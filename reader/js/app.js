@@ -1414,9 +1414,20 @@ function bindPageCurl() {
   const next = $('pageCurlNext');
   if (!wrap || !prev || !next) return;
 
+  const setCurl = (el, amount) => {
+    const t = Math.max(0, Math.min(1, amount));
+    if (t <= 0.03) {
+      el.classList.remove('visible');
+      el.style.setProperty('--curl', '0');
+      return;
+    }
+    el.classList.add('visible');
+    el.style.setProperty('--curl', t.toFixed(3));
+  };
+
   const hide = () => {
-    prev.classList.remove('visible');
-    next.classList.remove('visible');
+    setCurl(prev, 0);
+    setCurl(next, 0);
   };
 
   const update = (e) => {
@@ -1433,22 +1444,21 @@ function bindPageCurl() {
       return;
     }
     const rect = wrap.getBoundingClientRect();
-    const zone = Math.min(96, Math.max(56, rect.width * 0.12));
+    const zone = Math.min(110, Math.max(64, rect.width * 0.14));
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    if (y < 0 || y > rect.height) {
+    if (y < 0 || y > rect.height || x < 0 || x > rect.width) {
       hide();
       return;
     }
-    const nearPrev = x >= 0 && x < zone;
-    const nearNext = x <= rect.width && x > rect.width - zone;
-    prev.classList.toggle('visible', nearPrev);
-    next.classList.toggle('visible', nearNext && !nearPrev);
+    const prevAmt = x < zone ? 1 - x / zone : 0;
+    const nextAmt = x > rect.width - zone ? 1 - (rect.width - x) / zone : 0;
+    setCurl(prev, prevAmt);
+    setCurl(next, nextAmt);
   };
 
   wrap.addEventListener('pointermove', update);
   wrap.addEventListener('pointerleave', hide);
-  wrap.addEventListener('pointerdown', hide);
 }
 
 async function init() {

@@ -757,63 +757,96 @@ body[data-stage="cover"] .cover-dock { display: flex; }
 }
 
 .page-curl {
+  --curl: 0;
   position: absolute;
-  width: 44px;
-  height: 44px;
+  top: 0;
+  bottom: 0;
+  width: 52px;
   pointer-events: none;
-  z-index: 4;
+  z-index: 5;
   opacity: 0;
-  transform: scale(0.72);
-  transition: opacity 220ms var(--motion-ease), transform 220ms var(--motion-ease);
+  transition:
+    opacity 480ms var(--motion-ease),
+    transform 520ms var(--motion-ease),
+    width 520ms var(--motion-ease);
 }
 
-.page-curl.prev {
-  left: 0;
-  bottom: 0;
-  transform-origin: 0 100%;
-}
+.page-curl.prev { left: 0; transform: translateX(-10px); }
+.page-curl.next { right: 0; transform: translateX(10px); }
 
-.page-curl.next {
-  right: 0;
-  bottom: 0;
-  transform-origin: 100% 100%;
-}
-
+/* Lifted sheet along the whole edge */
 .page-curl::before {
   content: "";
   position: absolute;
   inset: 0;
-  box-shadow: 0 0 14px rgba(0, 0, 0, 0.14);
 }
 
 .page-curl.prev::before {
-  background:
-    linear-gradient(
-      135deg,
-      transparent 49.5%,
-      color-mix(in srgb, var(--bg-page) 88%, #fff 12%) 50%,
-      color-mix(in srgb, var(--bg-page) 72%, #000 28%) 62%,
-      color-mix(in srgb, var(--accent) 18%, var(--bg-page)) 100%
-    );
-  clip-path: polygon(0 0, 0 100%, 100% 100%);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 14%, var(--bg-page)) 0%,
+    color-mix(in srgb, var(--bg-page) 68%, #000 32%) 18%,
+    color-mix(in srgb, var(--bg-page) 90%, #fff 10%) 42%,
+    color-mix(in srgb, #000 16%, transparent) 58%,
+    transparent 100%
+  );
+  box-shadow: 10px 0 22px -12px rgba(0, 0, 0, 0.35);
+  border-radius: 3px 0 0 3px;
 }
 
 .page-curl.next::before {
-  background:
-    linear-gradient(
-      225deg,
-      transparent 49.5%,
-      color-mix(in srgb, var(--bg-page) 88%, #fff 12%) 50%,
-      color-mix(in srgb, var(--bg-page) 72%, #000 28%) 62%,
-      color-mix(in srgb, var(--accent) 18%, var(--bg-page)) 100%
-    );
-  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  background: linear-gradient(
+    270deg,
+    color-mix(in srgb, var(--accent) 14%, var(--bg-page)) 0%,
+    color-mix(in srgb, var(--bg-page) 68%, #000 32%) 18%,
+    color-mix(in srgb, var(--bg-page) 90%, #fff 10%) 42%,
+    color-mix(in srgb, #000 16%, transparent) 58%,
+    transparent 100%
+  );
+  box-shadow: -10px 0 22px -12px rgba(0, 0, 0, 0.35);
+  border-radius: 0 3px 3px 0;
+}
+
+/* Rolled rim — the paper thickness standing up */
+.page-curl::after {
+  content: "";
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  width: 6px;
+  border-radius: 3px;
+  opacity: 0.92;
+}
+
+.page-curl.prev::after {
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--bg-page) 55%, #000 45%),
+    color-mix(in srgb, var(--bg-page) 88%, #fff 12%) 45%,
+    color-mix(in srgb, var(--accent) 22%, var(--bg-page))
+  );
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.22);
+}
+
+.page-curl.next::after {
+  right: 0;
+  background: linear-gradient(
+    270deg,
+    color-mix(in srgb, var(--bg-page) 55%, #000 45%),
+    color-mix(in srgb, var(--bg-page) 88%, #fff 12%) 45%,
+    color-mix(in srgb, var(--accent) 22%, var(--bg-page))
+  );
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.22);
 }
 
 .page-curl.visible {
-  opacity: 1;
-  transform: scale(1);
+  opacity: calc(0.28 + var(--curl) * 0.72);
+  width: calc(30px + var(--curl) * 28px);
 }
+
+.page-curl.prev.visible { transform: translateX(0); }
+.page-curl.next.visible { transform: translateX(0); }
 
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
   .page-curl { display: none !important; }
