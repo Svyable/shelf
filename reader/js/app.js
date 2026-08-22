@@ -1488,7 +1488,7 @@ function bindPageCurl() {
       return;
     }
     const rect = wrap.getBoundingClientRect();
-    const zone = Math.min(120, Math.max(64, rect.width * 0.15));
+    const zone = Math.min(78, Math.max(40, rect.width * 0.09));
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     if (y < 0 || y > rect.height || x < 0 || x > rect.width) {
