@@ -309,7 +309,12 @@ body[data-stage="binder"] .progress-bar-container { opacity: 0; }
   overflow-wrap: break-word;
 }
 
-.binder-actions { margin-bottom: 2.5rem; }
+.binder-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.5rem;
+  margin-bottom: 2.5rem;
+}
 
 .write-link {
   font-family: var(--font-accent);

@@ -9,7 +9,9 @@ export const DEFAULT_IMPRINT = {
   credit: '',
   creditHref: '',
   writeHref: 'https://github.com/Svyable/openbookbinder',
-  writeLabel: 'Write on GitHub',
+  writeLabel: 'Start your own shelf',
+  forkHref: 'https://svyable.github.io/shelf/reader/',
+  forkLabel: 'See a live shelf',
   homeLabel: 'Binder',
   storagePrefix: 'obb',
   github: { owner: 'Svyable', repo: 'openbookbinder' },
@@ -55,6 +57,16 @@ export function applyImprint(imprint) {
   if (write) {
     write.href = imprint.writeHref;
     write.textContent = imprint.writeLabel;
+  }
+  const fork = document.getElementById('forkLink');
+  if (fork) {
+    if (imprint.forkHref && imprint.forkLabel) {
+      fork.hidden = false;
+      fork.href = imprint.forkHref;
+      fork.textContent = imprint.forkLabel;
+    } else {
+      fork.hidden = true;
+    }
   }
   const home = document.getElementById('homeFromEnd');
   if (home) home.textContent = imprint.homeLabel;

@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=r9">
+  <link rel="stylesheet" href="css/style.css?v=r10">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0c0b0a">
 </head>
@@ -61,7 +61,8 @@
           <h1>The public binder</h1>
           <p class="binder-lede">Manuscripts live as plain Markdown. When an author marks a book Published, it takes a place on this shelf.</p>
           <p class="binder-actions">
-            <a class="write-link" id="writeLink" href="https://github.com/Svyable/openbookbinder">Write on GitHub</a>
+            <a class="write-link" id="writeLink" href="https://github.com/Svyable/openbookbinder">Start your own shelf</a>
+            <a class="write-link" id="forkLink" hidden href="https://svyable.github.io/shelf/reader/">See a live shelf</a>
           </p>
           <div class="library-bar">
             <input type="search" id="librarySearch" placeholder="Search the library" autocomplete="off">
@@ -214,7 +215,7 @@
         <span>Paper</span>
         <div class="setting-pills">
           <button type="button" class="pill" data-paper="dark">Ink</button>
-          <button type="button" class="pill" data-paper="sepia">Vellum</button>
+          <button type="button" class="pill" data-paper="sepia">Parchment</button>
           <button type="button" class="pill" data-paper="light">Paper</button>
         </div>
       </div>
