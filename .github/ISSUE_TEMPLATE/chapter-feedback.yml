@@ -1,0 +1,48 @@
+name: Chapter feedback
+description: Suggest an improvement to a chapter — no git knowledge needed
+title: "[Feedback]: "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reading. Tell us which part and what you would change.
+        If you know the exact line, you can also open a pull request and
+        propose the new sentence there.
+  - type: dropdown
+    id: book
+    attributes:
+      label: Book
+      description: Which book is this about?
+      options:
+        - leveraging-luck
+        - the-exponentiality
+        - _TEMPLATE
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Where in the book?
+      description: Chapter name, or a few words from the passage.
+      placeholder: e.g. Chapter 2, the paragraph starting with…
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of feedback?
+      options:
+        - Typo
+        - Clarity
+        - Structure
+        - Bigger idea
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: What would you change, and why?
+    validations:
+      required: true

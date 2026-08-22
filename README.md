@@ -1,0 +1,39 @@
+# Svyable Press
+
+Sven Benson's books. The writing desk is this GitHub repository. The reading
+room is the [Open Book Binder](https://github.com/Svyable/openbookbinder)
+reader — the same open-source GUI, pointed at this imprint.
+
+**Read:** [svyable.github.io/press](https://svyable.github.io/press/)
+
+## The books
+
+| Book | Authors |
+|------|---------|
+| [Leveraging Luck](books/leveraging-luck/) | @svyable |
+
+*The Exponentiality* is on the desk (`books/the-exponentiality/`) and not yet
+on the shelf. *The Unbounding* stays in the private workshop until it is
+meant to be public.
+
+To publish a book: set Status to `Published` in that book's README, and add
+a row here.
+
+## How it works
+
+This repository is a personal instance of Open Book Binder.
+
+- **One book, one folder** under `books/<slug>/`.
+- **Plain Markdown** is the source of truth.
+- **GitHub** is where the books are written and reviewed.
+- **The reader** (`reader/`) paginates those files like a book. No build step.
+
+The software is MIT. The manuscripts are not. See [LICENSE](LICENSE).
+
+## Local reader
+
+```bash
+python3 -m http.server
+```
+
+Then open [http://127.0.0.1:8000/reader/](http://127.0.0.1:8000/reader/).

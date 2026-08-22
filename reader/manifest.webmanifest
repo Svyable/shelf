@@ -1,0 +1,9 @@
+{
+  "name": "Svyable Press",
+  "short_name": "Press",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0c0b0a",
+  "theme_color": "#0c0b0a",
+  "description": "Sven Benson's books. Built with Open Book Binder."
+}
