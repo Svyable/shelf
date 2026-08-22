@@ -7,13 +7,18 @@ This walkthrough uses the GitHub website on a computer.
 
 ## In one minute
 
-1. Copy `books/_TEMPLATE/` to `books/your-title/` (lowercase, hyphens).
+1. Copy `books/_TEMPLATE/` to `books/your-title/` (lowercase, hyphens) —
+   or copy a finished folder from the private workshop.
 2. Open a chapter, click the pencil, write, and **Commit changes**.
 3. Preview at `reader/#/b/your-title/`. When you are ready, set Status to
    `Published` and add a row for the book in the root `README.md`.
 
-That is the whole publishing loop. The rest of this guide is the same
-path, slower.
+This repository is the **public library** in a
+[Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md)
+setup. Do not put unpublished manuscripts here. Secret drafts stay in the
+private workshop.
+
+The rest of this guide is the same path, slower.
 
 ## 1. What this place is
 
@@ -121,6 +126,10 @@ The reader cannot open from a `file://` page. GitHub Pages (or any static
 server at the repository root) has to serve the files.
 
 ## 9. Publishing
+
+This is the public library. If the book was written in the workshop, copy
+the folder here first ([Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md)),
+then do the two edits below.
 
 Publishing is two edits, together. Nothing in `reader/` changes.
 

@@ -66,6 +66,12 @@ shelf.
 **Publish.** In one change set: set the book README Status to the exact
 string `Published`, and add one row to the portal README table under
 “The books” linking `books/<slug>/`. Both are required. Lead author merges.
+Do this here on the **public library**. Unpublished manuscripts belong in
+the private workshop — see
+https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md
+
+**Promote (Bookself).** Receive a copied folder from the private workshop,
+then Publish here. Do not add unpublished titles to this repo.
 
 **Unpublish.** Set Status to anything except `Published` and remove the
 portal README row.

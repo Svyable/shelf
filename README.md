@@ -1,12 +1,16 @@
 # Svyable Shelf
 
-Sven Benson's books. This repository is the **library** — the Markdown
-manuscripts. The reader is [Open Book Binder](https://github.com/Svyable/openbookbinder),
-open-source software anyone can fork to start their own shelf.
+Sven Benson's **public library** in a [Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md)
+setup. The manuscripts here are meant to be read. Drafts and unpublished
+titles stay in a private workshop.
+
+The reader is [Open Book Binder](https://github.com/Svyable/openbookbinder),
+open-source software. Fork that to start your own shelf — not this repo.
 
 **Read:** [svyable.github.io/shelf/reader](https://svyable.github.io/shelf/reader/)  
-**Books (this repo):** [github.com/Svyable/shelf](https://github.com/Svyable/shelf)  
-**Software:** [github.com/Svyable/openbookbinder](https://github.com/Svyable/openbookbinder)
+**Books (this library):** [github.com/Svyable/shelf](https://github.com/Svyable/shelf)  
+**Software:** [github.com/Svyable/openbookbinder](https://github.com/Svyable/openbookbinder)  
+**Workflow:** [Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md)
 
 Reader upgrades are made in Open Book Binder, then copied here with
 `scripts/sync-reader.sh`. This repo's `imprint.json` is the only branding
@@ -20,14 +24,14 @@ file; do not fork `reader/` unless you mean to customize the shelf alone.
 
 *The Exponentiality* is on the desk (`books/the-exponentiality/`) and not yet
 on the shelf. *The Unbounding* stays in the private workshop until it is
-meant to be public.
+promoted here.
 
-To publish a book: set Status to `Published` in that book's README, and add
-a row here.
+To publish a book: copy it from the workshop if it was private, set Status
+to `Published` in that book's README, and add a row here.
 
 ## How it works
 
-This repository is a personal instance of Open Book Binder.
+This repository is the public half of Bookself.
 
 - **One book, one folder** under `books/<slug>/`.
 - **Plain Markdown** is the source of truth.

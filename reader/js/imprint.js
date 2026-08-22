@@ -5,7 +5,7 @@ export const DEFAULT_IMPRINT = {
   shortName: 'Binder',
   description: 'Read books written in public — a Kindle-style binder for open manuscripts.',
   kicker: 'Written on GitHub · Read like a book',
-  lede: 'Manuscripts live as plain Markdown. When an author marks a book Published, it takes a place on this shelf.',
+  lede: 'This is the software. Fork once for a public shelf, or twice for Bookself: a private workshop and a public library.',
   credit: '',
   creditHref: '',
   writeHref: 'https://github.com/Svyable/openbookbinder',
@@ -17,7 +17,8 @@ export const DEFAULT_IMPRINT = {
   steps: [
     { n: '1', title: 'Copy', body: 'books/_TEMPLATE to books/your-title' },
     { n: '2', title: 'Write', body: 'Plain Markdown. Pencil icon. Commit.' },
-    { n: '3', title: 'Publish', body: 'Status: Published, plus a row in the README' },
+    { n: '3', title: 'Publish', body: 'On a public repo: Status Published, plus a row in the README' },
+    { n: '4', title: 'Bookself', body: 'Secret drafts stay in a private workshop until you copy them to the library' },
   ],
   github: { owner: 'Svyable', repo: 'openbookbinder' },
 };

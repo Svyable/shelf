@@ -38,6 +38,10 @@ folder.
 
 ## Publishing and the public catalog
 
+This is the public library. Promoting a book from the private workshop is
+copy-the-folder, then the two edits below — see
+[Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md).
+
 The public reader lists a book only when **both** are true:
 
 1. The book README Status is exactly `Published`.
