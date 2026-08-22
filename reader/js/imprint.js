@@ -14,6 +14,11 @@ export const DEFAULT_IMPRINT = {
   forkLabel: 'See a live shelf',
   homeLabel: 'Binder',
   storagePrefix: 'obb',
+  steps: [
+    { n: '1', title: 'Copy', body: 'books/_TEMPLATE to books/your-title' },
+    { n: '2', title: 'Write', body: 'Plain Markdown. Pencil icon. Commit.' },
+    { n: '3', title: 'Publish', body: 'Status: Published, plus a row in the README' },
+  ],
   github: { owner: 'Svyable', repo: 'openbookbinder' },
 };
 
@@ -24,6 +29,7 @@ export async function loadImprint() {
       ...DEFAULT_IMPRINT,
       ...data,
       github: { ...DEFAULT_IMPRINT.github, ...(data.github || {}) },
+      steps: Array.isArray(data.steps) ? data.steps : DEFAULT_IMPRINT.steps,
     };
   } catch {
     return { ...DEFAULT_IMPRINT, github: { ...DEFAULT_IMPRINT.github } };
@@ -75,6 +81,26 @@ export function applyImprint(imprint) {
     logo.title = imprint.name;
     logo.setAttribute('aria-label', imprint.name);
   }
+  const steps = document.getElementById('howSteps');
+  if (steps) {
+    const list = imprint.steps;
+    if (!list || !list.length) {
+      steps.hidden = true;
+      steps.innerHTML = '';
+    } else {
+      steps.hidden = false;
+      steps.innerHTML = list.map((s) => (
+        `<li><span class="how-n">${esc(s.n || '')}</span><strong>${esc(s.title || '')}</strong> ${esc(s.body || '')}</li>`
+      )).join('');
+    }
+  }
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 export function imprintName() {

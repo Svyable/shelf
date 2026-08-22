@@ -28,6 +28,7 @@ export function loadPrefs() {
     viewMode: 'spread',
     focus: false,
     lastSlug: null,
+    seenHint: false,
   };
   try {
     return { ...defaults, ...JSON.parse(localStorage.getItem(prefsKey()) || '{}') };

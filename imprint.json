@@ -12,6 +12,7 @@
   "forkLabel": "Start your own shelf",
   "homeLabel": "Shelf",
   "storagePrefix": "svs",
+  "steps": [],
   "github": {
     "owner": "Svyable",
     "repo": "shelf"

@@ -344,6 +344,7 @@ function showStage(name) {
   $('backCover').classList.toggle('show', name === 'end');
   $('pageNav').hidden = name !== 'read';
   $('readerChrome').classList.toggle('is-reading', name === 'read');
+  showReadHint(name === 'read');
   const proof = $('proofRibbon');
   if (proof) proof.hidden = !(app.book && !app.book.published && name !== 'binder');
 }
@@ -413,6 +414,9 @@ function fillCover(book, { draft }) {
   const canContinue = !!(prog && book.contents.some((c) => c.id === prog.chapter));
   $('startBtn').textContent = canContinue ? 'Continue' : 'Begin';
   $('startOverBtn').hidden = !canContinue;
+  if ($('copyPreviewBtn')) {
+    $('copyPreviewBtn').textContent = draft ? 'Preview link' : 'Link';
+  }
   fillProof(book, draft);
   const src = $('sourceLink');
   if (src) src.href = sourceUrl(book);
@@ -614,6 +618,7 @@ function volumeEl(book) {
         <span class="volume-title">${escapeHtml(book.title)}</span>
         <span class="volume-author">${escapeHtml((book.authors || '').replace(/@/g, ''))}</span>
         ${book.publisher ? `<span class="volume-imprint">${escapeHtml(book.publisher)}</span>` : ''}
+        <span class="volume-open">Open</span>
       </span>`;
   a.addEventListener('click', (e) => {
     e.preventDefault();
@@ -1044,6 +1049,26 @@ function renderStats() {
   $('statsCircle').style.setProperty('--pct', String(pct));
 }
 
+function showReadHint(on) {
+  const el = $('readHint');
+  if (!el) return;
+  if (!on || app.prefs?.seenHint) {
+    el.hidden = true;
+    return;
+  }
+  el.hidden = false;
+  window.setTimeout(() => dismissReadHint(), 7000);
+}
+
+function dismissReadHint() {
+  const el = $('readHint');
+  if (el) el.hidden = true;
+  if (app.prefs && !app.prefs.seenHint) {
+    app.prefs.seenHint = true;
+    savePrefs(app.prefs);
+  }
+}
+
 function prefersMotion() {
   return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
@@ -1067,6 +1092,7 @@ async function playLeaf(delta) {
 async function turn(delta) {
   if (document.body.dataset.stage !== 'read') return;
   if (app.turning) return;
+  dismissReadHint();
   const step = spreadOn() ? 2 : 1;
   const next = app.pageIndex + delta * step;
   if (next >= app.pages.length) {

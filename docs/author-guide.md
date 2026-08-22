@@ -5,6 +5,16 @@ each chapter is a page, and GitHub keeps every version.
 
 This walkthrough uses the GitHub website on a computer.
 
+## In one minute
+
+1. Copy `books/_TEMPLATE/` to `books/your-title/` (lowercase, hyphens).
+2. Open a chapter, click the pencil, write, and **Commit changes**.
+3. Preview at `reader/#/b/your-title/`. When you are ready, set Status to
+   `Published` and add a row for the book in the root `README.md`.
+
+That is the whole publishing loop. The rest of this guide is the same
+path, slower.
+
 ## 1. What this place is
 
 The repository is a stack of books. Open [`books/`](../books/). The folder

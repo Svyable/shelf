@@ -4,6 +4,11 @@
   The manuscript files are example prose — overwrite them.
   Front matter uses a worked title ("The Example Book"); the hub title
   below this comment is the fill-in-the-blank you replace first.
+
+  Preview: reader/#/b/<slug>/
+  Publish: Status → Published, then add a row in the root README
+  under "## The books" linking to books/<slug>/.
+
   Delete this comment when you are ready.
 -->
 
