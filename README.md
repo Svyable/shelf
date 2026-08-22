@@ -1,10 +1,14 @@
-# Svyable Press
+# Svyable Shelf
 
 Sven Benson's books. The writing desk is this GitHub repository. The reading
 room is the [Open Book Binder](https://github.com/Svyable/openbookbinder)
-reader — the same open-source GUI, pointed at this imprint.
+reader — the same open-source GUI, pointed at this shelf.
 
-**Read:** [svyable.github.io/press](https://svyable.github.io/press/)
+**Read:** [svyable.github.io/shelf](https://svyable.github.io/shelf/)
+
+Reader upgrades are made in `openbookbinder`, then copied here with
+`scripts/sync-reader.sh`. This repo's `imprint.json` is the only branding
+file; do not fork `reader/` unless you mean to customize the shelf alone.
 
 ## The books
 

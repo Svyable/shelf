@@ -1,4 +1,7 @@
-const key = (slug) => `svp:${slug}:notes`;
+const key = (slug) => {
+  const prefix = (typeof window !== 'undefined' && window.__IMPRINT?.storagePrefix) || 'obb';
+  return `${prefix}:${slug}:notes`;
+};
 
 export function loadNotes(slug) {
   try {

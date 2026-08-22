@@ -6,14 +6,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Svyable Press">
+  <meta name="apple-mobile-web-app-title" content="Binder">
   <meta name="format-detection" content="telephone=no">
-  <title>Svyable Press</title>
-  <meta name="description" content="Sven Benson's books, read like a book. Built with Open Book Binder.">
+  <title>Open Book Binder</title>
+  <meta name="description" content="Read books written in public — a Kindle-style binder for open manuscripts.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=press1">
+  <link rel="stylesheet" href="css/style.css?v=r4">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0c0b0a">
 </head>
@@ -25,7 +25,7 @@
   <div class="app">
     <header class="app-header" id="readerChrome">
       <div class="header-left">
-        <button class="logo" id="logoBtn" type="button" title="Svyable Press" aria-label="Svyable Press">
+        <button class="logo" id="logoBtn" type="button" title="Binder" aria-label="Binder">
           <span class="logo-mark">⌘</span>
         </button>
         <span class="draft-badge" id="draftBadge" hidden>Draft</span>
@@ -55,11 +55,11 @@
     <main class="stage">
       <section class="binder-view" id="binderView">
         <div class="binder-hero">
-          <p class="binder-kicker">Sven Benson · Written on GitHub · Read like a book</p>
-          <h1>Svyable Press</h1>
-          <p class="binder-lede">The author's shelf. Books are plain Markdown in this repository. The reader is <a href="https://github.com/Svyable/openbookbinder">Open Book Binder</a>, open source.</p>
+          <p class="binder-kicker">Written on GitHub · Read like a book</p>
+          <h1>The public binder</h1>
+          <p class="binder-lede">Manuscripts live as plain Markdown. When an author marks a book Published, it takes a place on this shelf.</p>
           <p class="binder-actions">
-            <a class="write-link" id="writeLink" href="https://github.com/Svyable/press">The manuscripts</a>
+            <a class="write-link" id="writeLink" href="https://github.com/Svyable/openbookbinder">Write on GitHub</a>
           </p>
           <div class="library-bar">
             <input type="search" id="librarySearch" placeholder="Search the library" autocomplete="off">
@@ -105,6 +105,8 @@
         </nav>
 
         <div class="pages-wrapper" id="pagesWrapper">
+          <div class="page-curl prev" id="pageCurlPrev" aria-hidden="true"></div>
+          <div class="page-curl next" id="pageCurlNext" aria-hidden="true"></div>
           <div class="page-surface left" id="pageLeft">
             <span class="page-running"></span>
             <div class="page-inner"></div>

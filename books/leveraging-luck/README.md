@@ -4,7 +4,7 @@
 |---|---|
 | **Authors**   | @svyable |
 | **Status**    | Published |
-| **Publisher** | Svyable Press |
+| **Publisher** | Svyable Shelf |
 | **Chapters**  | 10 of 10 drafted |
 
 An Optimistic Guide To Life.

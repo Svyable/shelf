@@ -1,7 +1,13 @@
-const PREFS = 'svp:prefs';
+function prefix() {
+  return (typeof window !== 'undefined' && window.__IMPRINT?.storagePrefix) || 'obb';
+}
+
+function prefsKey() {
+  return `${prefix()}:prefs`;
+}
 
 function bookKey(slug, name) {
-  return `svp:${slug}:${name}`;
+  return `${prefix()}:${slug}:${name}`;
 }
 
 function systemTheme() {
@@ -24,14 +30,14 @@ export function loadPrefs() {
     lastSlug: null,
   };
   try {
-    return { ...defaults, ...JSON.parse(localStorage.getItem(PREFS) || '{}') };
+    return { ...defaults, ...JSON.parse(localStorage.getItem(prefsKey()) || '{}') };
   } catch {
     return defaults;
   }
 }
 
 export function savePrefs(prefs) {
-  localStorage.setItem(PREFS, JSON.stringify(prefs));
+  localStorage.setItem(prefsKey(), JSON.stringify(prefs));
 }
 
 export function loadProgress(slug) {

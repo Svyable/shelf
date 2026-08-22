@@ -1,4 +1,4 @@
-/* Svyable Press — Open Book Binder reading room */
+/* Open Book Binder — reading room */
 
 :root {
   --bg-primary: #0c0b0a;
@@ -756,6 +756,69 @@ body[data-stage="cover"] .cover-dock { display: flex; }
   display: block;
 }
 
+.page-curl {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  transform: scale(0.72);
+  transition: opacity 220ms var(--motion-ease), transform 220ms var(--motion-ease);
+}
+
+.page-curl.prev {
+  left: 0;
+  bottom: 0;
+  transform-origin: 0 100%;
+}
+
+.page-curl.next {
+  right: 0;
+  bottom: 0;
+  transform-origin: 100% 100%;
+}
+
+.page-curl::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.14);
+}
+
+.page-curl.prev::before {
+  background:
+    linear-gradient(
+      135deg,
+      transparent 49.5%,
+      color-mix(in srgb, var(--bg-page) 88%, #fff 12%) 50%,
+      color-mix(in srgb, var(--bg-page) 72%, #000 28%) 62%,
+      color-mix(in srgb, var(--accent) 18%, var(--bg-page)) 100%
+    );
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+
+.page-curl.next::before {
+  background:
+    linear-gradient(
+      225deg,
+      transparent 49.5%,
+      color-mix(in srgb, var(--bg-page) 88%, #fff 12%) 50%,
+      color-mix(in srgb, var(--bg-page) 72%, #000 28%) 62%,
+      color-mix(in srgb, var(--accent) 18%, var(--bg-page)) 100%
+    );
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+}
+
+.page-curl.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .page-curl { display: none !important; }
+}
+
 .page-inner {
   flex: 1;
   overflow: hidden;
@@ -1338,7 +1401,7 @@ body.focus-mode:hover .page-nav {
   .paper-grain, .night-light-overlay, .app-header, .progress-bar-container,
   .page-nav, .toc-overlay, .stats-overlay, .search-overlay, .sel-pop,
   .loader, .toast, .binder-view, .cover-page, .back-cover, .pages-wrapper,
-  .book-stage { display: none !important; }
+  .book-stage, .page-curl { display: none !important; }
 
   html, body {
     height: auto;

@@ -1,0 +1,17 @@
+{
+  "name": "Svyable Shelf",
+  "shortName": "Shelf",
+  "description": "Sven Benson's books, read like a book. Built with Open Book Binder.",
+  "kicker": "Sven Benson · Written on GitHub · Read like a book",
+  "lede": "The author's shelf. Books are plain Markdown in this repository.",
+  "credit": "Open Book Binder",
+  "creditHref": "https://github.com/Svyable/openbookbinder",
+  "writeHref": "https://github.com/Svyable/shelf",
+  "writeLabel": "The manuscripts",
+  "homeLabel": "Shelf",
+  "storagePrefix": "svs",
+  "github": {
+    "owner": "Svyable",
+    "repo": "shelf"
+  }
+}

@@ -27,9 +27,10 @@ import {
 } from './notes.js';
 import { searchBook, searchLibrary, wordCount, readingMinutes } from './search.js';
 import { bookAsMarkdown, bookAsHtml, downloadText } from './export.js';
+import { loadImprint, applyImprint, imprintName, imprintGithub } from './imprint.js';
 
 const app = {
-  prefs: loadPrefs(),
+  prefs: null,
   catalog: [],
   books: new Map(),
   slug: null,
@@ -323,7 +324,7 @@ function showStage(name) {
 function setTitle() {
   const book = app.book;
   if (!book) {
-    document.title = 'Svyable Press';
+    document.title = imprintName();
     return;
   }
   const stage = document.body.dataset.stage;
@@ -644,9 +645,11 @@ function setLoader(on) {
 }
 
 function githubRepo() {
+  const named = imprintGithub();
+  if (named?.owner && named?.repo) return named;
   const href = $('writeLink')?.getAttribute('href') || '';
   const m = href.match(/github\.com\/([^/]+)\/([^/#]+)/);
-  return m ? { owner: m[1], repo: m[2].replace(/\.git$/, '') } : { owner: 'Svyable', repo: 'press' };
+  return m ? { owner: m[1], repo: m[2].replace(/\.git$/, '') } : { owner: 'Svyable', repo: 'openbookbinder' };
 }
 
 function sourceUrl(book) {
@@ -1280,6 +1283,7 @@ function bindUi() {
     const x = e.clientX - rect.left;
     turn(x < rect.width / 2 ? -1 : 1);
   });
+  bindPageCurl();
   $('coverPage').addEventListener('click', (e) => {
     if (e.target.closest('button, a')) return;
     $('startBtn').click();
@@ -1399,7 +1403,57 @@ function bumpFont(delta) {
   }
 }
 
+function finePointer() {
+  return window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function bindPageCurl() {
+  const wrap = $('pagesWrapper');
+  const prev = $('pageCurlPrev');
+  const next = $('pageCurlNext');
+  if (!wrap || !prev || !next) return;
+
+  const hide = () => {
+    prev.classList.remove('visible');
+    next.classList.remove('visible');
+  };
+
+  const update = (e) => {
+    if (!finePointer()) {
+      hide();
+      return;
+    }
+    if (document.body.dataset.stage !== 'read' || overlaysOpen()) {
+      hide();
+      return;
+    }
+    if (window.getSelection && window.getSelection().toString().trim()) {
+      hide();
+      return;
+    }
+    const rect = wrap.getBoundingClientRect();
+    const zone = Math.min(96, Math.max(56, rect.width * 0.12));
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    if (y < 0 || y > rect.height) {
+      hide();
+      return;
+    }
+    const nearPrev = x >= 0 && x < zone;
+    const nearNext = x <= rect.width && x > rect.width - zone;
+    prev.classList.toggle('visible', nearPrev);
+    next.classList.toggle('visible', nearNext && !nearPrev);
+  };
+
+  wrap.addEventListener('pointermove', update);
+  wrap.addEventListener('pointerleave', hide);
+  wrap.addEventListener('pointerdown', hide);
+}
+
 async function init() {
+  applyImprint(await loadImprint());
+  app.prefs = loadPrefs();
   applyPrefs();
   bindUi();
   try {
