@@ -1414,8 +1414,9 @@ function bindPageCurl() {
   const next = $('pageCurlNext');
   if (!wrap || !prev || !next) return;
 
-  const setCurl = (el, amount) => {
+  const setCurl = (el, amount, grab) => {
     const t = Math.max(0, Math.min(1, amount));
+    el.style.setProperty('--grab', grab.toFixed(3));
     if (t <= 0.03) {
       el.classList.remove('visible');
       el.style.setProperty('--curl', '0');
@@ -1426,8 +1427,9 @@ function bindPageCurl() {
   };
 
   const hide = () => {
-    setCurl(prev, 0);
-    setCurl(next, 0);
+    setCurl(prev, 0, 0.5);
+    setCurl(next, 0, 0.5);
+    wrap.classList.remove('peel-prev', 'peel-next');
   };
 
   const update = (e) => {
@@ -1444,17 +1446,20 @@ function bindPageCurl() {
       return;
     }
     const rect = wrap.getBoundingClientRect();
-    const zone = Math.min(110, Math.max(64, rect.width * 0.14));
+    const zone = Math.min(140, Math.max(72, rect.width * 0.18));
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     if (y < 0 || y > rect.height || x < 0 || x > rect.width) {
       hide();
       return;
     }
+    const grab = Math.max(0.08, Math.min(0.92, y / rect.height));
     const prevAmt = x < zone ? 1 - x / zone : 0;
     const nextAmt = x > rect.width - zone ? 1 - (rect.width - x) / zone : 0;
-    setCurl(prev, prevAmt);
-    setCurl(next, nextAmt);
+    setCurl(prev, prevAmt, grab);
+    setCurl(next, nextAmt, grab);
+    wrap.classList.toggle('peel-prev', prevAmt > 0.03);
+    wrap.classList.toggle('peel-next', nextAmt > 0.03);
   };
 
   wrap.addEventListener('pointermove', update);
