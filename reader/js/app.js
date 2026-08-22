@@ -49,6 +49,7 @@ const app = {
   pendingNote: null,
   routing: false,
   sortMode: 'title',
+  turning: false,
 };
 
 function $(id) {
@@ -63,7 +64,12 @@ function applyPrefs() {
   document.body.classList.toggle('focus-mode', !!app.prefs.focus);
   document.body.classList.toggle('is-draft', !!(app.book && !app.book.published));
   $('nightLightOverlay').classList.toggle('active', !!app.prefs.nightLight);
+  $('lampPool')?.classList.toggle('active', !!app.prefs.nightLight);
   $('nightLightBtn')?.classList.toggle('active', !!app.prefs.nightLight);
+  $('nightLightBtn') && ($('nightLightBtn').textContent = app.prefs.nightLight ? 'On' : 'Off');
+  document.querySelectorAll('[data-paper]').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.paper === app.prefs.theme);
+  });
   $('viewModeBtn').hidden = !canSpreadViewport();
   $('viewModeBtn').textContent = app.prefs.viewMode === 'spread' ? 'Single' : 'Spread';
   document.querySelectorAll('[data-font]').forEach((btn) => {
@@ -104,6 +110,11 @@ async function loadCatalog() {
       const hubDoc = await fetchDocument(`books/${slug}/README.md`);
       const meta = parseBookReadme(hubDoc.text, slug);
       meta.modified = hubDoc.modified;
+      meta.cover = await firstExisting(
+        ['cover.png', 'cover.jpg', 'cover.webp', 'cover.jpeg'].map(
+          (name) => `books/${slug}/media/${name}`
+        )
+      );
       if (meta.published) entries.push(meta);
     } catch (err) {
       console.warn('Skip catalog slug', slug, err);
@@ -300,16 +311,30 @@ function paintPages() {
 }
 
 function showStage(name) {
+  const prev = document.body.dataset.stage;
   document.body.dataset.stage = name;
   const cover = $('coverPage');
   $('binderView').hidden = name !== 'binder';
   if (name === 'cover') {
     cover.hidden = false;
+    if (prev === 'read' || prev === 'end') {
+      cover.classList.add('opened');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => cover.classList.remove('opened'));
+      });
+    } else {
+      cover.classList.remove('opened');
+    }
+  } else if (name === 'read' && prev === 'cover') {
+    cover.hidden = false;
     cover.classList.add('opened');
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => cover.classList.remove('opened'));
-    });
-  } else {
+    window.setTimeout(() => {
+      if (document.body.dataset.stage === 'read') {
+        cover.hidden = true;
+        cover.classList.remove('opened');
+      }
+    }, 580);
+  } else if (name !== 'cover') {
     cover.classList.add('opened');
     window.setTimeout(() => {
       if (document.body.dataset.stage !== 'cover') cover.hidden = true;
@@ -319,6 +344,8 @@ function showStage(name) {
   $('backCover').classList.toggle('show', name === 'end');
   $('pageNav').hidden = name !== 'read';
   $('readerChrome').classList.toggle('is-reading', name === 'read');
+  const proof = $('proofRibbon');
+  if (proof) proof.hidden = !(app.book && !app.book.published && name !== 'binder');
 }
 
 function setTitle() {
@@ -369,10 +396,17 @@ function fillCover(book, { draft }) {
   ].filter(Boolean).join(' · ');
   $('draftBadge').hidden = !draft;
   document.body.classList.toggle('is-draft', draft);
+  const proof = $('proofRibbon');
+  if (proof) proof.hidden = !draft || document.body.dataset.stage === 'binder';
   const face = $('coverFront');
   face.style.setProperty('--cloth', clothColor(book.slug));
-  face.style.backgroundImage = '';
-  face.classList.remove('has-art');
+  if (book.cover) {
+    face.style.backgroundImage = `linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.42)), url("${book.cover}")`;
+    face.classList.add('has-art');
+  } else {
+    face.style.backgroundImage = '';
+    face.classList.remove('has-art');
+  }
   $('backTitle').textContent = book.title;
   $('backAuthor').textContent = book.authors ? book.authors.replace(/@/g, '') : '';
   const prog = loadProgress(book.slug);
@@ -421,10 +455,12 @@ function fillToc(book) {
   if (!book) return;
   const list = $('tocList');
   const current = chapterOfPage(app.pageIndex);
+  const readCh = loadStats(book.slug).chapters || [];
   list.innerHTML = '';
   for (const c of book.contents) {
     const li = document.createElement('li');
     li.className = 'toc-item';
+    if (readCh.includes(c.id)) li.classList.add('is-read');
     const a = document.createElement('a');
     a.className = 'toc-link';
     if (c.id === current) a.classList.add('is-current');
@@ -561,12 +597,19 @@ function volumeEl(book) {
   a.className = 'volume';
   a.href = coverHash(book.slug);
   a.style.setProperty('--cloth', clothColor(book.slug));
+  const n = (book.contents || []).length || 3;
+  a.style.setProperty('--block', `${Math.min(16, Math.max(3, Math.round(n * 0.55)))}px`);
   const progress = loadProgress(book.slug);
   const last = app.prefs.lastSlug === book.slug;
   a.classList.toggle('is-reading', !!(progress || last));
+  if (book.cover) a.classList.add('has-art');
+  const coverStyle = book.cover
+    ? ` style="background-image: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.5)), url('${book.cover}')"`
+    : '';
   a.innerHTML = `
       <span class="volume-spine"></span>
-      <span class="volume-cover">
+      <span class="volume-block"></span>
+      <span class="volume-cover"${coverStyle}>
         ${progress || last ? '<span class="reading-ribbon">Reading</span>' : ''}
         <span class="volume-title">${escapeHtml(book.title)}</span>
         <span class="volume-author">${escapeHtml((book.authors || '').replace(/@/g, ''))}</span>
@@ -704,6 +747,66 @@ async function copyText(text) {
   } catch {
     toast('Could not copy');
   }
+}
+
+function wrapCanvasLines(ctx, text, maxWidth) {
+  const words = String(text).replace(/\s+/g, ' ').trim().split(' ');
+  const lines = [];
+  let line = '';
+  for (const word of words) {
+    const next = line ? `${line} ${word}` : word;
+    if (ctx.measureText(next).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = next;
+    }
+  }
+  if (line) lines.push(line);
+  return lines.slice(0, 8);
+}
+
+async function downloadQuoteCard(quote, book) {
+  const w = 1200;
+  const h = 630;
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#16120e';
+  ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = '#c4a265';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(88, 88);
+  ctx.lineTo(220, 88);
+  ctx.stroke();
+  ctx.fillStyle = '#ede6d9';
+  ctx.font = 'italic 40px Georgia, serif';
+  const lines = wrapCanvasLines(ctx, `“${quote}”`, w - 176);
+  let y = 180;
+  for (const line of lines) {
+    ctx.fillText(line, 88, y);
+    y += 54;
+  }
+  ctx.fillStyle = '#c4a265';
+  ctx.font = '20px Georgia, serif';
+  ctx.fillText(book.title, 88, h - 96);
+  ctx.fillStyle = '#8a8274';
+  ctx.font = '16px Georgia, serif';
+  ctx.fillText(locationUrl(), 88, h - 62);
+  canvas.toBlob((blob) => {
+    if (!blob) {
+      toast('Could not make card');
+      return;
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${book.slug}-quote.png`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('Quote card saved');
+  }, 'image/png');
 }
 
 function printBook() {
@@ -941,20 +1044,45 @@ function renderStats() {
   $('statsCircle').style.setProperty('--pct', String(pct));
 }
 
-function turn(delta) {
+function prefersMotion() {
+  return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function playLeaf(delta) {
+  if (!prefersMotion()) return;
+  const wrap = $('pagesWrapper');
+  if (!wrap) return;
+  app.turning = true;
+  wrap.classList.add(delta > 0 ? 'turn-next' : 'turn-prev');
+  wrap.querySelectorAll('.page-curl.visible').forEach((el) => el.classList.remove('visible'));
+  await wait(560);
+  wrap.classList.remove('turn-next', 'turn-prev');
+  app.turning = false;
+}
+
+async function turn(delta) {
   if (document.body.dataset.stage !== 'read') return;
+  if (app.turning) return;
   const step = spreadOn() ? 2 : 1;
   const next = app.pageIndex + delta * step;
   if (next >= app.pages.length) {
     persist();
+    await playLeaf(1);
     openEnd();
     go(readHash(app.slug, 'back-cover', 0));
     return;
   }
   if (next < 0) {
+    persist();
+    await playLeaf(-1);
     go(coverHash(app.slug));
     return;
   }
+  await playLeaf(delta);
   app.pageIndex = Math.min(next, app.pages.length - 1);
   paintPages();
   persist();
@@ -1085,10 +1213,12 @@ function bindUi() {
       persist();
     }
   });
-  $('themeBtn').addEventListener('click', () => {
-    app.prefs.theme = app.prefs.theme === 'dark' ? 'light' : 'dark';
-    savePrefs(app.prefs);
-    applyPrefs();
+  document.querySelectorAll('[data-paper]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      app.prefs.theme = btn.dataset.paper;
+      savePrefs(app.prefs);
+      applyPrefs();
+    });
   });
   $('fontDecrease').addEventListener('click', () => bumpFont(-1));
   $('fontIncrease').addEventListener('click', () => bumpFont(1));
@@ -1227,6 +1357,11 @@ function bindUi() {
     const cur = currentSelection();
     if (cur) await copyText(`“${cur.text}”\n${locationUrl()}`);
     hideSelPop();
+  });
+  $('selCard')?.addEventListener('click', async () => {
+    const cur = currentSelection();
+    hideSelPop();
+    if (cur && app.book) await downloadQuoteCard(cur.text, app.book);
   });
   $('selNote').addEventListener('click', () => {
     const cur = currentSelection();
@@ -1479,7 +1614,7 @@ function bindPageCurl() {
       hide();
       return;
     }
-    if (document.body.dataset.stage !== 'read' || overlaysOpen()) {
+    if (document.body.dataset.stage !== 'read' || overlaysOpen() || app.turning) {
       hide();
       return;
     }

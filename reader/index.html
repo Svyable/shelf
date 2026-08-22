@@ -13,14 +13,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=r8">
+  <link rel="stylesheet" href="css/style.css?v=r9">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0c0b0a">
 </head>
 <body data-stage="binder">
   <a class="skip-link" href="#bookStage">Skip to book</a>
   <div class="night-light-overlay" id="nightLightOverlay"></div>
+  <div class="lamp-pool" id="lampPool" aria-hidden="true"></div>
   <div class="paper-grain" aria-hidden="true"></div>
+  <div class="proof-ribbon" id="proofRibbon" hidden>Proof</div>
 
   <div class="app">
     <header class="app-header" id="readerChrome">
@@ -209,10 +211,17 @@
         </div>
       </div>
       <div class="setting-row">
-        <span>Theme</span>
+        <span>Paper</span>
         <div class="setting-pills">
-          <button type="button" class="pill" id="themeBtn">Ink</button>
-          <button type="button" class="pill" id="nightLightBtn">Lamp</button>
+          <button type="button" class="pill" data-paper="dark">Ink</button>
+          <button type="button" class="pill" data-paper="sepia">Vellum</button>
+          <button type="button" class="pill" data-paper="light">Paper</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <span>Lamp</span>
+        <div class="setting-pills">
+          <button type="button" class="pill" id="nightLightBtn">On</button>
         </div>
       </div>
       <div class="setting-row">
@@ -259,6 +268,7 @@
     <button type="button" id="selCopy">Copy</button>
     <button type="button" id="selNote">Note</button>
     <button type="button" id="selShare">Share</button>
+    <button type="button" id="selCard">Card</button>
     <button type="button" id="selReport">Report</button>
   </div>
 
