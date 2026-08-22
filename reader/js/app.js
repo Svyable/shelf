@@ -1414,6 +1414,16 @@ function bindPageCurl() {
   const next = $('pageCurlNext');
   if (!wrap || !prev || !next) return;
 
+  const motion = {
+    grab: 0.5,
+    grabT: 0.5,
+    prev: 0,
+    prevT: 0,
+    next: 0,
+    nextT: 0,
+    raf: 0,
+  };
+
   const setCurl = (el, amount, grab) => {
     const t = Math.max(0, Math.min(1, amount));
     el.style.setProperty('--grab', grab.toFixed(3));
@@ -1426,10 +1436,42 @@ function bindPageCurl() {
     el.style.setProperty('--curl', t.toFixed(3));
   };
 
+  const paint = () => {
+    setCurl(prev, motion.prev, motion.grab);
+    setCurl(next, motion.next, motion.grab);
+    wrap.classList.toggle('peel-prev', motion.prev > 0.03);
+    wrap.classList.toggle('peel-next', motion.next > 0.03);
+  };
+
+  const tick = () => {
+    const k = 0.18;
+    motion.grab += (motion.grabT - motion.grab) * k;
+    motion.prev += (motion.prevT - motion.prev) * k;
+    motion.next += (motion.nextT - motion.next) * k;
+    paint();
+    const settled =
+      Math.abs(motion.grab - motion.grabT) < 0.002
+      && Math.abs(motion.prev - motion.prevT) < 0.002
+      && Math.abs(motion.next - motion.nextT) < 0.002;
+    if (settled) {
+      motion.grab = motion.grabT;
+      motion.prev = motion.prevT;
+      motion.next = motion.nextT;
+      paint();
+      motion.raf = 0;
+      return;
+    }
+    motion.raf = requestAnimationFrame(tick);
+  };
+
+  const kick = () => {
+    if (!motion.raf) motion.raf = requestAnimationFrame(tick);
+  };
+
   const hide = () => {
-    setCurl(prev, 0, 0.5);
-    setCurl(next, 0, 0.5);
-    wrap.classList.remove('peel-prev', 'peel-next');
+    motion.prevT = 0;
+    motion.nextT = 0;
+    kick();
   };
 
   const update = (e) => {
@@ -1446,20 +1488,17 @@ function bindPageCurl() {
       return;
     }
     const rect = wrap.getBoundingClientRect();
-    const zone = Math.min(140, Math.max(72, rect.width * 0.18));
+    const zone = Math.min(120, Math.max(64, rect.width * 0.15));
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     if (y < 0 || y > rect.height || x < 0 || x > rect.width) {
       hide();
       return;
     }
-    const grab = Math.max(0.08, Math.min(0.92, y / rect.height));
-    const prevAmt = x < zone ? 1 - x / zone : 0;
-    const nextAmt = x > rect.width - zone ? 1 - (rect.width - x) / zone : 0;
-    setCurl(prev, prevAmt, grab);
-    setCurl(next, nextAmt, grab);
-    wrap.classList.toggle('peel-prev', prevAmt > 0.03);
-    wrap.classList.toggle('peel-next', nextAmt > 0.03);
+    motion.grabT = Math.max(0.04, Math.min(0.96, y / rect.height));
+    motion.prevT = x < zone ? 1 - x / zone : 0;
+    motion.nextT = x > rect.width - zone ? 1 - (rect.width - x) / zone : 0;
+    kick();
   };
 
   wrap.addEventListener('pointermove', update);
