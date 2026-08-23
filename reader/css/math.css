@@ -1,0 +1,102 @@
+/* LaTeX math in Markdown — KaTeX parsing with native MathML output. */
+
+.reader-math {
+  color: inherit;
+  max-width: 100%;
+  font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", "Times New Roman", serif;
+  text-indent: 0;
+}
+
+.reader-math math {
+  color: inherit;
+  font-size: 1em;
+}
+
+.reader-math-inline {
+  display: inline;
+  white-space: nowrap;
+}
+
+.reader-math-inline math {
+  vertical-align: -0.08em;
+}
+
+.reader-math-display {
+  display: block;
+  width: 100%;
+  margin: 1.05em 0;
+  padding: 0.2em 0.15em 0.32em;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.reader-math-display math {
+  display: inline-block;
+  min-width: max-content;
+  max-width: none;
+  margin: 0 auto;
+}
+
+.reader-math-pending {
+  border-radius: 6px;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--bg-secondary) 72%, transparent);
+}
+
+.reader-math-inline.reader-math-pending {
+  padding: 0.08em 0.28em;
+}
+
+.reader-math-display.reader-math-pending {
+  border: 1px dashed color-mix(in srgb, var(--border) 78%, transparent);
+}
+
+.reader-math-pending code {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: 0.88em/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.reader-math-error {
+  outline: 1px solid color-mix(in srgb, #b6493d 72%, transparent);
+}
+
+.page-inner .reader-math-display,
+#pageMeasureInner .reader-math-display {
+  font-size: 0.94em;
+}
+
+.scroll-document .reader-math-display {
+  margin-block: 1.35em;
+}
+
+@media (max-width: 700px) {
+  .reader-math-display {
+    margin-block: 0.9em;
+    padding-inline: 0.05em;
+    text-align: left;
+  }
+
+  .reader-math-display math {
+    margin-inline: auto;
+  }
+}
+
+@media print {
+  .reader-math-display {
+    overflow: visible;
+    break-inside: avoid;
+  }
+
+  .reader-math-pending {
+    border-style: solid;
+  }
+}
