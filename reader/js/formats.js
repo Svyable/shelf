@@ -48,11 +48,12 @@ function annotateVolume(volume) {
   }
   if (badge) {
     badge.hidden = !isPaper;
-    badge.textContent = publicationLabel(meta);
+    const nextLabel = publicationLabel(meta);
+    if (badge.textContent !== nextLabel) badge.textContent = nextLabel;
   }
 
   const open = volume.querySelector('.volume-open');
-  if (open && isPaper) open.textContent = 'Read paper';
+  if (open && isPaper && open.textContent !== 'Read paper') open.textContent = 'Read paper';
 }
 
 function annotateVolumes() {
@@ -164,7 +165,8 @@ function syncPaperCover() {
     title?.insertAdjacentElement('beforebegin', badge);
   }
   badge.hidden = false;
-  badge.textContent = publicationLabel(meta);
+  const label = publicationLabel(meta);
+  if (badge.textContent !== label) badge.textContent = label;
 
   if (!detail) {
     detail = document.createElement('p');
@@ -173,22 +175,20 @@ function syncPaperCover() {
     metaLine?.insertAdjacentElement('afterend', detail);
   }
   const bits = [meta.venue, meta.doi ? `DOI ${meta.doi}` : ''].filter(Boolean);
+  const text = bits.join(' · ');
   detail.hidden = bits.length === 0;
-  detail.textContent = bits.join(' · ');
+  if (detail.textContent !== text) detail.textContent = text;
 }
 
 function observeReader() {
   const binder = document.getElementById('binderView');
-  const cover = document.getElementById('coverFront');
   const observer = new MutationObserver(() => {
     annotateVolumes();
     renderStand();
-    syncPaperCover();
   });
   if (binder) observer.observe(binder, { childList: true, subtree: true });
-  if (cover) observer.observe(cover, { childList: true, subtree: true });
-  window.addEventListener('hashchange', syncPaperCover);
-  window.addEventListener('popstate', syncPaperCover);
+  window.addEventListener('hashchange', () => queueMicrotask(syncPaperCover));
+  window.addEventListener('popstate', () => queueMicrotask(syncPaperCover));
 }
 
 async function loadPublicationMetadata(portal) {
