@@ -1,27 +1,51 @@
 import { fetchText } from './base.js';
 
 export const DEFAULT_IMPRINT = {
-  name: 'Open Book Binder',
-  shortName: 'Binder',
-  description: 'Read books written in public — a Kindle-style binder for open manuscripts.',
-  kicker: 'Written on GitHub · Read like a book',
-  lede: 'This is the software. Fork once for a public shelf, or twice for Bookself: a private binder and a public shelf.',
+  role: 'instance',
+  name: 'Bookself',
+  shortName: 'Bookself',
+  description: 'A Git-native bookshelf for Markdown books.',
+  kicker: 'Written in Markdown · Read like a book',
+  lede: 'Books live in this repository. The reader and publishing desk are shared Bookself software.',
   credit: '',
   creditHref: '',
-  writeHref: 'https://github.com/Svyable/bookself',
-  writeLabel: 'Start your own shelf',
-  forkHref: 'https://svyable.github.io/shelf/reader/',
-  forkLabel: 'See a live shelf',
-  homeLabel: 'Binder',
-  storagePrefix: 'obb',
+  writeHref: '../desk/',
+  writeLabel: 'Publishing desk',
+  forkHref: '',
+  forkLabel: '',
+  homeLabel: 'Books',
+  storagePrefix: 'bookself',
   steps: [
-    { n: '1', title: 'Copy', body: 'books/_TEMPLATE to books/your-title' },
-    { n: '2', title: 'Write', body: 'Plain Markdown. Pencil icon. Commit.' },
-    { n: '3', title: 'Publish', body: 'On a public repo: Status Published, plus a row in the README' },
-    { n: '4', title: 'Bookself', body: 'Secret drafts stay in a private binder until you promote them to the shelf' },
+    { n: '1', title: 'Start', body: 'Copy books/_TEMPLATE to books/your-title' },
+    { n: '2', title: 'Write', body: 'Keep the manuscript in plain Markdown' },
+    { n: '3', title: 'Preview', body: 'Use the reader before publishing' },
+    { n: '4', title: 'Publish', body: 'Promote finished work from a private binder to a public shelf' },
   ],
-  github: { owner: 'Svyable', repo: 'bookself' },
+  github: { owner: '', repo: '' },
 };
+
+function inferGithubFromLocation() {
+  const host = String(location.hostname || '').toLowerCase();
+  if (!host.endsWith('.github.io')) return { owner: '', repo: '' };
+
+  const owner = host.slice(0, -'.github.io'.length);
+  const firstPath = location.pathname.split('/').filter(Boolean)[0] || '';
+  const repo = firstPath || `${owner}.github.io`;
+  return owner && repo ? { owner, repo } : { owner: '', repo: '' };
+}
+
+function resolveGithub(value = {}) {
+  const configured = {
+    owner: String(value.owner || '').trim(),
+    repo: String(value.repo || '').trim(),
+  };
+  const inferred = inferGithubFromLocation();
+  const wantsAuto = configured.owner === 'auto' || configured.repo === 'auto';
+
+  if (wantsAuto) return inferred;
+  if (configured.owner && configured.repo) return configured;
+  return inferred;
+}
 
 export async function loadImprint() {
   try {
@@ -29,17 +53,19 @@ export async function loadImprint() {
     return {
       ...DEFAULT_IMPRINT,
       ...data,
-      github: { ...DEFAULT_IMPRINT.github, ...(data.github || {}) },
+      github: resolveGithub(data.github || {}),
       steps: Array.isArray(data.steps) ? data.steps : DEFAULT_IMPRINT.steps,
     };
   } catch {
-    return { ...DEFAULT_IMPRINT, github: { ...DEFAULT_IMPRINT.github } };
+    return { ...DEFAULT_IMPRINT, github: inferGithubFromLocation() };
   }
 }
 
 export function applyImprint(imprint) {
   window.__IMPRINT = imprint;
   document.title = imprint.name;
+  document.documentElement.dataset.bookselfRole = imprint.role || 'instance';
+
   const apple = document.querySelector('meta[name="apple-mobile-web-app-title"]');
   if (apple) apple.setAttribute('content', imprint.shortName);
   const desc = document.querySelector('meta[name="description"]');
@@ -62,8 +88,13 @@ export function applyImprint(imprint) {
   }
   const write = document.getElementById('writeLink');
   if (write) {
-    write.href = imprint.writeHref;
-    write.textContent = imprint.writeLabel;
+    if (imprint.writeHref && imprint.writeLabel) {
+      write.hidden = false;
+      write.href = imprint.writeHref;
+      write.textContent = imprint.writeLabel;
+    } else {
+      write.hidden = true;
+    }
   }
   const fork = document.getElementById('forkLink');
   if (fork) {
@@ -109,7 +140,9 @@ export function imprintName() {
 }
 
 export function imprintGithub() {
-  return window.__IMPRINT?.github || DEFAULT_IMPRINT.github;
+  const configured = window.__IMPRINT?.github;
+  if (configured?.owner && configured?.repo) return configured;
+  return inferGithubFromLocation();
 }
 
 export function storagePrefix() {
