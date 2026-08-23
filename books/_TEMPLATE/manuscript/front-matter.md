@@ -1,6 +1,6 @@
 # The Example Book
 
-A demonstration of how a book lives in openbookbinder.
+A demonstration of how a book lives in Bookself.
 
 © 2026 Your Name. All rights reserved.
 

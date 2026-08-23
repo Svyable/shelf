@@ -38,9 +38,9 @@ folder.
 
 ## Publishing and the public catalog
 
-This is the public library. Promoting a book from the private workshop is
+This is the public shelf. Promoting a book from the private binder is
 copy-the-folder, then the two edits below — see
-[Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md).
+[Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md).
 
 The public reader lists a book only when **both** are true:
 

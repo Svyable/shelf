@@ -65,9 +65,9 @@ Chapters count when it drifts.
 - `Published` — appears on the public shelf **after** the portal README
   also links `books/<slug>/`.
 
-This repository is the public library. Unlisted files here are still
-public. Secret drafts belong in the private workshop
-([Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md)).
+This repository is the public shelf. Unlisted files here are still
+public. Secret drafts belong in the private binder
+([Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)).
 
 Optional cover art: `media/cover.png` (or `.jpg` / `.webp`). The reader
 uses it on the generated cover. If it is missing, the reader makes a cloth

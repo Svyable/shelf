@@ -697,7 +697,7 @@ function githubRepo() {
   if (named?.owner && named?.repo) return named;
   const href = $('writeLink')?.getAttribute('href') || '';
   const m = href.match(/github\.com\/([^/]+)\/([^/#]+)/);
-  return m ? { owner: m[1], repo: m[2].replace(/\.git$/, '') } : { owner: 'Svyable', repo: 'openbookbinder' };
+  return m ? { owner: m[1], repo: m[2].replace(/\.git$/, '') } : { owner: 'Svyable', repo: 'bookself' };
 }
 
 function sourceUrl(book) {

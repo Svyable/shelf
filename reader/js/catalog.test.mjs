@@ -1,7 +1,7 @@
 import { parsePortalCatalog, parseBookReadme, extractSection } from './catalog.js';
 import assert from 'node:assert/strict';
 
-const portal = `# openbookbinder
+const portal = `# bookself
 
 ## The books
 

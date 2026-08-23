@@ -5,10 +5,10 @@ export const DEFAULT_IMPRINT = {
   shortName: 'Binder',
   description: 'Read books written in public — a Kindle-style binder for open manuscripts.',
   kicker: 'Written on GitHub · Read like a book',
-  lede: 'This is the software. Fork once for a public shelf, or twice for Bookself: a private workshop and a public library.',
+  lede: 'This is the software. Fork once for a public shelf, or twice for Bookself: a private binder and a public shelf.',
   credit: '',
   creditHref: '',
-  writeHref: 'https://github.com/Svyable/openbookbinder',
+  writeHref: 'https://github.com/Svyable/bookself',
   writeLabel: 'Start your own shelf',
   forkHref: 'https://svyable.github.io/shelf/reader/',
   forkLabel: 'See a live shelf',
@@ -18,9 +18,9 @@ export const DEFAULT_IMPRINT = {
     { n: '1', title: 'Copy', body: 'books/_TEMPLATE to books/your-title' },
     { n: '2', title: 'Write', body: 'Plain Markdown. Pencil icon. Commit.' },
     { n: '3', title: 'Publish', body: 'On a public repo: Status Published, plus a row in the README' },
-    { n: '4', title: 'Bookself', body: 'Secret drafts stay in a private workshop until you copy them to the library' },
+    { n: '4', title: 'Bookself', body: 'Secret drafts stay in a private binder until you promote them to the shelf' },
   ],
-  github: { owner: 'Svyable', repo: 'openbookbinder' },
+  github: { owner: 'Svyable', repo: 'bookself' },
 };
 
 export async function loadImprint() {

@@ -14,8 +14,8 @@ branch → edit → PR walkthrough.
 If you have never used GitHub, you can still propose an edit from the
 browser. See [the author guide](docs/author-guide.md).
 
-This repository is the public library in a
-[Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md)
+This repository is the public shelf in a
+[Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)
 setup. Do not open PRs that add unpublished manuscripts.
 
 ### 2. File an issue

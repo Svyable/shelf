@@ -1,16 +1,16 @@
 # Svyable Shelf
 
-Sven Benson's **public library** in a [Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md)
+Sven Benson's **public shelf** in a [Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)
 setup. The manuscripts here are meant to be read. Drafts and unpublished
-titles stay in a private workshop.
+titles stay in a private binder.
 
-The reader is [Open Book Binder](https://github.com/Svyable/openbookbinder),
+The reader is [Open Book Binder](https://github.com/Svyable/bookself),
 open-source software. Fork that to start your own shelf — not this repo.
 
 **Read:** [svyable.github.io/shelf/reader](https://svyable.github.io/shelf/reader/)  
-**Books (this library):** [github.com/Svyable/shelf](https://github.com/Svyable/shelf)  
-**Software:** [github.com/Svyable/openbookbinder](https://github.com/Svyable/openbookbinder)  
-**Workflow:** [Bookself](https://github.com/Svyable/openbookbinder/blob/main/docs/bookself.md)
+**Books (this shelf):** [github.com/Svyable/shelf](https://github.com/Svyable/shelf)  
+**Software:** [github.com/Svyable/bookself](https://github.com/Svyable/bookself)  
+**Workflow:** [Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)
 
 Reader upgrades are made in Open Book Binder, then copied here with
 `scripts/sync-reader.sh`. This repo's `imprint.json` is the only branding
@@ -23,10 +23,10 @@ file; do not fork `reader/` unless you mean to customize the shelf alone.
 | [Leveraging Luck](books/leveraging-luck/) | @svyable |
 
 *The Exponentiality* is on the desk (`books/the-exponentiality/`) and not yet
-on the shelf. *The Unbounding* stays in the private workshop until it is
+on the shelf. *The Unbounding* stays in the private binder until it is
 promoted here.
 
-To publish a book: copy it from the workshop if it was private, set Status
+To publish a book: copy it from the binder if it was private, set Status
 to `Published` in that book's README, and add a row here.
 
 ## How it works
