@@ -1,4 +1,4 @@
-/** Parse portal README and book hubs. No extra config files. */
+/** Parse portal README and publication hubs. No extra config files. */
 
 export function extractSection(markdown, heading) {
   const re = new RegExp(`^##\\s+${heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'im');
@@ -23,6 +23,25 @@ export function parsePortalCatalog(markdown) {
   return slugs;
 }
 
+export function parsePortalStand(markdown) {
+  const section = extractSection(markdown, 'The stand') || extractSection(markdown, 'Magazine stand');
+  if (!section) return [];
+  const entries = [];
+  const re = /^-\s+\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)(?:\s+[—–-]\s+(.+))?\s*$/gim;
+  let m;
+  while ((m = re.exec(section))) {
+    const url = m[2].trim();
+    const domain = url.replace(/^https?:\/\/(?:www\.)?/i, '').split('/')[0];
+    entries.push({
+      title: m[1].trim(),
+      url,
+      note: (m[3] || '').trim(),
+      domain,
+    });
+  }
+  return entries;
+}
+
 function cell(markdown, label) {
   const re = new RegExp(
     `\\|\\s*\\*\\*${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\*\\*\\s*\\|\\s*([^|\\n]+)\\|`,
@@ -32,12 +51,19 @@ function cell(markdown, label) {
   return m ? m[1].trim() : '';
 }
 
+function normalizeFormat(value) {
+  const raw = String(value || '').trim().toLowerCase();
+  if (['paper', 'whitepaper', 'white paper', 'research paper', 'preprint'].includes(raw)) return 'paper';
+  return 'book';
+}
+
 export function parseBookReadme(markdown, slug) {
   const titleMatch = markdown.match(/^#\s+(.+)$/m);
   const title = titleMatch ? titleMatch[1].trim() : slug;
   const status = cell(markdown, 'Status');
   const authors = cell(markdown, 'Authors');
   const chaptersCell = cell(markdown, 'Chapters');
+  const formatLabel = cell(markdown, 'Format');
   const contents = [];
   const re = /^- \[[ xX]\] \[([^\]]+)\]\((manuscript\/[^)\s]+)\)/gm;
   let m;
@@ -52,7 +78,11 @@ export function parseBookReadme(markdown, slug) {
     status,
     authors,
     chaptersCell,
+    format: normalizeFormat(formatLabel),
+    formatLabel: formatLabel || 'Book',
     publisher: cell(markdown, 'Publisher'),
+    venue: cell(markdown, 'Venue'),
+    doi: cell(markdown, 'DOI'),
     edition: cell(markdown, 'Edition'),
     language: cell(markdown, 'Language'),
     isbn: cell(markdown, 'ISBN'),
