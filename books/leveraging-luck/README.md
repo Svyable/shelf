@@ -22,4 +22,5 @@ An Optimistic Guide To Life.
 - [x] [Ch 8 — Sustaining Momentum](manuscript/ch08-sustaining-momentum.md)
 - [x] [Ch 9 — Carpe Diem](manuscript/ch09-carpe-diem.md)
 - [x] [Ch 10 — Conclusion: Your Luck Legacy](manuscript/ch10-your-luck-legacy.md)
+- [x] [Sven Hardy Benson Quote Registry](manuscript/quote-registry.md)
 - [x] [Back Matter](manuscript/back-matter.md)
