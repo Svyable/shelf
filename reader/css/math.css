@@ -41,6 +41,26 @@
   margin: 0 auto;
 }
 
+.reader-equation {
+  position: relative;
+  padding-right: 3.25em;
+}
+
+.reader-equation::after {
+  content: "(" attr(data-equation-number) ")";
+  position: absolute;
+  top: 50%;
+  right: 0.35em;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font: 0.82em/1 Georgia, "Times New Roman", serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.reader-equation-ref {
+  white-space: nowrap;
+}
+
 .reader-math-pending {
   border-radius: 6px;
   color: var(--text-secondary);
@@ -87,6 +107,10 @@
 
   .reader-math-display math {
     margin-inline: auto;
+  }
+
+  .reader-equation {
+    padding-right: 2.6em;
   }
 }
 
