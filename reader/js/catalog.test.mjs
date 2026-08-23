@@ -82,8 +82,9 @@ assert.equal(paper.formatLabel, 'Whitepaper');
 assert.equal(paper.venue, 'Example Lab');
 assert.equal(paper.doi, '10.1234/example');
 
-const preprint = parseBookReadme(` # ignored\n`, 'x');
-assert.equal(preprint.format, 'book');
+const preprint = parseBookReadme(`# Early Result\n\n| **Format** | Preprint |\n`, 'early-result');
+assert.equal(preprint.format, 'paper');
+assert.equal(preprint.formatLabel, 'Preprint');
 
 const tagged = parseBookReadme(
   `# T\n\n| **Series** | Field Notes |\n| **Tags** | guide, git |\n`,
