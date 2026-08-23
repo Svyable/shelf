@@ -19,6 +19,20 @@ vocabulary.
 - Do not put book prose in `reader/`. The reader fetches Markdown from
   `books/<slug>/`. Authors and agents only edit Markdown and `media/`.
 
+## Binder / Shelf boundary
+
+This repository is the **public Shelf**. It contains released publication
+snapshots. Drafts and the next revision of a published book belong in the
+private Binder.
+
+Binder and Shelf are separate Git repositories. Shelf does not reference,
+submodule, symlink, mount, or fetch manuscript files from Binder at runtime.
+A normal release copies a committed Binder snapshot into Shelf; after that the
+copies are independent until the next release.
+
+Normal manuscript flow is **Binder → Shelf**. Do not create a two-way sync.
+Shared `reader/` and `desk/` UI is copied separately from the Bookself platform.
+
 ## Voice
 
 - For book, essay, narrative, or other voice-sensitive prose tasks, read and
@@ -51,43 +65,52 @@ vocabulary.
   asked for that by name.
 - Do not change GitHub Pages source away from the repository root, or add a
   custom domain, unless a human asked.
-- Do not commit secrets, credentials, or unpublished manuscripts copied from
-  outside this repository.
+- Do not commit secrets or credentials.
+- Do not add private drafts or next-edition work to this public repository.
+- Do not change a released book to `Drafting` or `Revision in progress` merely
+  to revise it. That can hide it from the Reader while leaving the files public.
+- Do not revise a released manuscript in place unless a human explicitly asks
+  for a live public hotfix or an intentionally public proof.
 
 ## Verbs (author and agent)
 
-These are the whole public lifecycle. Each is Markdown (and maybe `media/`).
+These are the public lifecycle operations.
 
-**Start a book.** Copy `books/_TEMPLATE/` to `books/<slug>/`. Fill title,
-authors, `Status: Drafting`. Add the slug to the chapter-feedback dropdown.
-Do not add the book to the portal README catalog yet.
+**Receive a release.** The normal path begins in the private Binder with
+`scripts/release-book.sh <slug> ../shelf`. That command prepares an exact
+replacement publication snapshot here, sets the Shelf copy to `Published`,
+adds or updates the root **The books** row, verifies copied publication files
+against the committed Binder snapshot, and stops before commit or push.
+Review and land that prepared Shelf change through the normal branch / pull
+request workflow.
 
-**Write / edit.** One chapter file per change. If you add, rename, or remove
-a chapter, update that book's README TOC and Chapters count in the same
-change.
+**Publish.** A released publication has the exact Status `Published` and one
+root README row under **The books**. Normally both are prepared together by the
+Binder release command. Do not change only one side.
 
-**Preview.** After a push, the unlisted reader URL is
-`reader/#/b/<slug>/`. It works while Drafting. It does not appear on the
-shelf.
+**Preview a public proof.** Only when a human explicitly intends a public,
+unlisted proof may a non-published publication live here. Its direct Reader URL
+and raw Git files are public even when it is absent from the visible shelf.
+Never describe an unlisted Shelf proof as private.
 
-**Publish.** In one change set: set the book README Status to the exact
-string `Published`, and add one row to the portal README table under
-“The books” linking `books/<slug>/`. Both are required. Lead author merges.
-Do this here on the **public shelf**. Unpublished manuscripts belong in
-the private binder — see
-https://github.com/Svyable/bookself/blob/main/docs/bookself.md
+**Revise a published book.** Leave this Shelf snapshot unchanged. Revise and
+commit the private Binder copy, then receive the replacement release when it is
+ready.
 
-**Promote (Bookself).** Receive a copied folder promoted from the private
-binder, then Publish here. Do not add unpublished titles to this repo.
+**Live public hotfix.** Only when a human explicitly asks for an immediate
+public correction may the released Shelf manuscript be edited directly. Treat
+that as a public production change, not normal drafting, and reconcile the same
+change back into Binder afterward so the next release does not erase it.
 
-**Unpublish.** Set Status to anything except `Published` and remove the
-portal README row.
-
-**Revise a published book.** Edit the Markdown and push. The reader fetches
-live files. Do not bump a version stamp.
+**Unpublish.** Set Status to anything except `Published` and remove the root
+catalog row. Remember that content already pushed to public Git history is not
+made private by removing it from the current branch.
 
 Optional book README rows (omit or leave blank if unused): **Publisher**,
 **Series**, **Tags**, **Edition**, **Language**, **ISBN**. Series groups
 volumes on the public shelf. Tags are comma-separated. Wiki links
 `[[ch03-publishing|label]]` in chapter Markdown become in-reader jumps.
 Do not invent a config file for these.
+
+See https://github.com/Svyable/bookself/blob/main/docs/revisions.md for the
+canonical revision and release model.
