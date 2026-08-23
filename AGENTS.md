@@ -33,6 +33,17 @@ copies are independent until the next release.
 Normal manuscript flow is **Binder → Shelf**. Do not create a two-way sync.
 Shared `reader/` and `desk/` UI is copied separately from the Bookself platform.
 
+## Local-first publishing
+
+Bookself publishing must remain functional without GitHub Actions. A normal
+release is prepared locally in Binder with Git and Python's standard library,
+then reviewed and committed here. Do not introduce a requirement for a private
+Binder Actions job, hosted build artifact, or deployment runner.
+
+This Shelf's Reader is static and should remain no-build by default. GitHub
+Pages is the delivery surface for committed files, not a reason to add an
+Actions-based build pipeline.
+
 ## Voice
 
 - For book, essay, narrative, or other voice-sensitive prose tasks, read and
@@ -63,6 +74,8 @@ Shared `reader/` and `desk/` UI is copied separately from the Bookself platform.
   style) as a drive-by.
 - Do not add a build step, CODEOWNERS, or branch protection unless a human
   asked for that by name.
+- Do not make publication depend on GitHub Actions, especially a private Binder
+  workflow or paid automation minutes.
 - Do not change GitHub Pages source away from the repository root, or add a
   custom domain, unless a human asked.
 - Do not commit secrets or credentials.
@@ -77,12 +90,12 @@ Shared `reader/` and `desk/` UI is copied separately from the Bookself platform.
 These are the public lifecycle operations.
 
 **Receive a release.** The normal path begins in the private Binder with
-`scripts/release-book.sh <slug> ../shelf`. That command prepares an exact
-replacement publication snapshot here, sets the Shelf copy to `Published`,
-adds or updates the root **The books** row, verifies copied publication files
-against the committed Binder snapshot, and stops before commit or push.
-Review and land that prepared Shelf change through the normal branch / pull
-request workflow.
+`scripts/release-book.sh <slug> ../shelf`. That command runs locally, prepares
+an exact replacement publication snapshot here, sets the Shelf copy to
+`Published`, adds or updates the root **The books** row, verifies copied
+publication files against the committed Binder snapshot, and stops before
+commit or push. Review and land that prepared Shelf change through normal Git;
+a pull request is useful but not required by Bookself itself.
 
 **Publish.** A released publication has the exact Status `Published` and one
 root README row under **The books**. Normally both are prepared together by the
