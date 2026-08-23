@@ -1,9 +1,10 @@
 import { fetchText } from './base.js';
-import { parsePortalCatalog, parsePortalStand, parseBookReadme } from './catalog.js';
+import { parsePortalCatalog, parsePortalWebShelf, parsePortalStand, parseBookReadme } from './catalog.js';
 
 const FORMAT_CSS = 'css/formats.css?v=r1';
 const publicationMeta = new Map();
 let initialized = false;
+let webEntries = [];
 let standEntries = [];
 
 function installStyles() {
@@ -67,6 +68,84 @@ function hashHue(value) {
   return 18 + (hash % 310);
 }
 
+function webVolume(entry, index) {
+  const card = document.createElement('a');
+  card.className = 'volume publication-web-volume';
+  card.href = entry.url;
+  card.target = '_blank';
+  card.rel = 'noopener';
+  card.dataset.publicationFormat = 'web';
+  card.dataset.webVolume = String(index + 1);
+  card.style.setProperty('--cloth', `hsl(${hashHue(entry.domain || entry.title)} 38% 18%)`);
+  card.style.setProperty('--block', '7px');
+  card.setAttribute('aria-label', `${entry.title}, web volume; opens ${entry.domain || 'external site'} in a new tab`);
+  card.title = entry.note || `Open ${entry.domain}`;
+
+  const spine = document.createElement('span');
+  spine.className = 'volume-spine';
+  const block = document.createElement('span');
+  block.className = 'volume-block';
+  const cover = document.createElement('span');
+  cover.className = 'volume-cover';
+
+  const badge = document.createElement('span');
+  badge.className = 'volume-format-badge web-volume-badge';
+  badge.textContent = 'Web';
+
+  const title = document.createElement('span');
+  title.className = 'volume-title';
+  title.textContent = entry.title;
+
+  const domain = document.createElement('span');
+  domain.className = 'volume-author';
+  domain.textContent = entry.domain;
+
+  const note = document.createElement('span');
+  note.className = 'volume-imprint web-volume-note';
+  note.textContent = entry.note || 'Live on the web';
+
+  const open = document.createElement('span');
+  open.className = 'volume-open';
+  open.textContent = 'Visit ↗';
+
+  cover.append(badge, title, domain, note, open);
+  card.append(spine, block, cover);
+  return card;
+}
+
+function renderWebShelf() {
+  const binder = document.getElementById('binderView');
+  const shelf = document.getElementById('shelf');
+  if (!binder || !shelf) return;
+
+  let section = document.getElementById('publicationWebShelf');
+  if (!webEntries.length) {
+    section?.remove();
+    return;
+  }
+
+  if (!section) {
+    section = document.createElement('section');
+    section.id = 'publicationWebShelf';
+    section.className = 'publication-web-shelf';
+    section.innerHTML = `
+      <div class="publication-web-shelf-head">
+        <div>
+          <p class="publication-stand-kicker">Bound for the web</p>
+          <h2>Web shelf</h2>
+        </div>
+        <p class="publication-stand-lede">Sites and apps presented as volumes. Pull one out to visit the original.</p>
+      </div>
+      <div class="shelf publication-web-shelf-row" aria-label="Web volumes"></div>`;
+    shelf.insertAdjacentElement('afterend', section);
+  }
+
+  const row = section.querySelector('.publication-web-shelf-row');
+  if (!row) return;
+  row.innerHTML = '';
+  webEntries.forEach((entry, index) => row.appendChild(webVolume(entry, index)));
+}
+
 function standCard(entry, index) {
   const card = document.createElement('a');
   card.className = 'stand-card';
@@ -110,8 +189,8 @@ function standCard(entry, index) {
 
 function renderStand() {
   const binder = document.getElementById('binderView');
-  const stacks = document.getElementById('stacks');
-  if (!binder || !stacks) return;
+  const shelf = document.getElementById('shelf');
+  if (!binder || !shelf) return;
 
   let section = document.getElementById('publicationStand');
   if (!standEntries.length) {
@@ -132,7 +211,8 @@ function renderStand() {
         <p class="publication-stand-lede">Sites, tools, experiments, and other creations worth opening at the source.</p>
       </div>
       <div class="publication-stand-grid"></div>`;
-    stacks.insertAdjacentElement('afterend', section);
+    const anchor = document.getElementById('publicationWebShelf') || shelf;
+    anchor.insertAdjacentElement('afterend', section);
   }
 
   const grid = section.querySelector('.publication-stand-grid');
@@ -208,13 +288,16 @@ async function initialize() {
 
   try {
     const portal = await fetchText('README.md');
+    webEntries = parsePortalWebShelf(portal);
     standEntries = parsePortalStand(portal);
     await loadPublicationMetadata(portal);
   } catch {
+    webEntries = [];
     standEntries = [];
   }
 
   annotateVolumes();
+  renderWebShelf();
   renderStand();
   syncPaperCover();
 }
