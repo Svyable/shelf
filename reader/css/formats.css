@@ -1,4 +1,4 @@
-/* Publication formats — books, papers, and an external magazine stand. */
+/* Publication formats — books, papers, web volumes, and an external magazine stand. */
 
 .volume.publication-paper {
   --block: 4px !important;
@@ -43,10 +43,12 @@
   text-align: center;
 }
 
+.publication-web-shelf,
 .publication-stand {
   margin: 1.8rem 0 2.4rem;
 }
 
+.publication-web-shelf-head,
 .publication-stand-head {
   display: flex;
   align-items: end;
@@ -63,6 +65,7 @@
   text-transform: uppercase;
 }
 
+.publication-web-shelf h2,
 .publication-stand h2 {
   color: var(--text-primary);
   font-family: var(--font-display);
@@ -75,6 +78,83 @@
   color: var(--text-muted);
   font: 500 0.78rem/1.45 "IBM Plex Sans", system-ui, sans-serif;
   text-align: right;
+}
+
+.publication-web-shelf-row {
+  min-height: 18.5rem;
+  padding-top: 1rem;
+}
+
+.volume.publication-web-volume {
+  width: 12.7rem;
+  height: 17.4rem;
+  filter: drop-shadow(7px 11px 17px rgba(0,0,0,0.48));
+}
+
+.volume.publication-web-volume .volume-cover {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--accent) 78%, #fff 8%);
+  background:
+    radial-gradient(circle at 82% 14%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 31%),
+    linear-gradient(145deg, rgba(255,255,255,.08), transparent 36%),
+    var(--cloth);
+}
+
+.volume.publication-web-volume .volume-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 92%, rgba(255,255,255,.07) 92% 93%, transparent 93%),
+    linear-gradient(0deg, transparent 0 91%, rgba(255,255,255,.055) 91% 92%, transparent 92%);
+}
+
+.volume.publication-web-volume .volume-title,
+.volume.publication-web-volume .volume-author,
+.volume.publication-web-volume .volume-imprint,
+.volume.publication-web-volume .volume-format-badge {
+  position: relative;
+  z-index: 1;
+}
+
+.volume.publication-web-volume .volume-title {
+  font-size: 1.18rem;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+}
+
+.volume.publication-web-volume .volume-author {
+  max-width: 100%;
+  color: color-mix(in srgb, #fff 72%, var(--accent));
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+  text-transform: none;
+  overflow-wrap: anywhere;
+}
+
+.volume.publication-web-volume .web-volume-note {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  color: color-mix(in srgb, #fff 72%, var(--accent));
+  font: 500 0.69rem/1.35 "IBM Plex Sans", system-ui, sans-serif;
+  font-style: normal;
+  letter-spacing: 0.01em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.volume.publication-web-volume .web-volume-badge {
+  background: color-mix(in srgb, var(--accent) 22%, #000 44%);
+}
+
+.volume.publication-web-volume:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+  border-radius: 4px;
 }
 
 .publication-stand-grid {
@@ -185,12 +265,29 @@
 }
 
 @media (max-width: 700px) {
+  .publication-web-shelf-head,
   .publication-stand-head {
     align-items: start;
     flex-direction: column;
   }
 
   .publication-stand-lede { text-align: left; }
+
+  .publication-web-shelf-row {
+    flex-wrap: nowrap;
+    min-height: 18rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    padding-inline: 0.8rem;
+  }
+
+  .volume.publication-web-volume {
+    flex: 0 0 11.8rem;
+    width: 11.8rem;
+    height: 16.3rem;
+    scroll-snap-align: start;
+  }
 
   .publication-stand-grid {
     grid-auto-flow: column;
@@ -206,5 +303,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stand-card { transition: none; }
+  .stand-card,
+  .volume.publication-web-volume { transition: none; }
 }

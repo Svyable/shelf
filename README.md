@@ -44,13 +44,20 @@ To publish a book: copy it from the binder if it was private, set Status to
 `Published` in that book's README, and add a row here in the same publishing
 change.
 
-## The stand
+## The web shelf
 
 - [QNTLab](https://qntlab.app/) — Build + Test = Run
+
+The web shelf is for external work that should have the presence of a bound
+volume. The Reader gives it a spine and cover, while the original website
+remains the source of truth.
+
+## The stand
+
 - [Geek to Me](https://geektome.lovable.app/)
 
-The stand is for creations that should stay at their original website. Bookself
-provides the curated doorway; the linked site remains the source of truth.
+The stand is for external creations that should feel more like a magazine,
+feature, or quick doorway. The linked site remains the source of truth.
 
 ## How it works
 
