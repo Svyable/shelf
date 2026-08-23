@@ -1,11 +1,17 @@
 # Svyable Shelf
 
 Sven Benson's **public shelf** in a [Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)
-setup. The books here are meant to be read. Drafts and unpublished titles
-stay in the private binder until they are deliberately promoted.
+setup. The books here are released editions meant to be read. Drafts and the
+next revision of a published book stay in the private Binder until they are
+deliberately released.
+
+Binder and Shelf are separate Git repositories with separate histories. This
+public repository does **not** point into or read the private Binder. A release
+copies a committed publication snapshot into Shelf; after that, the public copy
+is independent until the next release.
 
 This repository is the first public implementation of the Bookself platform.
-Its identity and published books belong here; the shared Reader and Publishing
+Its identity and released books belong here; the shared Reader and Publishing
 Desk come from [Svyable/bookself](https://github.com/Svyable/bookself).
 
 **Read:** [svyable.github.io/shelf/reader](https://svyable.github.io/shelf/reader/)  
@@ -20,15 +26,16 @@ Bookself keeps platform software separate from an individual deployment:
 
 - `reader/` and `desk/` are **shared Bookself UI** and should stay aligned with
   the upstream platform.
-- `books/`, this `README.md`, and `imprint.json` are **this Shelf's content and
-  identity**.
+- `books/`, this `README.md`, and `imprint.json` are **this Shelf's released
+  content and identity**.
 - `imprint.json` is where Svyable-specific branding and repository identity
   belong; shared Reader/Desk code should not depend on those values.
 
 Platform UI upgrades are developed in Bookself and synchronized to both the
 private Binder and public Shelf. The canonical upstream command is
 `scripts/sync-ui.sh`; the older `sync-reader.sh` name remains a compatibility
-alias in Bookself.
+alias in Bookself. That UI synchronization is also a copy operation, not a
+runtime dependency on the platform repository.
 
 ## The books
 
@@ -37,12 +44,21 @@ alias in Bookself.
 | [Leveraging Luck](books/leveraging-luck/) | @svyable |
 
 *The Exponentiality* is on the desk (`books/the-exponentiality/`) and not yet
-on the shelf. *The Unbounding* stays in the private binder until it is
-promoted here.
+on the shelf. *The Unbounding* stays in the private Binder until it is
+released here.
 
-To publish a book: copy it from the binder if it was private, set Status to
-`Published` in that book's README, and add a row here in the same publishing
-change.
+For a normal publication or new edition, prepare the release from the private
+Binder with `scripts/release-book.sh <slug> ../shelf`. The command copies the
+committed Binder snapshot, sets the Shelf copy to `Published`, updates this
+catalog row, verifies the copied publication files, and stops before commit or
+push so the public diff can be reviewed.
+
+Do not change a released Shelf book to `Drafting` or `Revision in progress`
+just to work on its next edition. That can hide the book from the Reader without
+making its files private. Revise in Binder and release the replacement when it
+is ready.
+
+See [Revising a published book](https://github.com/Svyable/bookself/blob/main/docs/revisions.md).
 
 ## The web shelf
 
@@ -63,10 +79,10 @@ feature, or quick doorway. The linked site remains the source of truth.
 
 This repository is the public half of a Bookself installation.
 
-- **One book, one folder** under `books/<slug>/`.
-- **Plain Markdown** is the source of truth.
-- **GitHub** is where books are written and reviewed.
-- **The reader** (`reader/`) turns published Markdown into the reading
+- **One released publication, one folder** under `books/<slug>/`.
+- **Plain Markdown** is the source of truth for the released Shelf snapshot.
+- **GitHub history** is the release and rollback history for this public copy.
+- **The Reader** (`reader/`) turns published Markdown into the reading
   experience with no build step.
 - **The Publishing Desk** (`desk/`) reads the same repository state and makes
   readiness and publication mismatches visible without adding a CMS.
