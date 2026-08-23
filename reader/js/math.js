@@ -2,6 +2,7 @@ const KATEX_VERSION = '0.18.4';
 const KATEX_URL = `https://cdn.jsdelivr.net/npm/katex@${KATEX_VERSION}/dist/katex.min.js`;
 const KATEX_INTEGRITY = 'sha384-ykMNcWQhhTUb0YV9SPpPUFURHZ+tWmubkakGBP+OgNK/UXdO2gtzglWx0Rj9hnO3';
 const MATH_CSS = 'css/math.css?v=r1';
+const MATH_CACHE = 'obb-shell-v28';
 
 let markedInstalled = false;
 let engineRequested = false;
@@ -173,6 +174,15 @@ function hydratePendingMath() {
   });
 }
 
+function cacheMathEngine() {
+  if (typeof caches === 'undefined') return;
+  caches.open(MATH_CACHE)
+    .then((cache) => cache.add(KATEX_URL))
+    .catch(() => {
+      // Math still renders from the successful script response.
+    });
+}
+
 function announceEngineReady() {
   hydratePendingMath();
   document.documentElement.dataset.math = 'ready';
@@ -185,6 +195,7 @@ export function requestMathEngine() {
   if (engineRequested || typeof document === 'undefined') return;
   engineRequested = true;
   if (globalThis.katex?.renderToString) {
+    cacheMathEngine();
     queueMicrotask(announceEngineReady);
     return;
   }
@@ -197,8 +208,12 @@ export function requestMathEngine() {
   script.referrerPolicy = 'no-referrer';
   script.dataset.bookselfMathEngine = KATEX_VERSION;
   script.addEventListener('load', () => {
-    if (globalThis.katex?.renderToString) announceEngineReady();
-    else document.documentElement.dataset.math = 'fallback';
+    if (globalThis.katex?.renderToString) {
+      cacheMathEngine();
+      announceEngineReady();
+    } else {
+      document.documentElement.dataset.math = 'fallback';
+    }
   }, { once: true });
   script.addEventListener('error', () => {
     document.documentElement.dataset.math = 'fallback';
