@@ -1,105 +1,86 @@
 # Preface
 
-> "Luck is what happens when preparation meets opportunity."  
-> — Seneca
+> **The smallest luck feels personal. The largest luck feels invisible.**  
+> — Sven Hardy Benson
 
-> "The only real disaster is to be unprepared for the present."  
-> — Alan Watts
+I used to think luck was a word people reached for when they had run out of explanation.
 
-> "The art of living is not in preparing for a single great moment, but in attending to the succession of small, ordinary ones."  
-> — in the spirit of Aldous Huxley
+A promotion arrived. A market turned. A stranger became a spouse. A missed flight saved a life. A notebook left on a train reached the one person who knew what to do with it. We would shake our heads, smile at the impossible arithmetic of it all, and call it luck.
 
-> "The present moment is the only place where life is truly available."  
-> — Thich Nhat Hanh
+But the older I get, the less satisfied I am with that answer.
 
-> "Diligence is the mother of good luck."  
-> — attributed to Marcus Aurelius
+Not because luck is unreal. Quite the opposite. Luck is everywhere. It is in the family you did not choose, the language placed in your mouth, the country printed on your passport, the century that priced your talents, the teacher who noticed you, the illness that spared you from a worse road, the friend who dragged you to the room where your future was waiting in ordinary clothes.
 
-> "I find that the harder I work, the more luck I seem to have."  
-> — Thomas Jefferson
+Luck is not smaller than we think. It is larger.
 
-> "Success is the offspring of preparation and opportunity."  
-> — Bobby Unser
+The mistake is believing that because we do not control it, we have no relationship with it.
 
-> "The best time to plant a tree was 20 years ago. The second best time is now."  
-> — Chinese proverb
+This book began as an irritation. I kept noticing how badly we talk about success. The proud erase luck because it makes achievement feel less heroic. The bitter exaggerate luck because it makes effort feel less necessary. Both are incomplete. Luck explains more than the proud admit and less than the bitter insist.
 
-> "The future belongs to those who believe in the beauty of their dreams."  
-> — Eleanor Roosevelt
+The more useful question is not, *Was it luck or effort?*
 
-> "I will prepare and some day my chance will come."  
-> — Abraham Lincoln
+The useful question is, *What kind of person is ready when luck arrives?*
 
-> "The fortunate person is the one who gives themselves a good fortune through good impulses and good actions."  
-> — Marcus Aurelius
+## The question beneath the question
 
+Every life is shaped by two economies of luck.
 
-## The Moment Everything Changed
+**Micro luck** is the luck of moments: the glance, the call, the introduction, the delay, the door left ajar. Micro luck gives us stories.
 
-I was twenty-seven when I first understood luck was not random.
+**Macro luck** is the luck of conditions: birth, family, peace, institutions, technology, geography, health, timing, and the invisible scaffolding of an era. Macro luck gives us possibilities.
 
-I was sitting in a coffee shop in San Francisco, reading a research paper on "serendipity in scientific discovery." The thesis was simple: the most significant breakthroughs in science weren't random — they came from researchers who had cultivated habits, networks, and mindsets that *attracted* unexpected discoveries.
+We remember micro luck because it has a scene. We forget macro luck because it looks like reality.
 
-That paper changed my life.
+This book is about both.
 
-I began obsessively studying luck. Not the superstitious kind — not four-leaf clovers or lucky charms. I studied *real* luck. The kind that separates those who stumble onto opportunity from those who walk past it blindly.
+It is about the tiny moments that almost pass us by, and the large forces that make those moments matter. It is about why the same talent can be worthless in one era and priceless in another. It is about why some rooms carry more future than others. It is about why the lucky are often not merely fortunate, but exposed, attentive, useful, generous, and prepared.
 
-What I found changed everything I thought I knew about success, opportunity, and the nature of a well-lived life.
+It is also about love.
 
----
+A man turns his head in a bar. Years later, that glance has become children, a home, a mortgage, a language of private jokes, and the love of his life asleep beside him. What were the chances? Nearly none. And yet nearly every family begins with someone beating impossible odds by occupying the right second and then choosing not to waste it.
 
-## What This Book Is
+Chance introduces. Desire notices. Passion ignites. Character builds.
 
-This is not a book about "thinking positive" and hoping for the best.
+That pattern does not belong only to romance. It belongs to careers, companies, friendships, discoveries, recoveries, and countries. Luck may open the door. Character determines what we carry through it.
 
-This is not a book about "manifesting" your reality through pure belief.
+## What this book is not
 
-This is a book about the **physics of luck** — the discoverable, learnable, actionable principles that turn chance into momentum, accidents into advantages, and serendipity into a repeatable skill.
+This is not a book about magical thinking.
 
-I've spent years researching this topic:
+It is not a book about manifesting reality by pretending risk is not real. It is not an argument that everyone starts from the same place. They do not. It is not a sermon that if you simply work hard enough, fortune will eventually reward you. History is too honest for that.
 
-- Reading thousands of academic papers
-- Interviewing people who consistently create their own luck
-- Analyzing the habits, patterns, and mindsets of those who attract opportunity
-- Testing frameworks in my own life and with clients
+This is a book about positioning.
 
-And now I'm sharing it all with you.
+About attention.
 
----
+About deciding under uncertainty.
 
-## How to Read This Book
+About widening the surface area of your life so that more useful accidents can find you.
 
-You can read *Leveraging Luck* two ways:
+About becoming the sort of person whom opportunity can recognize.
 
-1. **Cover to cover** — Build your understanding systematically
-2. **Jump around** — Each chapter is designed to stand alone
+The books that shaped my thinking on this subject came from different shelves: behavioral economics, market history, biography, innovation theory, systems thinking, philosophy, management, and memoir. Kahneman taught me that the mind is not a courtroom but a weather system. Taleb taught me that randomness humiliates certainty. Malkiel and Silver taught me probabilistic humility. Steven Johnson and Walter Isaacson showed how invention blooms in networks, not isolation. Christensen showed how good decisions can still become traps when the world changes beneath them. Michael Lewis and Rich Cohen reminded me that the best nonfiction moves like a novel because history itself moves through character. David Brooks, Viktor Frankl, and Robert Pirsig made the deeper point: a life is not only optimized. It is interpreted. It is endured. It is made meaningful.
 
-Either works. But I recommend starting with the first three chapters — they establish the foundation for everything that follows.
+I do not cite those influences to borrow their authority. I cite them because this book is an attempt to braid their wisdom into a usable question:
 
----
+**How do we live so that luck, when it arrives, has somewhere worthy to land?**
 
-## A Promise
+## The promise
 
-By the end of this book, you will:
+By the end of this book, you will not control luck.
 
-- ✅ Understand exactly why some people seem to attract luck
-- ✅ Have concrete strategies to become a "luck magnet"
-- ✅ Know how to recognize and seize opportunities others miss
-- ✅ Have implemented at least three actionable changes in your life
+That would be a childish promise.
 
-This isn't a book to *finish*. It's a book to *use*.
+But you will see luck more clearly. You will know the difference between a spark and the weather around it. You will understand why certain rooms, habits, relationships, and industries create more collisions with possibility. You will learn how to respond to bad luck without immediately surrendering the story. You will become more alert to openings, more humble about advantages, more disciplined about preparation, and more generous with the luck that passes through your hands.
 
-Let's begin.
+That is the highest use of fortune: not to hoard it, but to become a better steward of it.
+
+This is not a book to finish. It is a book to practice.
+
+Let us begin where every serious investigation of luck must begin: with the uncomfortable fact that almost nothing important is entirely earned, and almost nothing worthwhile is entirely accidental.
+
+— **Sven Hardy Benson**
 
 ---
 
-*Sven Benson*  
-San Francisco, 2026
-
----
-
-
-
-[Introduction →](contents/intro.qmd)
-
-
+[Introduction →](ch02-introduction.md)
