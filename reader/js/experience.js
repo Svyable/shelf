@@ -478,7 +478,7 @@ function enhanceSettings() {
   });
   document.querySelectorAll('[data-reader-weight-value]').forEach((button) => {
     button.addEventListener('click', () => {
-      prefs.fontWeight = Number(button.dataset.readerWeightValue;
+      prefs.fontWeight = Number(button.dataset.readerWeightValue);
       applyPrefs();
     });
   });
