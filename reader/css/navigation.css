@@ -1,0 +1,107 @@
+/* Navigation mechanics — safer tap zones and tactile swipe feedback. */
+
+#pagesWrapper {
+  touch-action: pan-y pinch-zoom;
+}
+
+.nav-gesture-preview {
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  z-index: 8;
+  width: min(7.5rem, 22%);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  color: var(--accent);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.nav-gesture-preview::before {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 48%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-elevated) 84%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--shadow) 58%, transparent);
+  font: 500 1.25rem/1 var(--font-accent);
+  backdrop-filter: blur(8px);
+}
+
+.nav-gesture-preview.prev {
+  left: 0;
+  transform: translateX(calc(-0.4rem + var(--nav-drag-distance, 0px)));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent);
+}
+
+.nav-gesture-preview.next {
+  right: 0;
+  transform: translateX(calc(0.4rem - var(--nav-drag-distance, 0px)));
+  background: linear-gradient(270deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent);
+}
+
+.nav-gesture-preview.prev::before { content: "‹"; }
+.nav-gesture-preview.next::before { content: "›"; }
+
+#pagesWrapper.nav-drag-prev .nav-gesture-preview.prev,
+#pagesWrapper.nav-drag-next .nav-gesture-preview.next {
+  opacity: var(--nav-drag-opacity, 0.3);
+}
+
+#pagesWrapper[data-nav-buffered="prev"] .nav-gesture-preview.prev,
+#pagesWrapper[data-nav-buffered="next"] .nav-gesture-preview.next {
+  opacity: 0.3;
+  animation: navBufferedPulse 520ms ease-in-out infinite alternate;
+}
+
+.page-nav .nav-btn {
+  min-width: 2.65rem;
+  min-height: 2.65rem;
+}
+
+.page-nav .nav-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .page-nav .nav-btn {
+    min-width: 2.9rem;
+    min-height: 2.9rem;
+  }
+
+  .nav-gesture-preview {
+    width: 26%;
+  }
+
+  .nav-gesture-preview::before {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.45rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .nav-gesture-preview {
+    top: 4%;
+    bottom: 4%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-gesture-preview {
+    transition: none;
+  }
+
+  #pagesWrapper[data-nav-buffered] .nav-gesture-preview {
+    animation: none;
+  }
+}
+
+@keyframes navBufferedPulse {
+  from { opacity: 0.18; }
+  to { opacity: 0.42; }
+}
