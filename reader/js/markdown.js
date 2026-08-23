@@ -1,5 +1,6 @@
 import { fileUrl } from './base.js';
-import { installMarkedMath } from './math.js';
+import { installMarkedMath, setMathReferenceContext } from './math.js';
+import { installMarkedAcademic, setAcademicContext } from './academic.js';
 
 const CHAPTER = '(?:manuscript\\/)?((?:ch[\\w-]+|front-matter|back-matter)(?:\\.md)?)';
 
@@ -26,8 +27,15 @@ function rewriteUrls(html, slug) {
     );
 }
 
-export function renderMarkdown(markdown, slug) {
+function prepareMarkdown(markdown) {
   installMarkedMath();
+  installMarkedAcademic();
+  setMathReferenceContext(markdown);
+  setAcademicContext(markdown);
+}
+
+export function renderMarkdown(markdown, slug) {
+  prepareMarkdown(markdown);
   const raw = window.marked.parse(expandWikiLinks(markdown), { gfm: true, breaks: false });
   return rewriteUrls(raw, slug);
 }
@@ -47,7 +55,7 @@ export function headingOffsets(markdown) {
 }
 
 export function blocksFromMarkdown(markdown, slug) {
-  installMarkedMath();
+  prepareMarkdown(markdown);
   const tokens = window.marked.lexer(expandWikiLinks(markdown));
   const blocks = [];
   let offset = 0;
