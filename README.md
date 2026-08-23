@@ -48,10 +48,15 @@ on the shelf. *The Unbounding* stays in the private Binder until it is
 released here.
 
 For a normal publication or new edition, prepare the release from the private
-Binder with `scripts/release-book.sh <slug> ../shelf`. The command copies the
-committed Binder snapshot, sets the Shelf copy to `Published`, updates this
-catalog row, verifies the copied publication files, and stops before commit or
-push so the public diff can be reviewed.
+Binder with `scripts/release-book.sh <slug> ../shelf`. The command runs locally,
+copies the committed Binder snapshot, sets the Shelf copy to `Published`,
+updates this catalog row, verifies the copied publication files, and stops
+before commit or push so the public diff can be reviewed.
+
+No private-Binder GitHub Actions job is required to prepare that release, and
+this Shelf does not require an Actions build to turn Markdown into a separate
+artifact. GitHub Pages serves the committed Reader and publication files
+straight from the repository source configured for Pages.
 
 Do not change a released Shelf book to `Drafting` or `Revision in progress`
 just to work on its next edition. That can hide the book from the Reader without
@@ -86,6 +91,8 @@ This repository is the public half of a Bookself installation.
   experience with no build step.
 - **The Publishing Desk** (`desk/`) reads the same repository state and makes
   readiness and publication mismatches visible without adding a CMS.
+- **CI/CD is optional.** Reading and publishing do not depend on an Actions
+  workflow or hosted build artifact.
 
 The software is MIT. The manuscripts are not. See [LICENSE](LICENSE).
 
