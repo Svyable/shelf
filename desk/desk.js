@@ -188,7 +188,7 @@ function analyzeBook(meta, markdown, cataloged, checklist) {
       issues.push({ severity: 'warn', message: 'This published book still has unchecked Contents items.' });
     }
   } else if (state.role === 'binder' && meta.published) {
-    issues.push({ severity: 'warn', message: 'Published status inside a private binder does not publish the book; promotion to the shelf is a separate step.' });
+    issues.push({ severity: 'warn', message: 'Published status inside a private binder does not publish the book; release to the shelf is a separate step.' });
   }
 
   const blockingIssues = issues.filter((issue) => issue.severity === 'severe');
@@ -197,20 +197,20 @@ function analyzeBook(meta, markdown, cataloged, checklist) {
 
   let nextStep = '';
   if (state.role === 'binder') {
-    if (ready) nextStep = 'Ready to promote. Copy this book to the public shelf, then publish it there.';
+    if (ready) nextStep = 'Ready to release. Run the local release command to prepare a verified Shelf snapshot.';
     else if (placeholder) nextStep = 'Finish the book setup: replace template metadata and confirm the manuscript structure.';
     else if (checklist.length && !allChecklistDone) {
       const remaining = checklist.filter((entry) => !entry.checked).length;
       nextStep = `Keep drafting. ${remaining} Contents item${remaining === 1 ? '' : 's'} remain unchecked.`;
-    } else nextStep = 'Resolve the readiness items below before promotion.';
+    } else nextStep = 'Resolve the readiness items below before release.';
   } else if (meta.published && cataloged) {
-    nextStep = 'Published cleanly. Revise the Markdown normally; no version bump is required.';
+    nextStep = 'Released edition. Keep it stable here; revise the next edition in the private Binder.';
   } else if (meta.published && !cataloged) {
     nextStep = 'Complete publishing by adding this book to the root README catalog.';
   } else if (!meta.published && cataloged) {
     nextStep = 'Fix the publication mismatch: publish the book or remove its root catalog row.';
   } else if (ready) {
-    nextStep = 'Ready for editorial review. Publish with Status → Published and a root README catalog row in the same change.';
+    nextStep = 'Ready for editorial review. Publish through the normal release workflow rather than editing a released Shelf edition in place.';
   } else if (placeholder) {
     nextStep = 'Finish the book setup: replace template metadata and confirm the manuscript structure.';
   } else if (checklist.length && !allChecklistDone) {
@@ -265,7 +265,7 @@ function statusState(book) {
 
 function statusLabel(book) {
   if (isPublicRole() && book.published && book.cataloged) return 'Published';
-  if (book.ready) return state.role === 'binder' ? 'Ready to promote' : 'Ready';
+  if (book.ready) return state.role === 'binder' ? 'Ready to release' : 'Ready';
   return book.status || 'Drafting';
 }
 
@@ -363,7 +363,7 @@ function setSummaryLabels() {
   const labels = [...document.querySelectorAll('#summaryGrid .summary-label')];
   if (state.role === 'binder') {
     if (labels[1]) labels[1].textContent = 'Drafting';
-    if (labels[2]) labels[2].textContent = 'Ready to promote';
+    if (labels[2]) labels[2].textContent = 'Ready to release';
   } else {
     if (labels[1]) labels[1].textContent = 'Published';
     if (labels[2]) labels[2].textContent = 'Ready to publish';
