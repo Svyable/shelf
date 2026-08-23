@@ -2,10 +2,11 @@ const KATEX_VERSION = '0.18.4';
 const KATEX_URL = `https://cdn.jsdelivr.net/npm/katex@${KATEX_VERSION}/dist/katex.min.js`;
 const KATEX_INTEGRITY = 'sha384-ykMNcWQhhTUb0YV9SPpPUFURHZ+tWmubkakGBP+OgNK/UXdO2gtzglWx0Rj9hnO3';
 const MATH_CSS = 'css/math.css?v=r1';
-const MATH_CACHE = 'obb-shell-v28';
+const MATH_CACHE = 'obb-shell-v29';
 
 let markedInstalled = false;
 let engineRequested = false;
+let referenceContext = new Map();
 
 function escapeHtml(value) {
   return String(value)
@@ -16,6 +17,10 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+function safeId(value) {
+  return String(value || '').replace(/[^A-Za-z0-9_.:-]+/g, '-');
+}
+
 function sourceAttribute(tex) {
   return escapeHtml(encodeURIComponent(String(tex || '')));
 }
@@ -24,24 +29,51 @@ function trimMath(value) {
   return String(value || '').replace(/^\s+|\s+$/g, '');
 }
 
+function equationLabel(tex) {
+  const match = String(tex || '').match(/\\label\{([^}]+)\}/);
+  return match ? match[1].trim() : '';
+}
+
+function stripEquationLabel(tex) {
+  return trimMath(String(tex || '').replace(/\\label\{[^}]+\}/g, ''));
+}
+
 export function tokenizeBlockMath(src) {
   const source = String(src || '');
   let match = source.match(/^(?: {0,3})\$\$[ \t]*\n?([\s\S]*?)\n?[ \t]*\$\$(?:[ \t]*\n|$)/);
   if (match) {
-    const tex = trimMath(match[1]);
-    if (tex) return { raw: match[0], tex, display: true, delimiter: '$$' };
+    const rawTex = trimMath(match[1]);
+    if (rawTex) return {
+      raw: match[0],
+      tex: stripEquationLabel(rawTex),
+      label: equationLabel(rawTex),
+      display: true,
+      delimiter: '$$',
+    };
   }
 
   match = source.match(/^(?: {0,3})\\\[[ \t]*\n?([\s\S]*?)\n?[ \t]*\\\](?:[ \t]*\n|$)/);
   if (match) {
-    const tex = trimMath(match[1]);
-    if (tex) return { raw: match[0], tex, display: true, delimiter: '\\[' };
+    const rawTex = trimMath(match[1]);
+    if (rawTex) return {
+      raw: match[0],
+      tex: stripEquationLabel(rawTex),
+      label: equationLabel(rawTex),
+      display: true,
+      delimiter: '\\[',
+    };
   }
 
   match = source.match(/^(?: {0,3})(\\begin\{(equation\*?|align\*?|alignat\*?|gather\*?)\}[\s\S]*?\\end\{\2\})(?:[ \t]*\n|$)/);
   if (match) {
-    const tex = trimMath(match[1]);
-    if (tex) return { raw: match[0], tex, display: true, delimiter: 'environment' };
+    const rawTex = trimMath(match[1]);
+    if (rawTex) return {
+      raw: match[0],
+      tex: stripEquationLabel(rawTex),
+      label: equationLabel(rawTex),
+      display: true,
+      delimiter: 'environment',
+    };
   }
 
   return null;
@@ -49,7 +81,17 @@ export function tokenizeBlockMath(src) {
 
 export function tokenizeInlineMath(src) {
   const source = String(src || '');
-  let match = source.match(/^\\\(([^\n]+?)\\\)/);
+  let match = source.match(/^\\eqref\{([^}]+)\}/);
+  if (match) {
+    return {
+      raw: match[0],
+      ref: match[1].trim(),
+      display: false,
+      delimiter: 'eqref',
+    };
+  }
+
+  match = source.match(/^\\\(([^\n]+?)\\\)/);
   if (match) {
     const tex = trimMath(match[1]);
     if (tex) return { raw: match[0], tex, display: false, delimiter: '\\(' };
@@ -65,6 +107,43 @@ export function tokenizeInlineMath(src) {
   return null;
 }
 
+function blockStart(src) {
+  const match = String(src || '').match(/(?:^|\n)( {0,3})(\$\$|\\\[|\\begin\{(?:equation|align|alignat|gather)\*?\})/);
+  if (!match) return undefined;
+  const prefix = match[0].startsWith('\n') ? 1 : 0;
+  return match.index + prefix;
+}
+
+function inlineStart(src) {
+  const indexes = [src.indexOf('$'), src.indexOf('\\('), src.indexOf('\\eqref{')]
+    .filter((value) => value >= 0);
+  return indexes.length ? Math.min(...indexes) : undefined;
+}
+
+export function setMathReferenceContext(markdown) {
+  const source = String(markdown || '');
+  const refs = new Map();
+  let cursor = 0;
+  let number = 1;
+  while (cursor < source.length) {
+    const next = blockStart(source.slice(cursor));
+    if (next == null) break;
+    const start = cursor + next;
+    const token = tokenizeBlockMath(source.slice(start));
+    if (!token) {
+      cursor = start + 1;
+      continue;
+    }
+    if (token.label && !refs.has(token.label)) {
+      refs.set(token.label, { label: token.label, number, offset: start });
+      number += 1;
+    }
+    cursor = start + Math.max(token.raw.length, 1);
+  }
+  referenceContext = refs;
+  return refs;
+}
+
 function katexOptions(displayMode) {
   return {
     displayMode,
@@ -77,43 +156,48 @@ function katexOptions(displayMode) {
   };
 }
 
-function renderedMarkup(tex, displayMode, inner) {
-  const tag = displayMode ? 'div' : 'span';
-  const modeClass = displayMode ? 'reader-math-display' : 'reader-math-inline';
-  return `<${tag} class="reader-math ${modeClass}" data-math-rendered="true" data-math-source="${sourceAttribute(tex)}">${inner}</${tag}>`;
+function mathAttributes(meta = {}) {
+  const bits = [];
+  if (meta.label) bits.push(` id="eq-${safeId(meta.label)}"`);
+  if (meta.number) bits.push(` data-equation-number="${escapeHtml(meta.number)}"`);
+  return bits.join('');
 }
 
-function pendingMarkup(tex, displayMode) {
+function renderedMarkup(tex, displayMode, inner, meta = {}) {
   const tag = displayMode ? 'div' : 'span';
   const modeClass = displayMode ? 'reader-math-display' : 'reader-math-inline';
+  const equationClass = displayMode && meta.label ? ' reader-equation' : '';
+  return `<${tag} class="reader-math ${modeClass}${equationClass}" data-math-rendered="true" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}>${inner}</${tag}>`;
+}
+
+function pendingMarkup(tex, displayMode, meta = {}) {
+  const tag = displayMode ? 'div' : 'span';
+  const modeClass = displayMode ? 'reader-math-display' : 'reader-math-inline';
+  const equationClass = displayMode && meta.label ? ' reader-equation' : '';
   const raw = displayMode ? `$$${tex}$$` : `$${tex}$`;
-  return `<${tag} class="reader-math ${modeClass} reader-math-pending" data-math-rendered="false" data-math-source="${sourceAttribute(tex)}"><code>${escapeHtml(raw)}</code></${tag}>`;
+  return `<${tag} class="reader-math ${modeClass}${equationClass} reader-math-pending" data-math-rendered="false" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}><code>${escapeHtml(raw)}</code></${tag}>`;
 }
 
-export function renderMath(tex, displayMode = false) {
+export function renderMath(tex, displayMode = false, meta = {}) {
   const source = trimMath(tex);
   const katex = globalThis.katex;
 
   if (katex?.renderToString) {
     try {
-      return renderedMarkup(source, displayMode, katex.renderToString(source, katexOptions(displayMode)));
+      return renderedMarkup(source, displayMode, katex.renderToString(source, katexOptions(displayMode)), meta);
     } catch (error) {
       console.warn('Could not render LaTeX math', error);
     }
   }
-  return pendingMarkup(source, displayMode);
+  return pendingMarkup(source, displayMode, meta);
 }
 
-function blockStart(src) {
-  const match = String(src || '').match(/(?:^|\n)( {0,3})(\$\$|\\\[|\\begin\{(?:equation|align|alignat|gather)\*?\})/);
-  if (!match) return undefined;
-  const prefix = match[0].startsWith('\n') ? 1 : 0;
-  return match.index + prefix;
-}
-
-function inlineStart(src) {
-  const indexes = [src.indexOf('$'), src.indexOf('\\(')].filter((value) => value >= 0);
-  return indexes.length ? Math.min(...indexes) : undefined;
+export function renderEquationRef(label) {
+  const ref = referenceContext.get(String(label || '').trim());
+  if (!ref) {
+    return '<span class="reader-equation-ref reader-academic-missing">(?)</span>';
+  }
+  return `<a class="reader-equation-ref" href="#eq-${safeId(ref.label)}" data-academic-offset="${ref.offset}" data-equation-ref="${escapeHtml(ref.label)}">(${ref.number})</a>`;
 }
 
 export function installMarkedMath(marked = globalThis.window?.marked) {
@@ -129,7 +213,11 @@ export function installMarkedMath(marked = globalThis.window?.marked) {
           return token ? { type: 'bookselfMathBlock', ...token } : undefined;
         },
         renderer(token) {
-          return `${renderMath(token.tex, true)}\n`;
+          const ref = token.label ? referenceContext.get(token.label) : null;
+          return `${renderMath(token.tex, true, {
+            label: token.label,
+            number: ref?.number,
+          })}\n`;
         },
       },
       {
@@ -141,6 +229,7 @@ export function installMarkedMath(marked = globalThis.window?.marked) {
           return token ? { type: 'bookselfMathInline', ...token } : undefined;
         },
         renderer(token) {
+          if (token.delimiter === 'eqref') return renderEquationRef(token.ref);
           return renderMath(token.tex, false);
         },
       },
@@ -187,7 +276,6 @@ function announceEngineReady() {
   hydratePendingMath();
   document.documentElement.dataset.math = 'ready';
   window.dispatchEvent(new Event('bookself:math-ready'));
-  // Pages repaginates from the original Markdown; Scroll refreshes its block metrics.
   window.dispatchEvent(new Event('resize'));
 }
 
