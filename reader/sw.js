@@ -1,4 +1,5 @@
-const CACHE = 'obb-shell-v27';
+const CACHE = 'obb-shell-v28';
+const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
   './index.html',
@@ -9,6 +10,9 @@ const SHELL = [
   './css/atmosphere-library.css',
   './css/navigation.css',
   './css/gui.css',
+  './css/media.css',
+  './css/formats.css',
+  './css/math.css',
   './manifest.webmanifest',
   './vendor/marked.min.js',
   './js/atmosphere.js',
@@ -16,6 +20,9 @@ const SHELL = [
   './js/app.js',
   './js/experience.js',
   './js/gui.js',
+  './js/media.js',
+  './js/formats.js',
+  './js/math.js',
   './js/base.js',
   './js/catalog.js',
   './js/imprint.js',
@@ -44,17 +51,25 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+function cacheableExternal(url) {
+  return url.href === KATEX_CDN;
+}
+
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.origin !== location.origin) return;
+  const sameOrigin = url.origin === location.origin;
+  const external = cacheableExternal(url);
+  if (!sameOrigin && !external) return;
 
   event.respondWith(
     fetch(req)
       .then(async (res) => {
-        // Keep a current same-origin copy, but never sacrifice a successful
-        // network response just because storage is full or unavailable.
+        // Keep a current copy, but never sacrifice a successful network
+        // response just because storage is full or unavailable. The pinned
+        // KaTeX runtime is cached after its first successful online load so
+        // math can keep rendering on later offline visits.
         try {
           const cache = await caches.open(CACHE);
           await cache.put(req, res.clone());
@@ -63,6 +78,6 @@ self.addEventListener('fetch', (event) => {
         }
         return res;
       })
-      .catch(() => caches.match(req, { ignoreSearch: true }))
+      .catch(() => caches.match(req, { ignoreSearch: sameOrigin }))
   );
 });
