@@ -1,119 +1,113 @@
 # Introduction
 
-> "The only real disaster is to be unprepared for the present."  
-> — Alan Watts
+> **Luck has two economies: the moments that find us, and the systems that frame us.**  
+> — Sven Hardy Benson
 
-> "You will never notice opportunity if you are always hurrying past it."  
-> — in the spirit of Aldous Huxley
+There is a moment in nearly every life that becomes more important in memory than it looked in real time.
 
-> "Most people are not unlucky; they are asleep."  
-> — Thich Nhat Hanh-style
+A hallway conversation. A rejected application. A cheap apartment near the right people. A job taken only because the first choice fell through. A book handed over by a friend who said, *You might like this.* A night out you almost skipped. A market crash that seemed to end one career and quietly opened another.
 
-> "You will never catch luck if you are always fleeing the present in pursuit of some future 'big break.'"  
-> — Marcus Aurelius-style
+At the time, it does not feel like destiny. It feels like Tuesday.
 
-> "Stop waiting for the perfect moment—there is no such thing. There is only this moment, and it is enough."  
-> — Sven Benson
+Only later do we see the hinge.
 
-> "Luck is not a distant event—it is the moment when you are present enough to notice something real."  
-> — Sven Benson
+This is why luck is so hard to discuss honestly. We live forward, where everything feels uncertain, but explain backward, where everything starts to look inevitable. Once an outcome succeeds, the human mind becomes a press secretary. It edits the mess. It deletes the doubts. It turns hesitation into vision and accidents into strategy.
 
+That is comforting. It is also dangerous.
 
-## The Luck Paradox
+Daniel Kahneman spent a career showing that the mind is brilliant at storytelling and mediocre at statistical humility. Nassim Taleb warned that randomness often wears the costume of skill. Burton Malkiel showed generations of investors that markets punish overconfidence. Nate Silver made probability feel less like math and more like moral discipline: say what you know, say how much you know it, and leave room for surprise.
 
-Here's a question that haunted me:
+This book begins from that humility.
 
-> If success requires luck, and luck is random, isn't success itself random?
+Much of life is not under our control. But much of life is still under our influence.
 
-It's a dispiriting conclusion. It suggests that the亿万富翁 and the homeless person are equally subject to the whims of fortune. That hard work, talent, and intelligence matter less than being born in the right place at the right time.
+That distinction is everything.
 
-**But here's what I discovered:**
+## The luck paradox
 
-Luck is not random. Or at least — it's not *completely* random.
+Here is the question that haunted me:
 
-The most successful people aren't luckier in the sense that they're blessed by the universe. They're luckier in the sense that they've learned to create the conditions for luck to find them.
+> If success requires luck, and luck is random, is success itself random?
 
----
+The lazy answer is yes. The flattering answer is no. The useful answer is: not completely.
 
-## What Does "Leveraging Luck" Mean?
+Luck is not evenly distributed. Some people are born into peace, stability, education, health, and institutions that make ambition practical. Others are born into war, scarcity, disorder, prejudice, or bodies that make each ordinary day a negotiation. No serious philosophy of success can pretend those starting lines are the same.
 
-Let's be precise. When I say "leverage luck," I don't mean:
+And yet starting lines are not finish lines.
 
-- ✗ Wishing for good fortune
-- ✗ Taking lucky guesses
-- ✗ Waiting for the right moment
+Between birth and legacy sits a long middle region: attention, character, judgment, relationships, effort, courage, timing, generosity, and the willingness to move toward places where possibility is denser. That middle region is where luck can be leveraged.
 
-I mean:
+The purpose of this book is not to deny chance. It is to develop a better relationship with it.
 
-- ✓ Creating systems that increase your exposure to opportunity
-- ✓ Developing patterns that help you recognize serendipity
-- ✓ Building relationships that multiply your chances
-- ✓ Cultivating a mindset that transforms setbacks into setups
+## What leveraging luck means
 
-**Luck is a muscle.** And like any muscle, it can be exercised, strengthened, and optimized.
+When I say **leverage luck**, I do not mean wishing harder.
 
----
+I mean learning to increase the probability that useful accidents encounter a prepared life.
 
-## The Three Parts of Luck
+It means four things:
 
-Research (and my own experience) suggests there are three types of luck:
+1. **Positioning** — standing where interesting collisions are more likely.
+2. **Preparation** — building the skill and character to recognize what arrives.
+3. **Action** — moving before certainty has finished its paperwork.
+4. **Stewardship** — using the luck that reaches you to build, repair, connect, and compound.
 
-### 1. Blind Luck
+A scientist sees mold where another person sees contamination. A founder sees a fringe technology where an incumbent sees a toy. An investor sees a market mania and asks what everyone is being paid not to notice. A lover sees a stranger across a room and somehow understands that the future has briefly become visible.
 
-Pure chance. Being in the right place at the right time. Winning the lottery.
+The event may be accidental. The response is not.
 
-**You can't control this.** And you shouldn't try.
+## The three layers of luck
 
-### 2. Luck You Create
+Most books flatten luck into a single idea. I want to separate it into three layers.
 
-Through effort, preparation, and action, you increase your chances of being in the right place at the right time.
+### 1. Blind luck
 
-**This is where the magic is.** This is what this book is about.
+This is luck with no address. It is birth order, weather, genetics, timing, accident, catastrophe, lottery, the stray spore in the Petri dish, the storm that breaks the fleet, the missed plane that saves a life.
 
-### 3. Luck You Attract
+You cannot control blind luck. The best you can do is respect it.
 
-Your mindset, energy, and reputation cause others to bring opportunities to you.
+### 2. Created luck
 
-**This is the highest level.** And it's absolutely learnable.
+This is the luck produced by motion. You meet more people. You ship more work. You ask more questions. You enter more rooms. You take small bets. You build useful skills. You widen the surface area of your life.
 
----
+Chance favors motion because motion creates collisions.
 
-## The Roadmap
+### 3. Attracted luck
 
-Here's what we'll cover:
+This is the luck that comes through reputation. People bring you opportunities because they trust your judgment, admire your work, or remember that you treated earlier, smaller chances with respect.
 
-### Part I: Foundations
+Opportunity has a memory.
 
-- **Chapter 1:** Defining Luck — Moving beyond superstition
-- **Chapter 2:** The Luck Mindset — The psychological foundation
+The highest form of luck is not finding a door. It is becoming someone others call when a door opens.
 
-### Part II: Strategies
+## The shape of this book
 
-- **Chapter 3:** Leverage Strategies — How to create your own luck
-- **Chapter 4:** Action Catalysts — Converting opportunity into action
+This book is built as a widening spiral.
 
-### Part III: Mastery
+We begin by defining luck: not as superstition, but as the interplay between accident and atmosphere. Then we examine the mindset that allows people to notice what others dismiss. We move into strategies: portfolios of exposure, weak ties, experiments, rooms where the future leaks out early. We study bad luck, because every serious philosophy of fortune must explain what to do when fortune wounds. We turn to action, momentum, and the discipline of response. Finally, we ask what kind of legacy luck should leave behind.
 
-- **Chapter 5:** Sustaining Momentum — Making luck a lifestyle
-- **Conclusion:** Your Luck Legacy
+The chapters will move across history, science, finance, business, love, and ordinary domestic life because luck itself refuses to stay in one discipline. The same pattern appears everywhere: a condition, an opening, a decision, a consequence.
 
----
+The Spanish Armada meets a storm. Fleming notices a mold. Silicon Valley turns hobbyists into prophets. A company ignores a low-end technology until the toy becomes the future. A young person reads the right book too early to understand it, then spends a decade becoming the sort of person who finally can.
 
-## A Final Thought
+The stories differ. The grammar repeats.
 
-> "I'm a great believer in luck, and I find the harder I work, the more I have of it."  
-> — Thomas Jefferson
+## A note on optimism
 
-Jefferson understood something most people miss: **luck follows action.**
+This is an optimistic book, but not because life is fair.
 
-You don't need to believe in magic. You don't need to change your personality. You need to change your *systems*.
+Life is not fair.
 
-Let's get to work.
+Optimism that cannot survive contact with unfairness is merely decoration. The optimism I care about is sturdier. It says: even when much is given, much can still be shaped. Even when events cannot be controlled, responses can be trained. Even when the first draft of a life is written by conditions we did not choose, revision remains possible.
+
+That is not naïve. That is disciplined hope.
+
+The question is not whether you will be lucky.
+
+You already have been, in ways you can see and ways you cannot. You have also been unlucky, perhaps in ways no one else can fully understand.
+
+The question is what you will do with both.
 
 ---
 
-
-
-[Chapter 1: Defining Luck →](chapters/ch01-defining-luck.qmd)
-
-
+[Chapter 3: Defining Luck →](ch03-defining-luck.md)
