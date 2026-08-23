@@ -224,7 +224,7 @@ function renderStand() {
 function syncEmptyShelf() {
   const empty = document.getElementById('emptyShelf');
   if (!empty) return;
-  if (webEntries.length || standEntries.length) empty.hidden = true;
+  if ((webEntries.length || standEntries.length) && !empty.hidden) empty.hidden = true;
 }
 
 function syncPaperCover() {
