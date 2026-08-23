@@ -44,6 +44,14 @@ To publish a book: copy it from the binder if it was private, set Status to
 `Published` in that book's README, and add a row here in the same publishing
 change.
 
+## The stand
+
+- [QNTLab](https://qntlab.app/) — Build + Test = Run
+- [Geek to Me](https://geektome.lovable.app/)
+
+The stand is for creations that should stay at their original website. Bookself
+provides the curated doorway; the linked site remains the source of truth.
+
 ## How it works
 
 This repository is the public half of a Bookself installation.
