@@ -8,6 +8,7 @@ const OVERLAYS = [
 ];
 
 const openers = new Map();
+let overlayStack = [];
 let lastExternalFocus = null;
 let idleTimer = null;
 
@@ -21,6 +22,15 @@ function activeOverlays() {
     .filter((overlay) => overlay?.classList.contains('active'));
 }
 
+function topOverlay() {
+  for (let index = overlayStack.length - 1; index >= 0; index -= 1) {
+    const overlay = $(overlayStack[index]);
+    if (overlay?.classList.contains('active')) return overlay;
+  }
+  const active = activeOverlays();
+  return active[active.length - 1] || null;
+}
+
 function focusables(container) {
   return [...container.querySelectorAll(
     'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
@@ -32,13 +42,27 @@ function syncOverlayAccessibility(overlay, active) {
   overlay.setAttribute('aria-hidden', String(!active));
 }
 
+function syncOverlayStack() {
+  overlayStack = overlayStack.filter((id) => $(id)?.classList.contains('active'));
+  const top = topOverlay();
+
+  OVERLAYS.forEach(({ id }) => {
+    const overlay = $(id);
+    if (!overlay) return;
+    const isActive = overlay.classList.contains('active');
+    const stackIndex = overlayStack.indexOf(id);
+    syncOverlayAccessibility(overlay, isActive && overlay === top);
+    overlay.style.zIndex = isActive ? String(80 + Math.max(0, stackIndex)) : '';
+  });
+}
+
 function setOverlaySemantics(overlay, label) {
   overlay.setAttribute('role', 'dialog');
   overlay.setAttribute('aria-modal', 'true');
   if (!overlay.hasAttribute('aria-label') && !overlay.hasAttribute('aria-labelledby')) {
     overlay.setAttribute('aria-label', label);
   }
-  syncOverlayAccessibility(overlay, overlay.classList.contains('active'));
+  syncOverlayAccessibility(overlay, false);
 }
 
 function syncBodyOverlayState() {
@@ -50,7 +74,7 @@ function syncBodyOverlayState() {
 
 function focusOverlay(overlay, closeId) {
   requestAnimationFrame(() => {
-    if (!overlay.classList.contains('active')) return;
+    if (!overlay.classList.contains('active') || overlay !== topOverlay()) return;
 
     if (overlay.id === 'settingsPanel') {
       overlay.querySelector('.settings-card')?.scrollTo({ top: 0, behavior: 'auto' });
@@ -70,8 +94,8 @@ function restoreFocus(overlay) {
   openers.delete(overlay.id);
   if (!opener?.isConnected || typeof opener.focus !== 'function') return;
 
-  const remaining = activeOverlays();
-  if (remaining.length && !remaining.some((item) => item.contains(opener))) return;
+  const top = topOverlay();
+  if (top && !top.contains(opener)) return;
   opener.focus({ preventScroll: true });
 }
 
@@ -82,7 +106,6 @@ function onOverlayMutation(overlay, config) {
   overlay.dataset.guiActive = String(isActive);
 
   if (isActive) {
-    syncOverlayAccessibility(overlay, true);
     const active = document.activeElement;
     const opener = active && active !== document.body && !overlay.contains(active)
       ? active
@@ -90,10 +113,14 @@ function onOverlayMutation(overlay, config) {
     if (opener?.isConnected && !overlay.contains(opener)) {
       openers.set(overlay.id, opener);
     }
+    overlayStack = overlayStack.filter((id) => id !== overlay.id);
+    overlayStack.push(overlay.id);
+    syncOverlayStack();
     focusOverlay(overlay, config.close);
   } else {
+    overlayStack = overlayStack.filter((id) => id !== overlay.id);
+    syncOverlayStack();
     restoreFocus(overlay);
-    syncOverlayAccessibility(overlay, false);
   }
   syncBodyOverlayState();
 }
@@ -127,7 +154,7 @@ function installOverlayPolish() {
 
     if (config.id !== 'tocOverlay') {
       overlay.addEventListener('click', (event) => {
-        if (event.target === overlay) closeOverlay(config);
+        if (event.target === overlay && overlay === topOverlay()) closeOverlay(config);
       });
     }
 
@@ -135,13 +162,13 @@ function installOverlayPolish() {
     observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
   });
 
+  syncOverlayStack();
   syncBodyOverlayState();
 }
 
 function trapModalFocus(event) {
   if (event.key !== 'Tab') return;
-  const overlays = activeOverlays();
-  const overlay = overlays[overlays.length - 1];
+  const overlay = topOverlay();
   if (!overlay) return;
 
   const items = focusables(overlay);
