@@ -23,15 +23,22 @@ export function parsePortalCatalog(markdown) {
   return slugs;
 }
 
-export function parsePortalStand(markdown) {
-  const section = extractSection(markdown, 'The stand') || extractSection(markdown, 'Magazine stand');
+function externalEntries(section) {
   if (!section) return [];
   const entries = [];
+  const seen = new Set();
   const re = /^-\s+\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)(?:\s+[—–-]\s+(.+))?\s*$/gim;
   let m;
   while ((m = re.exec(section))) {
     const url = m[2].trim();
-    const domain = url.replace(/^https?:\/\/(?:www\.)?/i, '').split('/')[0];
+    if (seen.has(url)) continue;
+    seen.add(url);
+    let domain = url.replace(/^https?:\/\/(?:www\.)?/i, '').split('/')[0];
+    try {
+      domain = new URL(url).hostname.replace(/^www\./i, '') || domain;
+    } catch {
+      // Keep the simple parsed domain for a syntactically matched URL.
+    }
     entries.push({
       title: m[1].trim(),
       url,
@@ -40,6 +47,18 @@ export function parsePortalStand(markdown) {
     });
   }
   return entries;
+}
+
+export function parsePortalWebShelf(markdown) {
+  const section = extractSection(markdown, 'The web shelf')
+    || extractSection(markdown, 'Web shelf')
+    || extractSection(markdown, 'Web volumes');
+  return externalEntries(section);
+}
+
+export function parsePortalStand(markdown) {
+  const section = extractSection(markdown, 'The stand') || extractSection(markdown, 'Magazine stand');
+  return externalEntries(section);
 }
 
 function cell(markdown, label) {
