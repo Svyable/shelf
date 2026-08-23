@@ -81,9 +81,12 @@ function prepareImage(img) {
   if (!readerImage(img)) return;
   img.decoding = 'async';
   img.draggable = false;
-  img.tabIndex = 0;
-  img.setAttribute('role', 'button');
-  img.setAttribute('aria-label', img.alt ? `Expand image: ${img.alt}` : 'Expand image');
+  const measuring = !!img.closest('#pageMeasureInner');
+  if (!measuring) {
+    img.tabIndex = 0;
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', img.alt ? `Expand image: ${img.alt}` : 'Expand image');
+  }
   if (img.complete && img.naturalWidth) scheduleRepaginate(img);
 }
 
@@ -123,6 +126,11 @@ document.addEventListener('click', (event) => {
 }, true);
 
 document.addEventListener('keydown', (event) => {
+  if (lightbox && !lightbox.hidden && event.key === 'Tab') {
+    event.preventDefault();
+    lightbox.querySelector('.reader-media-lightbox-close')?.focus();
+    return;
+  }
   if (event.key === 'Escape' && lightbox && !lightbox.hidden) {
     event.preventDefault();
     event.stopPropagation();
