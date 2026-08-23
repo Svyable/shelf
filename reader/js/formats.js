@@ -221,6 +221,12 @@ function renderStand() {
   standEntries.forEach((entry, index) => grid.appendChild(standCard(entry, index)));
 }
 
+function syncEmptyShelf() {
+  const empty = document.getElementById('emptyShelf');
+  if (!empty) return;
+  if (webEntries.length || standEntries.length) empty.hidden = true;
+}
+
 function syncPaperCover() {
   const slug = currentSlug();
   const meta = publicationMeta.get(slug);
@@ -262,8 +268,13 @@ function syncPaperCover() {
 
 function observeReader() {
   const binder = document.getElementById('binderView');
-  const observer = new MutationObserver(() => annotateVolumes());
+  const empty = document.getElementById('emptyShelf');
+  const observer = new MutationObserver(() => {
+    annotateVolumes();
+    syncEmptyShelf();
+  });
   if (binder) observer.observe(binder, { childList: true, subtree: true });
+  if (empty) observer.observe(empty, { attributes: true, attributeFilter: ['hidden'] });
   window.addEventListener('hashchange', () => queueMicrotask(syncPaperCover));
   window.addEventListener('popstate', () => queueMicrotask(syncPaperCover));
 }
@@ -299,6 +310,7 @@ async function initialize() {
   annotateVolumes();
   renderWebShelf();
   renderStand();
+  syncEmptyShelf();
   syncPaperCover();
 }
 
