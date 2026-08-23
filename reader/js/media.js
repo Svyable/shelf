@@ -1,3 +1,7 @@
+import('./formats.js').catch((error) => {
+  console.warn('Publication format enhancements could not be loaded', error);
+});
+
 const MEDIA_CSS = 'css/media.css?v=r1';
 const loadedSources = new Set();
 let repaginateTimer = null;
