@@ -2,6 +2,10 @@
 
 Rules for AI agents working in this repository.
 
+Before changing files, read `.agents/README.md` for the repository's public
+semantic map, canonical-source order, publication semantics, and discovery
+vocabulary.
+
 ## Scope
 
 - Do only what was asked. Do not rewrite neighboring chapters, "clean up"
@@ -17,6 +21,9 @@ Rules for AI agents working in this repository.
 
 ## Voice
 
+- For book, essay, narrative, or other voice-sensitive prose tasks, read and
+  apply `.agents/skills/human-prose/SKILL.md` before drafting, reviewing, or
+  editing.
 - Preserve the author's voice, tense, and rhythm. Match the surrounding
   sentences, not a house style you brought with you.
 - Do not substitute synonyms "for clarity" unless the author asked for that.
