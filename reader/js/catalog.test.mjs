@@ -1,4 +1,4 @@
-import { parsePortalCatalog, parsePortalStand, parseBookReadme, extractSection } from './catalog.js';
+import { parsePortalCatalog, parsePortalWebShelf, parsePortalStand, parseBookReadme, extractSection } from './catalog.js';
 import assert from 'node:assert/strict';
 
 const portal = `# bookself
@@ -11,9 +11,12 @@ const portal = `# bookself
 
 To start one, copy [\`books/_TEMPLATE/\`](books/_TEMPLATE/) to \`books/<your-slug>/\`.
 
-## The stand
+## The web shelf
 
 - [QNTLab](https://qntlab.app/) — Build + Test = Run
+
+## The stand
+
 - [Geek to Me](https://geektome.lovable.app/)
 
 ## How to take part
@@ -22,15 +25,28 @@ To start one, copy [\`books/_TEMPLATE/\`](books/_TEMPLATE/) to \`books/<your-slu
 const slugs = parsePortalCatalog(portal);
 assert.deepEqual(slugs, ['the-example-book']);
 
+const webShelf = parsePortalWebShelf(portal);
+assert.deepEqual(webShelf, [
+  { title: 'QNTLab', url: 'https://qntlab.app/', note: 'Build + Test = Run', domain: 'qntlab.app' },
+]);
+
 const stand = parsePortalStand(portal);
 assert.deepEqual(stand, [
-  { title: 'QNTLab', url: 'https://qntlab.app/', note: 'Build + Test = Run', domain: 'qntlab.app' },
   { title: 'Geek to Me', url: 'https://geektome.lovable.app/', note: '', domain: 'geektome.lovable.app' },
 ]);
 
 const empty = parsePortalCatalog(`# x\n\n## The books\n\nNo books yet.\n`);
 assert.deepEqual(empty, []);
+assert.deepEqual(parsePortalWebShelf(`# x\n\n## The web shelf\n\nNothing here.\n`), []);
 assert.deepEqual(parsePortalStand(`# x\n\n## The stand\n\nNothing here.\n`), []);
+
+const aliases = parsePortalWebShelf(`## Web volumes\n\n- [Lab](https://www.example.org/path) - A useful site\n`);
+assert.deepEqual(aliases, [
+  { title: 'Lab', url: 'https://www.example.org/path', note: 'A useful site', domain: 'example.org' },
+]);
+
+const deduped = parsePortalWebShelf(`## The web shelf\n\n- [One](https://example.com/)\n- [Again](https://example.com/)\n`);
+assert.equal(deduped.length, 1);
 
 const mixed = parsePortalCatalog(`## The books
 
@@ -97,6 +113,7 @@ const drafting = parseBookReadme(`# T\n\n| **Status** | Drafting |\n`, 't');
 assert.equal(drafting.published, false);
 
 assert.ok(extractSection(portal, 'The books').includes('the-example-book'));
-assert.ok(extractSection(portal, 'The stand').includes('QNTLab'));
+assert.ok(extractSection(portal, 'The web shelf').includes('QNTLab'));
+assert.ok(extractSection(portal, 'The stand').includes('Geek to Me'));
 
 console.log('catalog tests ok');
