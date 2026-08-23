@@ -1,0 +1,82 @@
+/* Scholarly Markdown primitives: figures, citations, bibliography entries, and footnotes. */
+
+.reader-figure {
+  margin: 1.35em auto;
+  break-inside: avoid;
+  text-align: center;
+}
+
+.reader-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.reader-figure figcaption {
+  max-width: 42rem;
+  margin: 0.65em auto 0;
+  color: var(--text-secondary);
+  font-size: 0.82em;
+  line-height: 1.45;
+  text-align: left;
+  text-indent: 0;
+}
+
+.reader-citation,
+.reader-equation-ref,
+.reader-footnote-ref {
+  color: var(--accent);
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.15em;
+}
+
+.reader-footnote-marker {
+  margin-left: 0.08em;
+  font-size: 0.72em;
+  line-height: 0;
+  vertical-align: super;
+}
+
+.reader-footnote {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.45em;
+  margin: 0.85em 0;
+  padding-top: 0.65em;
+  border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  color: var(--text-secondary);
+  font-size: 0.82em;
+  line-height: 1.5;
+  text-indent: 0;
+}
+
+.reader-footnote > sup {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.reader-footnote > div > :first-child {
+  margin-top: 0;
+}
+
+.reader-reference {
+  margin: 0.72em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.reader-academic-missing {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+@media print {
+  .reader-figure,
+  .reader-footnote,
+  .reader-reference {
+    break-inside: avoid;
+  }
+}
