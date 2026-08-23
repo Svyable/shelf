@@ -182,10 +182,7 @@ function syncPaperCover() {
 
 function observeReader() {
   const binder = document.getElementById('binderView');
-  const observer = new MutationObserver(() => {
-    annotateVolumes();
-    renderStand();
-  });
+  const observer = new MutationObserver(() => annotateVolumes());
   if (binder) observer.observe(binder, { childList: true, subtree: true });
   window.addEventListener('hashchange', () => queueMicrotask(syncPaperCover));
   window.addEventListener('popstate', () => queueMicrotask(syncPaperCover));
