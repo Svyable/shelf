@@ -2,12 +2,12 @@
 
 | | |
 |---|---|
-| **Author**    | Sven Hardy Benson |
-| **Status**    | Revision in progress |
+| **Authors**   | @svyable |
+| **Status**    | Published |
 | **Publisher** | Svyable Shelf |
-| **Chapters**  | 10 of 10 drafted; first integrated narrative pass underway |
+| **Chapters**  | 10 of 10 drafted |
 
-An Optimistic Guide to Life.
+An Optimistic Guide To Life.
 
 ## Contents
 
@@ -22,7 +22,6 @@ An Optimistic Guide to Life.
 - [x] [Ch 8 — Sustaining Momentum](manuscript/ch08-sustaining-momentum.md)
 - [x] [Ch 9 — Carpe Diem](manuscript/ch09-carpe-diem.md)
 - [x] [Ch 10 — Conclusion: Your Luck Legacy](manuscript/ch10-your-luck-legacy.md)
-- [x] [Reading Lineage](manuscript/reading-lineage.md)
 - [x] [Narrative Spine & Chapter Weave](manuscript/chapter-weave.md)
 - [x] [Sven Hardy Benson Quote Registry](manuscript/quote-registry.md)
 - [x] [Back Matter](manuscript/back-matter.md)
