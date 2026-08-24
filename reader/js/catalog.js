@@ -72,14 +72,14 @@ function cell(markdown, label) {
 
 function normalizeFormat(value) {
   const raw = String(value || '').trim().toLowerCase();
-  if (['paper', 'whitepaper', 'white paper', 'research paper', 'preprint'].includes(raw)) return 'paper';
+  if (['paper', 'whitepaper', 'white paper', 'research paper', 'preprint', 'thesis', 'dissertation'].includes(raw)) return 'paper';
   if (['magazine', 'periodical', 'zine'].includes(raw)) return 'magazine';
   if (['newspaper', 'gazette', 'daily'].includes(raw)) return 'newspaper';
-  if (['journal', 'academic journal', 'research journal'].includes(raw)) return 'journal';
+  if (['journal', 'academic journal', 'research journal', 'proceedings', 'conference proceedings'].includes(raw)) return 'journal';
   if (['newsletter', 'bulletin'].includes(raw)) return 'newsletter';
   if (['comic', 'graphic novel', 'graphic narrative'].includes(raw)) return 'comic';
-  if (['anthology', 'collection'].includes(raw)) return 'anthology';
-  if (['report', 'annual report', 'field report'].includes(raw)) return 'report';
+  if (['anthology', 'collection', 'chapbook', 'poetry collection', 'story collection'].includes(raw)) return 'anthology';
+  if (['report', 'annual report', 'field report', 'manual', 'handbook', 'guide', 'catalog', 'catalogue', 'pamphlet', 'brochure'].includes(raw)) return 'report';
   return 'book';
 }
 
@@ -117,6 +117,23 @@ function plainInlineText(value) {
     .trim();
 }
 
+function identifierLinks(isbn, doi, explicitLinks) {
+  const links = [];
+  const labels = new Set(explicitLinks.map((link) => link.label.trim().toLowerCase()));
+
+  const compactIsbn = String(isbn || '').replace(/[^0-9Xx]/g, '').toUpperCase();
+  if (!labels.has('open library') && (/^\d{13}$/.test(compactIsbn) || /^\d{9}[\dX]$/.test(compactIsbn))) {
+    links.push({ label: 'Open Library', url: `https://openlibrary.org/isbn/${compactIsbn}` });
+  }
+
+  const cleanDoi = String(doi || '').trim().replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '');
+  if (!labels.has('doi') && /^10\.\d{4,9}\/.+/.test(cleanDoi)) {
+    links.push({ label: 'DOI', url: `https://doi.org/${cleanDoi}` });
+  }
+
+  return links;
+}
+
 export function parseBookReadme(markdown, slug) {
   const titleMatch = markdown.match(/^#\s+(.+)$/m);
   const title = titleMatch ? titleMatch[1].trim() : slug;
@@ -133,6 +150,14 @@ export function parseBookReadme(markdown, slug) {
     const id = file.replace(/^manuscript\//, '').replace(/\.md$/i, '');
     contents.push({ title: m[1].trim(), file, id });
   }
+
+  const isbn = cell(markdown, 'ISBN');
+  const doi = cell(markdown, 'DOI');
+  const explicitExternalLinks = mergeLinks(
+    parseLinks(cell(markdown, 'Links')),
+    parseLinks(cell(markdown, 'Find elsewhere'))
+  );
+
   return {
     slug,
     title,
@@ -145,10 +170,10 @@ export function parseBookReadme(markdown, slug) {
     formatLabel: formatLabel || 'Book',
     publisher: cell(markdown, 'Publisher'),
     venue: cell(markdown, 'Venue'),
-    doi: cell(markdown, 'DOI'),
+    doi,
     edition: cell(markdown, 'Edition'),
     language: cell(markdown, 'Language'),
-    isbn: cell(markdown, 'ISBN'),
+    isbn,
     issn: cell(markdown, 'ISSN'),
     series: cell(markdown, 'Series'),
     volume: cell(markdown, 'Volume'),
@@ -156,8 +181,8 @@ export function parseBookReadme(markdown, slug) {
     publicationDate: cell(markdown, 'Publication date') || cell(markdown, 'Date'),
     frequency: cell(markdown, 'Frequency'),
     externalLinks: mergeLinks(
-      parseLinks(cell(markdown, 'Links')),
-      parseLinks(cell(markdown, 'Find elsewhere'))
+      explicitExternalLinks,
+      identifierLinks(isbn, doi, explicitExternalLinks)
     ),
     tags: cell(markdown, 'Tags')
       .split(',')
