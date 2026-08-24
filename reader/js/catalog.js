@@ -117,12 +117,33 @@ function plainInlineText(value) {
     .trim();
 }
 
+function normalizedIsbn(value) {
+  const compact = String(value || '').replace(/[^0-9Xx]/g, '').toUpperCase();
+
+  if (/^\d{13}$/.test(compact)) {
+    const sum = [...compact.slice(0, 12)].reduce(
+      (total, digit, index) => total + Number(digit) * (index % 2 === 0 ? 1 : 3),
+      0
+    );
+    const check = (10 - (sum % 10)) % 10;
+    return check === Number(compact[12]) ? compact : '';
+  }
+
+  if (/^\d{9}[\dX]$/.test(compact)) {
+    const digits = [...compact].map((digit) => digit === 'X' ? 10 : Number(digit));
+    const sum = digits.reduce((total, digit, index) => total + digit * (10 - index), 0);
+    return sum % 11 === 0 ? compact : '';
+  }
+
+  return '';
+}
+
 function identifierLinks(isbn, doi, explicitLinks) {
   const links = [];
   const labels = new Set(explicitLinks.map((link) => link.label.trim().toLowerCase()));
 
-  const compactIsbn = String(isbn || '').replace(/[^0-9Xx]/g, '').toUpperCase();
-  if (!labels.has('open library') && (/^\d{13}$/.test(compactIsbn) || /^\d{9}[\dX]$/.test(compactIsbn))) {
+  const compactIsbn = normalizedIsbn(isbn);
+  if (!labels.has('open library') && compactIsbn) {
     links.push({ label: 'Open Library', url: `https://openlibrary.org/isbn/${compactIsbn}` });
   }
 
