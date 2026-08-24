@@ -73,14 +73,56 @@ function cell(markdown, label) {
 function normalizeFormat(value) {
   const raw = String(value || '').trim().toLowerCase();
   if (['paper', 'whitepaper', 'white paper', 'research paper', 'preprint'].includes(raw)) return 'paper';
+  if (['magazine', 'periodical', 'zine'].includes(raw)) return 'magazine';
+  if (['newspaper', 'gazette', 'daily'].includes(raw)) return 'newspaper';
+  if (['journal', 'academic journal', 'research journal'].includes(raw)) return 'journal';
+  if (['newsletter', 'bulletin'].includes(raw)) return 'newsletter';
+  if (['comic', 'graphic novel', 'graphic narrative'].includes(raw)) return 'comic';
+  if (['anthology', 'collection'].includes(raw)) return 'anthology';
+  if (['report', 'annual report', 'field report'].includes(raw)) return 'report';
   return 'book';
+}
+
+function parseLinks(value) {
+  const links = [];
+  const seen = new Set();
+  const re = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/gi;
+  let m;
+  while ((m = re.exec(String(value || '')))) {
+    const url = m[2].trim();
+    if (seen.has(url)) continue;
+    seen.add(url);
+    links.push({ label: m[1].trim(), url });
+  }
+  return links;
+}
+
+function mergeLinks(...lists) {
+  const links = [];
+  const seen = new Set();
+  for (const list of lists) {
+    for (const link of list) {
+      if (!link?.url || seen.has(link.url)) continue;
+      seen.add(link.url);
+      links.push(link);
+    }
+  }
+  return links;
+}
+
+function plainInlineText(value) {
+  return String(value || '')
+    .replace(/\[([^\]]+)\]\(https?:\/\/[^)\s]+\)/gi, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export function parseBookReadme(markdown, slug) {
   const titleMatch = markdown.match(/^#\s+(.+)$/m);
   const title = titleMatch ? titleMatch[1].trim() : slug;
   const status = cell(markdown, 'Status');
-  const authors = cell(markdown, 'Authors');
+  const authorsRaw = cell(markdown, 'Authors');
+  const authors = plainInlineText(authorsRaw);
   const chaptersCell = cell(markdown, 'Chapters');
   const formatLabel = cell(markdown, 'Format');
   const contents = [];
@@ -96,6 +138,8 @@ export function parseBookReadme(markdown, slug) {
     title,
     status,
     authors,
+    authorsRaw,
+    authorLinks: mergeLinks(parseLinks(authorsRaw), parseLinks(cell(markdown, 'Author Links'))),
     chaptersCell,
     format: normalizeFormat(formatLabel),
     formatLabel: formatLabel || 'Book',
@@ -105,7 +149,16 @@ export function parseBookReadme(markdown, slug) {
     edition: cell(markdown, 'Edition'),
     language: cell(markdown, 'Language'),
     isbn: cell(markdown, 'ISBN'),
+    issn: cell(markdown, 'ISSN'),
     series: cell(markdown, 'Series'),
+    volume: cell(markdown, 'Volume'),
+    issue: cell(markdown, 'Issue'),
+    publicationDate: cell(markdown, 'Publication date') || cell(markdown, 'Date'),
+    frequency: cell(markdown, 'Frequency'),
+    externalLinks: mergeLinks(
+      parseLinks(cell(markdown, 'Links')),
+      parseLinks(cell(markdown, 'Find elsewhere'))
+    ),
     tags: cell(markdown, 'Tags')
       .split(',')
       .map((t) => t.trim())
