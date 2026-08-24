@@ -1,4 +1,4 @@
-const CACHE = 'obb-shell-v29';
+const CACHE = 'obb-shell-v30';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
