@@ -3,12 +3,67 @@ import { installMarkedMath, setMathReferenceContext } from './math.js';
 import { installMarkedAcademic, setAcademicContext } from './academic.js';
 
 const CHAPTER = '(?:manuscript\\/)?((?:ch[\\w-]+|front-matter|back-matter)(?:\\.md)?)';
+let wikiInstalled = false;
+let wikiSlug = '';
 
-export function expandWikiLinks(markdown) {
-  return markdown.replace(/\[\[([^\]|#]+)(?:\|([^\]]+))?\]\]/g, (_, target, label) => {
-    const id = target.trim().replace(/^manuscript\//, '').replace(/\.md$/i, '');
-    return `[${label || id}](manuscript/${id}.md)`;
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function wikiId(target) {
+  const id = String(target || '')
+    .trim()
+    .replace(/^manuscript\//i, '')
+    .replace(/\.md$/i, '');
+  return /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(id) ? id : '';
+}
+
+export function tokenizeWikiLink(src) {
+  const match = String(src || '').match(/^\[\[([^\]|#]+?)(?:\|([^\]]+))?\]\]/);
+  if (!match) return null;
+  const id = wikiId(match[1]);
+  if (!id) return null;
+  return {
+    raw: match[0],
+    id,
+    label: (match[2] || id).trim(),
+  };
+}
+
+export function renderWikiLink(token, slug = wikiSlug) {
+  const label = escapeHtml(token.label || token.id);
+  if (!slug) return `<a href="manuscript/${encodeURIComponent(token.id)}.md">${label}</a>`;
+  return `<a href="#/b/${encodeURIComponent(slug)}/${encodeURIComponent(token.id)}/0" data-internal="1">${label}</a>`;
+}
+
+export function installMarkedWiki(marked = globalThis.window?.marked) {
+  if (wikiInstalled || !marked?.use) return false;
+  marked.use({
+    extensions: [
+      {
+        name: 'bookselfWikiLink',
+        level: 'inline',
+        start(src) {
+          const index = String(src || '').indexOf('[[');
+          return index >= 0 ? index : undefined;
+        },
+        tokenizer(src) {
+          const token = tokenizeWikiLink(src);
+          return token ? { type: 'bookselfWikiLink', ...token } : undefined;
+        },
+        renderer(token) {
+          return renderWikiLink(token);
+        },
+      },
+    ],
   });
+  wikiInstalled = true;
+  return true;
 }
 
 function rewriteUrls(html, slug) {
@@ -27,16 +82,18 @@ function rewriteUrls(html, slug) {
     );
 }
 
-function prepareMarkdown(markdown) {
+function prepareMarkdown(markdown, slug) {
   installMarkedMath();
   installMarkedAcademic();
+  installMarkedWiki();
+  wikiSlug = String(slug || '');
   setMathReferenceContext(markdown);
   setAcademicContext(markdown);
 }
 
 export function renderMarkdown(markdown, slug) {
-  prepareMarkdown(markdown);
-  const raw = window.marked.parse(expandWikiLinks(markdown), { gfm: true, breaks: false });
+  prepareMarkdown(markdown, slug);
+  const raw = window.marked.parse(markdown, { gfm: true, breaks: false });
   return rewriteUrls(raw, slug);
 }
 
@@ -55,8 +112,8 @@ export function headingOffsets(markdown) {
 }
 
 export function blocksFromMarkdown(markdown, slug) {
-  prepareMarkdown(markdown);
-  const tokens = window.marked.lexer(expandWikiLinks(markdown));
+  prepareMarkdown(markdown, slug);
+  const tokens = window.marked.lexer(markdown);
   const blocks = [];
   let offset = 0;
   for (const token of tokens) {
