@@ -7,6 +7,7 @@ const MATH_CACHE = 'obb-shell-v29';
 let markedInstalled = false;
 let engineRequested = false;
 let referenceContext = new Map();
+let duplicateReferenceLabels = new Set();
 
 function escapeHtml(value) {
   return String(value)
@@ -122,9 +123,9 @@ function inlineStart(src) {
 
 export function setMathReferenceContext(markdown) {
   const source = String(markdown || '');
-  const refs = new Map();
+  const occurrences = [];
+  const counts = new Map();
   let cursor = 0;
-  let number = 1;
   while (cursor < source.length) {
     const next = blockStart(source.slice(cursor));
     if (next == null) break;
@@ -134,13 +135,30 @@ export function setMathReferenceContext(markdown) {
       cursor = start + 1;
       continue;
     }
-    if (token.label && !refs.has(token.label)) {
-      refs.set(token.label, { label: token.label, number, offset: start });
-      number += 1;
+    if (token.label) {
+      occurrences.push({ label: token.label, offset: start });
+      counts.set(token.label, (counts.get(token.label) || 0) + 1);
     }
     cursor = start + Math.max(token.raw.length, 1);
   }
+
+  const duplicates = new Set(
+    [...counts.entries()].filter(([, count]) => count > 1).map(([label]) => label)
+  );
+  const refs = new Map();
+  let number = 1;
+  for (const occurrence of occurrences) {
+    if (duplicates.has(occurrence.label) || refs.has(occurrence.label)) continue;
+    refs.set(occurrence.label, {
+      label: occurrence.label,
+      number,
+      offset: occurrence.offset,
+    });
+    number += 1;
+  }
+
   referenceContext = refs;
+  duplicateReferenceLabels = duplicates;
   return refs;
 }
 
@@ -160,6 +178,10 @@ function mathAttributes(meta = {}) {
   const bits = [];
   if (meta.label) bits.push(` id="eq-${safeId(meta.label)}"`);
   if (meta.number) bits.push(` data-equation-number="${escapeHtml(meta.number)}"`);
+  if (meta.duplicateLabel) {
+    bits.push(` data-equation-label-duplicate="${escapeHtml(meta.duplicateLabel)}"`);
+    bits.push(` title="${escapeHtml(`Duplicate equation label ${meta.duplicateLabel}`)}"`);
+  }
   return bits.join('');
 }
 
@@ -167,15 +189,17 @@ function renderedMarkup(tex, displayMode, inner, meta = {}) {
   const tag = displayMode ? 'div' : 'span';
   const modeClass = displayMode ? 'reader-math-display' : 'reader-math-inline';
   const equationClass = displayMode && meta.label ? ' reader-equation' : '';
-  return `<${tag} class="reader-math ${modeClass}${equationClass}" data-math-rendered="true" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}>${inner}</${tag}>`;
+  const duplicateClass = displayMode && meta.duplicateLabel ? ' reader-academic-ambiguous' : '';
+  return `<${tag} class="reader-math ${modeClass}${equationClass}${duplicateClass}" data-math-rendered="true" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}>${inner}</${tag}>`;
 }
 
 function pendingMarkup(tex, displayMode, meta = {}) {
   const tag = displayMode ? 'div' : 'span';
   const modeClass = displayMode ? 'reader-math-display' : 'reader-math-inline';
   const equationClass = displayMode && meta.label ? ' reader-equation' : '';
+  const duplicateClass = displayMode && meta.duplicateLabel ? ' reader-academic-ambiguous' : '';
   const raw = displayMode ? `$$${tex}$$` : `$${tex}$`;
-  return `<${tag} class="reader-math ${modeClass}${equationClass} reader-math-pending" data-math-rendered="false" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}><code>${escapeHtml(raw)}</code></${tag}>`;
+  return `<${tag} class="reader-math ${modeClass}${equationClass}${duplicateClass} reader-math-pending" data-math-rendered="false" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}><code>${escapeHtml(raw)}</code></${tag}>`;
 }
 
 export function renderMath(tex, displayMode = false, meta = {}) {
@@ -193,9 +217,15 @@ export function renderMath(tex, displayMode = false, meta = {}) {
 }
 
 export function renderEquationRef(label) {
-  const ref = referenceContext.get(String(label || '').trim());
+  const key = String(label || '').trim();
+  if (duplicateReferenceLabels.has(key)) {
+    const detail = `Ambiguous equation label ${key}: duplicate definitions`;
+    return `<span class="reader-equation-ref reader-academic-missing reader-academic-ambiguous" title="${escapeHtml(detail)}" aria-label="${escapeHtml(detail)}">(?)</span>`;
+  }
+  const ref = referenceContext.get(key);
   if (!ref) {
-    return '<span class="reader-equation-ref reader-academic-missing">(?)</span>';
+    const detail = `Unresolved equation label ${key}`;
+    return `<span class="reader-equation-ref reader-academic-missing" title="${escapeHtml(detail)}" aria-label="${escapeHtml(detail)}">(?)</span>`;
   }
   return `<a class="reader-equation-ref" href="#eq-${safeId(ref.label)}" data-academic-offset="${ref.offset}" data-equation-ref="${escapeHtml(ref.label)}">(${ref.number})</a>`;
 }
@@ -213,10 +243,12 @@ export function installMarkedMath(marked = globalThis.window?.marked) {
           return token ? { type: 'bookselfMathBlock', ...token } : undefined;
         },
         renderer(token) {
-          const ref = token.label ? referenceContext.get(token.label) : null;
+          const duplicate = !!token.label && duplicateReferenceLabels.has(token.label);
+          const ref = token.label && !duplicate ? referenceContext.get(token.label) : null;
           return `${renderMath(token.tex, true, {
-            label: token.label,
+            label: duplicate ? '' : token.label,
             number: ref?.number,
+            duplicateLabel: duplicate ? token.label : '',
           })}\n`;
         },
       },
