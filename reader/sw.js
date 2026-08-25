@@ -1,4 +1,4 @@
-const CACHE = 'obb-shell-v32';
+const CACHE = 'obb-shell-v33';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -29,6 +29,8 @@ const SHELL = [
   './js/base.js',
   './js/catalog.js',
   './js/imprint.js',
+  './js/presentation.js',
+  './js/presentation-runtime.js',
   './js/markdown.js',
   './js/paginate.js',
   './js/storage.js',
@@ -72,9 +74,9 @@ self.addEventListener('fetch', (event) => {
     fetch(req)
       .then(async (res) => {
         // Keep a current copy, but never sacrifice a successful network
-        // response just because storage is full or unavailable. Pinned KaTeX
-        // and reader font resources are cached after first successful use so
-        // math and chosen typefaces survive later offline sessions.
+        // response just because storage is full or unavailable. Pinned KaTeX,
+        // reader font resources, and publication reader.json defaults are
+        // cached after first successful use for later offline reading.
         try {
           const cache = await caches.open(CACHE);
           await cache.put(req, res.clone());
