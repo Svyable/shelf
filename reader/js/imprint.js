@@ -1,5 +1,7 @@
 import { fetchText, fileUrl } from './base.js';
 
+export const READER_STYLE_API_VERSION = '1';
+
 export const DEFAULT_IMPRINT = {
   role: 'instance',
   name: 'Bookself',
@@ -97,6 +99,7 @@ export async function loadImprint() {
 export function applyImprint(imprint) {
   window.__IMPRINT = imprint;
   document.title = imprint.name;
+  document.documentElement.dataset.bookselfStyleApi = READER_STYLE_API_VERSION;
   document.documentElement.dataset.bookselfRole = imprint.role || 'instance';
   applyReaderStyles(imprint.readerStyles);
 
