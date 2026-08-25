@@ -16,7 +16,7 @@ Suppose you read a definition three times. On the third pass, every sentence fee
 
 If the explanation is difficult, the problem is not that the reading failed. The difficulty is showing you where memory has not yet become accessible without the page.
 
-**Retrieval practice** means attempting to bring information back without immediately looking at the source.
+**Retrieval practice** means attempting to bring information back without immediately looking at the source.[^retrieval]
 
 The attempt matters even when it is incomplete.
 
@@ -26,6 +26,8 @@ The attempt matters even when it is incomplete.
 | Highlighting | active | selection |
 | Closing the page and recalling | effortful | retrieval |
 | Explaining to another person | exposed | organization and gaps |
+
+A major review of common learning techniques rated practice testing and distributed practice as high-utility approaches across a broad range of conditions [@dunlosky|Dunlosky et al., 2013]. The useful lesson here is not that one technique solves every learning problem. It is that study methods should be judged by what they help you retrieve later, not only by how fluent they feel while the page is open.
 
 ## A ten-minute study loop
 
@@ -56,3 +58,7 @@ Before continuing, answer without looking back:
 If you cannot answer one question, you have found the next place to study.
 
 That is progress, not failure.
+
+[^retrieval]: In this specimen, *retrieval* means making a genuine recall attempt before looking back at the source. It is a learning action, not a grade.
+
+[@dunlosky]: Dunlosky, J., K. A. Rawson, E. J. Marsh, M. J. Nathan, and D. T. Willingham. “Improving Students’ Learning With Effective Learning Techniques: Promising Directions From Cognitive and Educational Psychology.” *Psychological Science in the Public Interest* 14(1), 2013, 4–58. https://doi.org/10.1177/1529100612453266
