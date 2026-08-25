@@ -1,4 +1,4 @@
-import { fetchText } from './base.js';
+import { fetchText, fileUrl } from './base.js';
 
 export const DEFAULT_IMPRINT = {
   role: 'instance',
@@ -15,6 +15,7 @@ export const DEFAULT_IMPRINT = {
   forkLabel: '',
   homeLabel: 'Books',
   storagePrefix: 'bookself',
+  readerStyles: [],
   steps: [
     { n: '1', title: 'Start', body: 'Copy books/_TEMPLATE to books/your-title' },
     { n: '2', title: 'Write', body: 'Keep the manuscript in plain Markdown' },
@@ -47,6 +48,37 @@ function resolveGithub(value = {}) {
   return inferred;
 }
 
+export function normalizeReaderStyles(value) {
+  if (!Array.isArray(value)) return [];
+
+  const styles = [];
+  const seen = new Set();
+  for (const raw of value) {
+    if (styles.length >= 8) break;
+    if (typeof raw !== 'string') continue;
+    const path = raw.trim().replace(/^\.\/+/, '');
+    if (!path || path.startsWith('/') || path.startsWith('//')) continue;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(path)) continue;
+    if (path.split('/').includes('..')) continue;
+    if (!/\.css$/i.test(path)) continue;
+    if (seen.has(path)) continue;
+    seen.add(path);
+    styles.push(path);
+  }
+  return styles;
+}
+
+function applyReaderStyles(styles) {
+  document.querySelectorAll('link[data-bookself-instance-style]').forEach((node) => node.remove());
+  for (const path of normalizeReaderStyles(styles)) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = fileUrl(path);
+    link.dataset.bookselfInstanceStyle = path;
+    document.head.appendChild(link);
+  }
+}
+
 export async function loadImprint() {
   try {
     const data = JSON.parse(await fetchText('imprint.json'));
@@ -54,6 +86,7 @@ export async function loadImprint() {
       ...DEFAULT_IMPRINT,
       ...data,
       github: resolveGithub(data.github || {}),
+      readerStyles: normalizeReaderStyles(data.readerStyles),
       steps: Array.isArray(data.steps) ? data.steps : DEFAULT_IMPRINT.steps,
     };
   } catch {
@@ -65,6 +98,7 @@ export function applyImprint(imprint) {
   window.__IMPRINT = imprint;
   document.title = imprint.name;
   document.documentElement.dataset.bookselfRole = imprint.role || 'instance';
+  applyReaderStyles(imprint.readerStyles);
 
   const apple = document.querySelector('meta[name="apple-mobile-web-app-title"]');
   if (apple) apple.setAttribute('content', imprint.shortName);
