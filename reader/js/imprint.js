@@ -1,5 +1,6 @@
 import { fetchText, fileUrl } from './base.js';
 import { migrateReaderPersonalization } from './presentation.js';
+import { binderHash, coverHash, go, parseRoute } from './router.js';
 
 export const READER_STYLE_API_VERSION = '1';
 
@@ -82,6 +83,124 @@ function applyReaderStyles(styles) {
   }
 }
 
+function installShelfNavigation(imprint) {
+  const headerLeft = document.querySelector('.header-left');
+  const logo = document.getElementById('logoBtn');
+  if (!headerLeft || !logo) return;
+
+  let nav = document.getElementById('readerExitNav');
+  if (!nav) {
+    nav = document.createElement('nav');
+    nav.id = 'readerExitNav';
+    nav.className = 'reader-exit-nav';
+    nav.setAttribute('aria-label', 'Publication navigation');
+
+    const shelf = document.createElement('button');
+    shelf.id = 'shelfHomeBtn';
+    shelf.type = 'button';
+    shelf.className = 'reader-exit-btn reader-exit-shelf';
+    shelf.addEventListener('click', () => go(binderHash()));
+
+    const cover = document.createElement('button');
+    cover.id = 'bookCoverBtn';
+    cover.type = 'button';
+    cover.className = 'reader-exit-btn reader-exit-cover';
+    cover.innerHTML = '<span aria-hidden="true">↖</span><span>Cover</span>';
+    cover.title = 'Back to book cover';
+    cover.setAttribute('aria-label', 'Back to book cover');
+    cover.addEventListener('click', () => {
+      const route = parseRoute();
+      if (route.slug) go(coverHash(route.slug));
+    });
+
+    nav.append(shelf, cover);
+    logo.insertAdjacentElement('afterend', nav);
+  }
+
+  const shelf = document.getElementById('shelfHomeBtn');
+  const cover = document.getElementById('bookCoverBtn');
+  const role = String(imprint.role || 'instance').toLowerCase();
+  const home = role === 'binder' ? 'Binder' : 'Shelf';
+  shelf.innerHTML = `<span aria-hidden="true">←</span><span>${home}</span>`;
+  shelf.title = `Back to ${home}`;
+  shelf.setAttribute('aria-label', `Back to ${home}`);
+
+  const sync = () => {
+    const route = parseRoute();
+    const atHome = route.view === 'binder';
+    shelf.hidden = atHome;
+    cover.hidden = atHome || route.view === 'cover';
+  };
+  sync();
+  if (!nav.dataset.routeSync) {
+    window.addEventListener('hashchange', sync);
+    window.addEventListener('popstate', sync);
+    nav.dataset.routeSync = 'true';
+  }
+
+  if (!document.getElementById('readerShelfHomeStyle')) {
+    const style = document.createElement('style');
+    style.id = 'readerShelfHomeStyle';
+    style.textContent = `
+      .reader-exit-nav {
+        display: flex;
+        align-items: center;
+        gap: .25rem;
+        margin-left: .15rem;
+        padding-left: .55rem;
+        border-left: 1px solid var(--border);
+      }
+      .reader-exit-btn {
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        gap: .32rem;
+        min-height: 2rem;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: .35rem .58rem;
+        background: transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font: 600 .76rem/1 var(--font-accent);
+        letter-spacing: .01em;
+        white-space: nowrap;
+      }
+      .reader-exit-btn:hover,
+      .reader-exit-btn:focus-visible {
+        border-color: var(--border);
+        background: var(--bg-secondary);
+        color: var(--accent);
+        outline: none;
+      }
+      .reader-exit-shelf {
+        color: var(--text-primary);
+      }
+      .reader-exit-btn[hidden] { display: none; }
+      @media (max-width: 560px) {
+        .reader-exit-nav { gap: 0; padding-left: .3rem; }
+        .reader-exit-btn { padding: .35rem .42rem; font-size: .7rem; }
+        .reader-exit-cover span:last-child { display: none; }
+        .reader-exit-cover { min-width: 2rem; justify-content: center; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
+
+function emptyLibraryText(role) {
+  if (role === 'binder') {
+    return 'No manuscripts yet. Start one from a blank template in books/, keep it Drafting, and preview it here before release.';
+  }
+  if (role === 'shelf') {
+    return 'No released publications yet. Keep drafts in the private Binder, then release a committed snapshot to this public Shelf when it is ready.';
+  }
+  if (role === 'platform') {
+    return 'No platform examples are listed yet. Add published specimen content under books/ to demonstrate Bookself without using a private Binder.';
+  }
+  return 'No publications are listed yet.';
+}
+
 export async function loadImprint() {
   try {
     const data = JSON.parse(await fetchText('imprint.json'));
@@ -104,6 +223,7 @@ export function applyImprint(imprint) {
   document.documentElement.dataset.bookselfStyleApi = READER_STYLE_API_VERSION;
   document.documentElement.dataset.bookselfRole = imprint.role || 'instance';
   applyReaderStyles(imprint.readerStyles);
+  installShelfNavigation(imprint);
 
   const apple = document.querySelector('meta[name="apple-mobile-web-app-title"]');
   if (apple) apple.setAttribute('content', imprint.shortName);
@@ -145,6 +265,8 @@ export function applyImprint(imprint) {
       fork.hidden = true;
     }
   }
+  const emptyShelf = document.getElementById('emptyShelf');
+  if (emptyShelf) emptyShelf.textContent = emptyLibraryText(imprint.role);
   const home = document.getElementById('homeFromEnd');
   if (home) home.textContent = imprint.homeLabel;
   const logo = document.getElementById('logoBtn');
