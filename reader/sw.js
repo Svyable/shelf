@@ -1,4 +1,4 @@
-const CACHE = 'obb-shell-v29';
+const CACHE = 'obb-shell-v33';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -6,6 +6,7 @@ const SHELL = [
   './css/style.css',
   './css/experience.css',
   './css/experience-scroll.css',
+  './css/typesetting.css',
   './css/atmosphere.css',
   './css/atmosphere-library.css',
   './css/navigation.css',
@@ -28,6 +29,8 @@ const SHELL = [
   './js/base.js',
   './js/catalog.js',
   './js/imprint.js',
+  './js/presentation.js',
+  './js/presentation-runtime.js',
   './js/markdown.js',
   './js/paginate.js',
   './js/storage.js',
@@ -54,7 +57,9 @@ self.addEventListener('activate', (event) => {
 });
 
 function cacheableExternal(url) {
-  return url.href === KATEX_CDN;
+  return url.href === KATEX_CDN
+    || url.origin === 'https://fonts.googleapis.com'
+    || url.origin === 'https://fonts.gstatic.com';
 }
 
 self.addEventListener('fetch', (event) => {
@@ -69,9 +74,9 @@ self.addEventListener('fetch', (event) => {
     fetch(req)
       .then(async (res) => {
         // Keep a current copy, but never sacrifice a successful network
-        // response just because storage is full or unavailable. The pinned
-        // KaTeX runtime is cached after its first successful online load so
-        // math can keep rendering on later offline visits.
+        // response just because storage is full or unavailable. Pinned KaTeX,
+        // reader font resources, and publication reader.json defaults are
+        // cached after first successful use for later offline reading.
         try {
           const cache = await caches.open(CACHE);
           await cache.put(req, res.clone());

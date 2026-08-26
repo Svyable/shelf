@@ -1,13 +1,39 @@
-/* Publication formats — books, papers, web volumes, and an external magazine stand. */
+/* Publication formats — books, periodicals, papers, web volumes, and external links. */
 
-.volume.publication-paper {
+.volume.publication-paper,
+.volume.publication-report {
   --block: 4px !important;
 }
 
-.volume.publication-paper .volume-cover {
+.volume.publication-magazine,
+.volume.publication-journal,
+.volume.publication-newsletter {
+  --block: 2px !important;
+}
+
+.volume.publication-newspaper {
+  --block: 1px !important;
+}
+
+.volume.publication-paper .volume-cover,
+.volume.publication-report .volume-cover {
   border-radius: 3px 3px 2px 2px;
   background-image:
     linear-gradient(180deg, color-mix(in srgb, var(--cloth) 76%, #fff 24%), var(--cloth));
+}
+
+.volume.publication-magazine .volume-cover,
+.volume.publication-journal .volume-cover,
+.volume.publication-newsletter .volume-cover {
+  border-radius: 2px;
+  background-image:
+    linear-gradient(155deg, color-mix(in srgb, var(--cloth) 70%, #fff 30%), var(--cloth));
+}
+
+.volume.publication-newspaper .volume-cover {
+  border-radius: 1px;
+  background-image:
+    linear-gradient(180deg, color-mix(in srgb, var(--cloth) 42%, #eee 58%), color-mix(in srgb, var(--cloth) 68%, #ddd 32%));
 }
 
 .volume-format-badge {
@@ -36,11 +62,24 @@
   text-transform: uppercase;
 }
 
-.cover-paper-meta {
+.cover-paper-meta,
+.cover-publication-meta,
+.cover-author-profiles {
   margin-top: 0.55rem;
   color: color-mix(in srgb, #fff 72%, var(--accent));
   font: 500 0.68rem/1.45 "IBM Plex Sans", system-ui, sans-serif;
   text-align: center;
+}
+
+.cover-author-primary,
+.cover-author-profiles a {
+  color: inherit;
+  text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+  text-underline-offset: 0.16em;
+}
+
+.cover-external-links {
+  display: contents;
 }
 
 .publication-web-shelf,

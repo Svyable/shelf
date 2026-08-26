@@ -72,15 +72,95 @@ function cell(markdown, label) {
 
 function normalizeFormat(value) {
   const raw = String(value || '').trim().toLowerCase();
-  if (['paper', 'whitepaper', 'white paper', 'research paper', 'preprint'].includes(raw)) return 'paper';
+  if (['paper', 'whitepaper', 'white paper', 'research paper', 'preprint', 'thesis', 'dissertation'].includes(raw)) return 'paper';
+  if (['magazine', 'periodical', 'zine'].includes(raw)) return 'magazine';
+  if (['newspaper', 'gazette', 'daily'].includes(raw)) return 'newspaper';
+  if (['journal', 'academic journal', 'research journal', 'proceedings', 'conference proceedings'].includes(raw)) return 'journal';
+  if (['newsletter', 'bulletin'].includes(raw)) return 'newsletter';
+  if (['comic', 'graphic novel', 'graphic narrative'].includes(raw)) return 'comic';
+  if (['anthology', 'collection', 'chapbook', 'poetry collection', 'story collection'].includes(raw)) return 'anthology';
+  if (['report', 'annual report', 'field report', 'manual', 'handbook', 'guide', 'catalog', 'catalogue', 'pamphlet', 'brochure'].includes(raw)) return 'report';
   return 'book';
+}
+
+function parseLinks(value) {
+  const links = [];
+  const seen = new Set();
+  const re = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/gi;
+  let m;
+  while ((m = re.exec(String(value || '')))) {
+    const url = m[2].trim();
+    if (seen.has(url)) continue;
+    seen.add(url);
+    links.push({ label: m[1].trim(), url });
+  }
+  return links;
+}
+
+function mergeLinks(...lists) {
+  const links = [];
+  const seen = new Set();
+  for (const list of lists) {
+    for (const link of list) {
+      if (!link?.url || seen.has(link.url)) continue;
+      seen.add(link.url);
+      links.push(link);
+    }
+  }
+  return links;
+}
+
+function plainInlineText(value) {
+  return String(value || '')
+    .replace(/\[([^\]]+)\]\(https?:\/\/[^)\s]+\)/gi, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function normalizedIsbn(value) {
+  const compact = String(value || '').replace(/[^0-9Xx]/g, '').toUpperCase();
+
+  if (/^\d{13}$/.test(compact)) {
+    const sum = [...compact.slice(0, 12)].reduce(
+      (total, digit, index) => total + Number(digit) * (index % 2 === 0 ? 1 : 3),
+      0
+    );
+    const check = (10 - (sum % 10)) % 10;
+    return check === Number(compact[12]) ? compact : '';
+  }
+
+  if (/^\d{9}[\dX]$/.test(compact)) {
+    const digits = [...compact].map((digit) => digit === 'X' ? 10 : Number(digit));
+    const sum = digits.reduce((total, digit, index) => total + digit * (10 - index), 0);
+    return sum % 11 === 0 ? compact : '';
+  }
+
+  return '';
+}
+
+function identifierLinks(isbn, doi, explicitLinks) {
+  const links = [];
+  const labels = new Set(explicitLinks.map((link) => link.label.trim().toLowerCase()));
+
+  const compactIsbn = normalizedIsbn(isbn);
+  if (!labels.has('open library') && compactIsbn) {
+    links.push({ label: 'Open Library', url: `https://openlibrary.org/isbn/${compactIsbn}` });
+  }
+
+  const cleanDoi = String(doi || '').trim().replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '');
+  if (!labels.has('doi') && /^10\.\d{4,9}\/.+/.test(cleanDoi)) {
+    links.push({ label: 'DOI', url: `https://doi.org/${cleanDoi}` });
+  }
+
+  return links;
 }
 
 export function parseBookReadme(markdown, slug) {
   const titleMatch = markdown.match(/^#\s+(.+)$/m);
   const title = titleMatch ? titleMatch[1].trim() : slug;
   const status = cell(markdown, 'Status');
-  const authors = cell(markdown, 'Authors');
+  const authorsRaw = cell(markdown, 'Authors');
+  const authors = plainInlineText(authorsRaw);
   const chaptersCell = cell(markdown, 'Chapters');
   const formatLabel = cell(markdown, 'Format');
   const contents = [];
@@ -91,21 +171,40 @@ export function parseBookReadme(markdown, slug) {
     const id = file.replace(/^manuscript\//, '').replace(/\.md$/i, '');
     contents.push({ title: m[1].trim(), file, id });
   }
+
+  const isbn = cell(markdown, 'ISBN');
+  const doi = cell(markdown, 'DOI');
+  const explicitExternalLinks = mergeLinks(
+    parseLinks(cell(markdown, 'Links')),
+    parseLinks(cell(markdown, 'Find elsewhere'))
+  );
+
   return {
     slug,
     title,
     status,
     authors,
+    authorsRaw,
+    authorLinks: mergeLinks(parseLinks(authorsRaw), parseLinks(cell(markdown, 'Author Links'))),
     chaptersCell,
     format: normalizeFormat(formatLabel),
     formatLabel: formatLabel || 'Book',
     publisher: cell(markdown, 'Publisher'),
     venue: cell(markdown, 'Venue'),
-    doi: cell(markdown, 'DOI'),
+    doi,
     edition: cell(markdown, 'Edition'),
     language: cell(markdown, 'Language'),
-    isbn: cell(markdown, 'ISBN'),
+    isbn,
+    issn: cell(markdown, 'ISSN'),
     series: cell(markdown, 'Series'),
+    volume: cell(markdown, 'Volume'),
+    issue: cell(markdown, 'Issue'),
+    publicationDate: cell(markdown, 'Publication date') || cell(markdown, 'Date'),
+    frequency: cell(markdown, 'Frequency'),
+    externalLinks: mergeLinks(
+      explicitExternalLinks,
+      identifierLinks(isbn, doi, explicitExternalLinks)
+    ),
     tags: cell(markdown, 'Tags')
       .split(',')
       .map((t) => t.trim())

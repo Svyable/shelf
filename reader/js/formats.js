@@ -1,8 +1,9 @@
 import { fetchText } from './base.js';
 import { parsePortalCatalog, parsePortalWebShelf, parsePortalStand, parseBookReadme } from './catalog.js';
 
-const FORMAT_CSS = 'css/formats.css?v=r1';
+const FORMAT_CSS = 'css/formats.css?v=r2';
 const publicationMeta = new Map();
+const FORMAT_CLASSES = ['paper', 'magazine', 'newspaper', 'journal', 'newsletter', 'comic', 'anthology', 'report'];
 let initialized = false;
 let webEntries = [];
 let standEntries = [];
@@ -27,9 +28,16 @@ function currentSlug() {
 }
 
 function publicationLabel(meta) {
-  if (!meta) return 'Book';
-  if (meta.format === 'paper') return meta.formatLabel || 'Paper';
-  return 'Book';
+  return meta?.formatLabel || 'Book';
+}
+
+function publicationAction(meta) {
+  if (!meta) return 'Open';
+  if (meta.format === 'paper') return 'Read paper';
+  if (meta.format === 'magazine' || meta.format === 'newsletter' || meta.format === 'journal') return 'Read issue';
+  if (meta.format === 'newspaper') return 'Read edition';
+  if (meta.format === 'report') return 'Read report';
+  return 'Open';
 }
 
 function annotateVolume(volume) {
@@ -37,24 +45,29 @@ function annotateVolume(volume) {
   const meta = publicationMeta.get(slug);
   if (!meta) return;
 
-  const isPaper = meta.format === 'paper';
+  const decorated = meta.format !== 'book';
   volume.dataset.publicationFormat = meta.format;
-  volume.classList.toggle('publication-paper', isPaper);
+  FORMAT_CLASSES.forEach((format) => {
+    volume.classList.toggle(`publication-${format}`, meta.format === format);
+  });
 
   let badge = volume.querySelector('.volume-format-badge');
-  if (isPaper && !badge) {
+  if (decorated && !badge) {
     badge = document.createElement('span');
     badge.className = 'volume-format-badge';
     volume.querySelector('.volume-cover')?.prepend(badge);
   }
   if (badge) {
-    badge.hidden = !isPaper;
+    badge.hidden = !decorated;
     const nextLabel = publicationLabel(meta);
     if (badge.textContent !== nextLabel) badge.textContent = nextLabel;
   }
 
   const open = volume.querySelector('.volume-open');
-  if (open && isPaper && open.textContent !== 'Read paper') open.textContent = 'Read paper';
+  if (open && decorated) {
+    const nextAction = publicationAction(meta);
+    if (open.textContent !== nextAction) open.textContent = nextAction;
+  }
 }
 
 function annotateVolumes() {
@@ -227,20 +240,106 @@ function syncEmptyShelf() {
   if ((webEntries.length || standEntries.length) && !empty.hidden) empty.hidden = true;
 }
 
-function syncPaperCover() {
+function metaBits(meta) {
+  if (!meta) return [];
+  const bits = [];
+  if (meta.volume) bits.push(`Vol. ${meta.volume}`);
+  if (meta.issue) bits.push(`Issue ${meta.issue}`);
+  if (meta.publicationDate) bits.push(meta.publicationDate);
+  if (meta.frequency) bits.push(meta.frequency);
+  if (meta.venue) bits.push(meta.venue);
+  if (meta.doi) bits.push(`DOI ${meta.doi}`);
+  if (meta.issn) bits.push(`ISSN ${meta.issn}`);
+  return bits;
+}
+
+function makeExternalLink(link, className = '') {
+  const a = document.createElement('a');
+  a.href = link.url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.textContent = link.label;
+  if (className) a.className = className;
+  return a;
+}
+
+function syncAuthorLinks(meta) {
+  const author = document.getElementById('coverAuthor');
+  if (!author) return;
+
+  let profiles = document.getElementById('coverAuthorProfiles');
+  const links = meta?.authorLinks || [];
+  if (!links.length) {
+    profiles?.remove();
+    return;
+  }
+
+  const primary = links.find((link) => link.label.trim().toLowerCase() === String(meta.authors || '').trim().toLowerCase());
+  if (primary) {
+    author.textContent = '';
+    author.appendChild(makeExternalLink(primary, 'cover-author-primary'));
+  }
+
+  const secondary = primary ? links.filter((link) => link.url !== primary.url) : links;
+  if (!secondary.length) {
+    profiles?.remove();
+    return;
+  }
+
+  if (!profiles) {
+    profiles = document.createElement('p');
+    profiles.id = 'coverAuthorProfiles';
+    profiles.className = 'cover-author-profiles';
+    author.insertAdjacentElement('afterend', profiles);
+  }
+  profiles.innerHTML = '';
+  secondary.forEach((link, index) => {
+    if (index) profiles.append(' · ');
+    profiles.appendChild(makeExternalLink(link));
+  });
+}
+
+function syncDiscoveryLinks(meta) {
+  const dock = document.getElementById('coverDock');
+  if (!dock) return;
+
+  let group = dock.querySelector('.cover-external-links');
+  const links = meta?.externalLinks || [];
+  if (!links.length) {
+    group?.remove();
+    return;
+  }
+
+  if (!group) {
+    group = document.createElement('span');
+    group.className = 'cover-external-links';
+    const source = document.getElementById('sourceLink');
+    if (source) source.insertAdjacentElement('beforebegin', group);
+    else dock.appendChild(group);
+  }
+  group.innerHTML = '';
+  links.forEach((link) => group.appendChild(makeExternalLink(link)));
+}
+
+function syncPublicationCover() {
   const slug = currentSlug();
   const meta = publicationMeta.get(slug);
   const face = document.getElementById('coverFront');
   if (!face) return;
 
-  let badge = face.querySelector('.cover-publication-kind');
-  let detail = face.querySelector('.cover-paper-meta');
-  const isPaper = meta?.format === 'paper';
+  FORMAT_CLASSES.forEach((format) => {
+    document.body.classList.toggle(`publication-format-${format}`, meta?.format === format);
+  });
 
-  document.body.classList.toggle('publication-format-paper', !!isPaper);
-  if (!isPaper) {
+  let badge = face.querySelector('.cover-publication-kind');
+  let detail = face.querySelector('.cover-publication-meta');
+  const decorated = !!meta && meta.format !== 'book';
+
+  if (!decorated) {
     if (badge) badge.hidden = true;
     if (detail) detail.hidden = true;
+    syncAuthorLinks(meta);
+    syncDiscoveryLinks(meta);
     return;
   }
 
@@ -256,14 +355,21 @@ function syncPaperCover() {
 
   if (!detail) {
     detail = document.createElement('p');
-    detail.className = 'cover-paper-meta';
+    detail.className = 'cover-publication-meta';
     const metaLine = face.querySelector('.cover-meta');
     metaLine?.insertAdjacentElement('afterend', detail);
   }
-  const bits = [meta.venue, meta.doi ? `DOI ${meta.doi}` : ''].filter(Boolean);
+  const bits = metaBits(meta);
   const text = bits.join(' · ');
   detail.hidden = bits.length === 0;
   if (detail.textContent !== text) detail.textContent = text;
+
+  syncAuthorLinks(meta);
+  syncDiscoveryLinks(meta);
+}
+
+function scheduleCoverSync() {
+  requestAnimationFrame(() => requestAnimationFrame(syncPublicationCover));
 }
 
 function observeReader() {
@@ -275,8 +381,8 @@ function observeReader() {
   });
   if (binder) observer.observe(binder, { childList: true, subtree: true });
   if (empty) observer.observe(empty, { attributes: true, attributeFilter: ['hidden'] });
-  window.addEventListener('hashchange', () => queueMicrotask(syncPaperCover));
-  window.addEventListener('popstate', () => queueMicrotask(syncPaperCover));
+  window.addEventListener('hashchange', scheduleCoverSync);
+  window.addEventListener('popstate', scheduleCoverSync);
 }
 
 async function loadPublicationMetadata(portal) {
@@ -311,7 +417,7 @@ async function initialize() {
   renderWebShelf();
   renderStand();
   syncEmptyShelf();
-  syncPaperCover();
+  scheduleCoverSync();
 }
 
 if (document.readyState === 'loading') {

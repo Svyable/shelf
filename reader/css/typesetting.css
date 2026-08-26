@@ -1,0 +1,398 @@
+/* Bookself typesetting layer
+   --------------------------
+   This file sits after the core reading-experience styles and before format-
+   specific overrides. It turns reader preferences into actual typographic
+   behavior and gives paged + continuous reading a shared print vocabulary.
+
+   Keep geometry measurable: anything that changes paged content height belongs
+   on elements that also exist in the hidden pagination measure surface. */
+
+:root {
+  --reader-font-weight: 400;
+  --reader-tracking: 0em;
+  --reader-face-tracking: 0em;
+  --reader-indent-size: 0em;
+  --reader-heading-ink: color-mix(in srgb, var(--text-primary) 96%, var(--accent) 4%);
+  --reader-rule: color-mix(in srgb, var(--accent) 58%, transparent);
+  --reader-hairline: color-mix(in srgb, var(--text-muted) 20%, transparent);
+}
+
+[data-reader-font="book"] {
+  --reader-face: "Source Serif 4", Georgia, serif;
+  --reader-face-tracking: 0em;
+}
+
+[data-reader-font="literary"] {
+  --reader-face: "Literata", "Source Serif 4", Georgia, serif;
+  --reader-face-tracking: -0.004em;
+}
+
+[data-reader-font="warm"] {
+  --reader-face: "Lora", Georgia, serif;
+  --reader-face-tracking: -0.006em;
+}
+
+[data-reader-font="classic"] {
+  --reader-face: Georgia, "Times New Roman", serif;
+  --reader-face-tracking: -0.003em;
+}
+
+[data-reader-font="modern"] {
+  --reader-face: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --reader-face-tracking: 0.002em;
+}
+
+[data-reader-font="clear"] {
+  --reader-face: "Atkinson Hyperlegible", Verdana, sans-serif;
+  --reader-face-tracking: 0.004em;
+}
+
+[data-reader-font="humanist"] {
+  --reader-face: "Avenir Next", Avenir, "Segoe UI", Candara, Calibri, sans-serif;
+  --reader-face-tracking: 0.003em;
+}
+
+[data-reader-font="system"] {
+  --reader-face: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --reader-face-tracking: 0em;
+}
+
+.page-inner,
+.scroll-document,
+.experience-preview p,
+.experience-preview-sample {
+  font-family: var(--reader-face, "Source Serif 4", Georgia, serif);
+  font-weight: var(--reader-font-weight, 400);
+  letter-spacing: calc(var(--reader-tracking, 0em) + var(--reader-face-tracking, 0em));
+  font-kerning: normal;
+  font-optical-sizing: auto;
+  font-variant-ligatures: common-ligatures contextual;
+  text-rendering: optimizeLegibility;
+}
+
+[data-reader-font="book"] .page-inner,
+[data-reader-font="book"] .scroll-document,
+[data-reader-font="literary"] .page-inner,
+[data-reader-font="literary"] .scroll-document,
+[data-reader-font="warm"] .page-inner,
+[data-reader-font="warm"] .scroll-document,
+[data-reader-font="classic"] .page-inner,
+[data-reader-font="classic"] .scroll-document {
+  font-variant-numeric: oldstyle-nums proportional-nums;
+}
+
+.experience-font[data-reader-font-value="book"] strong { font-family: "Source Serif 4", Georgia, serif; }
+.experience-font[data-reader-font-value="literary"] strong { font-family: "Literata", "Source Serif 4", Georgia, serif; }
+.experience-font[data-reader-font-value="warm"] strong { font-family: "Lora", Georgia, serif; }
+.experience-font[data-reader-font-value="classic"] strong { font-family: Georgia, "Times New Roman", serif; }
+.experience-font[data-reader-font-value="modern"] strong { font-family: "IBM Plex Sans", sans-serif; }
+.experience-font[data-reader-font-value="clear"] strong { font-family: "Atkinson Hyperlegible", Verdana, sans-serif; }
+.experience-font[data-reader-font-value="humanist"] strong { font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif; }
+.experience-font[data-reader-font-value="system"] strong { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+.experience-preview-title {
+  width: var(--reader-preview-measure);
+  margin: 0 auto 0.55rem;
+  color: var(--reader-heading-ink);
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+[data-reader-indent="none"] { --reader-indent-size: 0em; }
+[data-reader-indent="gentle"] { --reader-indent-size: 1.15em; }
+[data-reader-indent="classic"] { --reader-indent-size: 1.65em; }
+
+[data-reader-indent="gentle"] .page-inner p + p,
+[data-reader-indent="classic"] .page-inner p + p {
+  margin-top: 0.12em;
+  text-indent: var(--reader-indent-size);
+}
+
+[data-reader-indent="gentle"] .scroll-block:has(> p) + .scroll-block:has(> p) > p,
+[data-reader-indent="classic"] .scroll-block:has(> p) + .scroll-block:has(> p) > p {
+  text-indent: var(--reader-indent-size);
+}
+
+[data-reader-indent="classic"] .scroll-block:has(> p) + .scroll-block:has(> p) {
+  margin-top: 0.08em;
+}
+
+.page-inner p,
+.scroll-document p,
+.experience-preview p,
+.experience-preview-sample {
+  hanging-punctuation: first allow-end last;
+  hyphenate-limit-chars: 6 3 3;
+  orphans: 2;
+  widows: 2;
+  text-wrap: pretty;
+  text-underline-offset: 0.14em;
+  text-decoration-skip-ink: auto;
+}
+
+[data-reader-align="justify"] .page-inner p,
+[data-reader-align="justify"] .scroll-document p,
+[data-reader-align="justify"] .experience-preview p,
+[data-reader-align="justify"] .experience-preview-sample {
+  text-align-last: auto;
+}
+
+.page-inner h1:first-child {
+  max-width: 14ch;
+  margin-top: clamp(1.55em, 5.8vh, 3.2em);
+  margin-bottom: 1.35em;
+  color: var(--reader-heading-ink);
+  font-size: clamp(1.58em, 2.5vw, 1.92em);
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.page-inner h1:first-child::after {
+  content: "";
+  display: block;
+  width: 2.7rem;
+  margin-top: 0.72em;
+  border-top: 1px solid var(--reader-rule);
+}
+
+.page-inner.chapter-open.is-short {
+  justify-content: flex-start;
+}
+
+.page-surface:has(.page-inner.chapter-open) .page-running {
+  opacity: 0;
+}
+
+.page-inner.chapter-open > p:first-of-type::first-letter {
+  margin-right: 0.08em;
+  padding-right: 0.015em;
+  font-size: 3.25em;
+  line-height: 0.74;
+}
+
+.page-inner h2,
+.page-inner h3,
+.page-inner h4,
+.scroll-document h2,
+.scroll-document h3,
+.scroll-document h4 {
+  color: var(--reader-heading-ink);
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+.page-inner h2 {
+  margin-top: 1.85em;
+  margin-bottom: 0.72em;
+  font-size: 1.28em;
+  line-height: 1.16;
+}
+
+.page-inner h3 {
+  margin-top: 1.55em;
+  margin-bottom: 0.58em;
+  font-size: 1.08em;
+  line-height: 1.24;
+  letter-spacing: 0.012em;
+}
+
+.page-inner h4 {
+  margin-top: 1.35em;
+  margin-bottom: 0.5em;
+  font-size: 0.96em;
+  line-height: 1.3;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.page-inner h1,
+.page-inner h2,
+.page-inner h3,
+.page-inner h4,
+.scroll-document h1,
+.scroll-document h2,
+.scroll-document h3,
+.scroll-document h4 {
+  break-after: avoid;
+}
+
+.page-inner ul,
+.page-inner ol,
+.scroll-document ul,
+.scroll-document ol {
+  padding-left: 1.35em;
+}
+
+.page-inner li::marker,
+.scroll-document li::marker {
+  color: color-mix(in srgb, var(--accent) 76%, var(--text-secondary));
+  font-variant-numeric: tabular-nums;
+}
+
+.page-inner li + li,
+.scroll-document li + li {
+  margin-top: 0.28em;
+}
+
+.page-inner blockquote,
+.scroll-document blockquote {
+  position: relative;
+  margin: 1.55em 0;
+  padding: 0.12em 0 0.12em 1.15em;
+  border-left: 1px solid var(--reader-rule);
+  color: color-mix(in srgb, var(--text-primary) 74%, var(--text-secondary));
+  font-family: var(--reader-face, "Source Serif 4", Georgia, serif);
+  font-size: 0.96em;
+  font-style: italic;
+}
+
+.page-inner hr,
+.scroll-document hr {
+  width: 4.75rem;
+  margin: 2.7em auto;
+  border: 0;
+  border-top: 1px solid var(--reader-rule);
+}
+
+.page-inner a,
+.scroll-document a {
+  text-decoration-thickness: 0.055em;
+  text-underline-offset: 0.15em;
+}
+
+.page-surface {
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--shadow) 6%, transparent),
+      transparent 9%,
+      transparent 91%,
+      color-mix(in srgb, var(--shadow) 5%, transparent)),
+    radial-gradient(ellipse 72% 54% at 50% 15%,
+      color-mix(in srgb, var(--text-primary) 2.5%, transparent),
+      transparent 72%),
+    var(--bg-page);
+  border-top: 1px solid color-mix(in srgb, var(--text-muted) 9%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--shadow) 18%, transparent);
+}
+
+.page-running {
+  font-variant-caps: all-small-caps;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.13em;
+  text-transform: none;
+}
+
+.page-num {
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.06em;
+}
+
+.scroll-document {
+  color: color-mix(in srgb, var(--text-primary) 97%, var(--text-secondary) 3%);
+}
+
+.scroll-document .scroll-block > p,
+.scroll-document .scroll-block > li,
+.scroll-document .scroll-block > blockquote {
+  max-width: 100%;
+}
+
+[data-reader-font="modern"] .page-inner h1:first-child,
+[data-reader-font="clear"] .page-inner h1:first-child,
+[data-reader-font="humanist"] .page-inner h1:first-child,
+[data-reader-font="system"] .page-inner h1:first-child {
+  letter-spacing: -0.028em;
+}
+
+[data-reader-font="modern"] .page-inner.chapter-open > p:first-of-type::first-letter,
+[data-reader-font="clear"] .page-inner.chapter-open > p:first-of-type::first-letter,
+[data-reader-font="humanist"] .page-inner.chapter-open > p:first-of-type::first-letter,
+[data-reader-font="system"] .page-inner.chapter-open > p:first-of-type::first-letter,
+[data-reader-font="modern"] .scroll-chapter > .scroll-block:first-child + .scroll-block > p::first-letter,
+[data-reader-font="clear"] .scroll-chapter > .scroll-block:first-child + .scroll-block > p::first-letter,
+[data-reader-font="humanist"] .scroll-chapter > .scroll-block:first-child + .scroll-block > p::first-letter,
+[data-reader-font="system"] .scroll-chapter > .scroll-block:first-child + .scroll-block > p::first-letter {
+  font-family: var(--reader-face);
+  font-weight: 600;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 34%, transparent);
+  color: var(--text-primary);
+}
+
+@media (max-width: 700px) {
+  .page-inner h1:first-child {
+    margin-top: clamp(1.15em, 4.2vh, 2.1em);
+    margin-bottom: 1.05em;
+    font-size: clamp(1.48em, 6.5vw, 1.72em);
+  }
+
+  .page-inner h1:first-child::after {
+    width: 2.2rem;
+    margin-top: 0.6em;
+  }
+
+  .page-inner.chapter-open > p:first-of-type::first-letter {
+    font-size: 2.9em;
+  }
+
+  .page-running {
+    left: 1.2rem;
+    right: 1.2rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (max-height: 560px) {
+  .page-inner h1:first-child {
+    margin-top: 0.8em;
+    margin-bottom: 0.85em;
+  }
+
+  .page-inner.chapter-open > p:first-of-type::first-letter {
+    font-size: 2.7em;
+  }
+}
+
+@media print {
+  .page-surface,
+  .scroll-reader {
+    background: #fff !important;
+    color: #111 !important;
+    box-shadow: none !important;
+  }
+
+  .page-inner,
+  .scroll-document {
+    color: #111 !important;
+    font-size: 11pt !important;
+    line-height: 1.45 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .scroll-chapter + .scroll-chapter {
+    break-before: page;
+  }
+
+  .page-inner p,
+  .scroll-document p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .page-inner blockquote,
+  .page-inner figure,
+  .page-inner pre,
+  .page-inner table,
+  .scroll-document blockquote,
+  .scroll-document figure,
+  .scroll-document pre,
+  .scroll-document table {
+    break-inside: avoid;
+  }
+}

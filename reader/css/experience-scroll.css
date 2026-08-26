@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&family=Lora:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500&display=swap');
+@import url('./typesetting.css?v=r1');
+
 /* Continuous reading + advanced personalization for Bookself. */
 
 :root {
@@ -74,8 +77,6 @@
   color: var(--accent);
 }
 
-/* In continuous mode, the physical pages step aside but the reader chrome,
-   search, TOC, notes, progress, and settings remain available. */
 [data-reader-mode="scroll"] body[data-stage="read"] .pages-wrapper,
 [data-reader-mode="scroll"] body[data-stage="read"] .page-nav,
 [data-reader-mode="scroll"] body[data-stage="read"] .read-hint {
@@ -114,7 +115,7 @@
 .scroll-document {
   width: min(calc(100% - 2rem), var(--reader-scroll-max));
   margin: 0 auto;
-  padding: clamp(2.4rem, 7vw, 5.5rem) 0 clamp(6rem, 12vw, 10rem);
+  padding: clamp(4.5rem, 10vw, 8rem) 0 clamp(7rem, 14vw, 11rem);
   font-size: var(--reader-font-size);
   line-height: var(--reader-leading);
 }
@@ -124,22 +125,19 @@
 }
 
 .scroll-chapter + .scroll-chapter {
-  margin-top: clamp(4.5rem, 11vw, 8rem);
-  padding-top: clamp(3.5rem, 8vw, 6rem);
-  border-top: 1px solid color-mix(in srgb, var(--border) 76%, transparent);
+  margin-top: clamp(8rem, 18vw, 14rem);
+  padding-top: clamp(7rem, 14vw, 11rem);
+  border-top: 1px solid color-mix(in srgb, var(--border) 52%, transparent);
 }
 
 .scroll-chapter + .scroll-chapter::before {
-  content: "❧";
+  content: "";
   position: absolute;
-  top: -0.9rem;
+  top: 0;
   left: 50%;
+  width: 3.5rem;
   transform: translateX(-50%);
-  padding: 0 1rem;
-  background: var(--bg-page);
-  color: var(--accent);
-  font-family: var(--font-accent);
-  font-size: 1.15rem;
+  border-top: 1px solid color-mix(in srgb, var(--accent) 62%, transparent);
 }
 
 .scroll-block + .scroll-block {
@@ -156,39 +154,52 @@
 }
 
 .scroll-document h1 {
-  margin: 0 0 1.1em;
-  font-size: clamp(1.65em, 4vw, 2.15em);
+  max-width: 13ch;
+  margin: 0 0 clamp(2.2rem, 5vw, 3.4rem);
+  font-size: clamp(2.35em, 7vw, 4.2em);
   font-weight: 500;
-  line-height: 1.18;
-  letter-spacing: 0.025em;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+}
+
+.scroll-document h1::after {
+  content: "";
+  display: block;
+  width: 2.8rem;
+  margin-top: 0.55em;
+  border-top: 1px solid color-mix(in srgb, var(--accent) 72%, transparent);
 }
 
 .scroll-document h2 {
-  margin: 1.7em 0 0.7em;
-  font-size: 1.35em;
-  line-height: 1.25;
+  margin: 2.3em 0 0.72em;
+  font-size: 1.42em;
+  line-height: 1.22;
 }
 
 .scroll-document h3 {
-  margin: 1.5em 0 0.6em;
-  font-size: 1.12em;
+  margin: 1.8em 0 0.62em;
+  font-size: 1.13em;
   line-height: 1.3;
+  letter-spacing: 0.01em;
 }
 
-.scroll-document p {
-  margin: 0;
+.scroll-document p { margin: 0; }
+
+.scroll-chapter > .scroll-block:first-child:has(> h1) + .scroll-block:has(> p) > p::first-letter {
+  float: left;
+  margin: 0.08em 0.1em 0 0;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 3.35em;
+  font-weight: 500;
+  line-height: 0.76;
 }
 
-[data-reader-align="left"] .scroll-document p {
-  text-align: left;
-}
-
-[data-reader-align="justify"] .scroll-document p {
-  text-align: justify;
-}
+[data-reader-align="left"] .scroll-document p { text-align: left; }
+[data-reader-align="justify"] .scroll-document p { text-align: justify; }
 
 .scroll-document blockquote {
-  margin: 1.35em 0;
+  margin: 1.6em 0;
   padding: 0.15em 0 0.15em 1.15em;
   border-left: 2px solid var(--accent);
   color: var(--text-secondary);
@@ -197,13 +208,8 @@
 }
 
 .scroll-document ul,
-.scroll-document ol {
-  padding-left: 1.45em;
-}
-
-.scroll-document li + li {
-  margin-top: 0.35em;
-}
+.scroll-document ol { padding-left: 1.45em; }
+.scroll-document li + li { margin-top: 0.35em; }
 
 .scroll-document a {
   color: var(--accent);
@@ -215,7 +221,7 @@
   display: block;
   max-width: 100%;
   height: auto;
-  margin: 1.6em auto;
+  margin: 1.8em auto;
   border-radius: 3px;
 }
 
@@ -250,7 +256,7 @@
 
 .scroll-document hr {
   width: 5rem;
-  margin: 2.6em auto;
+  margin: 3em auto;
   border: 0;
   border-top: 1px solid var(--accent-dim);
 }
@@ -262,8 +268,6 @@
   font-family: var(--font-accent);
 }
 
-/* A subtle center-weighted reading field keeps long-form scroll mode feeling
-   like a page without boxing it into a faux card. */
 [data-reader-mode="scroll"] body[data-stage="read"] .stage {
   background:
     radial-gradient(
@@ -274,25 +278,16 @@
 }
 
 @media (max-width: 700px) {
-  .experience-mode-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  .experience-mode-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .experience-mode {
     min-height: 3rem;
     border-radius: 10px;
   }
 
-  .experience-mode strong {
-    font-size: 0.74rem;
-  }
+  .experience-mode strong { font-size: 0.74rem; }
+  .experience-mode small { font-size: 0.56rem; }
 
-  .experience-mode small {
-    font-size: 0.56rem;
-  }
-
-  /* Keep the primary sheet action reachable while its body scrolls. The DOM
-     keeps the accessible label “Close”; phones present the friendlier “Done”. */
   .settings-card.experience-card {
     display: flex;
     flex-direction: column;
@@ -316,18 +311,22 @@
 
   .scroll-document {
     width: min(calc(100% - 2rem), var(--reader-scroll-max));
-    padding-top: 2.6rem;
+    padding-top: 4.25rem;
     padding-bottom: 7rem;
   }
 
   .scroll-chapter + .scroll-chapter {
-    margin-top: 4.5rem;
-    padding-top: 3.5rem;
+    margin-top: 6.5rem;
+    padding-top: 5.5rem;
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .scroll-reader {
-    scroll-behavior: auto;
+  .scroll-document h1 {
+    max-width: 15ch;
+    margin-bottom: 2.2rem;
+    font-size: clamp(2.25em, 12vw, 3.25em);
+  }
+
+  .scroll-chapter > .scroll-block:first-child:has(> h1) + .scroll-block:has(> p) > p::first-letter {
+    font-size: 3em;
   }
 }
