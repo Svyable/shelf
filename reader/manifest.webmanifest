@@ -1,9 +1,9 @@
 {
-  "name": "Open Book Binder",
-  "short_name": "Binder",
+  "name": "Bookself Reader",
+  "short_name": "Reader",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0c0b0a",
   "theme_color": "#0c0b0a",
-  "description": "A Git-native bookshelf. Write on GitHub. Read like a book."
+  "description": "A Git-native bookshelf for reading Bookself publications."
 }
