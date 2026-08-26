@@ -42,10 +42,55 @@ runtime dependency on the platform repository.
 | Book | Authors |
 |------|---------|
 | [Leveraging Luck](books/leveraging-luck/) | @svyable |
+| [The Common Book](books/style-common-book/) | Bookself Studio |
+| [The Lamplight Room](books/style-lamplight-room/) | Bookself Studio |
+| [A Clear Margin](books/style-clear-margin/) | Bookself Studio |
+| [Field Notes Quarterly](books/style-field-notes/) | Bookself Studio |
+| [Poems at the Window](books/style-poems-at-window/) | Bookself Studio |
+| [After Midnight](books/style-after-midnight/) | Bookself Studio |
+| [Easy Reading](books/style-easy-reading/) | Bookself Studio |
+| [Study in Green](books/style-quiet-study/) | Bookself Studio |
+
+The eight Bookself Studio volumes are deliberately small **Reader style
+specimens**. Each is a real Markdown publication with a copyable `reader.json`
+that demonstrates one named author preset.
 
 *The Exponentiality* is on the desk (`books/the-exponentiality/`) and not yet
 on the shelf. *The Unbounding* stays in the private Binder until it is
 released here.
+
+## Reader style options
+
+Authors and stylists can recommend a starting reading composition with a named
+preset in `books/<slug>/reader.json`:
+
+```json
+{
+  "version": 1,
+  "preset": "literary"
+}
+```
+
+| Preset | Example | Starting composition |
+|---|---|---|
+| `book` | [The Common Book](books/style-common-book/) | ivory · Source Serif 4 · balanced paged reading |
+| `literary` | [The Lamplight Room](books/style-lamplight-room/) | parchment · Literata · classic indents · pages |
+| `modern-essay` | [A Clear Margin](books/style-clear-margin/) | porcelain · IBM Plex Sans · wide left-aligned scroll |
+| `editorial` | [Field Notes Quarterly](books/style-field-notes/) | linen · humanist sans · compact editorial scroll |
+| `poetry` | [Poems at the Window](books/style-poems-at-window/) | ivory · classic serif · airy open scroll |
+| `night-story` | [After Midnight](books/style-after-midnight/) | midnight · Lora · narrow warm paged reading |
+| `accessible` | [Easy Reading](books/style-easy-reading/) | high contrast · Atkinson Hyperlegible · larger narrow scroll |
+| `quiet-study` | [Study in Green](books/style-quiet-study/) | sage · Literata · narrow left-aligned study scroll |
+
+A preset is shorthand, not a locked theme. `reader.json` can fine-tune the
+recommended theme, warmth, font, size, weight, tracking, leading, measure,
+alignment, paragraph rhythm, indentation, Pages/Scroll mode, and hyphenation.
+
+**The publication can suggest. The reader decides.** If a reader changes the
+font, text size, spacing, alignment, mode, or atmosphere, that personalization
+belongs only to that browser. It does not edit `reader.json`, change Git, or
+change any other reader's experience. **Use this book's design** clears the
+local ownership markers and reapplies the publication recommendation.
 
 For a normal publication or new edition, prepare the release from the private
 Binder with `scripts/release-book.sh <slug> ../shelf`. The command runs locally,
