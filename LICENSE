@@ -1,11 +1,10 @@
 # License
 
-This repository uses two notices.
+This repository separates reusable Bookself software from author-owned publication content.
 
-## Framework (everything outside `books/`)
+## MIT-licensed framework
 
-The scaffolding, documentation, GitHub configuration, and everything else
-outside the `books/` directory are licensed under the MIT License:
+Bookself-derived framework code, shared Reader/Publishing Desk software, scripts, documentation, repository scaffolding, and underscore-prefixed blank starter material are licensed under the MIT License unless a file says otherwise.
 
 MIT License
 
@@ -29,14 +28,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Books (everything inside `books/`)
+## Publication content is not MIT by default
 
-All rights reserved.
+Normal publication directories under `books/<slug>/` are outside the MIT grant above unless their own rights file expressly says otherwise.
 
-Manuscripts, media, and other files under `books/` remain copyright of their
-respective authors, as named in each book's `manuscript/front-matter.md`. They
-are not licensed under the MIT License. Do not copy, publish, or reuse book
-contents without the author's permission.
+Manuscripts, illustrations, photographs, cover art, audio, and other publication content remain copyright of their respective rightsholders. The default for a real Bookself publication is **All Rights Reserved**. Public visibility, Git source availability, GitHub forking functionality, or inclusion in this public Shelf does not by itself grant permission to reproduce, republish, distribute, sell, adapt, translate, train or fine-tune AI systems on, ingest into generative AI systems, or otherwise exploit a publication.
 
-The `books/_TEMPLATE/` folder is example material for starting a new book.
-Replace its copyright line with your own when you copy it.
+A publication may deliberately choose another license in its own `RIGHTS.md`. That publication-specific file describes the author's intended grant for that work, subject to applicable law and separate hosting-provider terms.
+
+See `RIGHTS.md` and each publication's `RIGHTS.md` / `rights.json`.
