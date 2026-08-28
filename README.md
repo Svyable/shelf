@@ -42,6 +42,7 @@ runtime dependency on the platform repository.
 | Book | Authors |
 |------|---------|
 | [Leveraging Luck](books/leveraging-luck/) | Sven Hardy Benson |
+| [Silent Cartel](books/silent-cartel/) | Sven Hardy Benson |
 | [The Common Book](books/style-common-book/) | Bookself Studio |
 | [The Lamplight Room](books/style-lamplight-room/) | Bookself Studio |
 | [A Clear Margin](books/style-clear-margin/) | Bookself Studio |
