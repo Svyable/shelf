@@ -1,6 +1,6 @@
 # Svyable Shelf
 
-Sven Benson's **public shelf** in a [Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)
+Sven Hardy Benson's **public shelf** in a [Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)
 setup. The books here are released editions meant to be read. Drafts and the
 next revision of a published book stay in the private Binder until they are
 deliberately released.
@@ -41,7 +41,7 @@ runtime dependency on the platform repository.
 
 | Book | Authors |
 |------|---------|
-| [Leveraging Luck](books/leveraging-luck/) | @svyable |
+| [Leveraging Luck](books/leveraging-luck/) | Sven Hardy Benson |
 | [The Common Book](books/style-common-book/) | Bookself Studio |
 | [The Lamplight Room](books/style-lamplight-room/) | Bookself Studio |
 | [A Clear Margin](books/style-clear-margin/) | Bookself Studio |
