@@ -1,4 +1,4 @@
-# Opening the Binder
+# Opening the Desk
 
 This is a real chapter, short on purpose. Copy this folder, rename it, and
 overwrite these pages with your own.
