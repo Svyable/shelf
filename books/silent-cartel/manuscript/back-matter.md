@@ -1,0 +1,15 @@
+# Back Matter
+
+## A Note on Evidence
+
+This book rests on court filings and appellate opinions, government press releases and consent decrees, peer-reviewed economics papers, congressional letters and bill text, and reporting from established news organizations, rather than on anonymous sources or private access. Every specific case, statistic, and quotation examined in these pages is attributed to a named source in the text itself, and the detailed research trail — organized chapter by chapter, with source URLs, publication dates, and explicit notes on what each source does and does not establish — is kept separately in `research/README.md` and `research/source-ledger.csv`, so the narrative can read cleanly while the claims underneath it remain checkable.
+
+Several boundaries are worth stating directly, because this book has tried to name its own limits throughout rather than only at the end. A negotiated legal settlement, examined at length in this book's central chapters, resolves a dispute without ever producing a binding judicial ruling on the underlying legal theory; this book has tried to say so plainly wherever a settlement, rather than a verdict, is the most that can honestly be claimed. A laboratory finding, however well replicated, is not the same kind of evidence as a documented real-world effect, and this book has tried to keep those two categories of evidence visibly distinct rather than letting a striking simulation stand in for proof of real-world harm. Litigation examined in this book's later chapters — the RealPage case's remaining defendants, the Cendyn casino-hotel litigation, the Kentucky state action — remained active and unresolved as this book was completed in the second half of 2026; where a case's ultimate outcome was not yet known, this book has tried to say so rather than imply a resolution that had not actually occurred.
+
+## Acknowledgments
+
+This book owes its existence to the people who did the patient, often unglamorous work of making an invisible mechanism visible: the investigative journalists, led by Heather Vogell's reporting for ProPublica, who first traced a pricing algorithm's effect on real rent bills; the economists — Emilio Calvano, Giacomo Calzolari, Vincenzo Denicolò, and Sergio Pastorello foremost among them — who built and tested the laboratory evidence at the center of this book's argument; the government litigators, state attorneys general, and congressional staff who turned circumstantial patterns into formal legal complaints; and the tenants, drivers, and travelers who noticed, before anyone in a position of institutional authority did, that a price no longer seemed to be answering to the market alone. None of them are responsible for how their work has been synthesized here, or for any error that synthesis may have introduced.
+
+## About the Author
+
+Sven Hardy Benson writes about the systems, markets, and institutions that quietly decide what things cost, and who benefits when no one is looking closely enough to ask.
