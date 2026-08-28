@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Authors**   | @svyable |
+| **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Publisher** | Svyable Shelf |
 | **Chapters**  | 10 of 10 drafted |
