@@ -4,16 +4,16 @@
 > — Jim Collins
 
 > "The best preparation for the future is the cultivation of a mind that is clear, present, and unafraid of change."  
-> — in the spirit of Aldous Huxley
+> — Sven Hardy Benson
 
 > "Your luck is not a solo act; it is a duet between you and the people around you."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "The rarest kind of luck is not a job offer or a windfall; it is a friend who sees your potential and tells you about it."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "Momentum is not about doing more—it's about doing what matters, consistently, until it becomes who you are."  
-> — Sven Benson
+> — Sven Hardy Benson
 
 
 ## The Long Game
@@ -104,13 +104,13 @@ Luck has down periods. Here's how to handle them:
 > — Viktor Frankl, *Man's Search for Meaning*
 
 > "Bad luck is not a curse; it is a teacher disguised as loss."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "Suffering only becomes wisdom if you are willing to stay with it, to feel it, and to learn from it."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "The obstacle is not in your way—the obstacle is the way. Every setback is a setup for a comeback."  
-> — Marcus Aurelius-style
+> — Sven Hardy Benson
 
 > "The obstacle is the way; the block is the door."  
 > — Marcus Aurelius, *Meditations*
@@ -123,9 +123,6 @@ Luck has down periods. Here's how to handle them:
 
 > "The only thing that overcomes hard luck is hard work."  
 > — Harry Golden
-
-> "You have to be willing to fail, to take that risk, and the only way that can happen is by being willing to try."  
-> — Elon Musk
 
 > "There is always the opportunity to learn something. What is in you will always be bigger than whatever is around you."  
 > — John L. Mason
@@ -274,9 +271,6 @@ Eventually, luck becomes who you are.
 Not "someone who gets lucky" — just "someone who creates opportunity."
 
 This is the goal: luck as identity, not behavior.
-
-> "You don't rise to the level of your goals; you fall to the level of your systems."  
-> — James Clear
 
 ---
 
