@@ -7,7 +7,7 @@
 > — Alan Watts
 
 > "The art of living is not in preparing for a single great moment, but in attending to the succession of small, ordinary ones."  
-> — in the spirit of Aldous Huxley
+> — Sven Hardy Benson
 
 > "The present moment is the only place where life is truly available."  
 > — Thich Nhat Hanh
@@ -93,7 +93,7 @@ Let's begin.
 
 ---
 
-*Sven Benson*  
+*Sven Hardy Benson*  
 San Francisco, 2026
 
 ---
