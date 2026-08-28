@@ -27,6 +27,6 @@
 ## Contents
 
 - [ ] [Front Matter](manuscript/front-matter.md)
-- [ ] [Ch 1 — Opening the Binder](manuscript/ch01-example.md)
+- [ ] [Ch 1 — Opening the Desk](manuscript/ch01-example.md)
 - [ ] [Ch 2 — Leaving a Trace](manuscript/ch02-example.md)
 - [ ] [Back Matter](manuscript/back-matter.md)
