@@ -1,22 +1,19 @@
 # Introduction
 
-> "The only real disaster is to be unprepared for the present."  
-> — Alan Watts
-
 > "You will never notice opportunity if you are always hurrying past it."  
-> — in the spirit of Aldous Huxley
+> — Sven Hardy Benson
 
 > "Most people are not unlucky; they are asleep."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "You will never catch luck if you are always fleeing the present in pursuit of some future 'big break.'"  
-> — Marcus Aurelius-style
+> — Sven Hardy Benson
 
 > "Stop waiting for the perfect moment—there is no such thing. There is only this moment, and it is enough."  
-> — Sven Benson
+> — Sven Hardy Benson
 
 > "Luck is not a distant event—it is the moment when you are present enough to notice something real."  
-> — Sven Benson
+> — Sven Hardy Benson
 
 
 ## The Luck Paradox
