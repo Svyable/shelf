@@ -1,22 +1,19 @@
 # Defining Luck
 
-> "Luck is what happens when preparation meets opportunity."  
-> — Seneca
-
 > "Luck is not a force that happens to you; it is the way your life moves through time."  
-> — inspired by Alan Watts
+> — Sven Hardy Benson
 
 > "The world is full of opportunities; the rare thing is the person who is awake enough to notice them."  
-> — in the spirit of Aldous Huxley
+> — Sven Hardy Benson
 
 > "The door to opportunity is not a secret; it is the one you have been walking past without noticing."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "You do not meet good fortune by accident; you meet it by having already done the work."  
-> — Marcus Aurelius-style
+> — Sven Hardy Benson
 
 > "Good fortune is the name we give to the moments when our preparation finally aligns with the world's movement."  
-> — Sven Benson
+> — Sven Hardy Benson
 
 > "Success is where preparation and opportunity meet."  
 > — Bobby Unser
@@ -39,9 +36,6 @@
 > "The main way of getting lucky in the Valley is the classic 'run into someone' story."  
 > — Paul Saffo, futurist (Forbes ASAP)
 
-> "Success is the offspring of preparation and opportunity."  
-> — Bobby Unser
-
 > "Don't wait for the right opportunity: create it."  
 > — George Bernard Shaw
 
@@ -52,7 +46,7 @@
 > — Latin proverb
 
 > "Luck is not about waiting for lightning to strike—it's about building the tallest rod you can and standing in the right field."  
-> — Sven Benson
+> — Sven Hardy Benson
 
 ---
 
