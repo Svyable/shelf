@@ -4,7 +4,7 @@
 > — Farmer's Son proverb, told by Odds Bodkin
 
 > "When I was a child, I listened to Odds Bodkin tell the story of the Farmer's Son. The farmer's simple question—'How do you know this is not a blessing?'—stuck with me. It became my first lesson in the quiet, Stoic truth that fortune is not what happens to you, but what you do with it."  
-> — Sven Benson
+> — Sven Hardy Benson
 
 ---
 
@@ -28,9 +28,7 @@ The farmer replies, *"How do you know this is not a curse?"*
 
 Every event—good or bad—can be reframed as a blessing or a curse, depending on how you respond.
 
-This is the heartbeat of this chapter, and arguably the heartbeat of the entire book:
-
-> "How do you know this is not a blessing?"
+This is the heartbeat of this chapter, and arguably the heartbeat of the entire book.
 
 ---
 
@@ -55,8 +53,6 @@ The farmer's response isn't blind optimism. It's preparedness — the ability to
 ### 1. Pause Before Judging
 
 When something "bad" happens, your first reaction is often fear or anger. The farmer didn't react immediately. He waited. He wondered.
-
-> "How do you know this is not a blessing?"
 
 ### 2. Ask the Counter-Question
 
@@ -113,8 +109,6 @@ The next time something "bad" happens, try this:
 2. Ask: "How do I know this is not a blessing?"
 3. Wait. Don't answer immediately.
 4. Watch. See what unfolds.
-
-> "How do you know this is not a blessing?"
 
 It might be the most powerful question you ever ask.
 
