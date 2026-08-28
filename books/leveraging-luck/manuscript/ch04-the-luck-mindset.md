@@ -13,22 +13,19 @@
 > — Dr. Susan Albers, PsyD, Cleveland Clinic
 
 > "You never see the world as it is; you see the world as you are trained to notice."  
-> — inspired by Alan Watts
+> — Sven Hardy Benson
 
 > "We see the world not as it is, but as we have been taught to see it."  
-> — in the spirit of Aldous Huxley
-
-> "Most people are not unlucky; they are asleep."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "To capture opportunity, you must first learn to wake up to the ordinary moments."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "The wise person does not pray for good luck; they pray for the wisdom to use what arrives, whether it is good or bad."  
-> — Marcus Aurelius-style
+> — Sven Hardy Benson
 
 > "You don't have to control the world to live a lucky life. You only have to control your response to what the world gives you."  
-> — Marcus Aurelius-style
+> — Sven Hardy Benson
 
 > "The man who has confidence in himself gains the confidence of others."  
 > — Hasakai
@@ -42,7 +39,7 @@
 > — Charles M. Schulz
 
 > "Your mindset is not who you are—it is who you practice being, every single day."  
-> — Sven Benson
+> — Sven Hardy Benson
 
 > "Stay hungry. Stay foolish."  
 > — Steve Jobs, Stanford 2005
@@ -95,9 +92,6 @@ This mindset attracts luck because:
 ### 1. Curiosity
 
 Lucky people are genuinely interested in the world. They ask questions. They explore. They follow threads.
-
-> "Luck is what happens when preparation meets opportunity."  
-> — Seneca
 
 Curiosity is the preparation.
 
@@ -287,7 +281,7 @@ And watch as the luck starts to flow.
 > — James Clear, *Atomic Habits*
 
 > "Opportunity finds you in the places where your habits have already prepared you to say 'yes.'"  
-> — inspired by James Clear
+> — Sven Hardy Benson
 
 ---
 
