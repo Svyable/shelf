@@ -39,11 +39,11 @@ Each chapter includes:
 
 ## About the Author
 
-## Sven Benson
+## Sven Hardy Benson
 
-Sven Benson doesn't fit neatly into a box — and that's the point.
+Sven Hardy Benson doesn't fit neatly into a box — and that's the point.
 
-With experience spanning quantitative research, strategic consulting, and direct work with individuals seeking transformation, Sven brings a multi-disciplinary lens to questions of human potential.
+With experience spanning quantitative research, strategic consulting, and direct work with individuals seeking transformation, Sven Hardy Benson brings a multi-disciplinary lens to questions of human potential.
 
 ### Background
 
@@ -57,7 +57,7 @@ With experience spanning quantitative research, strategic consulting, and direct
 
 ### What Drives This Work
 
-Sven believes that:
+Sven Hardy Benson believes that:
 
 1. **Information without action is entertainment** — We don't just want to know; we want to *do*
 2. **Optimism is a strategy** — A positive mindset isn't naive; it's a competitive advantage
@@ -77,7 +77,7 @@ Sven believes that:
 
 [← Back to Home](index.qmd)
 
-© 2026 Sven Benson
+© 2026 Sven Hardy Benson
 
 ## References & Further Reading
 
@@ -87,7 +87,7 @@ Sven believes that:
 
 ### Books
 
-Benson, Sven. *Leveraging Luck: An Optimistic Guide to Life*. 2026.
+Benson, Sven Hardy. *Leveraging Luck: An Optimistic Guide to Life*. 2026.
 
 Cervantes, Miguel de. *Don Quixote*. Translated by John Rutherford. Oxford University Press, 2000.
 
@@ -137,7 +137,7 @@ Watts, Alan. *The Way of Zen*. Pantheon Books, 1957.
 
 ## Bibliography
 
-Benson, Sven. *Leveraging Luck: An Optimistic Guide to Life*, 2026.
+Benson, Sven Hardy. *Leveraging Luck: An Optimistic Guide to Life*, 2026.
 
 Cervantes, Miguel de. *Don Quixote*. Translated by John Rutherford. Oxford University Press, 2000.
 
