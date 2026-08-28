@@ -187,16 +187,16 @@ function analyzeBook(meta, markdown, cataloged, checklist) {
     if (meta.published && !allChecklistDone) {
       issues.push({ severity: 'warn', message: 'This published book still has unchecked Contents items.' });
     }
-  } else if (state.role === 'binder' && meta.published) {
-    issues.push({ severity: 'warn', message: 'Published status inside a private binder does not publish the book; release to the shelf is a separate step.' });
+  } else if (state.role === 'desk' && meta.published) {
+    issues.push({ severity: 'warn', message: 'Published status on a private Desk does not publish the book; release to the Shelf is a separate step.' });
   }
 
   const blockingIssues = issues.filter((issue) => issue.severity === 'severe');
   const ready = allChecklistDone && !placeholder && blockingIssues.length === 0
-    && (state.role === 'binder' || (!meta.published && !cataloged));
+    && (state.role === 'desk' || (!meta.published && !cataloged));
 
   let nextStep = '';
-  if (state.role === 'binder') {
+  if (state.role === 'desk') {
     if (ready) nextStep = 'Ready to release. Run the local release command to prepare a verified Shelf snapshot.';
     else if (placeholder) nextStep = 'Finish the book setup: replace template metadata and confirm the manuscript structure.';
     else if (checklist.length && !allChecklistDone) {
@@ -204,7 +204,7 @@ function analyzeBook(meta, markdown, cataloged, checklist) {
       nextStep = `Keep drafting. ${remaining} Contents item${remaining === 1 ? '' : 's'} remain unchecked.`;
     } else nextStep = 'Resolve the readiness items below before release.';
   } else if (meta.published && cataloged) {
-    nextStep = 'Released edition. Keep it stable here; revise the next edition in the private Binder.';
+    nextStep = 'Released edition. Keep it stable here; revise the next edition on the private Desk.';
   } else if (meta.published && !cataloged) {
     nextStep = 'Complete publishing by adding this book to the root README catalog.';
   } else if (!meta.published && cataloged) {
@@ -252,7 +252,7 @@ function unreadableBook(slug, catalogSlugs) {
     slug, title: slug, status: 'Unreadable', authors: '', tags: [], checklist: [], chapterCount: 0,
     draftedChapters: 0, allChecklistDone: false, cataloged: catalogSlugs.includes(slug), ready: false,
     unreadable: true, nextStep: 'Open the book folder and repair or add its README hub.',
-    issues: [{ severity: 'severe', message: 'The desk could not read books/<slug>/README.md.' }],
+    issues: [{ severity: 'severe', message: 'The Desk could not read books/<slug>/README.md.' }],
   };
 }
 
@@ -265,7 +265,7 @@ function statusState(book) {
 
 function statusLabel(book) {
   if (isPublicRole() && book.published && book.cataloged) return 'Published';
-  if (book.ready) return state.role === 'binder' ? 'Ready to release' : 'Ready';
+  if (book.ready) return state.role === 'desk' ? 'Ready to release' : 'Ready';
   return book.status || 'Drafting';
 }
 
@@ -361,7 +361,7 @@ function renderBooks() {
 
 function setSummaryLabels() {
   const labels = [...document.querySelectorAll('#summaryGrid .summary-label')];
-  if (state.role === 'binder') {
+  if (state.role === 'desk') {
     if (labels[1]) labels[1].textContent = 'Drafting';
     if (labels[2]) labels[2].textContent = 'Ready to release';
   } else {
@@ -372,7 +372,7 @@ function setSummaryLabels() {
 
 function renderSummary() {
   $('summaryBooks').textContent = String(state.books.length);
-  $('summaryPublished').textContent = String(state.role === 'binder'
+  $('summaryPublished').textContent = String(state.role === 'desk'
     ? state.books.filter((book) => !book.ready).length
     : state.books.filter((book) => book.published && book.cataloged).length);
   $('summaryReady').textContent = String(state.books.filter((book) => book.ready).length);
@@ -395,14 +395,14 @@ function configureRepoLinks(meta = {}) {
   $('startBookLink').href = hasGithub() ? githubUrl(`/tree/${branch}/books/_TEMPLATE`) : localUrl('books/_TEMPLATE/');
   $('authorGuideLink').href = state.local ? localUrl('docs/author-guide.md') : githubUrl(`/blob/${branch}/docs/author-guide.md`);
   $('rootEditLink').href = hasGithub() ? githubUrl(`/edit/${branch}/README.md`) : localUrl('README.md');
-  $('rootEditLink').textContent = state.role === 'binder' ? 'Edit inventory' : 'Edit catalog';
+  $('rootEditLink').textContent = state.role === 'desk' ? 'Edit inventory' : 'Edit catalog';
 
   const label = document.querySelector('label[for="repoInput"]');
   if (label) label.textContent = 'Inspect another public repository';
   const help = $('repoHelp');
   if (help) {
-    help.textContent = state.role === 'binder'
-      ? 'This private binder is loaded from the current instance. Remote switching is limited to public Bookself repositories.'
+    help.textContent = state.role === 'desk'
+      ? 'This private Desk is loaded from the current instance. Remote switching is limited to public Bookself repositories.'
       : 'The current instance is loaded directly. You can also inspect another public Bookself repository by owner/repository.';
   }
 }
@@ -411,7 +411,7 @@ function showLoading(message = 'Reading instance metadata and manuscript hubs.')
   const status = $('deskStatus');
   status.hidden = false;
   status.classList.remove('error');
-  status.innerHTML = `<div class="status-spinner" aria-hidden="true"></div><div><strong>Opening the publishing desk…</strong><span>${escapeHtml(message)}</span></div>`;
+  status.innerHTML = `<div class="status-spinner" aria-hidden="true"></div><div><strong>Opening the publishing Desk…</strong><span>${escapeHtml(message)}</span></div>`;
 }
 
 function showError(error, label = 'this Bookself instance') {
@@ -421,7 +421,7 @@ function showError(error, label = 'this Bookself instance') {
   const hint = state.local
     ? 'Serve the repository over HTTP (for example, python3 -m http.server). file:// cannot load the Markdown workspace.'
     : error?.status === 404
-      ? 'This remote repository may be private or unavailable. Private binders should open their own local Desk; no GitHub token is requested here.'
+      ? 'This remote repository may be private or unavailable. Private Desks should open their own local Desk; no GitHub token is requested here.'
       : 'GitHub could not be reached. Check the repository name or try again after the API rate limit resets.';
   status.innerHTML = `<div><strong>Could not open ${escapeHtml(label)}.</strong><span>${escapeHtml(hint)}</span></div>`;
   ['repoOverview', 'summaryGrid', 'deskControls'].forEach((id) => { $(id).hidden = true; });
@@ -491,13 +491,16 @@ async function loadRemoteWorkspace(repo) {
   try {
     const meta = await api();
     state.branch = meta.default_branch || 'main';
-    const [directories, portalMarkdown] = await Promise.all([
+    const [directories, portalMarkdown, remoteImprint] = await Promise.all([
       api(`/contents/books?ref=${encodeURIComponent(state.branch)}`),
       remoteText('README.md').catch(() => ''),
+      remoteText('imprint.json').then((text) => JSON.parse(text)).catch(() => ({})),
     ]);
+    state.imprint = remoteImprint;
+    state.role = remoteImprint.role || 'shelf';
     const catalogSlugs = parsePortalCatalog(portalMarkdown || '');
-    const bookDirectories = directories.filter((item) => item.type === 'dir' && item.name !== '_TEMPLATE');
-    showLoading(`Reading ${bookDirectories.length} manuscript hub${bookDirectories.length === 1 ? '' : 's'}…`);
+    const bookDirectories = directories.filter((item) => item.type === 'dir' && !item.name.startsWith('_'));
+    showLoading(`Reading ${bookDirectories.length} manuscript hub${bookDirectories.length === 1 ? '' : 's'} from this ${state.role}…`);
     state.books = await mapLimit(bookDirectories, 6, (directory) => loadRemoteBook(directory, catalogSlugs));
     finishLoad(meta);
 

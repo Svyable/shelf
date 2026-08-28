@@ -17,7 +17,7 @@ import {
   loadStats,
   saveStats,
 } from './storage.js';
-import { parseRoute, binderHash, coverHash, readHash, go } from './router.js';
+import { parseRoute, libraryHash, coverHash, readHash, go } from './router.js';
 import {
   loadNotes,
   addNote,
@@ -314,7 +314,7 @@ function showStage(name) {
   const prev = document.body.dataset.stage;
   document.body.dataset.stage = name;
   const cover = $('coverPage');
-  $('binderView').hidden = name !== 'binder';
+  $('libraryView').hidden = name !== 'library';
   if (name === 'cover') {
     cover.hidden = false;
     if (prev === 'read' || prev === 'end') {
@@ -346,7 +346,7 @@ function showStage(name) {
   $('readerChrome').classList.toggle('is-reading', name === 'read');
   showReadHint(name === 'read');
   const proof = $('proofRibbon');
-  if (proof) proof.hidden = !(app.book && !app.book.published && name !== 'binder');
+  if (proof) proof.hidden = !(app.book && !app.book.published && name !== 'library');
 }
 
 function setTitle() {
@@ -398,7 +398,7 @@ function fillCover(book, { draft }) {
   $('draftBadge').hidden = !draft;
   document.body.classList.toggle('is-draft', draft);
   const proof = $('proofRibbon');
-  if (proof) proof.hidden = !draft || document.body.dataset.stage === 'binder';
+  if (proof) proof.hidden = !draft || document.body.dataset.stage === 'library';
   const face = $('coverFront');
   face.style.setProperty('--cloth', clothColor(book.slug));
   if (book.cover) {
@@ -1125,8 +1125,8 @@ async function onRoute() {
   $('noteDialog').classList.remove('active');
   $('helpOverlay').classList.remove('active');
   hideSelPop();
-  if (route.view === 'binder') {
-    showStage('binder');
+  if (route.view === 'library') {
+    showStage('library');
     app.slug = null;
     app.book = null;
     document.documentElement.lang = 'en';
@@ -1168,7 +1168,7 @@ async function onRoute() {
     $('shelfError').textContent = err.message || 'Could not open that book.';
     setTitle();
     renderShelf(app.catalog);
-    showStage('binder');
+    showStage('library');
   }
 }
 
@@ -1200,7 +1200,7 @@ function toggleBookmark() {
 }
 
 function bindUi() {
-  $('logoBtn').addEventListener('click', () => go(binderHash()));
+  $('logoBtn').addEventListener('click', () => go(libraryHash()));
   $('startBtn').addEventListener('click', (e) => {
     e.stopPropagation();
     const first = app.book.contents[0]?.id;
@@ -1216,7 +1216,7 @@ function bindUi() {
     go(readHash(app.slug, app.book.contents[0]?.id, 0));
   });
   $('rereadBtn').addEventListener('click', () => go(coverHash(app.slug)));
-  $('homeFromEnd').addEventListener('click', () => go(binderHash()));
+  $('homeFromEnd').addEventListener('click', () => go(libraryHash()));
   $('prevBtn').addEventListener('click', (e) => {
     e.stopPropagation();
     turn(-1);
@@ -1271,7 +1271,7 @@ function bindUi() {
     });
   });
   $('searchBtn').addEventListener('click', () => {
-    if (document.body.dataset.stage === 'binder') {
+    if (document.body.dataset.stage === 'library') {
       $('librarySearch')?.focus();
       return;
     }
@@ -1478,7 +1478,7 @@ function bindUi() {
         return;
       }
       if (stage === 'read') go(coverHash(app.slug));
-      else if (stage === 'cover' || stage === 'end') go(binderHash());
+      else if (stage === 'cover' || stage === 'end') go(libraryHash());
       return;
     }
     if (stage === 'cover' && (e.key === 'Enter' || e.key === ' ')) {
@@ -1677,7 +1677,7 @@ async function init() {
     console.error(err);
     $('shelfError').hidden = false;
     $('shelfError').textContent =
-      'Could not load the binder catalog. Serve the repository root (not file://) so Markdown can be fetched.';
+      'Could not load the library catalog. Serve the repository root (not file://) so Markdown can be fetched.';
   }
   const requestRoute = () => {
     if (app.routing) return;

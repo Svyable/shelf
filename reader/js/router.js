@@ -4,7 +4,7 @@ export function parseHash(hash = window.location.hash) {
   const raw = (hash || '#/').replace(/^#/, '');
   const parts = raw.split('/').filter(Boolean);
   if (parts[0] !== 'b' || !parts[1]) {
-    return { view: 'binder', slug: null, chapter: null, offset: 0 };
+    return { view: 'library', slug: null, chapter: null, offset: 0 };
   }
   const slug = decodeURIComponent(parts[1]);
   const chapter = parts[2] ? decodeURIComponent(parts[2]) : null;
@@ -27,7 +27,7 @@ export function parseRoute() {
   return parseQuery() || parseHash();
 }
 
-export function binderHash() {
+export function libraryHash() {
   return '#/';
 }
 
@@ -40,7 +40,7 @@ export function readHash(slug, chapter, offset = 0) {
 }
 
 function queryFor(route) {
-  if (!route.slug || route.view === 'binder') return '';
+  if (!route.slug || route.view === 'library') return '';
   const q = new URLSearchParams();
   q.set('b', route.slug);
   if (route.chapter) q.set('c', route.chapter);
