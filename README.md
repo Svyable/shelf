@@ -2,11 +2,11 @@
 
 Sven Hardy Benson's **public shelf** in a [Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)
 setup. The books here are released editions meant to be read. Drafts and the
-next revision of a published book stay in the private Binder until they are
+next revision of a published book stay on the private Desk until they are
 deliberately released.
 
-Binder and Shelf are separate Git repositories with separate histories. This
-public repository does **not** point into or read the private Binder. A release
+Desk and Shelf are separate Git repositories with separate histories. This
+public repository does **not** point into or read the private Desk. A release
 copies a committed publication snapshot into Shelf; after that, the public copy
 is independent until the next release.
 
@@ -32,7 +32,7 @@ Bookself keeps platform software separate from an individual deployment:
   belong; shared Reader/Desk code should not depend on those values.
 
 Platform UI upgrades are developed in Bookself and synchronized to both the
-private Binder and public Shelf. The canonical upstream command is
+private Desk and public Shelf. The canonical upstream command is
 `scripts/sync-ui.sh`; the older `sync-reader.sh` name remains a compatibility
 alias in Bookself. That UI synchronization is also a copy operation, not a
 runtime dependency on the platform repository.
@@ -55,8 +55,8 @@ The eight Bookself Studio volumes are deliberately small **Reader style
 specimens**. Each is a real Markdown publication with a copyable `reader.json`
 that demonstrates one named author preset.
 
-*The Exponentiality* is on the desk (`books/the-exponentiality/`) and not yet
-on the shelf. *The Unbounding* stays in the private Binder until it is
+*The Exponentiality* is on the private Desk (`books/the-exponentiality/`) and
+not yet on the shelf. *The Unbounding* stays on the private Desk until it is
 released here.
 
 ## Reader style options
@@ -93,20 +93,20 @@ change any other reader's experience. **Use this book's design** clears the
 local ownership markers and reapplies the publication recommendation.
 
 For a normal publication or new edition, prepare the release from the private
-Binder with `scripts/release-book.sh <slug> ../shelf`. The command runs locally,
-copies the committed Binder snapshot, sets the Shelf copy to `Published`,
-updates this catalog row, verifies the copied publication files, and stops
-before commit or push so the public diff can be reviewed.
+Desk with `scripts/release-book.sh <slug> ../shelf`. The command runs locally,
+copies the committed Desk snapshot, sets the Shelf copy to `Published`, updates
+this catalog row, verifies the copied publication files, and stops before
+commit or push so the public diff can be reviewed.
 
-No private-Binder GitHub Actions job is required to prepare that release, and
+No private-Desk GitHub Actions job is required to prepare that release, and
 this Shelf does not require an Actions build to turn Markdown into a separate
 artifact. GitHub Pages serves the committed Reader and publication files
 straight from the repository source configured for Pages.
 
 Do not change a released Shelf book to `Drafting` or `Revision in progress`
 just to work on its next edition. That can hide the book from the Reader without
-making its files private. Revise in Binder and release the replacement when it
-is ready.
+making its files private. Revise on Desk and release the replacement when it is
+ready.
 
 See [Revising a published book](https://github.com/Svyable/bookself/blob/main/docs/revisions.md).
 
