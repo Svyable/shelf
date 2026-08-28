@@ -2,4 +2,4 @@
 
 An Optimistic Guide To Life
 
-© 2026 Sven Benson. All rights reserved.
+© 2026 Sven Hardy Benson. All rights reserved.
