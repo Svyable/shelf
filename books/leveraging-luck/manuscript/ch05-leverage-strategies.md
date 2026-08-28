@@ -4,19 +4,19 @@
 > — Jim Collins
 
 > "The smallest action in the present moment is the most powerful thing you can do."  
-> — inspired by Alan Watts
+> — Sven Hardy Benson
 
 > "The mind is a kind of lens; what you let in determines what you find."  
-> — in the spirit of Aldous Huxley
+> — Sven Hardy Benson
 
 > "The smallest action, done with full attention, is the most powerful thing you can do."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "The rare people who seem 'lucky' are not the ones who wait for fate; they are the ones who practice virtue in the small, unglamorous moments."  
-> — Marcus Aurelius-style
+> — Sven Hardy Benson
 
 > "Every small act done with clarity and discipline is a tiny brick in the wall of your good fortune."  
-> — Marcus Aurelius-style
+> — Sven Hardy Benson
 
 > "Every day is a new opportunity. You can build on yesterday's success or put its failures behind and start over again."  
 > — Bob Feller
@@ -25,10 +25,10 @@
 > — Confucius
 
 > "You don't need a dramatic gesture to change your life; you need a small, repeated act done with full presence."  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "Strategies are useless without action—but action without strategy is just noise. The magic happens when both dance together."  
-> — Sven Benson
+> — Sven Hardy Benson
 
 > "The internet was ready; the prepared mind knew how to light it."  
 > — Tim Berners-Lee and the World Wide Web (1989)
@@ -147,7 +147,7 @@ Set designated periods of intense exploration:
 Block time for serendipity. Don't leave luck to chance — schedule it.
 
 > "Relaxation is the highest form of preparation; it is the mind and body ready to move, not rigid, not brittle."  
-> — inspired by Alan Watts
+> — Sven Hardy Benson
 
 ---
 
