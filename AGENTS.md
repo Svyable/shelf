@@ -19,26 +19,26 @@ vocabulary.
 - Do not put book prose in `reader/`. The reader fetches Markdown from
   `books/<slug>/`. Authors and agents only edit Markdown and `media/`.
 
-## Binder / Shelf boundary
+## Desk / Shelf boundary
 
 This repository is the **public Shelf**. It contains released publication
-snapshots. Drafts and the next revision of a published book belong in the
-private Binder.
+snapshots. Drafts and the next revision of a published book belong on the
+private Desk.
 
-Binder and Shelf are separate Git repositories. Shelf does not reference,
-submodule, symlink, mount, or fetch manuscript files from Binder at runtime.
-A normal release copies a committed Binder snapshot into Shelf; after that the
+Desk and Shelf are separate Git repositories. Shelf does not reference,
+submodule, symlink, mount, or fetch manuscript files from Desk at runtime.
+A normal release copies a committed Desk snapshot into Shelf; after that the
 copies are independent until the next release.
 
-Normal manuscript flow is **Binder → Shelf**. Do not create a two-way sync.
+Normal manuscript flow is **Desk → Shelf**. Do not create a two-way sync.
 Shared `reader/` and `desk/` UI is copied separately from the Bookself platform.
 
 ## Local-first publishing
 
 Bookself publishing must remain functional without GitHub Actions. A normal
-release is prepared locally in Binder with Git and Python's standard library,
+release is prepared locally on Desk with Git and Python's standard library,
 then reviewed and committed here. Do not introduce a requirement for a private
-Binder Actions job, hosted build artifact, or deployment runner.
+Desk Actions job, hosted build artifact, or deployment runner.
 
 This Shelf's Reader is static and should remain no-build by default. GitHub
 Pages is the delivery surface for committed files, not a reason to add an
@@ -74,7 +74,7 @@ Actions-based build pipeline.
   style) as a drive-by.
 - Do not add a build step, CODEOWNERS, or branch protection unless a human
   asked for that by name.
-- Do not make publication depend on GitHub Actions, especially a private Binder
+- Do not make publication depend on GitHub Actions, especially a private Desk
   workflow or paid automation minutes.
 - Do not change GitHub Pages source away from the repository root, or add a
   custom domain, unless a human asked.
@@ -89,17 +89,17 @@ Actions-based build pipeline.
 
 These are the public lifecycle operations.
 
-**Receive a release.** The normal path begins in the private Binder with
+**Receive a release.** The normal path begins on the private Desk with
 `scripts/release-book.sh <slug> ../shelf`. That command runs locally, prepares
 an exact replacement publication snapshot here, sets the Shelf copy to
 `Published`, adds or updates the root **The books** row, verifies copied
-publication files against the committed Binder snapshot, and stops before
+publication files against the committed Desk snapshot, and stops before
 commit or push. Review and land that prepared Shelf change through normal Git;
 a pull request is useful but not required by Bookself itself.
 
 **Publish.** A released publication has the exact Status `Published` and one
 root README row under **The books**. Normally both are prepared together by the
-Binder release command. Do not change only one side.
+Desk release command. Do not change only one side.
 
 **Preview a public proof.** Only when a human explicitly intends a public,
 unlisted proof may a non-published publication live here. Its direct Reader URL
@@ -107,13 +107,13 @@ and raw Git files are public even when it is absent from the visible shelf.
 Never describe an unlisted Shelf proof as private.
 
 **Revise a published book.** Leave this Shelf snapshot unchanged. Revise and
-commit the private Binder copy, then receive the replacement release when it is
+commit the private Desk copy, then receive the replacement release when it is
 ready.
 
 **Live public hotfix.** Only when a human explicitly asks for an immediate
 public correction may the released Shelf manuscript be edited directly. Treat
 that as a public production change, not normal drafting, and reconcile the same
-change back into Binder afterward so the next release does not erase it.
+change back into Desk afterward so the next release does not erase it.
 
 **Unpublish.** Set Status to anything except `Published` and remove the root
 catalog row. Remember that content already pushed to public Git history is not

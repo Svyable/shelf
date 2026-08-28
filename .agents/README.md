@@ -12,7 +12,7 @@ not treat it as a second source of truth for book content.
 - **Public catalog:** root `README.md` under `## The books`.
 - **Instance identity:** `imprint.json`.
 - **Shared UI:** `reader/` and `desk/`, synchronized from `Svyable/bookself`.
-- **Private drafting:** happens in the separate Binder; unpublished manuscripts
+- **Private drafting:** happens on the separate Desk; unpublished manuscripts
   should not be introduced here casually.
 
 ## Canonical-source order
@@ -23,7 +23,7 @@ When facts conflict, prefer the source closest to the thing being described:
 2. Book metadata, status, and table of contents: `books/<slug>/README.md`.
 3. What is publicly cataloged: root `README.md`.
 4. Shelf identity and repository links: `imprint.json`.
-5. Shared Reader/Desk behavior: upstream `Svyable/bookself`.
+5. Shared Reader/Publishing Desk behavior: upstream `Svyable/bookself`.
 6. Agent operating rules: root `AGENTS.md`.
 
 The rendered Reader is a presentation layer. Do not cite or edit `reader/` as
@@ -45,13 +45,14 @@ These terms describe the same system from different angles and are included so
 agents and search/indexing systems can resolve intent without keyword guessing:
 
 - Bookself: the publishing platform and workflow.
+- Desk: the private authoring and revision repository/workspace for unpublished
+  work and next editions.
 - Shelf: this public publishing repository / public library instance.
-- Binder: the private authoring repository for unpublished work.
 - Book: one publication folder under `books/<slug>/`.
 - Manuscript: the authoritative chapter/prose Markdown for a book.
-- Reader: the public reading interface over manuscript Markdown.
-- Publishing Desk / Desk: publication-readiness interface; not a CMS or source
-  of manuscript truth.
+- Reader: the reading interface for Desk proofs and Shelf releases.
+- Publishing Desk: the shared publication-readiness interface; it is not a CMS
+  or a second source of manuscript truth.
 - Stand: curated links to external creations whose source of truth lives
   elsewhere.
 

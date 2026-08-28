@@ -1,8 +1,6 @@
 import { fetchText, fileUrl } from './base.js';
 import { migrateReaderPersonalization } from './presentation.js';
-import { binderHash, coverHash, go, parseRoute } from './router.js';
-
-export const READER_STYLE_API_VERSION = '1';
+import { libraryHash, coverHash, go, parseRoute } from './router.js';
 
 export const DEFAULT_IMPRINT = {
   role: 'instance',
@@ -10,11 +8,11 @@ export const DEFAULT_IMPRINT = {
   shortName: 'Bookself',
   description: 'A Git-native bookshelf for Markdown books.',
   kicker: 'Written in Markdown · Read like a book',
-  lede: 'Books live in this repository. The reader and publishing desk are shared Bookself software.',
+  lede: 'Books live in this repository. The Reader and publishing Desk are shared Bookself software.',
   credit: '',
   creditHref: '',
   writeHref: '../desk/',
-  writeLabel: 'Publishing desk',
+  writeLabel: 'Publishing Desk',
   forkHref: '',
   forkLabel: '',
   homeLabel: 'Books',
@@ -23,8 +21,8 @@ export const DEFAULT_IMPRINT = {
   steps: [
     { n: '1', title: 'Start', body: 'Copy books/_TEMPLATE to books/your-title' },
     { n: '2', title: 'Write', body: 'Keep the manuscript in plain Markdown' },
-    { n: '3', title: 'Preview', body: 'Use the reader before publishing' },
-    { n: '4', title: 'Publish', body: 'Promote finished work from a private binder to a public shelf' },
+    { n: '3', title: 'Preview', body: 'Use the Reader before publishing' },
+    { n: '4', title: 'Publish', body: 'Release finished work from a private Desk to a public Shelf' },
   ],
   github: { owner: '', repo: '' },
 };
@@ -99,7 +97,7 @@ function installShelfNavigation(imprint) {
     shelf.id = 'shelfHomeBtn';
     shelf.type = 'button';
     shelf.className = 'reader-exit-btn reader-exit-shelf';
-    shelf.addEventListener('click', () => go(binderHash()));
+    shelf.addEventListener('click', () => go(libraryHash()));
 
     const cover = document.createElement('button');
     cover.id = 'bookCoverBtn';
@@ -120,14 +118,14 @@ function installShelfNavigation(imprint) {
   const shelf = document.getElementById('shelfHomeBtn');
   const cover = document.getElementById('bookCoverBtn');
   const role = String(imprint.role || 'instance').toLowerCase();
-  const home = role === 'binder' ? 'Binder' : 'Shelf';
+  const home = role === 'desk' ? 'Desk' : 'Shelf';
   shelf.innerHTML = `<span aria-hidden="true">←</span><span>${home}</span>`;
   shelf.title = `Back to ${home}`;
   shelf.setAttribute('aria-label', `Back to ${home}`);
 
   const sync = () => {
     const route = parseRoute();
-    const atHome = route.view === 'binder';
+    const atHome = route.view === 'library';
     shelf.hidden = atHome;
     cover.hidden = atHome || route.view === 'cover';
   };
@@ -189,14 +187,14 @@ function installShelfNavigation(imprint) {
 }
 
 function emptyLibraryText(role) {
-  if (role === 'binder') {
+  if (role === 'desk') {
     return 'No manuscripts yet. Start one from a blank template in books/, keep it Drafting, and preview it here before release.';
   }
   if (role === 'shelf') {
-    return 'No released publications yet. Keep drafts in the private Binder, then release a committed snapshot to this public Shelf when it is ready.';
+    return 'No released publications yet. Keep drafts on the private Desk, then release a committed snapshot to this public Shelf when it is ready.';
   }
   if (role === 'platform') {
-    return 'No platform examples are listed yet. Add published specimen content under books/ to demonstrate Bookself without using a private Binder.';
+    return 'No platform examples are listed yet. Add published specimen content under books/ to demonstrate Bookself without using a private Desk.';
   }
   return 'No publications are listed yet.';
 }
@@ -220,7 +218,6 @@ export function applyImprint(imprint) {
   window.__IMPRINT = imprint;
   migrateReaderPersonalization();
   document.title = imprint.name;
-  document.documentElement.dataset.bookselfStyleApi = READER_STYLE_API_VERSION;
   document.documentElement.dataset.bookselfRole = imprint.role || 'instance';
   applyReaderStyles(imprint.readerStyles);
   installShelfNavigation(imprint);
@@ -229,11 +226,11 @@ export function applyImprint(imprint) {
   if (apple) apple.setAttribute('content', imprint.shortName);
   const desc = document.querySelector('meta[name="description"]');
   if (desc && imprint.description) desc.setAttribute('content', imprint.description);
-  const h1 = document.querySelector('.binder-hero h1');
+  const h1 = document.querySelector('.library-hero h1');
   if (h1) h1.textContent = imprint.name;
-  const kicker = document.querySelector('.binder-kicker');
+  const kicker = document.querySelector('.library-kicker');
   if (kicker) kicker.textContent = imprint.kicker;
-  const lede = document.querySelector('.binder-lede');
+  const lede = document.querySelector('.library-lede');
   if (lede) {
     lede.textContent = imprint.lede;
     if (imprint.credit && imprint.creditHref) {
