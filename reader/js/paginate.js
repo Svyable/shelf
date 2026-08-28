@@ -11,7 +11,7 @@ function joinHtml(parts) {
   return parts.map((p) => p.html).join('');
 }
 
-function splitTextBlock(block, measureEl) {
+function splitTextBlock(block, measureEl, prefixHtml = '') {
   const wrap = document.createElement('div');
   wrap.innerHTML = block.html;
   const el = wrap.firstElementChild;
@@ -26,25 +26,31 @@ function splitTextBlock(block, measureEl) {
 
   const parts = [];
   let cursor = 0;
+  let prefix = prefixHtml;
   const raw = block.raw;
   const textLen = words.join('').length || 1;
 
   while (cursor < words.length) {
     let lo = cursor + 1;
     let hi = words.length;
-    let best = lo;
+    let best = cursor;
     while (lo <= hi) {
       const mid = Math.floor((lo + hi) / 2);
       const slice = words.slice(cursor, mid).join('');
       const html = `${open}${escapeHtml(slice)}${close}`;
-      if (fits(measureEl, html)) {
+      if (fits(measureEl, `${prefix}${html}`)) {
         best = mid;
         lo = mid + 1;
       } else {
         hi = mid - 1;
       }
     }
-    if (best <= cursor) best = cursor + 1;
+
+    // If the existing page has no usable room for even the first word, leave
+    // the block intact so the caller can flush and retry it on a fresh page.
+    if (best === cursor && prefix) return [block];
+    if (best === cursor) best = cursor + 1;
+
     const slice = words.slice(cursor, best).join('');
     const ratio0 = words.slice(0, cursor).join('').length / textLen;
     const ratio1 = words.slice(0, best).join('').length / textLen;
@@ -57,6 +63,7 @@ function splitTextBlock(block, measureEl) {
       raw: raw,
     });
     cursor = best;
+    prefix = '';
   }
   return parts;
 }
@@ -113,9 +120,25 @@ export function paginateBlocks(chapterId, blocks, measureEl) {
       }
       return;
     }
+
     current.push(piece);
     if (!overflow()) return;
     current.pop();
+
+    // Paragraphs, list items, and blockquotes should use whatever room is left
+    // on the current page instead of moving wholesale to a mostly empty page.
+    // Headings remain atomic so they do not get split away from the prose they
+    // introduce.
+    if (!isHeading(piece)) {
+      const bits = splitTextBlock(piece, measureEl, joinHtml(current));
+      if (bits.length > 1) {
+        current.push(bits[0]);
+        flush();
+        for (const bit of bits.slice(1)) accept(bit);
+        return;
+      }
+    }
+
     flush();
     accept(piece);
   };
