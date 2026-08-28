@@ -4,16 +4,16 @@
 > — Yoda, *The Empire Strikes Back*
 
 > "The door is not the hard part; the hard part is standing in front of it and realizing it's real."  
-> — inspired by Alan Watts
+> — Sven Hardy Benson
 
 > "The first step is simply to pause, look, and ask, 'Is this the door I've been waiting for?'"  
-> — Thich Nhat Hanh-style
+> — Sven Hardy Benson
 
 > "The only real door that matters is the one you can open with your own hands."  
-> — Marcus Aurelius-style
+> — Sven Hardy Benson
 
 > "The world will always have closed doors, but it will also have open ones. The rare person is the one who walks through them without hesitation."  
-> — Marcus Aurelius-style
+> — Sven Hardy Benson
 
 > "Fate left the door ajar; the Americans had already rehearsed how to walk through it."  
 > — the story of the Ludendorff Bridge at Remagen
@@ -40,7 +40,7 @@
 > — Elon Musk
 
 > "Opportunity means nothing if you never walk through the door. The only bad move is the one you never make."  
-> — Sven Benson
+> — Sven Hardy Benson
 
 
 ## From Opportunity to Action
@@ -87,23 +87,17 @@ The U.S. arrived at exactly the right moment. Japanese carriers were caught refu
 
 American dive-bomber pilots hit the Japanese carriers at their most exposed instant, sinking four in a single day. That five-minute window reshaped the Pacific War.
 
-> "The greatest battle in history rested on a sliver of time, and the side that had practiced the most took the shot."
-
 ### The Ludendorff Bridge at Remagen (1945)
 
 A German demolition attempt on the Ludendorff Bridge failed. The bridge stayed intact long enough for U.S. troops to rush across. The U.S. had a coherent plan to cross the Rhine. Units were already staged, and engineers were ready to reinforce.
 
 Commanders on the spot recognized the chance, pushed troops across immediately, and created a critical bridgehead into Germany.
 
-> "Fate left the door ajar; the Americans had already rehearsed how to walk through it."
-
 ### Apollo 11 (1969)
 
 The astronauts were exposed to unknown risks. The slightest error could have ended the mission. But thousands of engineers, scientists, and trainers had rehearsed every contingency. Simulation after simulation built the "muscle memory" of decision-making.
 
 When the critical moment arrived — Armstrong landing on the Moon — their training allowed them to perform flawlessly under pressure.
-
-> "The moment belonged to all of humanity, but the skill to seize it belonged to the men who had practiced for it."
 
 ### The Challenger Disaster (1986)
 
@@ -200,7 +194,8 @@ The inaction tax compounds. Act now.
 
 > "Yoda's line is the ultimate anti-hedging device: when you're ready, 'trying' is just fear dressed up as prudence."
 
-> "Luck is the knock on the door. Preparedness is the ability to hear it, and courage is the willingness to turn the handle."
+> "Luck is the knock on the door. Preparedness is the ability to hear it, and courage is the willingness to turn the handle."  
+> — Sven Hardy Benson
 
 ---
 
