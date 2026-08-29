@@ -7,6 +7,10 @@
   touch-action: pan-y pinch-zoom;
 }
 
+.pages-wrapper.active {
+  contain: layout;
+}
+
 .nav-gesture-preview {
   position: absolute;
   top: 8%;
