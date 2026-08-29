@@ -1,9 +1,9 @@
 /**
  * Derive pages from Markdown blocks. Canonical position is chapter + source offset.
  *
- * Pagination deliberately measures real rendered HTML. Text blocks may be split
- * to use the remaining page area, but inline markup is preserved with DOM Range
- * cloning instead of flattening the block to textContent.
+ * Pagination deliberately measures real rendered HTML. Prose preserves inline
+ * markup with DOM Range cloning; lists and tables fragment at semantic item/row
+ * boundaries so technical content does not become an oversized page brick.
  */
 
 const SPLITTABLE_TAGS = new Set(['P', 'BLOCKQUOTE', 'LI']);
@@ -16,6 +16,12 @@ function fits(measureEl, html) {
 
 function joinHtml(parts) {
   return parts.map((p) => p.html).join('');
+}
+
+function parsedElement(html) {
+  const wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  return wrap.firstElementChild;
 }
 
 function textBoundaries(text) {
@@ -83,10 +89,20 @@ function cloneTextRange(root, start, end) {
   return shell.textContent?.trim() ? shell.outerHTML : '';
 }
 
+function blockPart(block, html, ratio0, ratio1) {
+  const span = block.end - block.start;
+  const start = block.start + Math.floor(span * ratio0);
+  const end = block.start + Math.floor(span * ratio1);
+  return {
+    html,
+    start,
+    end: Math.max(end, start + 1),
+    raw: block.raw,
+  };
+}
+
 function splitTextBlock(block, measureEl, prefixHtml = '') {
-  const wrap = document.createElement('div');
-  wrap.innerHTML = block.html;
-  const el = wrap.firstElementChild;
+  const el = parsedElement(block.html);
   if (!el || !el.textContent || !SPLITTABLE_TAGS.has(el.tagName)) return [block];
 
   const text = el.textContent;
@@ -98,7 +114,6 @@ function splitTextBlock(block, measureEl, prefixHtml = '') {
   const parts = [];
   let cursor = 0;
   let prefix = prefixHtml;
-  const raw = block.raw;
   const textLen = Math.max(text.length, 1);
 
   while (cursor < wordCount) {
@@ -139,22 +154,147 @@ function splitTextBlock(block, measureEl, prefixHtml = '') {
     const html = cloneTextRange(el, startChar, endChar);
     if (!html) break;
 
-    const ratio0 = startChar / textLen;
-    const ratio1 = endChar / textLen;
-    const start = block.start + Math.floor((block.end - block.start) * ratio0);
-    const end = block.start + Math.floor((block.end - block.start) * ratio1);
-    parts.push({
-      html,
-      start,
-      end: Math.max(end, start + 1),
-      raw,
-    });
-
+    parts.push(blockPart(block, html, startChar / textLen, endChar / textLen));
     cursor = best;
     prefix = '';
   }
 
   return parts.length ? parts : [block];
+}
+
+function cumulativeWeights(nodes) {
+  const cumulative = [0];
+  for (const node of nodes) {
+    const weight = Math.max(1, node.textContent?.trim().length || 0);
+    cumulative.push(cumulative[cumulative.length - 1] + weight);
+  }
+  return cumulative;
+}
+
+function splitListBlock(block, measureEl, prefixHtml = '') {
+  const list = parsedElement(block.html);
+  if (!list || !['UL', 'OL'].includes(list.tagName)) return null;
+  const items = [...list.children].filter((child) => child.tagName === 'LI');
+  if (items.length < 2) return [block];
+
+  const cumulative = cumulativeWeights(items);
+  const totalWeight = Math.max(1, cumulative[cumulative.length - 1]);
+  const orderedBase = Number.parseInt(list.getAttribute('start') || '1', 10) || 1;
+
+  const htmlFor = (start, end) => {
+    const shell = list.cloneNode(false);
+    if (list.tagName === 'OL' && start > 0) shell.setAttribute('start', String(orderedBase + start));
+    for (const item of items.slice(start, end)) shell.appendChild(item.cloneNode(true));
+    return shell.outerHTML;
+  };
+
+  const parts = [];
+  let cursor = 0;
+  let prefix = prefixHtml;
+
+  while (cursor < items.length) {
+    let lo = cursor + 1;
+    let hi = items.length;
+    let best = cursor;
+
+    while (lo <= hi) {
+      const mid = Math.floor((lo + hi) / 2);
+      const html = htmlFor(cursor, mid);
+      if (fits(measureEl, `${prefix}${html}`)) {
+        best = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+
+    if (best === cursor && prefix) return [block];
+    if (best === cursor) best = cursor + 1;
+
+    const html = htmlFor(cursor, best);
+    parts.push(blockPart(
+      block,
+      html,
+      cumulative[cursor] / totalWeight,
+      cumulative[best] / totalWeight
+    ));
+    cursor = best;
+    prefix = '';
+  }
+
+  return parts.length ? parts : [block];
+}
+
+function splitTableBlock(block, measureEl, prefixHtml = '') {
+  const table = parsedElement(block.html);
+  if (!table || table.tagName !== 'TABLE') return null;
+
+  const body = table.tBodies?.[0];
+  const rows = body ? [...body.rows] : [];
+  if (rows.length < 2) return [block];
+
+  const caption = table.caption;
+  const colgroups = [...table.children].filter((child) => child.tagName === 'COLGROUP');
+  const head = table.tHead;
+  const foot = table.tFoot;
+  const cumulative = cumulativeWeights(rows);
+  const totalWeight = Math.max(1, cumulative[cumulative.length - 1]);
+
+  const htmlFor = (start, end) => {
+    const shell = table.cloneNode(false);
+    if (caption && start === 0) shell.appendChild(caption.cloneNode(true));
+    for (const group of colgroups) shell.appendChild(group.cloneNode(true));
+    if (head) shell.appendChild(head.cloneNode(true));
+    const nextBody = document.createElement('tbody');
+    for (const row of rows.slice(start, end)) nextBody.appendChild(row.cloneNode(true));
+    shell.appendChild(nextBody);
+    if (foot && end === rows.length) shell.appendChild(foot.cloneNode(true));
+    return shell.outerHTML;
+  };
+
+  const parts = [];
+  let cursor = 0;
+  let prefix = prefixHtml;
+
+  while (cursor < rows.length) {
+    let lo = cursor + 1;
+    let hi = rows.length;
+    let best = cursor;
+
+    while (lo <= hi) {
+      const mid = Math.floor((lo + hi) / 2);
+      const html = htmlFor(cursor, mid);
+      if (fits(measureEl, `${prefix}${html}`)) {
+        best = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+
+    if (best === cursor && prefix) return [block];
+    if (best === cursor) best = cursor + 1;
+
+    const html = htmlFor(cursor, best);
+    parts.push(blockPart(
+      block,
+      html,
+      cumulative[cursor] / totalWeight,
+      cumulative[best] / totalWeight
+    ));
+    cursor = best;
+    prefix = '';
+  }
+
+  return parts.length ? parts : [block];
+}
+
+function splitBlock(block, measureEl, prefixHtml = '') {
+  const listParts = splitListBlock(block, measureEl, prefixHtml);
+  if (listParts) return listParts;
+  const tableParts = splitTableBlock(block, measureEl, prefixHtml);
+  if (tableParts) return tableParts;
+  return splitTextBlock(block, measureEl, prefixHtml);
 }
 
 function makePage(chapterId, parts) {
@@ -171,7 +311,7 @@ function isHeading(piece) {
 }
 
 function isAtomic(piece) {
-  return /^\s*<(?:pre|table|figure|img|video|audio|iframe|hr)\b/i.test(piece.html || '');
+  return /^\s*<(?:pre|figure|img|video|audio|iframe|hr)\b/i.test(piece.html || '');
 }
 
 export function paginateBlocks(chapterId, blocks, measureEl) {
@@ -201,7 +341,7 @@ export function paginateBlocks(chapterId, blocks, measureEl) {
       current = [piece];
       if (overflow()) {
         current = [];
-        const bits = isAtomic(piece) ? [piece] : splitTextBlock(piece, measureEl);
+        const bits = isAtomic(piece) ? [piece] : splitBlock(piece, measureEl);
         if (bits.length === 1) {
           pages.push(makePage(chapterId, bits));
           return;
@@ -215,10 +355,10 @@ export function paginateBlocks(chapterId, blocks, measureEl) {
     if (!overflow()) return;
     current.pop();
 
-    // Use the remaining page area for prose while preserving inline emphasis,
-    // links, citations and notes. Headings and complex media stay atomic.
+    // Use remaining page area for semantic text/list/table fragments while
+    // headings and complex media stay atomic.
     if (!isHeading(piece) && !isAtomic(piece)) {
-      const bits = splitTextBlock(piece, measureEl, joinHtml(current));
+      const bits = splitBlock(piece, measureEl, joinHtml(current));
       if (bits.length > 1) {
         current.push(bits[0]);
         flush();
