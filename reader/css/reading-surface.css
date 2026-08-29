@@ -1,0 +1,367 @@
+/* Adaptive ebook reading surface
+   -----------------------------
+   Geometry here is shared by rendered pages and the hidden measuring page.
+   Keep rules deterministic so pagination and paint agree at every viewport. */
+
+:root {
+  --reader-book-max-spread: 76rem;
+  --reader-book-max-single: 42rem;
+  --reader-stage-inline: clamp(.65rem, 2vw, 2rem);
+  --reader-stage-block: clamp(.45rem, 1.6vh, 1rem);
+  --reader-page-top: clamp(3.2rem, 6.4vh, 5.3rem);
+  --reader-page-bottom: clamp(3rem, 5.6vh, 4.6rem);
+  --reader-page-pad: clamp(2.4rem, 4.2vw, 4.5rem);
+  --reader-page-radius: 4px;
+  --reader-paper-edge: color-mix(in srgb, var(--text-muted) 12%, transparent);
+  --reader-paper-shadow: 0 18px 52px color-mix(in srgb, var(--shadow) 72%, transparent);
+}
+
+/* Reading measure is a reader preference, not a device side effect. Keep these
+   values in this final geometry layer so responsive rules never erase it. */
+[data-reader-measure="narrow"] { --reader-page-pad: clamp(3.7rem, 5.8vw, 5.4rem); }
+[data-reader-measure="balanced"] { --reader-page-pad: clamp(2.4rem, 4.2vw, 4.5rem); }
+[data-reader-measure="wide"] { --reader-page-pad: clamp(1.45rem, 2.6vw, 2.7rem); }
+
+body[data-stage="read"] .stage {
+  background:
+    radial-gradient(ellipse 54% 40% at 50% 16%, color-mix(in srgb, var(--accent) 4.5%, transparent), transparent 76%),
+    color-mix(in srgb, var(--bg-primary) 98%, #000 2%);
+}
+
+body[data-stage="read"] .book-stage {
+  padding: var(--reader-stage-block) var(--reader-stage-inline);
+  align-items: center;
+  justify-content: center;
+}
+
+.pages-wrapper.active {
+  flex: 1 1 auto;
+  height: 100%;
+  max-height: min(52rem, 100%);
+  margin: auto;
+  align-self: center;
+  transform: translateZ(0);
+  contain: layout paint;
+  isolation: isolate;
+}
+
+.pages-wrapper.active:has(#pageRight.active),
+.pages-wrapper.active[data-reader-spread="spread"] {
+  width: min(
+    100%,
+    var(--reader-book-max-spread),
+    calc((var(--reader-viewport-height, 100dvh) - 7.75rem) * 1.48)
+  );
+}
+
+.pages-wrapper.active:not(:has(#pageRight.active)),
+.pages-wrapper.active[data-reader-spread="single"] {
+  width: min(
+    100%,
+    var(--reader-book-max-single),
+    calc((var(--reader-viewport-height, 100dvh) - 7.75rem) * .76)
+  );
+}
+
+.page-surface {
+  padding-top: var(--reader-page-top);
+  padding-bottom: var(--reader-page-bottom);
+  padding-left: var(--reader-page-pad);
+  padding-right: var(--reader-page-pad);
+  border-top: 1px solid var(--reader-paper-edge);
+  border-bottom: 1px solid color-mix(in srgb, var(--shadow) 22%, transparent);
+  box-shadow: var(--reader-paper-shadow);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.pages-wrapper[data-reader-spread="spread"] .page-surface.left,
+.pages-wrapper.active:has(#pageRight.active) .page-surface.left {
+  padding-left: calc(var(--reader-page-pad) * 1.08);
+  padding-right: calc(var(--reader-page-pad) * .92);
+  border-radius: var(--reader-page-radius) 0 0 var(--reader-page-radius);
+  box-shadow:
+    inset -24px 0 34px -30px color-mix(in srgb, #000 72%, transparent),
+    var(--reader-paper-shadow);
+}
+
+.pages-wrapper[data-reader-spread="spread"] .page-surface.right,
+.pages-wrapper.active:has(#pageRight.active) .page-surface.right {
+  padding-left: calc(var(--reader-page-pad) * .92);
+  padding-right: calc(var(--reader-page-pad) * 1.08);
+  border-radius: 0 var(--reader-page-radius) var(--reader-page-radius) 0;
+  box-shadow:
+    inset 24px 0 34px -30px color-mix(in srgb, #000 72%, transparent),
+    var(--reader-paper-shadow);
+}
+
+.pages-wrapper[data-reader-spread="single"] .page-surface,
+.pages-wrapper.active:not(:has(#pageRight.active)) .page-surface {
+  border-radius: var(--reader-page-radius);
+}
+
+.gutter {
+  width: clamp(7px, .7vw, 11px);
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, #000 42%, transparent),
+      color-mix(in srgb, #000 12%, transparent) 46%,
+      color-mix(in srgb, var(--text-primary) 2%, transparent) 50%,
+      color-mix(in srgb, #000 12%, transparent) 54%,
+      color-mix(in srgb, #000 42%, transparent));
+  box-shadow: inset 0 0 9px color-mix(in srgb, #000 24%, transparent);
+}
+
+.page-inner {
+  width: 100%;
+  max-width: 70ch;
+  margin-inline: auto;
+  min-height: 0;
+  text-wrap: pretty;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Sparse final pages should preserve the same top rhythm as every other page.
+   Centered orphaned paragraphs look like slides rather than book pages. */
+.page-inner.is-short,
+.page-inner.chapter-open.is-short {
+  display: block;
+  justify-content: initial;
+}
+
+.page-inner p {
+  hanging-punctuation: first allow-end last;
+  hyphenate-limit-chars: 6 3 3;
+  hyphenate-limit-lines: 2;
+  orphans: 3;
+  widows: 3;
+}
+
+.page-inner h1,
+.page-inner h2,
+.page-inner h3,
+.page-inner h4 {
+  text-wrap: balance;
+  break-after: avoid;
+}
+
+.page-inner h2 + p,
+.page-inner h3 + p,
+.page-inner h4 + p {
+  break-before: avoid;
+}
+
+.page-running {
+  top: clamp(.78rem, 1.7vh, 1.05rem);
+  left: var(--reader-page-pad);
+  right: var(--reader-page-pad);
+  opacity: .72;
+}
+
+.page-num {
+  bottom: clamp(.72rem, 1.6vh, 1rem);
+  opacity: .76;
+}
+
+/* Human page turn: quick commitment, slower lifted middle, soft landing.
+   Keep the visible leaf under the core 560ms turn lock. */
+[data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active {
+  animation-duration: 536ms;
+  animation-timing-function: linear;
+  will-change: transform, box-shadow, filter;
+  transform-style: preserve-3d;
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active {
+  animation-name: readerLeafNext;
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active {
+  animation-name: readerLeafPrev;
+}
+
+@keyframes readerLeafNext {
+  0% {
+    transform: translate3d(0,0,0) rotateY(0deg) rotateX(0deg);
+    filter: brightness(1);
+    box-shadow: inset 18px 0 28px -22px #0008, 0 12px 40px var(--shadow);
+  }
+  16% {
+    transform: translate3d(-2px,0,10px) rotateY(-15deg) rotateX(.2deg);
+    filter: brightness(.995);
+  }
+  46% {
+    transform: translate3d(-7px,0,24px) rotateY(-55deg) rotateX(.55deg);
+    filter: brightness(.96);
+    box-shadow: inset 30px 0 42px -22px #000b, -14px 20px 42px color-mix(in srgb, var(--shadow) 78%, transparent);
+  }
+  78% {
+    transform: translate3d(-5px,0,10px) rotateY(-94deg) rotateX(.25deg);
+    filter: brightness(.925);
+    box-shadow: inset 38px 0 48px -18px #000c, -20px 14px 32px color-mix(in srgb, var(--shadow) 66%, transparent);
+  }
+  100% {
+    transform: translate3d(0,0,0) rotateY(-108deg) rotateX(0deg);
+    filter: brightness(.96);
+    box-shadow: inset 22px 0 30px -20px #0009, -8px 9px 18px color-mix(in srgb, var(--shadow) 48%, transparent);
+  }
+}
+
+@keyframes readerLeafPrev {
+  0% {
+    transform: translate3d(0,0,0) rotateY(0deg) rotateX(0deg);
+    filter: brightness(1);
+    box-shadow: inset -18px 0 28px -22px #0008, 0 12px 40px var(--shadow);
+  }
+  16% {
+    transform: translate3d(2px,0,10px) rotateY(15deg) rotateX(.2deg);
+    filter: brightness(.995);
+  }
+  46% {
+    transform: translate3d(7px,0,24px) rotateY(55deg) rotateX(.55deg);
+    filter: brightness(.96);
+    box-shadow: inset -30px 0 42px -22px #000b, 14px 20px 42px color-mix(in srgb, var(--shadow) 78%, transparent);
+  }
+  78% {
+    transform: translate3d(5px,0,10px) rotateY(94deg) rotateX(.25deg);
+    filter: brightness(.925);
+    box-shadow: inset -38px 0 48px -18px #000c, 20px 14px 32px color-mix(in srgb, var(--shadow) 66%, transparent);
+  }
+  100% {
+    transform: translate3d(0,0,0) rotateY(108deg) rotateX(0deg);
+    filter: brightness(.96);
+    box-shadow: inset -22px 0 30px -20px #0009, 8px 9px 18px color-mix(in srgb, var(--shadow) 48%, transparent);
+  }
+}
+
+[data-reader-mode="paged"] .page-surface.turning {
+  animation: readerPageSettle 210ms cubic-bezier(.2,.72,.2,1);
+}
+
+@keyframes readerPageSettle {
+  from { opacity: .88; transform: translate3d(0,1px,-2px); }
+  to { opacity: 1; transform: translate3d(0,0,0); }
+}
+
+/* Tablet: preserve generous reading measure without pretending portrait is a
+   tiny desktop. The core may still offer Spread when space permits. */
+[data-reader-device="tablet"] {
+  --reader-stage-inline: clamp(.5rem, 1.7vw, 1rem);
+  --reader-page-top: clamp(3rem, 5.4vh, 4.4rem);
+  --reader-page-bottom: clamp(2.7rem, 4.8vh, 4rem);
+}
+
+[data-reader-device="tablet"][data-reader-measure="narrow"] { --reader-page-pad: clamp(3rem, 7vw, 4.5rem); }
+[data-reader-device="tablet"][data-reader-measure="balanced"] { --reader-page-pad: clamp(2rem, 5vw, 3.5rem); }
+[data-reader-device="tablet"][data-reader-measure="wide"] { --reader-page-pad: clamp(1.2rem, 3vw, 2.1rem); }
+
+[data-reader-device="tablet"][data-reader-orientation="portrait"] .pages-wrapper.active:not(:has(#pageRight.active)) {
+  width: min(100%, 43rem, calc((var(--reader-viewport-height, 100dvh) - 7rem) * .74));
+}
+
+/* Phone: the page becomes the viewport. Shadows, rounded cards and oversized
+   margins waste scarce reading space, so remove them while retaining typographic
+   rhythm and safe-area protection. */
+[data-reader-device="phone"] {
+  --reader-stage-inline: 0px;
+  --reader-stage-block: 0px;
+  --reader-page-top: clamp(2.65rem, 6.8vh, 3.6rem);
+  --reader-page-bottom: clamp(2.35rem, 6vh, 3.2rem);
+  --reader-page-radius: 0px;
+}
+
+[data-reader-device="phone"][data-reader-measure="narrow"] { --reader-page-pad: clamp(1.55rem, 7vw, 2rem); }
+[data-reader-device="phone"][data-reader-measure="balanced"] { --reader-page-pad: clamp(1.05rem, 5.4vw, 1.55rem); }
+[data-reader-device="phone"][data-reader-measure="wide"] { --reader-page-pad: clamp(.7rem, 3.8vw, 1.05rem); }
+
+[data-reader-device="phone"] body[data-stage="read"] .book-stage {
+  padding: 0;
+}
+
+[data-reader-device="phone"] .pages-wrapper.active,
+[data-reader-device="phone"] .pages-wrapper.active:not(:has(#pageRight.active)) {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+
+[data-reader-device="phone"] .page-surface {
+  padding-left: max(var(--reader-page-pad), env(safe-area-inset-left));
+  padding-right: max(var(--reader-page-pad), env(safe-area-inset-right));
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+[data-reader-device="phone"] .page-running {
+  left: max(var(--reader-page-pad), env(safe-area-inset-left));
+  right: max(var(--reader-page-pad), env(safe-area-inset-right));
+  font-size: .58rem;
+}
+
+[data-reader-device="phone"] .page-num {
+  bottom: max(.72rem, env(safe-area-inset-bottom));
+}
+
+[data-reader-device="phone"] .gutter {
+  display: none !important;
+}
+
+/* Short landscape devices need content, not decorative margins. */
+@media (max-height: 620px) {
+  :root {
+    --reader-page-top: 2.4rem;
+    --reader-page-bottom: 2.25rem;
+  }
+
+  [data-reader-measure="narrow"] { --reader-page-pad: clamp(2.2rem, 4.4vw, 3.2rem); }
+  [data-reader-measure="balanced"] { --reader-page-pad: clamp(1.6rem, 3.4vw, 2.8rem); }
+  [data-reader-measure="wide"] { --reader-page-pad: clamp(1rem, 2.2vw, 1.8rem); }
+
+  .pages-wrapper.active {
+    max-height: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  body[data-stage="read"] .page-nav {
+    padding-left: max(.55rem, env(safe-area-inset-left));
+    padding-right: max(.55rem, env(safe-area-inset-right));
+    padding-bottom: max(.5rem, env(safe-area-inset-bottom));
+  }
+
+  .nav-center {
+    min-width: 0;
+  }
+
+  .page-chapter {
+    max-width: 42vw;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .page-surface {
+    border-color: color-mix(in srgb, var(--text-muted) 34%, transparent);
+  }
+
+  .page-running,
+  .page-num {
+    opacity: .9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active,
+  [data-reader-mode="paged"] .page-surface.turning {
+    animation: none !important;
+    filter: none !important;
+  }
+}
