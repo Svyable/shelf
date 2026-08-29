@@ -1,16 +1,24 @@
+import {
+  reconcileDialogStack,
+  activateDialog,
+  deactivateDialog,
+  topDialogId,
+} from './dialog-stack.js';
+
 import('./media.js').catch((error) => {
   console.warn('Media enhancements could not be loaded', error);
 });
 
 const OVERLAYS = [
-  { id: 'tocOverlay', close: 'tocClose', label: 'Contents' },
-  { id: 'progressPanel', close: 'statsClose', label: 'Reading progress' },
-  { id: 'settingsPanel', close: 'settingsClose', label: 'Reading experience' },
-  { id: 'searchOverlay', close: 'searchClose', label: 'Search this book' },
-  { id: 'noteDialog', close: 'noteCancel', label: 'Note' },
-  { id: 'helpOverlay', close: 'helpClose', label: 'Keyboard shortcuts' },
+  { id: 'tocOverlay', close: 'tocClose', opener: 'tocBtn', initial: 'tocSearch', label: 'Contents' },
+  { id: 'progressPanel', close: 'statsClose', opener: 'progressBtn', label: 'Reading progress' },
+  { id: 'settingsPanel', close: 'settingsClose', opener: 'settingsBtn', initial: 'readerFontSize', label: 'Reading experience' },
+  { id: 'searchOverlay', close: 'searchClose', opener: 'searchBtn', initial: 'bookSearch', label: 'Search this book' },
+  { id: 'noteDialog', close: 'noteCancel', opener: 'selNote', initial: 'noteBody', label: 'Note' },
+  { id: 'helpOverlay', close: 'helpClose', opener: 'helpBtn', label: 'Keyboard shortcuts' },
 ];
 
+const BACKGROUND_SELECTORS = ['.app', '#selPop'];
 const openers = new Map();
 let overlayStack = [];
 let lastExternalFocus = null;
@@ -26,13 +34,13 @@ function activeOverlays() {
     .filter((overlay) => overlay?.classList.contains('active'));
 }
 
+function activeOverlayIds() {
+  return activeOverlays().map((overlay) => overlay.id);
+}
+
 function topOverlay() {
-  for (let index = overlayStack.length - 1; index >= 0; index -= 1) {
-    const overlay = $(overlayStack[index]);
-    if (overlay?.classList.contains('active')) return overlay;
-  }
-  const active = activeOverlays();
-  return active[active.length - 1] || null;
+  const id = topDialogId(overlayStack, activeOverlayIds());
+  return id ? $(id) : null;
 }
 
 function focusables(container) {
@@ -46,27 +54,49 @@ function syncOverlayAccessibility(overlay, active) {
   overlay.setAttribute('aria-hidden', String(!active));
 }
 
-function syncOverlayStack() {
-  overlayStack = overlayStack.filter((id) => $(id)?.classList.contains('active'));
-  const top = topOverlay();
-
-  OVERLAYS.forEach(({ id }) => {
-    const overlay = $(id);
-    if (!overlay) return;
-    const isActive = overlay.classList.contains('active');
-    const stackIndex = overlayStack.indexOf(id);
-    syncOverlayAccessibility(overlay, isActive && overlay === top);
-    overlay.style.zIndex = isActive ? String(80 + Math.max(0, stackIndex)) : '';
-  });
+function syncBackgroundIsolation(isolated) {
+  for (const selector of BACKGROUND_SELECTORS) {
+    const root = document.querySelector(selector);
+    if (!root) continue;
+    root.inert = isolated;
+    root.classList.toggle('gui-modal-background', isolated);
+  }
 }
 
-function setOverlaySemantics(overlay, label) {
+function syncOpenerSemantics(config, active) {
+  const opener = $(config.opener);
+  if (!opener) return;
+  opener.setAttribute('aria-controls', config.id);
+  opener.setAttribute('aria-haspopup', 'dialog');
+  opener.setAttribute('aria-expanded', String(active));
+}
+
+function syncOverlayStack() {
+  const activeIds = activeOverlayIds();
+  overlayStack = reconcileDialogStack(overlayStack, activeIds);
+  const topId = topDialogId(overlayStack, activeIds);
+
+  OVERLAYS.forEach((config) => {
+    const overlay = $(config.id);
+    if (!overlay) return;
+    const isActive = activeIds.includes(config.id);
+    const stackIndex = overlayStack.indexOf(config.id);
+    syncOverlayAccessibility(overlay, isActive && config.id === topId);
+    syncOpenerSemantics(config, isActive);
+    overlay.style.zIndex = isActive ? String(80 + Math.max(0, stackIndex)) : '';
+  });
+
+  syncBackgroundIsolation(Boolean(topId));
+}
+
+function setOverlaySemantics(overlay, config) {
   overlay.setAttribute('role', 'dialog');
   overlay.setAttribute('aria-modal', 'true');
   if (!overlay.hasAttribute('aria-label') && !overlay.hasAttribute('aria-labelledby')) {
-    overlay.setAttribute('aria-label', label);
+    overlay.setAttribute('aria-label', config.label);
   }
   syncOverlayAccessibility(overlay, false);
+  syncOpenerSemantics(config, false);
 }
 
 function syncBodyOverlayState() {
@@ -76,21 +106,20 @@ function syncBodyOverlayState() {
   if (active.length) wakeChrome();
 }
 
-function focusOverlay(overlay, closeId) {
-  requestAnimationFrame(() => {
-    if (!overlay.classList.contains('active') || overlay !== topOverlay()) return;
+function focusOverlay(overlay, config) {
+  if (!overlay.classList.contains('active') || overlay !== topOverlay()) return;
 
-    if (overlay.id === 'settingsPanel') {
-      overlay.querySelector('.settings-card')?.scrollTo({ top: 0, behavior: 'auto' });
-    }
+  if (overlay.id === 'settingsPanel') {
+    overlay.querySelector('.settings-card')?.scrollTo({ top: 0, behavior: 'auto' });
+  }
 
-    if (overlay.contains(document.activeElement)) return;
-    const preferred = $(closeId);
-    const target = preferred && overlay.contains(preferred)
-      ? preferred
-      : focusables(overlay)[0];
-    target?.focus({ preventScroll: true });
-  });
+  if (overlay.contains(document.activeElement)) return;
+  const preferred = config.initial ? $(config.initial) : null;
+  const close = $(config.close);
+  const target = preferred && overlay.contains(preferred) && !preferred.disabled
+    ? preferred
+    : focusables(overlay)[0] || (close && overlay.contains(close) ? close : null);
+  target?.focus({ preventScroll: true });
 }
 
 function restoreFocus(overlay) {
@@ -117,12 +146,11 @@ function onOverlayMutation(overlay, config) {
     if (opener?.isConnected && !overlay.contains(opener)) {
       openers.set(overlay.id, opener);
     }
-    overlayStack = overlayStack.filter((id) => id !== overlay.id);
-    overlayStack.push(overlay.id);
+    overlayStack = activateDialog(overlayStack, overlay.id);
     syncOverlayStack();
-    focusOverlay(overlay, config.close);
+    focusOverlay(overlay, config);
   } else {
-    overlayStack = overlayStack.filter((id) => id !== overlay.id);
+    overlayStack = deactivateDialog(overlayStack, overlay.id);
     syncOverlayStack();
     restoreFocus(overlay);
   }
@@ -131,10 +159,18 @@ function onOverlayMutation(overlay, config) {
 
 function closeOverlay(config) {
   const overlay = $(config.id);
-  if (!overlay?.classList.contains('active')) return;
+  if (!overlay?.classList.contains('active')) return false;
   const close = $(config.close);
   if (close) close.click();
   else overlay.classList.remove('active');
+  return true;
+}
+
+function closeTopOverlay() {
+  const top = topOverlay();
+  if (!top) return false;
+  const config = OVERLAYS.find((entry) => entry.id === top.id);
+  return config ? closeOverlay(config) : false;
 }
 
 function installOverlayPolish() {
@@ -142,7 +178,9 @@ function installOverlayPolish() {
   tocScrim.className = 'gui-toc-scrim';
   tocScrim.setAttribute('aria-hidden', 'true');
   document.body.appendChild(tocScrim);
-  tocScrim.addEventListener('click', () => closeOverlay(OVERLAYS[0]));
+  tocScrim.addEventListener('click', () => {
+    if (topOverlay()?.id === 'tocOverlay') closeOverlay(OVERLAYS[0]);
+  });
 
   document.addEventListener('focusin', (event) => {
     if (!activeOverlays().length && event.target !== document.body) {
@@ -153,7 +191,7 @@ function installOverlayPolish() {
   OVERLAYS.forEach((config) => {
     const overlay = $(config.id);
     if (!overlay) return;
-    setOverlaySemantics(overlay, config.label);
+    setOverlaySemantics(overlay, config);
     overlay.dataset.guiActive = String(overlay.classList.contains('active'));
 
     if (config.id !== 'tocOverlay') {
@@ -170,13 +208,23 @@ function installOverlayPolish() {
   syncBodyOverlayState();
 }
 
-function trapModalFocus(event) {
-  if (event.key !== 'Tab') return;
+function handleModalKeys(event) {
   const overlay = topOverlay();
   if (!overlay) return;
 
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    closeTopOverlay();
+    return;
+  }
+
+  if (event.key !== 'Tab') return;
   const items = focusables(overlay);
-  if (!items.length) return;
+  if (!items.length) {
+    event.preventDefault();
+    return;
+  }
 
   const first = items[0];
   const last = items[items.length - 1];
@@ -276,7 +324,7 @@ function initialize() {
   installReaderContext();
   installOverlayPolish();
   installCalmChrome();
-  document.addEventListener('keydown', trapModalFocus, true);
+  document.addEventListener('keydown', handleModalKeys, true);
 }
 
 if (document.readyState === 'loading') {
