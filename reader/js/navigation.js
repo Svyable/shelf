@@ -1,3 +1,5 @@
+import { installReadingSurface } from './reading-surface.js';
+
 const state = {
   pointerId: null,
   startX: 0,
@@ -352,6 +354,7 @@ function initialize() {
   const el = wrap();
   if (!el || document.documentElement.dataset.navigationEnhanced === 'true') return;
   document.documentElement.dataset.navigationEnhanced = 'true';
+  installReadingSurface();
   loadStyles();
   installGestureIndicators();
   tuneHint();
