@@ -1,3 +1,6 @@
+@import url('./reading-surface.css?v=r1');
+@import url('./reading-chrome.css?v=r1');
+
 /* Navigation mechanics — safer tap zones and tactile swipe feedback. */
 
 #pagesWrapper {
