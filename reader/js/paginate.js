@@ -1,3 +1,5 @@
+import { withSourceRange } from './reading-position.js';
+
 /**
  * Derive pages from Markdown blocks. Canonical position is chapter + source offset.
  *
@@ -119,10 +121,11 @@ function blockPart(block, html, ratio0, ratio1) {
   const span = block.end - block.start;
   const start = block.start + Math.floor(span * ratio0);
   const end = block.start + Math.floor(span * ratio1);
+  const boundedEnd = Math.max(end, start + 1);
   return {
-    html,
+    html: withSourceRange(html, start, boundedEnd),
     start,
-    end: Math.max(end, start + 1),
+    end: boundedEnd,
     raw: block.raw,
   };
 }

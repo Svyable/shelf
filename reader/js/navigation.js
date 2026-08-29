@@ -1,4 +1,5 @@
 import { installReadingSurface } from './reading-surface.js';
+import { installReadingContinuity } from './reading-continuity.js';
 
 const state = {
   pointerId: null,
@@ -355,6 +356,7 @@ function initialize() {
   if (!el || document.documentElement.dataset.navigationEnhanced === 'true') return;
   document.documentElement.dataset.navigationEnhanced = 'true';
   installReadingSurface();
+  installReadingContinuity();
   loadStyles();
   installGestureIndicators();
   tuneHint();
