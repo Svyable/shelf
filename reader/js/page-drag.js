@@ -75,6 +75,9 @@ function bindPageDrag() {
     return true;
   };
 
+  // app.js still carries a compatibility Touch Events swipe handler. Suppress
+  // that path for eligible page gestures so Pointer Events owns the turn once,
+  // while leaving links, controls, selection, overlays, and Scroll untouched.
   wrap.addEventListener('touchstart', (event) => {
     state.ownsTouch = eligibleSurface(event.target);
     if (state.ownsTouch) event.stopPropagation();
@@ -91,6 +94,9 @@ function bindPageDrag() {
 
   wrap.addEventListener('pointerdown', (event) => {
     if (event.pointerType === 'mouse' || !eligibleSurface(event.target)) return;
+    // navigation.js already owns tap zones, keyboard semantics, and turn
+    // buffering. Stop only its pointer-gesture path here so one controller owns
+    // the drag while those higher-level navigation contracts remain intact.
     event.stopPropagation();
     state.id = event.pointerId;
     state.x = event.clientX;
