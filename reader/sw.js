@@ -1,4 +1,6 @@
-const CACHE = 'obb-shell-v35';
+importScripts('./js/offline-cache.js');
+
+const CACHE = 'obb-shell-v36';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -42,6 +44,7 @@ const SHELL = [
   './js/notes.js',
   './js/search.js',
   './js/export.js',
+  './js/offline-cache.js',
 ];
 
 self.addEventListener('install', (event) => {
@@ -66,6 +69,33 @@ function cacheableExternal(url) {
     || url.origin === 'https://fonts.gstatic.com';
 }
 
+async function warmPublication(readmeResponse, readmeUrl) {
+  if (!readmeResponse?.ok) return;
+  let markdown;
+  try {
+    markdown = await readmeResponse.text();
+  } catch {
+    return;
+  }
+
+  const chapters = self.BookselfOfflineCache.chapterLinks(markdown, readmeUrl.href);
+  if (!chapters.length) return;
+  const cache = await caches.open(CACHE);
+
+  await Promise.allSettled(chapters.map(async (href) => {
+    const request = new Request(href, { credentials: 'same-origin' });
+    const existing = await cache.match(request, { ignoreSearch: true });
+    if (existing) return;
+    const response = await fetch(request);
+    if (!response.ok) return;
+    try {
+      await cache.put(request, response.clone());
+    } catch {
+      // A full cache must not interfere with the book currently being read.
+    }
+  }));
+}
+
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
@@ -74,21 +104,30 @@ self.addEventListener('fetch', (event) => {
   const external = cacheableExternal(url);
   if (!sameOrigin && !external) return;
 
+  const network = fetch(req)
+    .then(async (res) => {
+      // Keep a current copy, but never sacrifice a successful network
+      // response just because storage is full or unavailable. Pinned KaTeX,
+      // reader font resources, and publication reader.json defaults are
+      // cached after first successful use for later offline reading.
+      try {
+        const cache = await caches.open(CACHE);
+        await cache.put(req, res.clone());
+      } catch {
+        // Reading continues from the network response.
+      }
+      return res;
+    });
+
+  if (sameOrigin && self.BookselfOfflineCache.isPublicationReadme(url.href)) {
+    event.waitUntil(
+      network
+        .then((res) => warmPublication(res.clone(), url))
+        .catch(() => {})
+    );
+  }
+
   event.respondWith(
-    fetch(req)
-      .then(async (res) => {
-        // Keep a current copy, but never sacrifice a successful network
-        // response just because storage is full or unavailable. Pinned KaTeX,
-        // reader font resources, and publication reader.json defaults are
-        // cached after first successful use for later offline reading.
-        try {
-          const cache = await caches.open(CACHE);
-          await cache.put(req, res.clone());
-        } catch {
-          // Reading continues from the network response.
-        }
-        return res;
-      })
-      .catch(() => caches.match(req, { ignoreSearch: sameOrigin }))
+    network.catch(() => caches.match(req, { ignoreSearch: sameOrigin }))
   );
 });
