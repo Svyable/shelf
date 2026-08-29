@@ -1,4 +1,4 @@
-const CACHE = 'obb-shell-v33';
+const CACHE = 'obb-shell-v34';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -10,6 +10,8 @@ const SHELL = [
   './css/atmosphere.css',
   './css/atmosphere-library.css',
   './css/navigation.css',
+  './css/reading-surface.css',
+  './css/reading-chrome.css',
   './css/gui.css',
   './css/media.css',
   './css/formats.css',
@@ -19,6 +21,7 @@ const SHELL = [
   './vendor/marked.min.js',
   './js/atmosphere.js',
   './js/navigation.js',
+  './js/reading-surface.js',
   './js/app.js',
   './js/experience.js',
   './js/gui.js',
