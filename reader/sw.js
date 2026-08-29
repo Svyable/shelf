@@ -1,6 +1,6 @@
 importScripts('./js/offline-cache.js');
 
-const CACHE = 'obb-shell-v41';
+const CACHE = 'obb-shell-v42';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -49,6 +49,8 @@ const SHELL = [
   './js/search.js',
   './js/export.js',
   './js/offline-cache.js',
+  './js/progress-position.js',
+  './js/semantic-progress.js',
 ];
 
 self.addEventListener('install', (event) => {
