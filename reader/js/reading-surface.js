@@ -185,6 +185,8 @@ export function installReadingSurface() {
     const toggle = document.getElementById('viewModeBtn');
     const spreadVisible = !!right?.classList.contains('active');
     if (!spreadVisible) {
+      // The layout is already comfortable. Mark this viewport as handled so a
+      // later explicit user request for Spread is respected until geometry changes.
       autoCollapseKey = key;
       return;
     }
@@ -212,6 +214,9 @@ export function installReadingSurface() {
     if (decision.transientKeyboard) {
       el.dataset.readerViewportOccluded = 'keyboard';
       syncViewport(stableViewport, { allowAutoCollapse: false });
+      // The core Reader also listens to these events to repaginate. A software
+      // keyboard changes the visual viewport temporarily, not the book's layout
+      // contract, so keep that transient resize from reaching those handlers.
       event?.stopImmediatePropagation?.();
       return;
     }
