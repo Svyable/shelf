@@ -185,7 +185,7 @@ export async function loadBookPresentation(slug) {
 }
 
 function storagePrefix() {
-  return (typeof window !== 'undefined' && window.__IMPRINT?.storagePrefix) || 'obb';
+  return (typeof window !== 'undefined' && window.__IMPRINT?.storagePrefix) || 'bookself';
 }
 
 function stateKey() {
