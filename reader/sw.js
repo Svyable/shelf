@@ -109,6 +109,10 @@ self.addEventListener('fetch', (event) => {
 
   const network = fetch(req)
     .then(async (res) => {
+      // Keep a current copy, but never sacrifice a successful network
+      // response just because storage is full or unavailable. Pinned KaTeX,
+      // reader font resources, and publication reader.json defaults are
+      // cached after first successful use for later offline reading.
       try {
         const cache = await caches.open(CACHE);
         await cache.put(req, res.clone());
