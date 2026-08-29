@@ -1,0 +1,202 @@
+/* Resilient paged content
+   -----------------------
+   These rules apply to the visible page and the hidden pagination measure so
+   complex blocks fit the same geometry they are measured against. */
+
+.page-inner pre,
+.scroll-document pre {
+  max-width: 100%;
+  max-height: min(54vh, 30rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: .85em 1em;
+  border: 1px solid color-mix(in srgb, var(--border) 84%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-secondary) 86%, var(--bg-page));
+  font-size: .8em;
+  line-height: 1.48;
+  tab-size: 2;
+  scrollbar-width: thin;
+  break-inside: avoid;
+}
+
+.page-inner code,
+.scroll-document code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: .88em;
+  font-variant-ligatures: none;
+}
+
+.page-inner :not(pre) > code,
+.scroll-document :not(pre) > code {
+  padding: .08em .28em;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--bg-secondary) 72%, transparent);
+}
+
+.page-inner table,
+.scroll-document table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: .84em;
+  line-height: 1.38;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page-inner thead,
+.scroll-document thead {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.page-inner th,
+.page-inner td,
+.scroll-document th,
+.scroll-document td {
+  min-width: 5.5em;
+  padding: .48em .62em;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  text-align: left;
+  vertical-align: top;
+}
+
+.page-inner th,
+.scroll-document th {
+  border-bottom-color: color-mix(in srgb, var(--accent) 38%, var(--border));
+}
+
+.page-inner caption,
+.scroll-document caption {
+  padding-bottom: .55em;
+  color: var(--text-secondary);
+  font-family: var(--font-accent);
+  font-size: .88em;
+  font-style: italic;
+  text-align: left;
+}
+
+.page-inner figure,
+.scroll-document figure {
+  max-width: 100%;
+  margin: 1.15em 0;
+  break-inside: avoid;
+}
+
+.page-inner figcaption,
+.scroll-document figcaption {
+  max-width: 52ch;
+  margin: .55em auto 0;
+  color: var(--text-secondary);
+  font-family: var(--font-accent);
+  font-size: .76em;
+  line-height: 1.38;
+  text-align: center;
+}
+
+.page-inner video,
+.page-inner iframe,
+.scroll-document video,
+.scroll-document iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: min(48vh, 28rem);
+  margin: 1em auto;
+  border: 0;
+  border-radius: 8px;
+  background: #000;
+}
+
+.page-inner ul,
+.page-inner ol {
+  padding-inline-start: 1.35em;
+}
+
+.page-inner li {
+  padding-inline-start: .08em;
+}
+
+.page-inner li + li {
+  margin-top: .3em;
+}
+
+.page-inner sup,
+.page-inner sub,
+.scroll-document sup,
+.scroll-document sub {
+  line-height: 0;
+}
+
+.page-inner mark,
+.scroll-document mark {
+  padding: .02em .08em;
+  border-radius: 2px;
+}
+
+@media (max-width: 700px) {
+  .page-inner pre,
+  .scroll-document pre {
+    max-height: 46vh;
+    margin-inline: -.1rem;
+    padding: .72em .78em;
+    border-radius: 6px;
+    font-size: .76em;
+  }
+
+  .page-inner table,
+  .scroll-document table {
+    font-size: .78em;
+  }
+
+  .page-inner th,
+  .page-inner td,
+  .scroll-document th,
+  .scroll-document td {
+    min-width: 6em;
+    padding: .44em .52em;
+  }
+
+  .page-inner video,
+  .page-inner iframe,
+  .scroll-document video,
+  .scroll-document iframe {
+    max-height: 42vh;
+    border-radius: 5px;
+  }
+}
+
+@media print {
+  .page-inner pre,
+  .scroll-document pre,
+  .page-inner table,
+  .scroll-document table {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .page-inner table,
+  .scroll-document table {
+    display: table;
+    width: 100%;
+    font-size: 8.5pt;
+  }
+
+  .page-inner thead,
+  .scroll-document thead {
+    display: table-header-group;
+  }
+
+  .page-inner figure,
+  .scroll-document figure,
+  .page-inner pre,
+  .scroll-document pre {
+    break-inside: avoid;
+  }
+}
