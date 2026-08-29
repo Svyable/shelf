@@ -8,6 +8,7 @@
 
 const SPLITTABLE_TAGS = new Set(['P', 'BLOCKQUOTE', 'LI']);
 const MIN_EDGE_WORDS = 3;
+const MIN_EDGE_ITEMS = 2;
 
 function fits(measureEl, html) {
   measureEl.innerHTML = html;
@@ -45,6 +46,31 @@ export function balancedBreakIndex(best, cursor, total, minEdgeWords = MIN_EDGE_
   // Avoid leaving one or two words alone at the top of the continuation page.
   if (remaining > 0 && remaining < minEdgeWords && used > minEdgeWords) {
     return Math.max(cursor + minEdgeWords, total - minEdgeWords);
+  }
+  return best;
+}
+
+export function balancedStructuredBreakIndex(
+  best,
+  cursor,
+  total,
+  canDefer = false,
+  minEdgeItems = MIN_EDGE_ITEMS
+) {
+  if (best <= cursor || best >= total) return best;
+  const used = best - cursor;
+  const remaining = total - best;
+
+  // If a list/table begins near the bottom of an already occupied page and only
+  // one item/row fits, move the structure forward instead of stranding it.
+  if (canDefer && used < minEdgeItems && total - cursor >= minEdgeItems + 1) {
+    return cursor;
+  }
+
+  // When the final continuation would contain a single item/row, rebalance one
+  // item/row onto that continuation if the current fragment can spare it.
+  if (remaining > 0 && remaining < minEdgeItems && used > minEdgeItems) {
+    return Math.max(cursor + minEdgeItems, total - minEdgeItems);
   }
   return best;
 }
@@ -132,8 +158,6 @@ function splitTextBlock(block, measureEl, prefixHtml = '') {
       }
     }
 
-    // No useful room remains on the current page. Let the caller flush and
-    // retry the intact block on a fresh page instead of creating a widow.
     if (best === cursor && prefix) return [block];
     if (best === cursor) best = cursor + 1;
 
@@ -211,6 +235,10 @@ function splitListBlock(block, measureEl, prefixHtml = '') {
     if (best === cursor && prefix) return [block];
     if (best === cursor) best = cursor + 1;
 
+    const balanced = balancedStructuredBreakIndex(best, cursor, items.length, !!prefix);
+    if (balanced === cursor && prefix) return [block];
+    if (balanced > cursor && balanced < best) best = balanced;
+
     const html = htmlFor(cursor, best);
     parts.push(blockPart(
       block,
@@ -275,6 +303,10 @@ function splitTableBlock(block, measureEl, prefixHtml = '') {
     if (best === cursor && prefix) return [block];
     if (best === cursor) best = cursor + 1;
 
+    const balanced = balancedStructuredBreakIndex(best, cursor, rows.length, !!prefix);
+    if (balanced === cursor && prefix) return [block];
+    if (balanced > cursor && balanced < best) best = balanced;
+
     const html = htmlFor(cursor, best);
     parts.push(blockPart(
       block,
@@ -323,8 +355,6 @@ export function paginateBlocks(chapterId, blocks, measureEl) {
   const flush = () => {
     if (!current.length) return;
 
-    // Never strand a heading as the final item on a page. Move it forward so
-    // the next page opens with the heading and the prose it introduces.
     if (current.length > 1 && isHeading(current[current.length - 1])) {
       const heading = current.pop();
       pages.push(makePage(chapterId, current));
@@ -355,8 +385,6 @@ export function paginateBlocks(chapterId, blocks, measureEl) {
     if (!overflow()) return;
     current.pop();
 
-    // Use remaining page area for semantic text/list/table fragments while
-    // headings and complex media stay atomic.
     if (!isHeading(piece) && !isAtomic(piece)) {
       const bits = splitBlock(piece, measureEl, joinHtml(current));
       if (bits.length > 1) {
