@@ -1,0 +1,144 @@
+/* Immersive reader chrome
+   -----------------------
+   Controls adapt to the reading device without changing manuscript geometry. */
+
+body[data-stage="read"] .app-header,
+body[data-stage="read"] .page-nav,
+body[data-stage="read"] .progress-bar-container,
+body[data-stage="read"] .proof-ribbon {
+  transition:
+    opacity 180ms ease,
+    transform 220ms cubic-bezier(.2,.72,.2,1),
+    background 180ms ease;
+}
+
+[data-reader-device="phone"] .app-header {
+  padding-left: max(.55rem, env(safe-area-inset-left));
+  padding-right: max(.55rem, env(safe-area-inset-right));
+  gap: .25rem;
+}
+
+[data-reader-device="phone"] .header-right {
+  gap: .08rem;
+}
+
+[data-reader-device="phone"] .header-btn,
+[data-reader-device="phone"] .logo {
+  width: 2.35rem;
+  height: 2.35rem;
+}
+
+[data-reader-device="phone"] .reading-time {
+  display: none;
+}
+
+[data-reader-device="phone"] body[data-stage="read"] .page-nav {
+  position: fixed;
+  z-index: 36;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: .5rem max(.55rem, env(safe-area-inset-right)) max(.55rem, env(safe-area-inset-bottom)) max(.55rem, env(safe-area-inset-left));
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-primary) 58%, transparent) 48%, color-mix(in srgb, var(--bg-primary) 78%, transparent));
+}
+
+[data-reader-device="phone"] .page-nav .nav-btn,
+[data-reader-device="phone"] .page-nav .nav-center {
+  pointer-events: auto;
+}
+
+[data-reader-device="phone"] .page-nav .nav-btn {
+  width: 2.8rem;
+  min-width: 2.8rem;
+  height: 2.8rem;
+  min-height: 2.8rem;
+  border-color: color-mix(in srgb, var(--border) 68%, transparent);
+  background: color-mix(in srgb, var(--bg-elevated) 82%, transparent);
+}
+
+[data-reader-device="phone"] .nav-center {
+  flex: 0 1 auto;
+  min-width: 7.3rem;
+  max-width: min(54vw, 13rem);
+  padding: .38rem .65rem;
+  background: color-mix(in srgb, var(--bg-elevated) 84%, transparent);
+}
+
+[data-reader-device="phone"] .page-chapter {
+  display: none;
+}
+
+[data-reader-device="phone"] .page-indicator {
+  font-size: .82rem;
+}
+
+[data-reader-device="phone"] .view-toggle {
+  display: none !important;
+}
+
+[data-reader-device="phone"] .proof-ribbon {
+  bottom: max(4.35rem, calc(3.8rem + env(safe-area-inset-bottom)));
+  right: max(.65rem, env(safe-area-inset-right));
+}
+
+[data-reader-device="phone"] body.reader-chrome-hidden .app-header {
+  opacity: 0;
+  transform: translateY(calc(-100% - env(safe-area-inset-top)));
+  pointer-events: none;
+}
+
+[data-reader-device="phone"] body.reader-chrome-hidden .progress-bar-container {
+  opacity: 0;
+}
+
+[data-reader-device="phone"] body.reader-chrome-hidden .page-nav {
+  opacity: 0;
+  transform: translateY(calc(100% + env(safe-area-inset-bottom)));
+  pointer-events: none;
+}
+
+[data-reader-device="phone"] body.reader-chrome-hidden .proof-ribbon {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+[data-reader-device="tablet"] .page-nav .nav-btn {
+  min-width: 2.8rem;
+  min-height: 2.8rem;
+}
+
+[data-reader-device="tablet"] .nav-center {
+  max-width: min(52vw, 23rem);
+}
+
+[data-reader-device="desktop"] .nav-center {
+  max-width: min(46vw, 25rem);
+}
+
+@media (max-height: 620px) and (orientation: landscape) {
+  [data-reader-device="phone"] .app-header {
+    padding-top: max(.28rem, env(safe-area-inset-top));
+    padding-bottom: .28rem;
+  }
+
+  [data-reader-device="phone"] .header-btn,
+  [data-reader-device="phone"] .logo {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+
+  [data-reader-device="phone"] body[data-stage="read"] .page-nav {
+    padding-top: .28rem;
+    padding-bottom: max(.28rem, env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-stage="read"] .app-header,
+  body[data-stage="read"] .page-nav,
+  body[data-stage="read"] .progress-bar-container,
+  body[data-stage="read"] .proof-ribbon {
+    transition: none;
+  }
+}
