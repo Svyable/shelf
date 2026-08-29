@@ -3,10 +3,11 @@
 | | |
 |---|---|
 | **Authors**   | @svyable |
-| **Status**    | Not yet drafted |
-| **Chapters**  | 0 of N drafted |
+| **Status**    | Drafting |
+| **Chapters**  | Prologue drafted |
 
 ## Contents
 
 - [ ] [Front Matter](manuscript/front-matter.md)
+- [x] [Prologue: We Were Looking for the Wrong Moment](manuscript/prologue.md)
 - [ ] [Back Matter](manuscript/back-matter.md)
