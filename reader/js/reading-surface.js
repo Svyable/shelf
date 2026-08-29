@@ -1,3 +1,5 @@
+import { stabilizeViewport, textEntryTarget } from './viewport-stability.js';
+
 const DEFAULT_VIEWPORT = Object.freeze({ width: 1280, height: 800 });
 
 function finiteDimension(value, fallback) {
@@ -166,10 +168,10 @@ export function installReadingSurface() {
 
   const requestRepaginate = createRepaginator();
   let autoCollapseKey = '';
+  let stableViewport = viewportSnapshot();
 
-  const maybeAutoCollapseSpread = () => {
+  const maybeAutoCollapseSpread = (snapshot = stableViewport) => {
     if (el.dataset.readerMode === 'scroll') return;
-    const snapshot = viewportSnapshot();
     if (snapshot.spreadRecommended) {
       autoCollapseKey = '';
       return;
@@ -196,12 +198,32 @@ export function installReadingSurface() {
     queueMicrotask(() => toggle.click());
   };
 
-  const syncViewport = () => {
-    const snapshot = viewportSnapshot();
+  const syncViewport = (snapshot = stableViewport, { allowAutoCollapse = true } = {}) => {
     setViewportCss(snapshot);
     syncSpreadState();
     syncPageSemantics();
-    window.setTimeout(maybeAutoCollapseSpread, 0);
+    if (allowAutoCollapse) window.setTimeout(() => maybeAutoCollapseSpread(snapshot), 0);
+  };
+
+  const onViewport = (event) => {
+    const raw = viewportSnapshot();
+    const decision = stabilizeViewport(stableViewport, raw, {
+      editing: textEntryTarget(document.activeElement),
+    });
+
+    if (decision.transientKeyboard) {
+      el.dataset.readerViewportOccluded = 'keyboard';
+      syncViewport(stableViewport, { allowAutoCollapse: false });
+      // The core Reader also listens to these events to repaginate. A software
+      // keyboard changes the visual viewport temporarily, not the book's layout
+      // contract, so keep that transient resize from reaching those handlers.
+      event?.stopImmediatePropagation?.();
+      return;
+    }
+
+    delete el.dataset.readerViewportOccluded;
+    stableViewport = decision.snapshot || raw;
+    syncViewport(stableViewport);
   };
 
   syncViewport();
@@ -209,10 +231,10 @@ export function installReadingSurface() {
   installImmersiveChromeToggle();
 
   const coarseQuery = window.matchMedia?.('(pointer: coarse)');
-  coarseQuery?.addEventListener?.('change', syncViewport);
-  window.addEventListener('orientationchange', syncViewport, { passive: true });
-  window.visualViewport?.addEventListener('resize', syncViewport, { passive: true });
-  window.addEventListener('resize', syncViewport, { passive: true });
+  coarseQuery?.addEventListener?.('change', onViewport);
+  window.addEventListener('orientationchange', onViewport, { capture: true, passive: true });
+  window.visualViewport?.addEventListener('resize', onViewport, { capture: true, passive: true });
+  window.addEventListener('resize', onViewport, { capture: true, passive: true });
 
   const wrapper = document.getElementById('pagesWrapper');
   const right = document.getElementById('pageRight');
@@ -221,7 +243,7 @@ export function installReadingSurface() {
     const observer = new MutationObserver(() => {
       syncSpreadState();
       syncPageSemantics();
-      window.setTimeout(maybeAutoCollapseSpread, 0);
+      window.setTimeout(() => maybeAutoCollapseSpread(stableViewport), 0);
     });
     if (wrapper) observer.observe(wrapper, { attributes: true, attributeFilter: ['class'] });
     if (right) observer.observe(right, { attributes: true, attributeFilter: ['class'] });
@@ -233,7 +255,7 @@ export function installReadingSurface() {
       document.body.classList.remove('reader-chrome-hidden');
       return;
     }
-    window.setTimeout(maybeAutoCollapseSpread, 0);
+    window.setTimeout(() => maybeAutoCollapseSpread(stableViewport), 0);
   });
   stageObserver.observe(document.body, { attributes: true, attributeFilter: ['data-stage'] });
 
