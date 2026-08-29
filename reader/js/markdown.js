@@ -1,6 +1,7 @@
 import { fileUrl } from './base.js';
 import { installMarkedMath, setMathReferenceContext } from './math.js';
 import { installMarkedAcademic, setAcademicContext } from './academic.js';
+import { withSourceRange } from './reading-position.js';
 
 const CHAPTER = '(?:manuscript\\/)?((?:ch[\\w-]+|front-matter|back-matter)(?:\\.md)?)';
 let wikiInstalled = false;
@@ -122,12 +123,16 @@ export function blocksFromMarkdown(markdown, slug) {
     const end = offset + raw.length;
     offset = end;
     if (token.type === 'space' || raw.trim() === '') continue;
-    const html = rewriteUrls(window.marked.parser([token]), slug);
+    const html = withSourceRange(
+      rewriteUrls(window.marked.parser([token]), slug),
+      start,
+      end
+    );
     blocks.push({ html, start, end, raw });
   }
   if (blocks.length === 0) {
     blocks.push({
-      html: '<p></p>',
+      html: withSourceRange('<p></p>', 0, markdown.length),
       start: 0,
       end: markdown.length,
       raw: markdown,
