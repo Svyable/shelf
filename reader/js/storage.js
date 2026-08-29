@@ -1,5 +1,5 @@
 function prefix() {
-  return (typeof window !== 'undefined' && window.__IMPRINT?.storagePrefix) || 'obb';
+  return (typeof window !== 'undefined' && window.__IMPRINT?.storagePrefix) || 'bookself';
 }
 
 function prefsKey() {
