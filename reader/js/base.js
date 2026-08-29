@@ -1,5 +1,11 @@
 import './page-drag.js';
 
+queueMicrotask(() => {
+  import('./semantic-progress.js').catch((error) => {
+    console.warn('Semantic reading progress could not be loaded', error);
+  });
+});
+
 /** Repo-root URL prefix so fetches work at / and at /<repo>/ */
 
 export function repoBase() {
