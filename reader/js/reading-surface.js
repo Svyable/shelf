@@ -168,6 +168,7 @@ export function installReadingSurface() {
   let autoCollapseKey = '';
 
   const maybeAutoCollapseSpread = () => {
+    if (el.dataset.readerMode === 'scroll') return;
     const snapshot = viewportSnapshot();
     if (snapshot.spreadRecommended) {
       autoCollapseKey = '';
