@@ -1,3 +1,5 @@
+import './page-drag.js';
+
 /** Repo-root URL prefix so fetches work at / and at /<repo>/ */
 
 export function repoBase() {
