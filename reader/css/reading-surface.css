@@ -41,11 +41,10 @@ body[data-stage="read"] .book-stage {
   margin: auto;
   align-self: center;
   transform: translateZ(0);
-  contain: layout paint;
+  contain: layout;
   isolation: isolate;
 }
 
-.pages-wrapper.active:has(#pageRight.active),
 .pages-wrapper.active[data-reader-spread="spread"] {
   width: min(
     100%,
@@ -54,7 +53,6 @@ body[data-stage="read"] .book-stage {
   );
 }
 
-.pages-wrapper.active:not(:has(#pageRight.active)),
 .pages-wrapper.active[data-reader-spread="single"] {
   width: min(
     100%,
@@ -76,8 +74,7 @@ body[data-stage="read"] .book-stage {
   -webkit-backface-visibility: hidden;
 }
 
-.pages-wrapper[data-reader-spread="spread"] .page-surface.left,
-.pages-wrapper.active:has(#pageRight.active) .page-surface.left {
+.pages-wrapper[data-reader-spread="spread"] .page-surface.left {
   padding-left: calc(var(--reader-page-pad) * 1.08);
   padding-right: calc(var(--reader-page-pad) * .92);
   border-radius: var(--reader-page-radius) 0 0 var(--reader-page-radius);
@@ -86,8 +83,7 @@ body[data-stage="read"] .book-stage {
     var(--reader-paper-shadow);
 }
 
-.pages-wrapper[data-reader-spread="spread"] .page-surface.right,
-.pages-wrapper.active:has(#pageRight.active) .page-surface.right {
+.pages-wrapper[data-reader-spread="spread"] .page-surface.right {
   padding-left: calc(var(--reader-page-pad) * .92);
   padding-right: calc(var(--reader-page-pad) * 1.08);
   border-radius: 0 var(--reader-page-radius) var(--reader-page-radius) 0;
@@ -96,10 +92,12 @@ body[data-stage="read"] .book-stage {
     var(--reader-paper-shadow);
 }
 
-.pages-wrapper[data-reader-spread="single"] .page-surface,
-.pages-wrapper.active:not(:has(#pageRight.active)) .page-surface {
+.pages-wrapper[data-reader-spread="single"] .page-surface {
   border-radius: var(--reader-page-radius);
 }
+
+.pages-wrapper[data-reader-spread="spread"] .gutter { display: block; }
+.pages-wrapper[data-reader-spread="single"] .gutter { display: none; }
 
 .gutter {
   width: clamp(7px, .7vw, 11px);
@@ -168,8 +166,8 @@ body[data-stage="read"] .book-stage {
 
 /* Human page turn: quick commitment, slower lifted middle, soft landing.
    Keep the visible leaf under the core 560ms turn lock. */
-[data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
-[data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="spread"] #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="single"] #pageLeft.active,
 [data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active {
   animation-duration: 536ms;
   animation-timing-function: linear;
@@ -177,8 +175,8 @@ body[data-stage="read"] .book-stage {
   transform-style: preserve-3d;
 }
 
-[data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
-[data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active {
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="spread"] #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="single"] #pageLeft.active {
   animation-name: readerLeafNext;
 }
 
@@ -261,7 +259,7 @@ body[data-stage="read"] .book-stage {
 [data-reader-device="tablet"][data-reader-measure="balanced"] { --reader-page-pad: clamp(2rem, 5vw, 3.5rem); }
 [data-reader-device="tablet"][data-reader-measure="wide"] { --reader-page-pad: clamp(1.2rem, 3vw, 2.1rem); }
 
-[data-reader-device="tablet"][data-reader-orientation="portrait"] .pages-wrapper.active:not(:has(#pageRight.active)) {
+[data-reader-device="tablet"][data-reader-orientation="portrait"] .pages-wrapper.active[data-reader-spread="single"] {
   width: min(100%, 43rem, calc((var(--reader-viewport-height, 100dvh) - 7rem) * .74));
 }
 
@@ -284,8 +282,7 @@ body[data-stage="read"] .book-stage {
   padding: 0;
 }
 
-[data-reader-device="phone"] .pages-wrapper.active,
-[data-reader-device="phone"] .pages-wrapper.active:not(:has(#pageRight.active)) {
+[data-reader-device="phone"] .pages-wrapper.active {
   width: 100%;
   height: 100%;
   max-height: none;
@@ -357,8 +354,8 @@ body[data-stage="read"] .book-stage {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
-  [data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="spread"] #pageRight.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="single"] #pageLeft.active,
   [data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active,
   [data-reader-mode="paged"] .page-surface.turning {
     animation: none !important;
