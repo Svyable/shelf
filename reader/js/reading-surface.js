@@ -67,6 +67,20 @@ export function formatReadingStatus({
   return `${parts.join('. ')}.`;
 }
 
+export function readingFocusTarget({
+  stage = 'read',
+  mode = 'paged',
+  leftActive = false,
+  rightActive = false,
+  scrollVisible = false,
+} = {}) {
+  if (stage !== 'read') return 'bookStage';
+  if (mode === 'scroll' && scrollVisible) return 'scrollReader';
+  if (leftActive) return 'pageLeft';
+  if (rightActive) return 'pageRight';
+  return 'pagesWrapper';
+}
+
 export function viewportSnapshot(win = window) {
   const vv = win.visualViewport;
   const width = vv?.width || win.innerWidth || DEFAULT_VIEWPORT.width;
@@ -104,6 +118,7 @@ function syncPageSemantics() {
     wrapper.setAttribute('role', 'group');
     wrapper.setAttribute('aria-roledescription', 'book pages');
     wrapper.setAttribute('aria-label', 'Paged reading view');
+    wrapper.tabIndex = -1;
   }
 
   for (const id of ['pageLeft', 'pageRight']) {
@@ -113,6 +128,7 @@ function syncPageSemantics() {
     page.setAttribute('role', 'article');
     page.setAttribute('aria-roledescription', 'page');
     page.setAttribute('aria-hidden', String(!active));
+    page.tabIndex = -1;
     const number = cleanStatusPart(page.querySelector('.page-num')?.textContent);
     const chapter = cleanStatusPart(page.querySelector('.page-running')?.textContent);
     if (number) {
@@ -150,6 +166,32 @@ function readingStatusSnapshot() {
   };
 }
 
+function readingFocusSnapshot() {
+  const left = document.getElementById('pageLeft');
+  const right = document.getElementById('pageRight');
+  const scrollReader = document.getElementById('scrollReader');
+  return {
+    stage: document.body.dataset.stage || '',
+    mode: root().dataset.readerMode === 'scroll' ? 'scroll' : 'paged',
+    leftActive: !!left?.classList.contains('active'),
+    rightActive: !!right?.classList.contains('active'),
+    scrollVisible: !!scrollReader && !scrollReader.hidden,
+  };
+}
+
+function focusCurrentReadingSurface({ preventScroll = true } = {}) {
+  const id = readingFocusTarget(readingFocusSnapshot());
+  const target = document.getElementById(id);
+  if (!target) return false;
+  if (!target.hasAttribute('tabindex')) target.tabIndex = -1;
+  try {
+    target.focus({ preventScroll });
+  } catch {
+    target.focus();
+  }
+  return document.activeElement === target;
+}
+
 function syncModeSemantics() {
   const scroll = root().dataset.readerMode === 'scroll';
   const reading = document.body.dataset.stage === 'read';
@@ -159,6 +201,7 @@ function syncModeSemantics() {
 
   if (pages) pages.setAttribute('aria-hidden', String(!reading || scroll));
   if (nav) nav.setAttribute('aria-hidden', String(!reading || scroll));
+  if (scrollReader) scrollReader.tabIndex = -1;
   if (scrollReader && reading && scroll && !scrollReader.hidden) {
     scrollReader.removeAttribute('aria-hidden');
   } else if (scrollReader) {
@@ -198,6 +241,63 @@ function afterFrames(count, callback) {
     requestAnimationFrame(step);
   };
   step();
+}
+
+function installReadingFocusNavigation() {
+  const skip = document.querySelector('.skip-link');
+  skip?.addEventListener('click', (event) => {
+    event.preventDefault();
+    afterFrames(1, () => focusCurrentReadingSurface({ preventScroll: false }));
+  });
+
+  let pendingOverlayLanding = false;
+  let pendingModeLanding = false;
+  const landingOverlays = ['tocOverlay', 'searchOverlay']
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+  const settings = document.getElementById('settingsPanel');
+
+  document.addEventListener('click', (event) => {
+    const action = event.target?.closest?.('button, a, [role="button"]');
+    if (!action) return;
+    const overlay = action.closest?.('#tocOverlay, #searchOverlay');
+    if (!overlay) return;
+    const closeAction = action.matches('#tocClose, #searchClose, [data-dialog-close]');
+    if (!closeAction) pendingOverlayLanding = true;
+  }, true);
+
+  const maybeLand = () => {
+    if (document.body.dataset.stage !== 'read') return;
+    const navigationOpen = landingOverlays.some((overlay) => overlay.classList.contains('active'));
+    const settingsOpen = settings?.classList.contains('active');
+    if (pendingOverlayLanding && !navigationOpen) {
+      pendingOverlayLanding = false;
+      afterFrames(2, () => focusCurrentReadingSurface());
+      return;
+    }
+    if (pendingModeLanding && !settingsOpen) {
+      pendingModeLanding = false;
+      afterFrames(2, () => focusCurrentReadingSurface());
+    }
+  };
+
+  landingOverlays.forEach((overlay) => {
+    new MutationObserver(maybeLand).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+  });
+  if (settings) {
+    new MutationObserver(maybeLand).observe(settings, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  return {
+    modeChanged() {
+      if (document.body.dataset.stage !== 'read') return;
+      if (settings?.classList.contains('active')) {
+        pendingModeLanding = true;
+        return;
+      }
+      afterFrames(2, () => focusCurrentReadingSurface());
+    },
+  };
 }
 
 function createRepaginator() {
@@ -245,6 +345,7 @@ export function installReadingSurface() {
 
   const requestRepaginate = createRepaginator();
   const announcer = createReadingAnnouncer();
+  const focusNavigation = installReadingFocusNavigation();
   let autoCollapseKey = '';
   let stableViewport = viewportSnapshot();
 
@@ -349,6 +450,7 @@ export function installReadingSurface() {
     syncModeSemantics();
     syncPageSemantics();
     announcer.announce();
+    focusNavigation.modeChanged();
   });
   modeObserver.observe(el, { attributes: true, attributeFilter: ['data-reader-mode'] });
 
