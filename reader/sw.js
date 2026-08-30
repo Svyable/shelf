@@ -1,6 +1,6 @@
 importScripts('./js/offline-cache.js');
 
-const CACHE = 'obb-shell-v59';
+const CACHE = 'obb-shell-v60';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -19,6 +19,7 @@ const SHELL = [
   './css/search-navigation.css',
   './css/search-landing.css',
   './css/selection-marker.css',
+  './css/annotation-navigator.css',
   './css/cover-design.css',
   './css/media.css',
   './css/formats.css',
@@ -61,6 +62,9 @@ const SHELL = [
   './js/router.js',
   './js/notes.js',
   './js/annotations.js',
+  './js/annotation-navigator-model.js',
+  './js/annotation-navigator.js',
+  './js/annotation-navigator-modal.js',
   './js/selection-memory.js',
   './js/selection-marker.js',
   './js/selection-actions.js',
