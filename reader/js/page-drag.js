@@ -1,10 +1,13 @@
 const AXIS_LOCK_PX = 10;
 const COMMIT_RATIO = 0.22;
 const FLING_VELOCITY = 0.55;
+const MIN_FLING_RATIO = 0.06;
 const MAX_TILT_DEG = 13;
 const SCROLL_EDGE_PX = 2;
+const EDGE_RESISTANCE_FACTOR = 0.32;
+const EDGE_RESISTANCE_MAX = 0.18;
 
-export function pageDragDecision({ dx, dy, elapsedMs, width }) {
+export function pageDragDecision({ dx, dy, elapsedMs, width, canTurn = true }) {
   const absX = Math.abs(dx);
   const absY = Math.abs(dy);
   const safeWidth = Math.max(1, Number(width) || 1);
@@ -13,18 +16,24 @@ export function pageDragDecision({ dx, dy, elapsedMs, width }) {
   const velocity = absX / elapsed;
   const horizontal = absX >= AXIS_LOCK_PX && absX > absY * 1.15;
   const direction = dx < 0 ? 1 : -1;
-  const commit = horizontal && (ratio >= COMMIT_RATIO || velocity >= FLING_VELOCITY);
-  return { horizontal, commit, direction, ratio, velocity };
+  const fling = velocity >= FLING_VELOCITY && ratio >= MIN_FLING_RATIO;
+  const commit = !!canTurn && horizontal && (ratio >= COMMIT_RATIO || fling);
+  return { horizontal, commit, direction, ratio, velocity, fling, canTurn: !!canTurn };
 }
 
-export function dragVisual(dx, width) {
+export function dragVisual(dx, width, { resisted = false } = {}) {
   const safeWidth = Math.max(1, Number(width) || 1);
-  const progress = Math.max(-1, Math.min(1, dx / safeWidth));
+  const raw = Math.max(-1, Math.min(1, dx / safeWidth));
+  const progress = resisted
+    ? Math.sign(raw) * Math.min(EDGE_RESISTANCE_MAX, Math.abs(raw) * EDGE_RESISTANCE_FACTOR)
+    : raw;
   return {
     progress,
+    rawProgress: raw,
+    resisted: !!resisted,
     translatePct: progress * 34,
     rotateDeg: progress * MAX_TILT_DEG,
-    shade: Math.min(0.32, Math.abs(progress) * 0.3),
+    shade: Math.min(resisted ? 0.1 : 0.32, Math.abs(progress) * 0.3),
   };
 }
 
@@ -43,6 +52,11 @@ export function scrollLeftAfterPan({ scrollLeft, deltaX, scrollWidth, clientWidt
   return Math.max(0, Math.min(maxScroll, next));
 }
 
+export function contentPanHandoff({ dx, scrollLeft, scrollWidth, clientWidth }) {
+  if (Math.abs(Number(dx) || 0) < AXIS_LOCK_PX) return false;
+  return !scrollContainerConsumes({ dx, scrollLeft, scrollWidth, clientWidth });
+}
+
 function interactiveTarget(target) {
   return !!target?.closest?.('a,button,input,textarea,select,option,label,mark,[contenteditable="true"],.sel-pop,.toc-overlay,.search-overlay,.stats-overlay');
 }
@@ -55,6 +69,15 @@ function horizontalScroller(target) {
 
 function reducedMotion() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+}
+
+function turnButton(direction) {
+  return document.getElementById(direction > 0 ? 'nextBtn' : 'prevBtn');
+}
+
+function canTurn(direction) {
+  const button = turnButton(direction);
+  return !!button && !button.disabled;
 }
 
 function bindPageDrag() {
@@ -74,11 +97,12 @@ function bindPageDrag() {
     ownsTouch: false,
     scroller: null,
     contentPan: false,
+    handedOff: false,
   };
 
   const clearVisual = (animate = true) => {
     wrap.classList.toggle('drag-settling', animate && !reducedMotion());
-    wrap.classList.remove('dragging-page', 'drag-next', 'drag-prev');
+    wrap.classList.remove('dragging-page', 'drag-next', 'drag-prev', 'drag-resisted');
     wrap.style.removeProperty('--drag-x');
     wrap.style.removeProperty('--drag-rotate');
     wrap.style.removeProperty('--drag-shade');
@@ -92,6 +116,7 @@ function bindPageDrag() {
     state.moved = false;
     state.scroller = null;
     state.contentPan = false;
+    state.handedOff = false;
   };
 
   const reset = () => {
@@ -129,9 +154,6 @@ function bindPageDrag() {
 
   wrap.addEventListener('pointerdown', (event) => {
     if (event.pointerType === 'mouse' || !eligibleSurface(event.target)) return;
-    // navigation.js already owns tap zones, keyboard semantics, and turn
-    // buffering. Stop only its pointer-gesture path here so one controller owns
-    // the drag while those higher-level navigation contracts remain intact.
     event.stopPropagation();
     state.id = event.pointerId;
     state.x = event.clientX;
@@ -143,6 +165,7 @@ function bindPageDrag() {
     state.moved = false;
     state.scroller = horizontalScroller(event.target);
     state.contentPan = false;
+    state.handedOff = false;
   }, { capture: true });
 
   wrap.addEventListener('pointermove', (event) => {
@@ -182,13 +205,31 @@ function bindPageDrag() {
         clientWidth: state.scroller.clientWidth,
       });
       state.lastX = event.clientX;
+
+      // Once the nested region reaches the edge in the continuing gesture
+      // direction, hand ownership to the book instead of forcing a second swipe.
+      if (contentPanHandoff({
+        dx: deltaX,
+        scrollLeft: state.scroller.scrollLeft,
+        scrollWidth: state.scroller.scrollWidth,
+        clientWidth: state.scroller.clientWidth,
+      })) {
+        state.contentPan = false;
+        state.handedOff = true;
+        state.x = event.clientX;
+        state.y = event.clientY;
+        state.t = performance.now();
+      }
       return;
     }
 
-    const visual = dragVisual(dx, wrap.getBoundingClientRect().width);
+    const direction = dx < 0 ? 1 : -1;
+    const available = canTurn(direction);
+    const visual = dragVisual(dx, wrap.getBoundingClientRect().width, { resisted: !available });
     wrap.classList.add('dragging-page');
     wrap.classList.toggle('drag-next', dx < 0);
     wrap.classList.toggle('drag-prev', dx > 0);
+    wrap.classList.toggle('drag-resisted', !available);
     if (!reducedMotion()) {
       wrap.style.setProperty('--drag-x', `${visual.translatePct}%`);
       wrap.style.setProperty('--drag-rotate', `${visual.rotateDeg}deg`);
@@ -200,11 +241,14 @@ function bindPageDrag() {
     if (event.pointerId !== state.id) return;
     const dx = event.clientX - state.x;
     const dy = event.clientY - state.y;
+    const direction = dx < 0 ? 1 : -1;
+    const available = canTurn(direction);
     const decision = pageDragDecision({
       dx,
       dy,
       elapsedMs: performance.now() - state.t,
       width: wrap.getBoundingClientRect().width,
+      canTurn: available,
     });
     const moved = state.moved;
     const contentPan = state.contentPan;
@@ -213,8 +257,7 @@ function bindPageDrag() {
     resetPointer();
     if (contentPan || !moved || cancelled || !decision.commit) return;
     event.preventDefault();
-    const button = document.getElementById(decision.direction > 0 ? 'nextBtn' : 'prevBtn');
-    if (button && !button.disabled) button.click();
+    turnButton(decision.direction)?.click();
   };
 
   wrap.addEventListener('pointerup', (event) => finish(event), { capture: true });
