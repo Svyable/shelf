@@ -2,6 +2,10 @@ const OVERLAY_SELECTOR = '#tocOverlay.active, #progressPanel.active, #settingsPa
 const INTERACTIVE_SELECTOR = 'a, button, input, textarea, select, label, mark, [contenteditable="true"], .sel-pop';
 const SURFACE_SELECTOR = '#pagesWrapper, .scroll-reader';
 const AUTO_HIDE_MS = 3200;
+const ROUTE_HIDE_MS = 850;
+const SCROLL_HIDE_PX = 96;
+const SCROLL_REVEAL_PX = 52;
+const SCROLL_TOP_PX = 28;
 
 function body() {
   return document.body;
@@ -31,6 +35,33 @@ export function canHideReaderChrome({
     && !chromeFocused;
 }
 
+export function manualImmersiveAllowed({ coarse = false, device = '' } = {}) {
+  return !!coarse && (device === 'phone' || device === 'tablet');
+}
+
+export function scrollChromeIntent({
+  deltaY = 0,
+  accumulated = 0,
+  hidden = false,
+  nearStart = false,
+  hideThreshold = SCROLL_HIDE_PX,
+  revealThreshold = SCROLL_REVEAL_PX,
+} = {}) {
+  if (nearStart) return { action: hidden ? 'reveal' : 'none', accumulated: 0 };
+
+  const delta = Number(deltaY) || 0;
+  if (!delta) return { action: 'none', accumulated: Number(accumulated) || 0 };
+  const previous = Number(accumulated) || 0;
+  const sameDirection = !previous || Math.sign(previous) === Math.sign(delta);
+  const next = sameDirection ? previous + delta : delta;
+  const hideAt = Math.max(1, Number(hideThreshold) || SCROLL_HIDE_PX);
+  const revealAt = Math.max(1, Number(revealThreshold) || SCROLL_REVEAL_PX);
+
+  if (!hidden && next >= hideAt) return { action: 'hide', accumulated: 0 };
+  if (hidden && next <= -revealAt) return { action: 'reveal', accumulated: 0 };
+  return { action: 'none', accumulated: next };
+}
+
 function focusMode() {
   return body()?.classList.contains('focus-mode') || false;
 }
@@ -40,8 +71,12 @@ function coarsePointer() {
     || !!window.matchMedia?.('(pointer: coarse)').matches;
 }
 
-function phone() {
-  return root()?.dataset.readerDevice === 'phone';
+function device() {
+  return root()?.dataset.readerDevice || '';
+}
+
+function scrollMode() {
+  return root()?.dataset.readerMode === 'scroll';
 }
 
 function overlayOpen() {
@@ -50,7 +85,7 @@ function overlayOpen() {
 
 function chromeFocused() {
   const active = document.activeElement;
-  return !!active?.closest?.('.app-header, .page-nav');
+  return !!active?.closest?.('.app-header, .page-nav, .progress-bar-container');
 }
 
 function selectionActive() {
@@ -75,6 +110,19 @@ function currentState(manualImmersive = false) {
   };
 }
 
+function scrollY() {
+  return window.scrollY
+    || document.scrollingElement?.scrollTop
+    || document.documentElement.scrollTop
+    || 0;
+}
+
+function setChromeInert(hidden) {
+  for (const el of document.querySelectorAll('.app-header, .page-nav')) {
+    if ('inert' in el) el.inert = hidden;
+  }
+}
+
 export function installImmersiveChrome() {
   const pageSurface = document.getElementById('pagesWrapper');
   if (!pageSurface || root().dataset.immersiveChromeEnhanced === 'true') return;
@@ -84,16 +132,28 @@ export function installImmersiveChrome() {
   let manualImmersive = false;
   let lastFocusMode = focusMode();
   let lastStage = body().dataset.stage || '';
+  let lastScrollY = scrollY();
+  let scrollAccumulated = 0;
 
   const clearTimer = () => {
     window.clearTimeout(timer);
     timer = 0;
   };
 
+  const syncContract = () => {
+    body().dataset.readerImmersive = focusMode()
+      ? 'focus'
+      : manualImmersive
+        ? 'manual'
+        : 'off';
+  };
+
   const setHidden = (hidden) => {
     body().classList.toggle('reader-chrome-hidden', hidden);
     body().classList.toggle('reader-chrome-visible', !hidden);
     body().dataset.readerChrome = hidden ? 'hidden' : 'visible';
+    setChromeInert(hidden);
+    syncContract();
   };
 
   const hide = () => {
@@ -114,9 +174,15 @@ export function installImmersiveChrome() {
     if (autoHide) scheduleHide();
   };
 
+  const resetScrollIntent = () => {
+    lastScrollY = scrollY();
+    scrollAccumulated = 0;
+  };
+
   const leaveImmersive = () => {
     manualImmersive = false;
     clearTimer();
+    resetScrollIntent();
     setHidden(false);
   };
 
@@ -124,6 +190,8 @@ export function installImmersiveChrome() {
     syncFocusButton();
     lastFocusMode = focusMode();
     lastStage = body().dataset.stage || '';
+    syncContract();
+    resetScrollIntent();
     if (lastStage !== 'read') {
       leaveImmersive();
       return;
@@ -142,8 +210,7 @@ export function installImmersiveChrome() {
   document.addEventListener('click', (event) => {
     if (body().dataset.stage !== 'read') return;
     const surface = event.target.closest?.(SURFACE_SELECTOR);
-    if (!surface) return;
-    if (!coarsePointer()) return;
+    if (!surface || !coarsePointer()) return;
     if (event.target.closest?.(INTERACTIVE_SELECTOR)) return;
     if (selectionActive() || overlayOpen()) return;
 
@@ -154,12 +221,44 @@ export function installImmersiveChrome() {
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    if (!focusMode() && phone()) manualImmersive = true;
+    if (!focusMode() && manualImmersiveAllowed({ coarse: true, device: device() })) {
+      manualImmersive = true;
+      syncContract();
+    }
     if (!focusMode() && !manualImmersive) return;
 
     if (body().classList.contains('reader-chrome-hidden')) reveal();
     else hide();
   }, true);
+
+  document.addEventListener('scroll', () => {
+    const current = scrollY();
+    const deltaY = current - lastScrollY;
+    lastScrollY = current;
+
+    if (
+      body().dataset.stage !== 'read'
+      || !scrollMode()
+      || !coarsePointer()
+      || (!focusMode() && !manualImmersive)
+      || overlayOpen()
+      || chromeFocused()
+      || selectionActive()
+    ) {
+      scrollAccumulated = 0;
+      return;
+    }
+
+    const result = scrollChromeIntent({
+      deltaY,
+      accumulated: scrollAccumulated,
+      hidden: body().classList.contains('reader-chrome-hidden'),
+      nearStart: current <= SCROLL_TOP_PX,
+    });
+    scrollAccumulated = result.accumulated;
+    if (result.action === 'hide') hide();
+    else if (result.action === 'reveal') reveal();
+  }, { capture: true, passive: true });
 
   document.addEventListener('pointermove', (event) => {
     if (body().dataset.stage !== 'read' || coarsePointer()) return;
@@ -188,7 +287,9 @@ export function installImmersiveChrome() {
   }, true);
 
   document.addEventListener('focusin', (event) => {
-    if (event.target.closest?.('.app-header, .page-nav')) reveal({ autoHide: false });
+    if (event.target.closest?.('.app-header, .page-nav, .progress-bar-container')) {
+      reveal({ autoHide: false });
+    }
   });
 
   document.addEventListener('focusout', () => {
@@ -196,6 +297,16 @@ export function installImmersiveChrome() {
       if (!chromeFocused()) scheduleHide();
     }, 0);
   });
+
+  const routeChanged = () => {
+    resetScrollIntent();
+    if (body().dataset.stage === 'read' && (focusMode() || manualImmersive)) {
+      reveal();
+      scheduleHide(ROUTE_HIDE_MS);
+    }
+  };
+  window.addEventListener('hashchange', routeChanged, { passive: true });
+  window.addEventListener('popstate', routeChanged, { passive: true });
 
   const observer = new MutationObserver((records) => {
     const mode = focusMode();
