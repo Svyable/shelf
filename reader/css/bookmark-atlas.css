@@ -1,0 +1,275 @@
+.bookmark-atlas-button {
+  position: relative;
+}
+
+.bookmark-atlas-count {
+  position: absolute;
+  right: 1px;
+  bottom: 0;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: var(--accent, currentColor);
+  color: var(--paper, #fff);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+}
+
+.bookmark-atlas-dialog {
+  width: min(720px, calc(100vw - 32px));
+  max-height: min(78vh, 760px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  border-radius: 18px;
+  background: var(--paper, #f4efe4);
+  color: var(--ink, #211d19);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .28);
+  overflow: hidden;
+}
+
+.bookmark-atlas-dialog::backdrop {
+  background: rgba(0, 0, 0, .48);
+  backdrop-filter: blur(4px);
+}
+
+.bookmark-atlas-shell {
+  display: flex;
+  flex-direction: column;
+  max-height: min(78vh, 760px);
+}
+
+.bookmark-atlas-head,
+.bookmark-atlas-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bookmark-atlas-head {
+  justify-content: space-between;
+  padding: 18px 20px 12px;
+}
+
+.bookmark-atlas-head h2,
+.bookmark-atlas-eyebrow,
+.bookmark-atlas-status,
+.bookmark-atlas-empty {
+  margin: 0;
+}
+
+.bookmark-atlas-eyebrow {
+  margin-bottom: 2px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .62;
+}
+
+.bookmark-atlas-close {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.bookmark-atlas-close:hover,
+.bookmark-atlas-close:focus-visible {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.bookmark-atlas-tools {
+  padding: 0 20px 12px;
+}
+
+.bookmark-atlas-search {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--paper, #fff) 94%, currentColor 2%);
+  color: inherit;
+  font: inherit;
+}
+
+.bookmark-atlas-step {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.bookmark-atlas-step button,
+.bookmark-atlas-remove {
+  min-height: 40px;
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.bookmark-atlas-status,
+.bookmark-atlas-empty {
+  padding: 0 20px 10px;
+  font-size: .82rem;
+  opacity: .7;
+}
+
+.bookmark-atlas-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0 12px max(16px, env(safe-area-inset-bottom));
+  list-style: none;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.bookmark-atlas-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.bookmark-atlas-card {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--paper, #fff) 96%, currentColor 2%);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bookmark-atlas-card:hover,
+.bookmark-atlas-card:focus-visible {
+  border-color: color-mix(in srgb, var(--accent, currentColor) 65%, currentColor);
+  background: color-mix(in srgb, var(--accent, currentColor) 7%, var(--paper, #fff));
+}
+
+.bookmark-atlas-card:focus-visible,
+.bookmark-atlas-search:focus-visible,
+.bookmark-atlas-step button:focus-visible,
+.bookmark-atlas-remove:focus-visible,
+.bookmark-atlas-close:focus-visible {
+  outline: 2px solid var(--accent, currentColor);
+  outline-offset: 2px;
+}
+
+.bookmark-atlas-chapter {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.bookmark-atlas-excerpt {
+  font-family: var(--reader-font-family, inherit);
+  font-size: .96rem;
+  line-height: 1.45;
+}
+
+.bookmark-atlas-position {
+  font-size: .72rem;
+  opacity: .58;
+}
+
+.bookmark-atlas-remove {
+  align-self: center;
+}
+
+@media (max-width: 640px) {
+  .bookmark-atlas-dialog {
+    width: calc(100vw - 16px);
+    max-height: min(88vh, calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom))));
+    border-radius: 16px;
+  }
+
+  .bookmark-atlas-shell {
+    max-height: inherit;
+  }
+
+  .bookmark-atlas-head {
+    padding: 15px 14px 10px;
+  }
+
+  .bookmark-atlas-tools {
+    display: grid;
+    padding: 0 14px 10px;
+  }
+
+  .bookmark-atlas-step {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bookmark-atlas-status,
+  .bookmark-atlas-empty {
+    padding-inline: 14px;
+  }
+
+  .bookmark-atlas-list {
+    padding-inline: 8px;
+  }
+
+  .bookmark-atlas-item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bookmark-atlas-remove {
+    justify-self: end;
+    min-height: 36px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .bookmark-atlas-dialog {
+    max-height: calc(100dvh - 12px);
+  }
+
+  .bookmark-atlas-head {
+    padding-block: 10px 6px;
+  }
+
+  .bookmark-atlas-card {
+    padding-block: 10px;
+  }
+}
+
+@media (forced-colors: active) {
+  .bookmark-atlas-dialog,
+  .bookmark-atlas-search,
+  .bookmark-atlas-card,
+  .bookmark-atlas-step button,
+  .bookmark-atlas-remove {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .bookmark-atlas-count {
+    background: Highlight;
+    color: HighlightText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bookmark-atlas-dialog::backdrop {
+    backdrop-filter: none;
+  }
+}
