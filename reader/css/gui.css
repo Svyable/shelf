@@ -45,6 +45,58 @@
   outline-offset: 2px;
 }
 
+/* Bookself mark: a tiny three-volume shelf instead of the old command glyph. */
+.logo {
+  width: 2.15rem;
+  height: 2.15rem;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+}
+
+.logo:hover {
+  background: color-mix(in srgb, var(--bg-elevated) 72%, transparent);
+}
+
+.logo-mark {
+  position: relative;
+  display: block;
+  width: 1.35rem;
+  height: 1.2rem;
+  font-size: 0;
+  border-bottom: 2px solid var(--accent);
+}
+
+.logo-mark::before {
+  content: "";
+  position: absolute;
+  left: .08rem;
+  bottom: .14rem;
+  width: .24rem;
+  height: .76rem;
+  border: 1.5px solid var(--accent);
+  border-radius: 1px;
+  box-shadow:
+    .38rem .08rem 0 -.02rem var(--bg-elevated),
+    .38rem .08rem 0 0 var(--accent),
+    .78rem -.02rem 0 -.02rem var(--bg-elevated),
+    .78rem -.02rem 0 0 var(--accent);
+}
+
+/* Proof status belongs in the reading chrome, not over the exit/navigation area. */
+.proof-ribbon {
+  top: auto;
+  left: auto;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  width: auto;
+  padding: .28rem .56rem;
+  border-radius: 999px;
+  transform: none;
+  box-shadow: 0 6px 16px var(--shadow);
+  pointer-events: none;
+}
+
 .reader-context {
   min-width: 0;
   align-self: center;
@@ -450,6 +502,11 @@ body.gui-overlay-open .binder-view {
     bottom: calc(.8rem + env(safe-area-inset-bottom));
     max-width: calc(100vw - 1.5rem);
     text-align: center;
+  }
+
+  .proof-ribbon {
+    right: .7rem;
+    bottom: calc(.7rem + env(safe-area-inset-bottom));
   }
 }
 
