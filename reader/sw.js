@@ -1,6 +1,6 @@
 importScripts('./js/offline-cache.js');
 
-const CACHE = 'obb-shell-v64';
+const CACHE = 'obb-shell-v65';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -21,6 +21,7 @@ const SHELL = [
   './css/selection-marker.css',
   './css/annotation-navigator.css',
   './css/reader-state-backup.css',
+  './css/pwa-update.css',
   './css/cover-design.css',
   './css/media.css',
   './css/formats.css',
@@ -43,6 +44,8 @@ const SHELL = [
   './js/experience.js',
   './js/gui.js',
   './js/dialog-stack.js',
+  './js/pwa-update-model.js',
+  './js/pwa-update.js',
   './js/search-navigation.js',
   './js/search-landing.js',
   './js/cover-presentation.js',
@@ -81,11 +84,11 @@ const SHELL = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE)
-      .then((cache) => cache.addAll(SHELL))
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'BOOKSELF_ACTIVATE_UPDATE') self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
