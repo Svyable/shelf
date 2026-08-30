@@ -71,4 +71,5 @@ export function go(hash, { replace = false } = {}) {
 
 if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   import('./reading-trail.js').catch(() => {});
+  import('./bookmark-atlas.js').catch(() => {});
 }
