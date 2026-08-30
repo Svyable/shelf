@@ -1,5 +1,6 @@
 import { stabilizeViewport, textEntryTarget } from './viewport-stability.js';
 import { installImmersiveChrome } from './immersive-chrome.js';
+import { installFontReadiness } from './font-readiness-runtime.js';
 
 const DEFAULT_VIEWPORT = Object.freeze({ width: 1280, height: 800 });
 
@@ -196,6 +197,9 @@ export function installReadingSurface() {
   syncViewport();
   watchAdaptiveStyles(requestRepaginate);
   installImmersiveChrome();
+  installFontReadiness({
+    onReady: () => afterFrames(2, () => requestRepaginate(0)),
+  });
 
   const coarseQuery = window.matchMedia?.('(pointer: coarse)');
   coarseQuery?.addEventListener?.('change', onViewport);
@@ -227,19 +231,4 @@ export function installReadingSurface() {
     window.setTimeout(() => maybeAutoCollapseSpread(stableViewport), 0);
   });
   stageObserver.observe(document.body, { attributes: true, attributeFilter: ['data-stage'] });
-
-  if (document.fonts) {
-    el.dataset.readerFonts = document.fonts.status === 'loaded' ? 'ready' : 'loading';
-    document.fonts.ready.then(() => {
-      el.dataset.readerFonts = 'ready';
-      afterFrames(2, () => requestRepaginate(0));
-    }).catch(() => {});
-    document.fonts.addEventListener?.('loading', () => {
-      el.dataset.readerFonts = 'loading';
-    });
-    document.fonts.addEventListener?.('loadingdone', () => {
-      el.dataset.readerFonts = 'ready';
-      afterFrames(2, () => requestRepaginate(0));
-    });
-  }
 }
