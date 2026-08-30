@@ -138,6 +138,169 @@ body[data-stage="read"].reader-chrome-hidden .proof-ribbon {
   max-width: min(46vw, 25rem);
 }
 
+/* Semantic progress is also a navigation surface. The range control floats over
+   the existing 3px progress rail so the hit area grows without changing stage
+   height or pagination geometry. */
+.progress-bar-container[data-reader-seekable="true"] {
+  --reader-seek-position: 0%;
+  position: relative;
+  overflow: visible;
+}
+
+.progress-seek {
+  position: absolute;
+  z-index: 4;
+  top: -2px;
+  left: env(safe-area-inset-left);
+  right: env(safe-area-inset-right);
+  width: auto;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  color: var(--accent);
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.progress-seek:disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+.progress-seek::-webkit-slider-runnable-track {
+  height: 24px;
+  border: 0;
+  background: transparent;
+}
+
+.progress-seek::-moz-range-track {
+  height: 24px;
+  border: 0;
+  background: transparent;
+}
+
+.progress-seek::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: 5px;
+  border: 2px solid var(--bg-elevated);
+  border-radius: 999px;
+  -webkit-appearance: none;
+  background: var(--accent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--shadow) 70%, transparent);
+  opacity: 0;
+  transition: opacity 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+
+.progress-seek::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--bg-elevated);
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--shadow) 70%, transparent);
+  opacity: 0;
+  transition: opacity 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+
+.progress-bar-container[data-reader-seekable="true"]:hover .progress-seek::-webkit-slider-thumb,
+.progress-bar-container.is-seeking .progress-seek::-webkit-slider-thumb,
+.progress-seek:focus-visible::-webkit-slider-thumb {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.progress-bar-container[data-reader-seekable="true"]:hover .progress-seek::-moz-range-thumb,
+.progress-bar-container.is-seeking .progress-seek::-moz-range-thumb,
+.progress-seek:focus-visible::-moz-range-thumb {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.progress-seek:focus-visible {
+  outline: none;
+}
+
+.progress-seek:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 26%, transparent),
+    0 2px 8px color-mix(in srgb, var(--shadow) 70%, transparent);
+}
+
+.progress-seek:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 26%, transparent),
+    0 2px 8px color-mix(in srgb, var(--shadow) 70%, transparent);
+}
+
+.progress-bar-container.is-seeking .progress-bar {
+  transition: none;
+}
+
+.progress-seek-label {
+  position: absolute;
+  z-index: 5;
+  top: 1.25rem;
+  left: clamp(
+    calc(3.25rem + env(safe-area-inset-left)),
+    var(--reader-seek-position),
+    calc(100% - 3.25rem - env(safe-area-inset-right))
+  );
+  max-width: min(18rem, calc(100vw - 1.5rem));
+  padding: .3rem .55rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  box-shadow: 0 7px 20px color-mix(in srgb, var(--shadow) 42%, transparent);
+  color: var(--text-secondary);
+  font-family: var(--font-accent);
+  font-size: .74rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.progress-bar-container.is-seeking .progress-seek-label,
+.progress-bar-container:focus-within .progress-seek-label {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (pointer: coarse) {
+  .progress-seek {
+    top: -2px;
+    height: 28px;
+  }
+
+  .progress-seek::-webkit-slider-runnable-track {
+    height: 28px;
+  }
+
+  .progress-seek::-moz-range-track {
+    height: 28px;
+  }
+
+  .progress-seek::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    margin-top: 6px;
+  }
+
+  .progress-seek::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 @media (max-height: 620px) and (orientation: landscape) {
   [data-reader-device="phone"] .app-header {
     padding-top: max(.28rem, env(safe-area-inset-top));
@@ -154,6 +317,34 @@ body[data-stage="read"].reader-chrome-hidden .proof-ribbon {
     padding-top: .28rem;
     padding-bottom: max(.28rem, env(safe-area-inset-bottom));
   }
+
+  .progress-seek-label {
+    top: 1rem;
+    font-size: .7rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .progress-seek::-webkit-slider-thumb {
+    border-color: Canvas;
+    background: Highlight;
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  .progress-seek::-moz-range-thumb {
+    border-color: Canvas;
+    background: Highlight;
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  .progress-seek-label {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -161,6 +352,18 @@ body[data-stage="read"].reader-chrome-hidden .proof-ribbon {
   body[data-stage="read"] .page-nav,
   body[data-stage="read"] .progress-bar-container,
   body[data-stage="read"] .proof-ribbon {
+    transition: none;
+  }
+
+  .progress-seek::-webkit-slider-thumb {
+    transition: none;
+  }
+
+  .progress-seek::-moz-range-thumb {
+    transition: none;
+  }
+
+  .progress-seek-label {
     transition: none;
   }
 }
