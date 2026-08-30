@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&family=Lora:wght@400;500;600&display=swap');
+
+.reader-design-studio {
+  margin: 1.5rem 0 2rem;
+  padding: clamp(1rem, 2.5vw, 1.6rem);
+  border: 1px solid var(--line, rgba(255,255,255,.12));
+  border-radius: 18px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--panel, #171512) 92%, #c49a5a 8%), var(--panel, #171512));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .14);
+}
+
+.reader-design-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.reader-design-head h2 {
+  margin: .1rem 0 .35rem;
+  font-family: Fraunces, Georgia, serif;
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
+  font-weight: 500;
+}
+
+.reader-design-head p:not(.eyebrow) {
+  max-width: 64ch;
+  margin: 0;
+  color: var(--muted, #a9a197);
+  line-height: 1.55;
+}
+
+.reader-design-book-select {
+  min-width: min(19rem, 100%);
+}
+
+.reader-design-book-select label,
+.reader-design-controls label {
+  display: grid;
+  gap: .35rem;
+  color: var(--muted, #a9a197);
+  font-size: .76rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.reader-design-book-select select,
+.reader-design-controls select,
+.reader-design-controls input[type="range"],
+.reader-design-output textarea {
+  width: 100%;
+}
+
+.reader-design-book-select select,
+.reader-design-controls select {
+  min-height: 2.45rem;
+  padding: .45rem .65rem;
+  border: 1px solid var(--line, rgba(255,255,255,.13));
+  border-radius: 9px;
+  color: var(--text, #f1ece5);
+  background: var(--field, #0f0e0c);
+  font: 500 .82rem/1.2 "IBM Plex Sans", sans-serif;
+}
+
+.reader-design-presets {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin-top: 1rem;
+  padding: .75rem 0 1rem;
+  border-bottom: 1px solid var(--line, rgba(255,255,255,.1));
+}
+
+.reader-design-presets > span {
+  margin-right: .25rem;
+  color: var(--muted, #a9a197);
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.reader-design-presets button {
+  padding: .44rem .65rem;
+  border: 1px solid var(--line, rgba(255,255,255,.13));
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text, #eee8df);
+  font: 500 .72rem/1 "IBM Plex Sans", sans-serif;
+  cursor: pointer;
+}
+
+.reader-design-presets button:hover,
+.reader-design-presets button:focus-visible {
+  border-color: var(--accent, #c19a62);
+  color: var(--accent, #d3ad75);
+}
+
+.reader-design-grid {
+  display: grid;
+  grid-template-columns: minmax(18rem, .9fr) minmax(24rem, 1.1fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  margin-top: 1.25rem;
+}
+
+.reader-design-preview-wrap {
+  min-width: 0;
+}
+
+.reader-design-preview {
+  --design-page: #f2ebdd;
+  --design-ink: #2d261f;
+  --design-accent: #845b35;
+  --design-warmth: transparent;
+  --design-font: "Literata", Georgia, serif;
+  --design-size: 1rem;
+  --design-weight: 400;
+  --design-tracking: 0em;
+  --design-leading: 1.62;
+  position: relative;
+  display: grid;
+  min-height: 30rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  overflow: hidden;
+  border-radius: 14px;
+  background: #0d0c0a;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+.reader-design-preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--design-warmth);
+  mix-blend-mode: multiply;
+}
+
+.reader-design-preview-page {
+  position: relative;
+  z-index: 1;
+  align-self: stretch;
+  width: min(100%, 31rem);
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 3.4rem) clamp(1.5rem, 5vw, 2.7rem);
+  border: 1px solid color-mix(in srgb, var(--design-ink) 12%, transparent);
+  border-radius: 3px 9px 9px 3px;
+  color: var(--design-ink);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--design-ink) 5%, transparent), transparent 8%),
+    var(--design-page);
+  box-shadow: 0 20px 48px rgba(0,0,0,.28), inset 10px 0 20px rgba(0,0,0,.025);
+  font-family: var(--design-font);
+  font-size: var(--design-size);
+  font-weight: var(--design-weight);
+  letter-spacing: var(--design-tracking);
+  line-height: var(--design-leading);
+}
+
+.reader-design-preview[data-mode="scroll"] .reader-design-preview-page {
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+.reader-design-preview[data-measure="narrow"] .reader-design-preview-page { max-width: 25rem; }
+.reader-design-preview[data-measure="balanced"] .reader-design-preview-page { max-width: 31rem; }
+.reader-design-preview[data-measure="wide"] .reader-design-preview-page { max-width: 38rem; }
+
+.reader-design-kicker {
+  margin: 0 0 1.2rem;
+  color: var(--design-accent);
+  font: 600 .65rem/1.2 "IBM Plex Sans", sans-serif;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.reader-design-preview h3 {
+  max-width: 13ch;
+  margin: 0 0 1.5rem;
+  color: var(--design-ink);
+  font: 500 clamp(1.8rem, 5vw, 2.8rem)/.98 Fraunces, Georgia, serif;
+  letter-spacing: -.025em;
+}
+
+.reader-design-sample {
+  margin: 0;
+  text-align: left;
+  text-wrap: pretty;
+}
+
+.reader-design-preview[data-align="justify"] .reader-design-sample { text-align: justify; }
+.reader-design-preview[data-hyphens="auto"] .reader-design-sample { hyphens: auto; }
+.reader-design-preview[data-hyphens="off"] .reader-design-sample { hyphens: none; }
+.reader-design-preview[data-paragraph="compact"] .reader-design-sample + .reader-design-sample { margin-top: .45em; }
+.reader-design-preview[data-paragraph="normal"] .reader-design-sample + .reader-design-sample { margin-top: .85em; }
+.reader-design-preview[data-paragraph="airy"] .reader-design-sample + .reader-design-sample { margin-top: 1.35em; }
+.reader-design-preview[data-indent="gentle"] .reader-design-sample + .reader-design-sample { text-indent: 1.15em; }
+.reader-design-preview[data-indent="classic"] .reader-design-sample + .reader-design-sample { text-indent: 1.65em; }
+
+.reader-design-preview blockquote {
+  margin: 1.6rem 0 0;
+  padding: .2rem 0 .2rem 1rem;
+  border-left: 2px solid var(--design-accent);
+  color: color-mix(in srgb, var(--design-ink) 78%, var(--design-page));
+  font-style: italic;
+}
+
+.reader-design-preview-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+  margin: .65rem 0 .9rem;
+  color: var(--muted, #aaa197);
+  font-size: .7rem;
+}
+
+.reader-design-preview-meta strong {
+  color: var(--text, #f1ece5);
+  font-size: .76rem;
+}
+
+.reader-design-controls {
+  display: grid;
+  gap: .85rem;
+  align-content: start;
+}
+
+.reader-design-controls fieldset {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 0;
+  padding: .9rem;
+  border: 1px solid var(--line, rgba(255,255,255,.1));
+  border-radius: 12px;
+}
+
+.reader-design-controls legend {
+  padding: 0 .35rem;
+  color: var(--text, #eee8df);
+  font: 600 .74rem/1 "IBM Plex Sans", sans-serif;
+}
+
+.reader-design-controls label.wide {
+  grid-column: 1 / -1;
+}
+
+.reader-design-controls output {
+  justify-self: end;
+  color: var(--accent, #d0aa72);
+  font-variant-numeric: tabular-nums;
+}
+
+.reader-design-controls input[type="range"] {
+  accent-color: var(--accent, #b98d54);
+}
+
+.reader-design-output {
+  margin-top: 1.3rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line, rgba(255,255,255,.1));
+}
+
+.reader-design-output-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .65rem;
+}
+
+.reader-design-output-head > div:first-child {
+  display: grid;
+  gap: .25rem;
+}
+
+.reader-design-output-head span {
+  color: var(--muted, #aaa197);
+  font-size: .7rem;
+}
+
+.reader-design-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: .45rem;
+}
+
+.reader-design-output textarea {
+  min-height: 18rem;
+  resize: vertical;
+  padding: 1rem;
+  border: 1px solid var(--line, rgba(255,255,255,.12));
+  border-radius: 10px;
+  color: #ddd6ca;
+  background: #0c0b09;
+  font: 400 .76rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  tab-size: 2;
+}
+
+.reader-design-privacy {
+  max-width: 92ch;
+  margin: .7rem 0 0;
+  color: var(--muted, #aaa197);
+  font-size: .7rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .reader-design-head,
+  .reader-design-output-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .reader-design-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reader-design-preview {
+    min-height: 25rem;
+  }
+
+  .reader-design-actions {
+    justify-content: start;
+  }
+}
+
+@media (max-width: 580px) {
+  .reader-design-studio {
+    padding: .85rem;
+    border-radius: 12px;
+  }
+
+  .reader-design-controls fieldset {
+    grid-template-columns: 1fr;
+  }
+
+  .reader-design-controls label.wide {
+    grid-column: auto;
+  }
+
+  .reader-design-preview-page {
+    padding: 2rem 1.3rem;
+  }
+
+  .reader-design-preview-meta {
+    display: grid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reader-design-studio *,
+  .reader-design-studio *::before,
+  .reader-design-studio *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
