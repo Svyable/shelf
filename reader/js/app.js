@@ -203,16 +203,58 @@ function sizeMeasure() {
   return true;
 }
 
-function rebuildPages() {
-  if (!app.book) return;
-  if (!sizeMeasure()) return;
+let paginationScheduler = null;
+let paginationEpoch = 0;
+
+async function rebuildPages({ cooperative = true, commitUi = true } = {}) {
+  if (!app.book) return false;
+  if (!sizeMeasure()) return false;
+  const run = ++paginationEpoch;
+  const book = app.book;
   const box = $('pageMeasureInner');
-  const pages = [];
-  for (const ch of app.book.chapters) {
-    const blocks = blocksFromMarkdown(ch.markdown, app.book.slug);
-    pages.push(...paginateBlocks(ch.id, blocks, box));
+  const wrapper = $('pagesWrapper');
+
+  if (!cooperative) {
+    const pages = [];
+    for (const ch of book.chapters) {
+      const blocks = blocksFromMarkdown(ch.markdown, book.slug);
+      pages.push(...paginateBlocks(ch.id, blocks, box));
+    }
+    if (run !== paginationEpoch || app.book !== book) return false;
+    app.pages = pages;
+    return true;
   }
-  app.pages = pages;
+
+  wrapper?.setAttribute('aria-busy', 'true');
+  try {
+    if (!paginationScheduler) {
+      const { createCooperativePaginationScheduler } = await import('./pagination-scheduler.js');
+      if (run !== paginationEpoch || app.book !== book) return false;
+      paginationScheduler = createCooperativePaginationScheduler();
+    }
+
+    const result = await paginationScheduler.run(book.chapters, (ch) => {
+      const blocks = blocksFromMarkdown(ch.markdown, book.slug);
+      return paginateBlocks(ch.id, blocks, box);
+    });
+    if (
+      result.status !== 'complete'
+      || run !== paginationEpoch
+      || app.book !== book
+    ) return false;
+
+    const chapter = chapterOfPage(app.pageIndex);
+    const offset = currentOffset();
+    app.pages = result.values.flat();
+    app.pageIndex = pageIndexForOffset(app.pages, chapter, offset);
+    if (commitUi && document.body.dataset.stage === 'read') {
+      paintPages();
+      persist();
+    }
+    return true;
+  } finally {
+    if (run === paginationEpoch) wrapper?.removeAttribute('aria-busy');
+  }
 }
 
 function chapterOfPage(i) {
@@ -823,7 +865,7 @@ function printBook() {
   if (!app.pages.length) {
     $('pagesWrapper').classList.add('active');
     sizeMeasure();
-    rebuildPages();
+    rebuildPages({ cooperative: false });
     if (!wasRead) $('pagesWrapper').classList.remove('active');
   }
   if (!app.pages.length) {
@@ -988,10 +1030,10 @@ async function openRead(slug, chapter, offset) {
     fillToc(book);
     showStage('read');
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    rebuildPages();
+    await rebuildPages({ commitUi: false });
     if (!app.pages.length) {
       await new Promise((r) => requestAnimationFrame(r));
-      rebuildPages();
+      await rebuildPages({ commitUi: false });
     }
     const ch = chapter && book.contents.some((c) => c.id === chapter)
       ? chapter
