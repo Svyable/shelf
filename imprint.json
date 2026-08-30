@@ -13,6 +13,7 @@
   "forkLabel": "Start your own Bookself",
   "homeLabel": "Shelf",
   "storagePrefix": "svs",
+  "readerStyles": ["reader/css/interface-v2.css"],
   "steps": [],
   "github": {
     "owner": "Svyable",
