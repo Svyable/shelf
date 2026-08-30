@@ -1,3 +1,7 @@
+import('./cover-runtime.js').catch((error) => {
+  console.warn('Cover presentation could not be loaded', error);
+});
+
 import('./formats.js').catch((error) => {
   console.warn('Publication format enhancements could not be loaded', error);
 });
