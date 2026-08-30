@@ -3,19 +3,34 @@ import { parseBookReadme } from './catalog.js';
 import { addNote, applyNotes, loadNotes, selectionSourceAnchor } from './notes.js';
 import { parseRoute } from './router.js';
 import {
+  SELECTION_SNAPSHOT_TTL,
   normalizeSelectionSnapshot,
   selectionAnchorTargetIndex,
   selectionSnapshotUsable,
 } from './selection-memory.js';
+import {
+  clearSelectionMarker,
+  installSelectionMarkerStyles,
+  paintSelectionMarker,
+} from './selection-marker.js';
 
 let remembered = null;
 let fallbackPending = null;
 let resumeArmed = false;
 let resumeTimer = 0;
+let resumeExpiryTimer = 0;
 const chapterCache = new Map();
+
+installSelectionMarkerStyles();
 
 function readerMode() {
   return document.documentElement.dataset.readerMode === 'scroll' ? 'scroll' : 'paged';
+}
+
+function activeReadingRoot() {
+  return readerMode() === 'scroll'
+    ? document.querySelector('#scrollReader:not([hidden])')
+    : document.querySelector('#pagesWrapper');
 }
 
 function liveSelection() {
@@ -61,6 +76,8 @@ function rememberLiveSelection() {
   if (next) {
     remembered = next;
     resumeArmed = !!next.anchor;
+    clearTimeout(resumeExpiryTimer);
+    clearSelectionMarker();
     setResumedActions(false);
   }
   return next;
@@ -133,9 +150,7 @@ function fallbackSelection() {
 
 function sourceTarget(snapshot) {
   if (!snapshot?.anchor) return null;
-  const root = readerMode() === 'scroll'
-    ? document.querySelector('#scrollReader:not([hidden])')
-    : document.querySelector('#pagesWrapper');
+  const root = activeReadingRoot();
   if (!root) return null;
 
   const candidates = [...root.querySelectorAll('[data-source-start][data-source-end]')]
@@ -179,14 +194,39 @@ function positionResumedActions(target) {
   return true;
 }
 
+function armResumeExpiry(snapshot) {
+  clearTimeout(resumeExpiryTimer);
+  const elapsed = Date.now() - Number(snapshot?.createdAt || 0);
+  const remaining = Math.max(0, SELECTION_SNAPSHOT_TTL - elapsed);
+  if (!remaining) {
+    disarmResume();
+    return false;
+  }
+  resumeExpiryTimer = window.setTimeout(disarmResume, remaining + 1);
+  return true;
+}
+
 function resumeSelectionActions() {
   clearTimeout(resumeTimer);
-  if (!resumeArmed || document.body.dataset.stage !== 'read') return false;
-  if (document.querySelector('.toc-overlay.active, .stats-overlay.active, .search-overlay.active')) return false;
+  if (!resumeArmed || document.body.dataset.stage !== 'read') {
+    clearSelectionMarker();
+    return false;
+  }
+  if (document.querySelector('.toc-overlay.active, .stats-overlay.active, .search-overlay.active')) {
+    clearSelectionMarker();
+    return false;
+  }
   const snapshot = usableRemembered({ allowModeChange: true });
-  if (!snapshot?.anchor) return false;
-  const target = sourceTarget(snapshot);
-  return positionResumedActions(target);
+  if (!snapshot?.anchor) {
+    clearSelectionMarker();
+    return false;
+  }
+  const root = activeReadingRoot();
+  const marker = paintSelectionMarker(snapshot.anchor, root);
+  const target = marker.target || sourceTarget(snapshot);
+  if (positionResumedActions(target) && armResumeExpiry(snapshot)) return true;
+  clearSelectionMarker();
+  return false;
 }
 
 function scheduleResume(delay = 220) {
@@ -200,13 +240,19 @@ function scheduleResume(delay = 220) {
 function disarmResume() {
   resumeArmed = false;
   clearTimeout(resumeTimer);
+  clearTimeout(resumeExpiryTimer);
+  clearSelectionMarker();
   setResumedActions(false);
 }
 
 document.addEventListener('selectionchange', rememberLiveSelection);
 document.addEventListener('mouseup', rememberLiveSelection);
 document.addEventListener('pointerdown', (event) => {
-  if (event.target.closest?.('#selPop, #settingsBtn, #settingsPanel')) rememberLiveSelection();
+  if (event.target.closest?.('#selPop, #settingsBtn, #settingsPanel')) {
+    rememberLiveSelection();
+    return;
+  }
+  if (resumeArmed && event.target.closest?.('.page-surface, .scroll-document')) disarmResume();
 }, true);
 
 const modeObserver = new MutationObserver(() => {
@@ -222,8 +268,19 @@ window.addEventListener('resize', () => {
 window.addEventListener('orientationchange', () => {
   if (resumeArmed) scheduleResume(320);
 }, true);
+document.addEventListener('scroll', () => {
+  if (resumeArmed && document.documentElement.dataset.selectionResumeMarker === 'true') scheduleResume(36);
+}, true);
 document.addEventListener('click', (event) => {
   if (resumeArmed && event.target.closest?.('#settingsClose')) scheduleResume(80);
+}, true);
+document.addEventListener('keydown', (event) => {
+  if (!resumeArmed || event.metaKey || event.ctrlKey || event.altKey) return;
+  if (event.target.closest?.('#selPop, input, textarea, select, [contenteditable="true"]')) return;
+  if (['Tab', 'Shift'].includes(event.key)) return;
+  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) {
+    disarmResume();
+  }
 }, true);
 
 document.addEventListener('click', (event) => {
