@@ -1,4 +1,4 @@
-/* Reader-hosted media — responsive figures for Pages, Scroll, zoom, and print. */
+/* Reader-hosted media — responsive figures for Pages, Scroll, inspection, and print. */
 
 .page-inner img,
 .scroll-document img {
@@ -17,9 +17,7 @@
 }
 
 .page-inner p:has(> img:only-child),
-.scroll-document p:has(> img:only-child) {
-  margin-block: 0.9em;
-}
+.scroll-document p:has(> img:only-child) { margin-block: 0.9em; }
 
 .reader-media-lightbox {
   position: fixed;
@@ -27,85 +25,132 @@
   z-index: 120;
   display: grid;
   place-items: center;
-  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
-  background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+  padding: max(0.75rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+  background: color-mix(in srgb, var(--bg-primary) 90%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  overscroll-behavior: contain;
 }
 
 .reader-media-lightbox[hidden] { display: none; }
 
 .reader-media-lightbox-card {
-  position: relative;
   display: grid;
-  gap: 0.7rem;
-  width: min(94vw, 1100px);
-  max-height: 92dvh;
-  padding: 0.8rem;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  width: min(96vw, 1200px);
+  height: min(94dvh, 900px);
+  min-height: min(32rem, 92dvh);
+  padding: 0.7rem;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--bg-elevated);
   box-shadow: 0 24px 90px var(--shadow);
 }
 
+.reader-media-lightbox-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.reader-media-lightbox-toolbar button {
+  display: grid;
+  place-items: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 20%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
+  color: var(--text-primary);
+  cursor: pointer;
+  font: 600 1rem/1 "IBM Plex Sans", system-ui, sans-serif;
+}
+
+.reader-media-lightbox-toolbar button:last-child {
+  margin-left: 0.35rem;
+  font-size: 1.25rem;
+}
+
+.reader-media-lightbox-toolbar button:disabled { opacity: 0.42; cursor: default; }
+.reader-media-lightbox-toolbar button:focus-visible,
+.reader-media-lightbox-viewport:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.reader-media-lightbox-status { min-width: 4.7rem !important; font-variant-numeric: tabular-nums; }
+
+.reader-media-lightbox-viewport {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 11px;
+  background: var(--bg-page);
+  cursor: default;
+  touch-action: none;
+  user-select: none;
+}
+
+.reader-media-lightbox.is-zoomed .reader-media-lightbox-viewport { cursor: grab; }
+.reader-media-lightbox-viewport.is-dragging { cursor: grabbing; }
+
 .reader-media-lightbox img {
   display: block;
-  width: 100%;
+  width: auto;
   height: auto;
-  max-height: calc(92dvh - 5rem);
-  object-fit: contain;
-  border-radius: 10px;
-  background: var(--bg-page);
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 9px;
+  box-shadow: none;
+  background: transparent;
+  transform-origin: center center;
+  will-change: transform;
+  pointer-events: none;
 }
 
 .reader-media-lightbox-caption {
+  max-width: 75ch;
   min-height: 1em;
+  margin: 0 auto;
   color: var(--text-secondary);
-  font: 500 0.78rem/1.35 "IBM Plex Sans", system-ui, sans-serif;
+  font: 500 0.78rem/1.4 "IBM Plex Sans", system-ui, sans-serif;
   text-align: center;
 }
 
-.reader-media-lightbox-close {
-  position: absolute;
-  top: 0.4rem;
-  right: 0.4rem;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 1px solid color-mix(in srgb, var(--text-primary) 20%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--bg-primary) 76%, transparent);
-  color: var(--text-primary);
-  cursor: pointer;
-  font: 600 1.25rem/1 system-ui, sans-serif;
-}
-
-.reader-media-lightbox-close:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+@media (prefers-reduced-motion: no-preference) {
+  .reader-media-lightbox img { transition: transform 120ms ease-out; }
+  .reader-media-lightbox-viewport.is-dragging img { transition: none; }
 }
 
 @media (max-width: 700px) {
   .page-inner img,
-  .scroll-document img {
-    max-height: 36vh;
-    border-radius: 7px;
-  }
+  .scroll-document img { max-height: 36vh; border-radius: 7px; }
+  .reader-media-lightbox { padding: max(0.35rem, env(safe-area-inset-top)) max(0.35rem, env(safe-area-inset-right)) max(0.35rem, env(safe-area-inset-bottom)) max(0.35rem, env(safe-area-inset-left)); }
+  .reader-media-lightbox-card { width: 100%; height: 96dvh; min-height: 0; padding: 0.5rem; border-radius: 13px; }
+  .reader-media-lightbox-toolbar button { min-width: 2.75rem; height: 2.75rem; }
+}
 
-  .reader-media-lightbox { padding: 0.6rem; }
-  .reader-media-lightbox-card { width: 100%; padding: 0.55rem; border-radius: 13px; }
+@media (max-height: 500px) and (orientation: landscape) {
+  .reader-media-lightbox-card { height: calc(100dvh - 0.5rem); grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto minmax(0, 1fr); }
+  .reader-media-lightbox-toolbar { grid-column: 2; grid-row: 1 / span 2; flex-direction: column; }
+  .reader-media-lightbox-toolbar button:last-child { margin: 0.35rem 0 0; }
+  .reader-media-lightbox-viewport { grid-column: 1; grid-row: 1 / span 2; }
+  .reader-media-lightbox-caption { display: none; }
+}
+
+@media (forced-colors: active) {
+  .reader-media-lightbox,
+  .reader-media-lightbox-card,
+  .reader-media-lightbox-viewport { forced-color-adjust: auto; }
+  .reader-media-lightbox-toolbar button { border: 1px solid ButtonText; }
 }
 
 @media print {
   .page-inner img,
-  .scroll-document img {
-    max-width: 100%;
-    max-height: 8in;
-    break-inside: avoid;
-    box-shadow: none;
-  }
-
+  .scroll-document img { max-width: 100%; max-height: 8in; break-inside: avoid; box-shadow: none; }
   .reader-media-lightbox { display: none !important; }
 }
