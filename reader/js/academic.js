@@ -1,11 +1,15 @@
 import { go, parseRoute, readHash } from './router.js';
 
-const ACADEMIC_CSS = 'css/academic.css?v=r2';
+const ACADEMIC_CSS = 'css/academic.css?v=r3';
 const PREVIEW_GUTTER = 12;
 const PREVIEW_GAP = 10;
+const LANDING_ATTEMPTS = 16;
 let markedInstalled = false;
 let context = { footnotes: new Map(), citations: new Map() };
 let activePreview = null;
+let activeAcademicLanding = null;
+let pendingAcademicNavigation = null;
+let landingFrame = 0;
 
 function escapeHtml(value) {
   return String(value)
@@ -69,6 +73,22 @@ export function academicPreviewModel(kind, key) {
   };
 }
 
+export function academicJumpModel(model, route) {
+  if (!model || route?.view !== 'read' || !route.slug || !route.chapter) return null;
+  const targetOffset = Math.max(0, Number(model.offset) || 0);
+  const returnOffset = Math.max(0, Number(route.offset) || 0);
+  return {
+    kind: model.kind === 'citation' ? 'citation' : 'footnote',
+    key: String(model.key || ''),
+    label: String(model.label || ''),
+    targetId: String(model.targetId || ''),
+    targetOffset,
+    returnOffset,
+    targetHash: readHash(route.slug, route.chapter, targetOffset),
+    returnHash: readHash(route.slug, route.chapter, returnOffset),
+  };
+}
+
 export function academicPreviewPlacement(anchorRect, previewSize, viewport, gutter = PREVIEW_GUTTER, gap = PREVIEW_GAP) {
   const width = Math.max(0, Number(previewSize?.width || 0));
   const height = Math.max(0, Number(previewSize?.height || 0));
@@ -109,6 +129,7 @@ export function tokenizeFootnoteDefinition(src) {
     key: match[1],
     body: match[2],
     number: item?.number || 1,
+    offset: item?.offset,
   };
 }
 
@@ -127,7 +148,8 @@ export function tokenizeFootnoteRef(src) {
 export function tokenizeCitationDefinition(src) {
   const match = String(src || '').match(/^\[@([A-Za-z0-9_.:-]+)\]:[ \t]*(.*)(?:\n|$)/);
   if (!match) return null;
-  return { raw: match[0], key: match[1], body: match[2] };
+  const item = context.citations.get(match[1]);
+  return { raw: match[0], key: match[1], body: match[2], offset: item?.offset };
 }
 
 export function tokenizeCitationRef(src) {
@@ -180,7 +202,8 @@ export function installMarkedAcademic(marked = globalThis.window?.marked) {
           return { type: 'bookselfFootnoteDefinition', ...token, tokens: this.lexer.inlineTokens(token.body) };
         },
         renderer(token) {
-          return `<aside class="reader-footnote" id="fn-${safeId(token.key)}"><sup>${token.number}</sup><div>${this.parser.parseInline(token.tokens)}</div></aside>\n`;
+          const offset = token.offset == null ? '' : ` data-academic-offset="${token.offset}"`;
+          return `<aside class="reader-footnote" id="fn-${safeId(token.key)}" role="note" tabindex="-1" data-academic-target="footnote" data-academic-key="${escapeHtml(token.key)}"${offset} aria-label="Footnote ${token.number}"><sup aria-hidden="true">${token.number}</sup><div>${this.parser.parseInline(token.tokens)}</div></aside>\n`;
         },
       },
       {
@@ -192,7 +215,8 @@ export function installMarkedAcademic(marked = globalThis.window?.marked) {
           return { type: 'bookselfCitationDefinition', ...token, tokens: this.lexer.inlineTokens(token.body) };
         },
         renderer(token) {
-          return `<p class="reader-reference" id="ref-${safeId(token.key)}">${this.parser.parseInline(token.tokens)}</p>\n`;
+          const offset = token.offset == null ? '' : ` data-academic-offset="${token.offset}"`;
+          return `<p class="reader-reference" id="ref-${safeId(token.key)}" tabindex="-1" data-academic-target="citation" data-academic-key="${escapeHtml(token.key)}"${offset} aria-label="Reference ${escapeHtml(token.key)}">${this.parser.parseInline(token.tokens)}</p>\n`;
         },
       },
       {
@@ -282,6 +306,87 @@ function positionAcademicPreview(dialog, trigger) {
   dialog.dataset.placement = placement.placement;
 }
 
+function readingElementVisible(element) {
+  if (!element?.isConnected || element.closest('[aria-hidden="true"]')) return false;
+  const page = element.closest('#pageLeft, #pageRight');
+  if (page) return page.classList.contains('active');
+  const scrollReader = element.closest('#scrollReader');
+  if (scrollReader) return !scrollReader.hidden;
+  return false;
+}
+
+function findAcademicElement({ phase, kind, key }) {
+  const selector = phase === 'return' ? 'a[data-academic-kind]' : '[data-academic-target]';
+  const candidates = Array.from(document.querySelectorAll(selector));
+  return candidates.find((element) => {
+    if (!readingElementVisible(element)) return false;
+    if (phase === 'return') {
+      const refKey = element.dataset.footnoteRef || element.dataset.citationRef;
+      return element.dataset.academicKind === kind && refKey === key;
+    }
+    return element.dataset.academicTarget === kind && element.dataset.academicKey === key;
+  }) || null;
+}
+
+function clearAcademicLanding() {
+  if (!activeAcademicLanding) return;
+  const { target, returnButton } = activeAcademicLanding;
+  target?.removeAttribute('data-academic-landed');
+  returnButton?.remove();
+  activeAcademicLanding = null;
+}
+
+function focusWithoutScroll(element) {
+  if (!element) return false;
+  try {
+    element.focus({ preventScroll: true });
+  } catch {
+    element.focus();
+  }
+  return document.activeElement === element;
+}
+
+function installReturnControl(target, jump) {
+  clearAcademicLanding();
+  target.dataset.academicLanded = 'true';
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'reader-academic-return';
+  button.textContent = 'Back to text';
+  button.setAttribute('aria-label', `Back to text from ${jump.label || jump.kind}`);
+  button.addEventListener('click', () => {
+    clearAcademicLanding();
+    pendingAcademicNavigation = { phase: 'return', ...jump };
+    go(jump.returnHash);
+    scheduleAcademicNavigation();
+  });
+  target.appendChild(button);
+  activeAcademicLanding = { target, returnButton: button };
+}
+
+function attemptAcademicNavigation() {
+  const pending = pendingAcademicNavigation;
+  if (!pending || document.body.dataset.stage !== 'read') return false;
+  const target = findAcademicElement(pending);
+  if (!target) return false;
+  if (pending.phase === 'target') installReturnControl(target, pending);
+  focusWithoutScroll(target);
+  pendingAcademicNavigation = null;
+  return true;
+}
+
+function scheduleAcademicNavigation() {
+  if (typeof requestAnimationFrame !== 'function') return;
+  cancelAnimationFrame(landingFrame);
+  let attempts = 0;
+  const step = () => {
+    if (!pendingAcademicNavigation || attemptAcademicNavigation()) return;
+    attempts += 1;
+    if (attempts < LANDING_ATTEMPTS) landingFrame = requestAnimationFrame(step);
+  };
+  landingFrame = requestAnimationFrame(step);
+}
+
 function openAcademicPreview(trigger) {
   const kind = trigger.dataset.academicKind;
   const key = trigger.dataset.footnoteRef || trigger.dataset.citationRef;
@@ -314,11 +419,13 @@ function openAcademicPreview(trigger) {
   activePreview = { dialog, trigger, model };
 
   dialog.querySelector('.reader-academic-preview__jump')?.addEventListener('click', () => {
-    const route = parseRoute();
+    const jump = academicJumpModel(model, parseRoute());
     closeAcademicPreview();
-    if (route.view === 'read' && route.slug && route.chapter) {
-      go(readHash(route.slug, route.chapter, Number(model.offset || 0)));
-    }
+    if (!jump) return;
+    clearAcademicLanding();
+    pendingAcademicNavigation = { phase: 'target', ...jump };
+    go(jump.targetHash);
+    scheduleAcademicNavigation();
   });
   dialog.querySelector('.reader-academic-preview__close')?.addEventListener('click', () => {
     closeAcademicPreview({ restoreFocus: true });
@@ -350,12 +457,18 @@ function protectAcademicLinks() {
     closeAcademicPreview({ restoreFocus: true });
   });
 
+  window.addEventListener('hashchange', scheduleAcademicNavigation);
   window.addEventListener('resize', () => closeAcademicPreview());
   window.addEventListener('orientationchange', () => closeAcademicPreview());
   document.addEventListener('scroll', (event) => {
     if (activePreview?.dialog.contains(event.target)) return;
     closeAcademicPreview();
   }, true);
+
+  const readingRoot = document.getElementById('bookStage') || document.body;
+  new MutationObserver(() => {
+    if (pendingAcademicNavigation) scheduleAcademicNavigation();
+  }).observe(readingRoot, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'hidden', 'aria-hidden'] });
 }
 
 if (typeof window !== 'undefined') {
