@@ -27,6 +27,33 @@
   font-variant-ligatures: none;
 }
 
+.page-inner a,
+.scroll-document a,
+.page-inner :not(pre) > code,
+.scroll-document :not(pre) > code {
+  overflow-wrap: anywhere;
+}
+
+.page-inner a,
+.scroll-document a {
+  text-decoration-thickness: max(1px, .07em);
+  text-underline-offset: .14em;
+  text-decoration-skip-ink: auto;
+}
+
+.page-inner a:focus-visible,
+.scroll-document a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: .16em;
+  border-radius: 2px;
+}
+
+/* Internal links, TOC entries, and footnote returns in continuous mode should
+   land with enough context to read the target instead of pinning it to an edge. */
+.scroll-document [id] {
+  scroll-margin-block: clamp(3.5rem, 9vh, 5.5rem);
+}
+
 .page-inner :not(pre) > code,
 .scroll-document :not(pre) > code {
   padding: .08em .28em;
@@ -82,6 +109,12 @@
   text-align: left;
 }
 
+.page-inner img,
+.scroll-document img {
+  max-width: 100%;
+  height: auto;
+}
+
 .page-inner figure,
 .scroll-document figure {
   max-width: 100%;
@@ -115,15 +148,19 @@
 }
 
 .page-inner ul,
-.page-inner ol {
+.page-inner ol,
+.scroll-document ul,
+.scroll-document ol {
   padding-inline-start: 1.35em;
 }
 
-.page-inner li {
+.page-inner li,
+.scroll-document li {
   padding-inline-start: .08em;
 }
 
-.page-inner li + li {
+.page-inner li + li,
+.scroll-document li + li {
   margin-top: .3em;
 }
 
@@ -138,6 +175,14 @@
 .scroll-document mark {
   padding: .02em .08em;
   border-radius: 2px;
+}
+
+.page-inner::selection,
+.page-inner *::selection,
+.scroll-document::selection,
+.scroll-document *::selection {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--accent) 30%, var(--bg-page));
 }
 
 @media (max-width: 700px) {
