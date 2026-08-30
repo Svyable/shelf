@@ -1,3 +1,5 @@
+export const SELECTION_SNAPSHOT_TTL = 15000;
+
 export function normalizeSelectionSnapshot(raw = {}, now = Date.now()) {
   const text = String(raw.text || '').replace(/\s+/g, ' ').trim();
   const slug = String(raw.slug || '').trim();
@@ -27,7 +29,7 @@ export function selectionSnapshotUsable(snapshot, {
   slug,
   mode,
   now = Date.now(),
-  maxAge = 15000,
+  maxAge = SELECTION_SNAPSHOT_TTL,
   allowModeChange = false,
 } = {}) {
   if (!snapshot?.text || !snapshot.slug) return false;
