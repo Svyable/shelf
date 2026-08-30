@@ -45,6 +45,20 @@ Sources checked for this draft:
 
 Counterevidence preserved in the chapter: delegation costs can rise when briefing is difficult, context is missing, expert workflows are interrupted, outputs are hard to verify, or subtle errors make review expensive. The chapter therefore makes no universal productivity claim.
 
+## Chapter 4 — The Firm Has a New Boundary
+
+Chapter 4 applies transaction-cost economics to the organizational consequences of agents. It deliberately rejects a one-direction prediction: the same technology can make outsourcing easier by lowering the cost of crossing firm boundaries and make large organizations easier to run by lowering internal coordination costs.
+
+Sources checked for this draft:
+
+- Ronald H. Coase, Nobel Prize lecture (1991): explains firms as alternative coordination systems that exist when internal administrative coordination is less costly than market transactions, with firm size limited by rising internal coordination costs. https://www.nobelprize.org/prizes/economic-sciences/1991/coase/lecture/
+- Nobel Prize press release for Coase (1991): explicitly summarizes the firm-size condition in terms of production, contracting, and administrative costs. https://www.nobelprize.org/prizes/economic-sciences/1991/press-release/1000/
+- Oliver E. Williamson, Nobel Prize lecture (2009), “Transaction Cost Economics: The Natural Progression”: develops the make-or-buy problem as a governance choice and emphasizes that transactions differ in their contractual and adaptation needs. https://www.nobelprize.org/prizes/economics/2009/williamson/lecture/
+- Nobel Prize presentation material for the 2009 prize: summarizes Williamson’s account of why complex transactions and relationship-specific investments can make hierarchy preferable to market contracting, while also noting the costs and potential abuse of authority inside firms. https://www.nobelprize.org/prizes/economic-sciences/2009/illustrated-information/?print=1
+- A. Michael Spence, Nobel lecture: discusses how internet platforms lowered informational and monitoring transaction costs and shifted some activities toward outsourcing, while noting that firm boundaries and supply-chain architecture remain unsettled empirical questions. https://www.nobelprize.org/uploads/2018/06/spence-lecture.pdf
+
+Counterevidence preserved in the chapter: lower coordination costs can produce smaller firms, larger firms, or hybrid firms; outsourced agent infrastructure can create lock-in and concentrated dependencies; proprietary data can strengthen incumbents; and legal accountability may resist operational outsourcing.
+
 ## Falsification questions
 
 1. Where does cheap delegation increase total work rather than reduce headcount?
@@ -57,4 +71,4 @@ Counterevidence preserved in the chapter: delegation costs can rise when briefin
 
 ## Draft status
 
-Front matter and Chapters 1, 2, 3, 6, 10, and 12 are complete working chapters. Chapter 13 is partial. Other planned chapters are not yet present in the promoted draft.
+Front matter and Chapters 1, 2, 3, 4, 6, 10, and 12 are complete working chapters. Chapter 13 is partial. Other planned chapters are not yet present in the promoted draft.
