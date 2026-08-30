@@ -2,9 +2,9 @@
 
 **Released editions. Read like books.**
 
-Svyable Shelf is the public reading library for books by Sven Hardy Benson and the live reference deployment of [Bookself](https://github.com/Svyable/bookself). The working copy moves on the [Desk](https://github.com/Svyable/desk); Shelf holds the public snapshots readers can actually open, cite, share, and return to.
+Svyable Shelf is the public reading library for books by Sven Hardy Benson and the live reference deployment of [Bookself](https://github.com/Svyable/bookself). The working copy moves on a separate private Desk; Shelf holds the public snapshots readers can actually open, cite, share, and return to.
 
-**[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See the working Desk →](https://github.com/Svyable/desk)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
+**[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
 > **3 author publication projects · 8 Reader style specimens · one public reading surface**
 
