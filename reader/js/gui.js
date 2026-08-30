@@ -13,6 +13,10 @@ import('./search-navigation.js').catch((error) => {
   console.warn('Search navigation could not be loaded', error);
 });
 
+import('./pwa-update.js').catch((error) => {
+  console.warn('PWA enhancements could not be loaded', error);
+});
+
 const OVERLAYS = [
   { id: 'tocOverlay', close: 'tocClose', opener: 'tocBtn', initial: 'tocSearch', label: 'Contents' },
   { id: 'progressPanel', close: 'statsClose', opener: 'progressBtn', label: 'Reading progress' },
