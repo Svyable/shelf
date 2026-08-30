@@ -12,6 +12,49 @@ body[data-stage="read"] .proof-ribbon {
     background 180ms ease;
 }
 
+/* The unified controller owns visibility. These selectors deliberately override
+   the legacy focus-mode hover rules without removing chrome from layout, so
+   entering or leaving Focus mode never changes pagination geometry. */
+body[data-stage="read"].focus-mode:not(.reader-chrome-hidden) .app-header,
+body[data-stage="read"].focus-mode:not(.reader-chrome-hidden) .page-nav,
+body[data-stage="read"].focus-mode:not(.reader-chrome-hidden) .progress-bar-container,
+body[data-stage="read"].focus-mode:not(.reader-chrome-hidden) .proof-ribbon {
+  opacity: 1 !important;
+  pointer-events: auto;
+  transform: none;
+}
+
+body[data-stage="read"].reader-chrome-hidden .app-header {
+  opacity: 0 !important;
+  transform: translateY(calc(-100% - env(safe-area-inset-top))) !important;
+  pointer-events: none !important;
+}
+
+body[data-stage="read"].reader-chrome-hidden .progress-bar-container {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body[data-stage="read"].reader-chrome-hidden .page-nav {
+  opacity: 0 !important;
+  transform: translateY(calc(100% + env(safe-area-inset-bottom))) !important;
+  pointer-events: none !important;
+}
+
+body[data-stage="read"].reader-chrome-hidden .proof-ribbon {
+  opacity: 0 !important;
+  transform: translateY(12px) !important;
+  pointer-events: none !important;
+}
+
+/* Header actions stay visually compact while preserving a comfortable 44px hit
+   area on desktop, tablet, portrait phones, and constrained landscape phones. */
+.app-header .header-btn,
+.app-header .logo {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+}
+
 [data-reader-device="phone"] .app-header {
   padding-left: max(.55rem, env(safe-area-inset-left));
   padding-right: max(.55rem, env(safe-area-inset-right));
@@ -80,27 +123,6 @@ body[data-stage="read"] .proof-ribbon {
 [data-reader-device="phone"] .proof-ribbon {
   bottom: max(4.35rem, calc(3.8rem + env(safe-area-inset-bottom)));
   right: max(.65rem, env(safe-area-inset-right));
-}
-
-[data-reader-device="phone"] body.reader-chrome-hidden .app-header {
-  opacity: 0;
-  transform: translateY(calc(-100% - env(safe-area-inset-top)));
-  pointer-events: none;
-}
-
-[data-reader-device="phone"] body.reader-chrome-hidden .progress-bar-container {
-  opacity: 0;
-}
-
-[data-reader-device="phone"] body.reader-chrome-hidden .page-nav {
-  opacity: 0;
-  transform: translateY(calc(100% + env(safe-area-inset-bottom)));
-  pointer-events: none;
-}
-
-[data-reader-device="phone"] body.reader-chrome-hidden .proof-ribbon {
-  opacity: 0;
-  transform: translateY(12px);
 }
 
 [data-reader-device="tablet"] .page-nav .nav-btn {
