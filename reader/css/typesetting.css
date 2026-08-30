@@ -1,11 +1,5 @@
 /* Bookself typesetting layer
-   --------------------------
-   This file sits after the core reading-experience styles and before format-
-   specific overrides. It turns reader preferences into actual typographic
-   behavior and gives paged + continuous reading a shared print vocabulary.
-
-   Keep geometry measurable: anything that changes paged content height belongs
-   on elements that also exist in the hidden pagination measure surface. */
+   Browser-native typography first; pagination geometry stays measurable. */
 
 :root {
   --reader-font-weight: 400;
@@ -14,48 +8,22 @@
   --reader-indent-size: 0em;
   --reader-heading-ink: color-mix(in srgb, var(--text-primary) 96%, var(--accent) 4%);
   --reader-rule: color-mix(in srgb, var(--accent) 58%, transparent);
-  --reader-hairline: color-mix(in srgb, var(--text-muted) 20%, transparent);
+  --reader-page-inline: clamp(2.6rem, 4.3vw, 4.8rem);
+  --reader-page-top: clamp(3.5rem, 6.2vh, 5.25rem);
+  --reader-page-bottom: clamp(3.25rem, 5.5vh, 4.75rem);
+  /* app.js clears the turn state after 560ms, so motion must land before it. */
+  --reader-turn-duration: 520ms;
+  --reader-turn-ease: cubic-bezier(0.18, 0.74, 0.18, 1);
 }
 
-[data-reader-font="book"] {
-  --reader-face: "Source Serif 4", Georgia, serif;
-  --reader-face-tracking: 0em;
-}
-
-[data-reader-font="literary"] {
-  --reader-face: "Literata", "Source Serif 4", Georgia, serif;
-  --reader-face-tracking: -0.004em;
-}
-
-[data-reader-font="warm"] {
-  --reader-face: "Lora", Georgia, serif;
-  --reader-face-tracking: -0.006em;
-}
-
-[data-reader-font="classic"] {
-  --reader-face: Georgia, "Times New Roman", serif;
-  --reader-face-tracking: -0.003em;
-}
-
-[data-reader-font="modern"] {
-  --reader-face: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --reader-face-tracking: 0.002em;
-}
-
-[data-reader-font="clear"] {
-  --reader-face: "Atkinson Hyperlegible", Verdana, sans-serif;
-  --reader-face-tracking: 0.004em;
-}
-
-[data-reader-font="humanist"] {
-  --reader-face: "Avenir Next", Avenir, "Segoe UI", Candara, Calibri, sans-serif;
-  --reader-face-tracking: 0.003em;
-}
-
-[data-reader-font="system"] {
-  --reader-face: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --reader-face-tracking: 0em;
-}
+[data-reader-font="book"] { --reader-face: "Source Serif 4", Georgia, serif; --reader-face-tracking: 0em; }
+[data-reader-font="literary"] { --reader-face: "Literata", "Source Serif 4", Georgia, serif; --reader-face-tracking: -0.004em; }
+[data-reader-font="warm"] { --reader-face: "Lora", Georgia, serif; --reader-face-tracking: -0.006em; }
+[data-reader-font="classic"] { --reader-face: Georgia, "Times New Roman", serif; --reader-face-tracking: -0.003em; }
+[data-reader-font="modern"] { --reader-face: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; --reader-face-tracking: 0.002em; }
+[data-reader-font="clear"] { --reader-face: "Atkinson Hyperlegible", Verdana, sans-serif; --reader-face-tracking: 0.004em; }
+[data-reader-font="humanist"] { --reader-face: "Avenir Next", Avenir, "Segoe UI", Candara, Calibri, sans-serif; --reader-face-tracking: 0.003em; }
+[data-reader-font="system"] { --reader-face: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; --reader-face-tracking: 0em; }
 
 .page-inner,
 .scroll-document,
@@ -67,6 +35,7 @@
   font-kerning: normal;
   font-optical-sizing: auto;
   font-variant-ligatures: common-ligatures contextual;
+  font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
@@ -115,9 +84,7 @@
   text-indent: var(--reader-indent-size);
 }
 
-[data-reader-indent="classic"] .scroll-block:has(> p) + .scroll-block:has(> p) {
-  margin-top: 0.08em;
-}
+[data-reader-indent="classic"] .scroll-block:has(> p) + .scroll-block:has(> p) { margin-top: 0.08em; }
 
 .page-inner p,
 .scroll-document p,
@@ -125,8 +92,8 @@
 .experience-preview-sample {
   hanging-punctuation: first allow-end last;
   hyphenate-limit-chars: 6 3 3;
-  orphans: 2;
-  widows: 2;
+  orphans: 3;
+  widows: 3;
   text-wrap: pretty;
   text-underline-offset: 0.14em;
   text-decoration-skip-ink: auto;
@@ -135,13 +102,16 @@
 [data-reader-align="justify"] .page-inner p,
 [data-reader-align="justify"] .scroll-document p,
 [data-reader-align="justify"] .experience-preview p,
-[data-reader-align="justify"] .experience-preview-sample {
-  text-align-last: auto;
-}
+[data-reader-align="justify"] .experience-preview-sample { text-align-last: auto; }
+
+/* Short pages must keep a stable top line. Centering sparse pages makes a
+   spread look like two unrelated cards and changes the visual baseline every turn. */
+.page-inner.is-short,
+.page-inner.chapter-open.is-short { display: block; }
 
 .page-inner h1:first-child {
   max-width: 14ch;
-  margin-top: clamp(1.55em, 5.8vh, 3.2em);
+  margin-top: clamp(1.15em, 4.2vh, 2.35em);
   margin-bottom: 1.35em;
   color: var(--reader-heading-ink);
   font-size: clamp(1.58em, 2.5vw, 1.92em);
@@ -159,18 +129,15 @@
   border-top: 1px solid var(--reader-rule);
 }
 
-.page-inner.chapter-open.is-short {
-  justify-content: flex-start;
-}
-
-.page-surface:has(.page-inner.chapter-open) .page-running {
-  opacity: 0;
-}
+.page-surface:has(.page-inner.chapter-open) .page-running { opacity: 0; }
 
 .page-inner.chapter-open > p:first-of-type::first-letter {
   margin-right: 0.08em;
   padding-right: 0.015em;
+  color: var(--accent);
+  font-family: var(--font-display);
   font-size: 3.25em;
+  font-weight: 500;
   line-height: 0.74;
 }
 
@@ -183,60 +150,22 @@
   color: var(--reader-heading-ink);
   font-family: var(--font-display);
   text-wrap: balance;
-}
-
-.page-inner h2 {
-  margin-top: 1.85em;
-  margin-bottom: 0.72em;
-  font-size: 1.28em;
-  line-height: 1.16;
-}
-
-.page-inner h3 {
-  margin-top: 1.55em;
-  margin-bottom: 0.58em;
-  font-size: 1.08em;
-  line-height: 1.24;
-  letter-spacing: 0.012em;
-}
-
-.page-inner h4 {
-  margin-top: 1.35em;
-  margin-bottom: 0.5em;
-  font-size: 0.96em;
-  line-height: 1.3;
-  letter-spacing: 0.035em;
-  text-transform: uppercase;
-}
-
-.page-inner h1,
-.page-inner h2,
-.page-inner h3,
-.page-inner h4,
-.scroll-document h1,
-.scroll-document h2,
-.scroll-document h3,
-.scroll-document h4 {
   break-after: avoid;
 }
+
+.page-inner h2 { max-width: 22ch; margin-top: 0.35em; margin-bottom: 0.78em; font-size: 1.26em; line-height: 1.15; letter-spacing: -0.008em; }
+.page-inner h3 { margin-top: 1.55em; margin-bottom: 0.58em; font-size: 1.08em; line-height: 1.24; letter-spacing: 0.012em; }
+.page-inner h4 { margin-top: 1.35em; margin-bottom: 0.5em; font-size: 0.96em; line-height: 1.3; letter-spacing: 0.035em; text-transform: uppercase; }
 
 .page-inner ul,
 .page-inner ol,
 .scroll-document ul,
-.scroll-document ol {
-  padding-left: 1.35em;
-}
+.scroll-document ol { padding-left: 1.35em; }
 
 .page-inner li::marker,
-.scroll-document li::marker {
-  color: color-mix(in srgb, var(--accent) 76%, var(--text-secondary));
-  font-variant-numeric: tabular-nums;
-}
-
+.scroll-document li::marker { color: color-mix(in srgb, var(--accent) 76%, var(--text-secondary)); font-variant-numeric: tabular-nums; }
 .page-inner li + li,
-.scroll-document li + li {
-  margin-top: 0.28em;
-}
+.scroll-document li + li { margin-top: 0.28em; }
 
 .page-inner blockquote,
 .scroll-document blockquote {
@@ -251,140 +180,175 @@
 }
 
 .page-inner hr,
-.scroll-document hr {
-  width: 4.75rem;
-  margin: 2.7em auto;
-  border: 0;
-  border-top: 1px solid var(--reader-rule);
-}
-
+.scroll-document hr { width: 4.75rem; margin: 2.7em auto; border: 0; border-top: 1px solid var(--reader-rule); }
 .page-inner a,
-.scroll-document a {
-  text-decoration-thickness: 0.055em;
-  text-underline-offset: 0.15em;
+.scroll-document a { text-decoration-thickness: 0.055em; text-underline-offset: 0.15em; }
+
+/* A responsive spread, not two maximized web panels. */
+[data-reader-mode="paged"] .pages-wrapper.active {
+  width: min(94vw, 1080px);
+  max-height: min(78dvh, 760px);
+  margin-inline: auto;
+  filter: drop-shadow(0 20px 34px color-mix(in srgb, #000 30%, transparent));
 }
 
-.page-surface {
+[data-reader-mode="paged"] .page-surface,
+.page-surface.measure {
+  padding-top: var(--reader-page-top);
+  padding-bottom: var(--reader-page-bottom);
+  padding-left: var(--reader-page-inline);
+  padding-right: var(--reader-page-inline);
+}
+
+[data-reader-mode="paged"] .page-surface {
   background:
-    linear-gradient(90deg,
-      color-mix(in srgb, var(--shadow) 6%, transparent),
-      transparent 9%,
-      transparent 91%,
-      color-mix(in srgb, var(--shadow) 5%, transparent)),
-    radial-gradient(ellipse 72% 54% at 50% 15%,
-      color-mix(in srgb, var(--text-primary) 2.5%, transparent),
-      transparent 72%),
+    linear-gradient(90deg, color-mix(in srgb, var(--shadow) 7%, transparent), transparent 8%, transparent 92%, color-mix(in srgb, var(--shadow) 6%, transparent)),
+    radial-gradient(ellipse 72% 54% at 50% 15%, color-mix(in srgb, var(--text-primary) 2.5%, transparent), transparent 72%),
     var(--bg-page);
   border-top: 1px solid color-mix(in srgb, var(--text-muted) 9%, transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--shadow) 18%, transparent);
 }
 
+[data-reader-mode="paged"] .page-surface.left {
+  border-radius: 3px 0 0 3px;
+  box-shadow: inset -26px 0 34px -30px color-mix(in srgb, #000 80%, transparent), inset 0 1px 0 color-mix(in srgb, var(--text-primary) 3%, transparent);
+}
+
+[data-reader-mode="paged"] .page-surface.right {
+  border-radius: 0 3px 3px 0;
+  box-shadow: inset 26px 0 34px -30px color-mix(in srgb, #000 80%, transparent), inset 0 1px 0 color-mix(in srgb, var(--text-primary) 3%, transparent);
+}
+
+[data-reader-mode="paged"] .gutter {
+  width: 7px;
+  background: linear-gradient(90deg, #0008, #0003 42%, #0003 58%, #0008);
+  box-shadow: 0 0 18px #0007;
+}
+
+[data-reader-mode="paged"] .page-inner {
+  width: 100%;
+  max-width: 34rem;
+  margin-inline: auto;
+  color: color-mix(in srgb, var(--text-primary) 98%, var(--text-secondary) 2%);
+  line-height: max(var(--reader-leading), 1.48);
+}
+
+[data-reader-mode="paged"] .page-inner > * + * { margin-top: max(var(--reader-paragraph-gap), 0.72em); }
+
 .page-running {
+  top: clamp(1rem, 2.1vh, 1.45rem);
+  left: var(--reader-page-inline);
+  right: var(--reader-page-inline);
   font-variant-caps: all-small-caps;
   font-variant-numeric: lining-nums tabular-nums;
   letter-spacing: 0.13em;
   text-transform: none;
+  opacity: 0.62;
 }
 
 .page-num {
+  bottom: clamp(1rem, 2vh, 1.35rem);
   font-variant-numeric: lining-nums tabular-nums;
   letter-spacing: 0.06em;
+  opacity: 0.72;
 }
 
-.scroll-document {
-  color: color-mix(in srgb, var(--text-primary) 97%, var(--text-secondary) 3%);
-}
-
+.scroll-document { color: color-mix(in srgb, var(--text-primary) 97%, var(--text-secondary) 3%); }
 .scroll-document .scroll-block > p,
 .scroll-document .scroll-block > li,
-.scroll-document .scroll-block > blockquote {
-  max-width: 100%;
+.scroll-document .scroll-block > blockquote { max-width: 100%; }
+
+/* Human page motion. The page accelerates after commitment, floats through the
+   middle, and lands before app.js swaps in the next typeset spread. */
+[data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active {
+  animation-duration: var(--reader-turn-duration) !important;
+  animation-timing-function: var(--reader-turn-ease) !important;
+  will-change: transform, box-shadow, filter;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-[data-reader-font="modern"] .page-inner h1:first-child,
-[data-reader-font="clear"] .page-inner h1:first-child,
-[data-reader-font="humanist"] .page-inner h1:first-child,
-[data-reader-font="system"] .page-inner h1:first-child {
-  letter-spacing: -0.028em;
+[data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active { animation-name: bookLeafNext !important; }
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active { animation-name: bookLeafPrev !important; }
+
+@keyframes bookLeafNext {
+  0% { transform: translate3d(0,0,0) rotateY(0deg) scaleX(1); filter: brightness(1); }
+  18% { transform: translate3d(-2px,0,10px) rotateY(-18deg) scaleX(.999); filter: brightness(.995); }
+  46% { transform: translate3d(-8px,-1px,24px) rotateY(-61deg) scaleX(.992); filter: brightness(.96); box-shadow: inset 34px 0 42px -22px #000c, -18px 20px 42px #0008; }
+  72% { transform: translate3d(-11px,0,15px) rotateY(-91deg) scaleX(.989); filter: brightness(.91); box-shadow: inset 42px 0 48px -20px #000d, -22px 14px 34px #0006; }
+  90% { transform: translate3d(-5px,0,4px) rotateY(-103deg) scaleX(.997); filter: brightness(.94); }
+  100% { transform: translate3d(0,0,0) rotateY(-106deg) scaleX(1); filter: brightness(.96); }
 }
 
-[data-reader-font="modern"] .page-inner.chapter-open > p:first-of-type::first-letter,
-[data-reader-font="clear"] .page-inner.chapter-open > p:first-of-type::first-letter,
-[data-reader-font="humanist"] .page-inner.chapter-open > p:first-of-type::first-letter,
-[data-reader-font="system"] .page-inner.chapter-open > p:first-of-type::first-letter,
-[data-reader-font="modern"] .scroll-chapter > .scroll-block:first-child + .scroll-block > p::first-letter,
-[data-reader-font="clear"] .scroll-chapter > .scroll-block:first-child + .scroll-block > p::first-letter,
-[data-reader-font="humanist"] .scroll-chapter > .scroll-block:first-child + .scroll-block > p::first-letter,
-[data-reader-font="system"] .scroll-chapter > .scroll-block:first-child + .scroll-block > p::first-letter {
-  font-family: var(--reader-face);
-  font-weight: 600;
+@keyframes bookLeafPrev {
+  0% { transform: translate3d(0,0,0) rotateY(0deg) scaleX(1); filter: brightness(1); }
+  18% { transform: translate3d(2px,0,10px) rotateY(18deg) scaleX(.999); filter: brightness(.995); }
+  46% { transform: translate3d(8px,-1px,24px) rotateY(61deg) scaleX(.992); filter: brightness(.96); box-shadow: inset -34px 0 42px -22px #000c, 18px 20px 42px #0008; }
+  72% { transform: translate3d(11px,0,15px) rotateY(91deg) scaleX(.989); filter: brightness(.91); box-shadow: inset -42px 0 48px -20px #000d, 22px 14px 34px #0006; }
+  90% { transform: translate3d(5px,0,4px) rotateY(103deg) scaleX(.997); filter: brightness(.94); }
+  100% { transform: translate3d(0,0,0) rotateY(106deg) scaleX(1); filter: brightness(.96); }
 }
 
-::selection {
-  background: color-mix(in srgb, var(--accent) 34%, transparent);
-  color: var(--text-primary);
+[data-reader-mode="paged"] .page-surface.turning {
+  animation-name: pageInkSettle !important;
+  animation-duration: 230ms !important;
+  animation-timing-function: cubic-bezier(.2,.7,.2,1) !important;
+}
+
+@keyframes pageInkSettle {
+  from { opacity: .84; filter: brightness(.965); }
+  to { opacity: 1; filter: brightness(1); }
+}
+
+::selection { background: color-mix(in srgb, var(--accent) 34%, transparent); color: var(--text-primary); }
+
+@media (max-width: 1100px) {
+  :root {
+    --reader-page-inline: clamp(2rem, 4vw, 3.4rem);
+    --reader-page-top: clamp(3.1rem, 5.4vh, 4.25rem);
+    --reader-page-bottom: clamp(2.9rem, 5vh, 4rem);
+  }
 }
 
 @media (max-width: 700px) {
-  .page-inner h1:first-child {
-    margin-top: clamp(1.15em, 4.2vh, 2.1em);
-    margin-bottom: 1.05em;
-    font-size: clamp(1.48em, 6.5vw, 1.72em);
+  :root {
+    --reader-page-inline: clamp(1.25rem, 6vw, 2rem);
+    --reader-page-top: clamp(2.8rem, 5vh, 3.5rem);
+    --reader-page-bottom: clamp(2.6rem, 4.5vh, 3.3rem);
   }
-
-  .page-inner h1:first-child::after {
-    width: 2.2rem;
-    margin-top: 0.6em;
-  }
-
-  .page-inner.chapter-open > p:first-of-type::first-letter {
-    font-size: 2.9em;
-  }
-
-  .page-running {
-    left: 1.2rem;
-    right: 1.2rem;
-    letter-spacing: 0.1em;
-  }
+  [data-reader-mode="paged"] .pages-wrapper.active { width: calc(100vw - 1rem); max-height: none; filter: drop-shadow(0 12px 22px color-mix(in srgb, #000 22%, transparent)); }
+  [data-reader-mode="paged"] .page-inner { max-width: none; }
+  .page-inner h1:first-child { margin-top: clamp(.9em,3.6vh,1.7em); margin-bottom: 1.05em; font-size: clamp(1.48em,6.5vw,1.72em); }
+  .page-inner h1:first-child::after { width: 2.2rem; margin-top: .6em; }
+  .page-inner.chapter-open > p:first-of-type::first-letter { font-size: 2.9em; }
+  .page-running { left: var(--reader-page-inline); right: var(--reader-page-inline); letter-spacing: .1em; }
 }
 
 @media (max-height: 560px) {
-  .page-inner h1:first-child {
-    margin-top: 0.8em;
-    margin-bottom: 0.85em;
-  }
+  :root { --reader-page-top: 2.4rem; --reader-page-bottom: 2.25rem; }
+  .page-inner h1:first-child { margin-top: .55em; margin-bottom: .85em; }
+  .page-inner.chapter-open > p:first-of-type::first-letter { font-size: 2.7em; }
+}
 
-  .page-inner.chapter-open > p:first-of-type::first-letter {
-    font-size: 2.7em;
-  }
+@media (prefers-reduced-motion: reduce) {
+  [data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active,
+  [data-reader-mode="paged"] .page-surface.turning { animation: none !important; }
 }
 
 @media print {
   .page-surface,
-  .scroll-reader {
-    background: #fff !important;
-    color: #111 !important;
-    box-shadow: none !important;
-  }
-
+  .scroll-reader { background: #fff !important; color: #111 !important; box-shadow: none !important; filter: none !important; }
   .page-inner,
-  .scroll-document {
-    color: #111 !important;
-    font-size: 11pt !important;
-    line-height: 1.45 !important;
-    letter-spacing: 0 !important;
-  }
-
-  .scroll-chapter + .scroll-chapter {
-    break-before: page;
-  }
-
+  .scroll-document { color: #111 !important; font-size: 11pt !important; line-height: 1.45 !important; letter-spacing: 0 !important; }
+  .scroll-chapter + .scroll-chapter { break-before: page; }
   .page-inner p,
-  .scroll-document p {
-    orphans: 3;
-    widows: 3;
-  }
-
+  .scroll-document p { orphans: 3; widows: 3; }
   .page-inner blockquote,
   .page-inner figure,
   .page-inner pre,
@@ -392,7 +356,5 @@
   .scroll-document blockquote,
   .scroll-document figure,
   .scroll-document pre,
-  .scroll-document table {
-    break-inside: avoid;
-  }
+  .scroll-document table { break-inside: avoid; }
 }
