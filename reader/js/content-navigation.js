@@ -41,6 +41,12 @@ export function horizontalKeyDestination({
 }
 
 export function overflowInstruction(kind = 'content') {
-  const noun = kind === 'table' ? 'table' : kind === 'code' ? 'code block' : 'content';
+  const noun = kind === 'table'
+    ? 'table'
+    : kind === 'code'
+      ? 'code block'
+      : kind === 'math'
+        ? 'equation'
+        : 'content';
   return `Scrollable ${noun}. Use Left and Right Arrow to move horizontally, Home and End for edges, or Shift plus Page Up and Page Down for larger steps.`;
 }
