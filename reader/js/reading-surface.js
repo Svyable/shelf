@@ -3,6 +3,7 @@ import { installImmersiveChrome } from './immersive-chrome.js';
 import { installFontReadiness } from './font-readiness-runtime.js';
 
 const DEFAULT_VIEWPORT = Object.freeze({ width: 1280, height: 800 });
+const ANNOUNCE_SCROLL_IDLE_MS = 620;
 
 function finiteDimension(value, fallback) {
   const n = Number(value);
@@ -34,6 +35,36 @@ export function classifyViewport(width, height, { coarse = false } = {}) {
     coarse: !!coarse,
     spreadRecommended,
   };
+}
+
+function cleanStatusPart(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+export function formatReadingStatus({
+  mode = 'paged',
+  chapter = '',
+  currentPage = '',
+  totalPages = '',
+  percent = '',
+} = {}) {
+  const parts = [mode === 'scroll' ? 'Continuous reading' : 'Pages'];
+  const chapterText = cleanStatusPart(chapter);
+  if (chapterText && chapterText !== '—') parts.push(chapterText);
+
+  if (mode === 'scroll') {
+    const progress = cleanStatusPart(percent);
+    if (/^\d{1,3}%$/.test(progress)) parts.push(`${progress} through book`);
+  } else {
+    const page = cleanStatusPart(currentPage);
+    const total = cleanStatusPart(totalPages);
+    if (page) {
+      const plural = /[–-]/.test(page);
+      parts.push(`${plural ? 'Pages' : 'Page'} ${page}${total ? ` of ${total}` : ''}`);
+    }
+  }
+
+  return `${parts.join('. ')}.`;
 }
 
 export function viewportSnapshot(win = window) {
@@ -68,20 +99,93 @@ function syncSpreadState() {
 
 function syncPageSemantics() {
   const wrapper = document.getElementById('pagesWrapper');
+  const total = cleanStatusPart(document.getElementById('totalPages')?.textContent);
   if (wrapper) {
     wrapper.setAttribute('role', 'group');
     wrapper.setAttribute('aria-roledescription', 'book pages');
+    wrapper.setAttribute('aria-label', 'Paged reading view');
   }
 
   for (const id of ['pageLeft', 'pageRight']) {
     const page = document.getElementById(id);
     if (!page) continue;
+    const active = page.classList.contains('active');
     page.setAttribute('role', 'article');
     page.setAttribute('aria-roledescription', 'page');
-    const number = page.querySelector('.page-num')?.textContent?.trim();
-    if (number) page.setAttribute('aria-label', `Page ${number}`);
-    else page.removeAttribute('aria-label');
+    page.setAttribute('aria-hidden', String(!active));
+    const number = cleanStatusPart(page.querySelector('.page-num')?.textContent);
+    const chapter = cleanStatusPart(page.querySelector('.page-running')?.textContent);
+    if (number) {
+      page.setAttribute(
+        'aria-label',
+        `${chapter && chapter !== '—' ? `${chapter}, ` : ''}page ${number}${total ? ` of ${total}` : ''}`
+      );
+    } else {
+      page.removeAttribute('aria-label');
+    }
   }
+}
+
+function ensureReadingLiveRegion() {
+  let live = document.getElementById('readerLive');
+  if (live) return live;
+  live = document.createElement('p');
+  live.id = 'readerLive';
+  live.className = 'sr-only';
+  live.setAttribute('role', 'status');
+  live.setAttribute('aria-live', 'polite');
+  live.setAttribute('aria-atomic', 'true');
+  (document.querySelector('.app') || document.body).appendChild(live);
+  return live;
+}
+
+function readingStatusSnapshot() {
+  const mode = root().dataset.readerMode === 'scroll' ? 'scroll' : 'paged';
+  return {
+    mode,
+    chapter: document.getElementById('currentChapter')?.textContent,
+    currentPage: document.getElementById('currentPage')?.textContent,
+    totalPages: document.getElementById('totalPages')?.textContent,
+    percent: document.getElementById('progressPercent')?.textContent,
+  };
+}
+
+function syncModeSemantics() {
+  const scroll = root().dataset.readerMode === 'scroll';
+  const reading = document.body.dataset.stage === 'read';
+  const pages = document.getElementById('pagesWrapper');
+  const nav = document.getElementById('pageNav');
+  const scrollReader = document.getElementById('scrollReader');
+
+  if (pages) pages.setAttribute('aria-hidden', String(!reading || scroll));
+  if (nav) nav.setAttribute('aria-hidden', String(!reading || scroll));
+  if (scrollReader && reading && scroll && !scrollReader.hidden) {
+    scrollReader.removeAttribute('aria-hidden');
+  } else if (scrollReader) {
+    scrollReader.setAttribute('aria-hidden', 'true');
+  }
+}
+
+function createReadingAnnouncer() {
+  const live = ensureReadingLiveRegion();
+  let timer = 0;
+  let lastMessage = '';
+
+  const announce = ({ settled = false } = {}) => {
+    clearTimeout(timer);
+    if (document.body.dataset.stage !== 'read') return;
+    const snapshot = readingStatusSnapshot();
+    const delay = snapshot.mode === 'scroll' && settled ? ANNOUNCE_SCROLL_IDLE_MS : 36;
+    timer = window.setTimeout(() => {
+      if (document.body.dataset.stage !== 'read') return;
+      const message = formatReadingStatus(readingStatusSnapshot());
+      if (!message || message === lastMessage) return;
+      lastMessage = message;
+      live.textContent = message;
+    }, delay);
+  };
+
+  return { announce };
 }
 
 function afterFrames(count, callback) {
@@ -140,8 +244,12 @@ export function installReadingSurface() {
   el.dataset.readingSurfaceEnhanced = 'true';
 
   const requestRepaginate = createRepaginator();
+  const announcer = createReadingAnnouncer();
   let autoCollapseKey = '';
   let stableViewport = viewportSnapshot();
+
+  const legacyLive = document.getElementById('pageLive');
+  if (legacyLive) legacyLive.setAttribute('aria-live', 'off');
 
   const maybeAutoCollapseSpread = (snapshot = stableViewport) => {
     if (el.dataset.readerMode === 'scroll') return;
@@ -173,6 +281,7 @@ export function installReadingSurface() {
     setViewportCss(snapshot);
     syncSpreadState();
     syncPageSemantics();
+    syncModeSemantics();
     if (allowAutoCollapse) window.setTimeout(() => maybeAutoCollapseSpread(snapshot), 0);
   };
 
@@ -214,6 +323,8 @@ export function installReadingSurface() {
     const observer = new MutationObserver(() => {
       syncSpreadState();
       syncPageSemantics();
+      syncModeSemantics();
+      if (el.dataset.readerMode !== 'scroll') announcer.announce();
       window.setTimeout(() => maybeAutoCollapseSpread(stableViewport), 0);
     });
     if (wrapper) observer.observe(wrapper, { attributes: true, attributeFilter: ['class'] });
@@ -221,13 +332,35 @@ export function installReadingSurface() {
     if (current) observer.observe(current, { childList: true, subtree: true, characterData: true });
   }
 
+  const locationNodes = [
+    document.getElementById('currentChapter'),
+    document.getElementById('progressPercent'),
+  ].filter(Boolean);
+  if (locationNodes.length) {
+    const locationObserver = new MutationObserver(() => {
+      if (el.dataset.readerMode === 'scroll') announcer.announce({ settled: true });
+    });
+    locationNodes.forEach((node) => {
+      locationObserver.observe(node, { childList: true, subtree: true, characterData: true });
+    });
+  }
+
+  const modeObserver = new MutationObserver(() => {
+    syncModeSemantics();
+    syncPageSemantics();
+    announcer.announce();
+  });
+  modeObserver.observe(el, { attributes: true, attributeFilter: ['data-reader-mode'] });
+
   const stageObserver = new MutationObserver(() => {
+    syncModeSemantics();
     if (document.body.dataset.stage !== 'read') {
       document.body.classList.remove('reader-chrome-hidden');
       document.body.classList.remove('reader-chrome-visible');
       delete document.body.dataset.readerChrome;
       return;
     }
+    announcer.announce();
     window.setTimeout(() => maybeAutoCollapseSpread(stableViewport), 0);
   });
   stageObserver.observe(document.body, { attributes: true, attributeFilter: ['data-stage'] });
