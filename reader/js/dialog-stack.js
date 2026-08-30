@@ -24,3 +24,7 @@ export function topDialogId(stack = [], activeIds = []) {
   const next = reconcileDialogStack(stack, activeIds);
   return next[next.length - 1] || null;
 }
+
+if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+  import('./pwa-update.js').catch(() => {});
+}
