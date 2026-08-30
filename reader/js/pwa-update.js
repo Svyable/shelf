@@ -41,17 +41,32 @@ function ensureNotice() {
   return notice;
 }
 
-function waitingWorker() { return registration?.waiting || null; }
+function waitingWorker() {
+  return registration?.waiting || null;
+}
+
 function showUpdate(worker = waitingWorker()) {
   if (!worker || worker === dismissedWorker) return false;
-  if (!shouldOfferReaderUpdate({ hasController: !!navigator.serviceWorker.controller, hasWaitingWorker: true })) return false;
+  if (!shouldOfferReaderUpdate({
+    hasController: !!navigator.serviceWorker.controller,
+    hasWaitingWorker: true,
+  })) return false;
   const notice = ensureNotice();
   notice.hidden = false;
   notice.dataset.state = 'ready';
   return true;
 }
-function hideUpdate() { const notice = document.getElementById('readerUpdateNotice'); if (notice) notice.hidden = true; }
-function dismissUpdate() { dismissedWorker = waitingWorker(); hideUpdate(); }
+
+function hideUpdate() {
+  const notice = document.getElementById('readerUpdateNotice');
+  if (notice) notice.hidden = true;
+}
+
+function dismissUpdate() {
+  dismissedWorker = waitingWorker();
+  hideUpdate();
+}
+
 function applyUpdate() {
   const worker = waitingWorker();
   if (!worker) return;
@@ -64,6 +79,7 @@ function applyUpdate() {
   notice.querySelectorAll('button').forEach((button) => { button.disabled = true; });
   worker.postMessage(activationMessage());
 }
+
 function trackInstalling(worker) {
   if (!worker) return;
   worker.addEventListener('statechange', () => {
@@ -71,6 +87,7 @@ function trackInstalling(worker) {
     if (navigator.serviceWorker.controller) showUpdate(registration?.waiting || worker);
   });
 }
+
 async function installReaderUpdates() {
   if (!('serviceWorker' in navigator) || !window.isSecureContext) return;
   installStyles();
@@ -81,12 +98,19 @@ async function installReaderUpdates() {
     if (registration.installing) trackInstalling(registration.installing);
     registration.addEventListener('updatefound', () => trackInstalling(registration.installing));
     window.addEventListener('focus', () => registration?.update().catch(() => {}), { passive: true });
-  } catch {}
+  } catch {
+    // Reading remains fully usable when service workers are unavailable.
+  }
 }
+
 navigator.serviceWorker?.addEventListener('controllerchange', () => {
   if (!shouldReloadAfterControllerChange({ activationRequested, reloadCommitted })) return;
   reloadCommitted = true;
   window.location.reload();
 });
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installReaderUpdates, { once: true });
-else void installReaderUpdates();
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', installReaderUpdates, { once: true });
+} else {
+  void installReaderUpdates();
+}
