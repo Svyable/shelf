@@ -131,6 +131,11 @@ function bindPageDrag() {
     return true;
   };
 
+  // app.js still carries a compatibility Touch Events swipe handler. Suppress
+  // that path for eligible page gestures so Pointer Events owns the turn once,
+  // while leaving links, controls, selection, overlays, and Scroll untouched.
+  // This also keeps the legacy swipe path from stealing a horizontal pan that
+  // belongs to an overflowing table or code block.
   wrap.addEventListener('touchstart', (event) => {
     state.ownsTouch = eligibleSurface(event.target);
     if (state.ownsTouch) event.stopPropagation();
@@ -200,6 +205,9 @@ function bindPageDrag() {
         clientWidth: state.scroller.clientWidth,
       });
       state.lastX = event.clientX;
+
+      // Once the nested region reaches the edge in the continuing gesture
+      // direction, hand ownership to the book instead of forcing a second swipe.
       if (contentPanHandoff({
         dx: deltaX,
         scrollLeft: state.scroller.scrollLeft,
