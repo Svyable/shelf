@@ -32,6 +32,7 @@
   overscroll-behavior-inline: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
+  scroll-behavior: smooth;
 }
 
 .reader-math-display math {
@@ -41,13 +42,31 @@
   margin: 0 auto;
 }
 
+.reader-math-display[data-math-overflow="true"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.reader-math-display[data-math-overflow="true"][data-overflow-start="false"] {
+  box-shadow: inset 14px 0 14px -16px color-mix(in srgb, var(--accent) 64%, transparent);
+}
+
+.reader-math-display[data-math-overflow="true"][data-overflow-end="false"] {
+  box-shadow: inset -14px 0 14px -16px color-mix(in srgb, var(--accent) 64%, transparent);
+}
+
+.reader-math-display[data-math-overflow="true"][data-overflow-start="false"][data-overflow-end="false"] {
+  box-shadow:
+    inset 14px 0 14px -16px color-mix(in srgb, var(--accent) 64%, transparent),
+    inset -14px 0 14px -16px color-mix(in srgb, var(--accent) 64%, transparent);
+}
+
 .reader-equation {
   position: relative;
   padding-right: 3.25em;
 }
 
-.reader-equation::after {
-  content: "(" attr(data-equation-number) ")";
+.reader-equation-number {
   position: absolute;
   top: 50%;
   right: 0.35em;
@@ -111,6 +130,18 @@
 
   .reader-equation {
     padding-right: 2.6em;
+  }
+}
+
+@media (forced-colors: active) {
+  .reader-math-display[data-math-overflow="true"]:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reader-math-display {
+    scroll-behavior: auto;
   }
 }
 

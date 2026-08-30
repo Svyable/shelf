@@ -1,12 +1,16 @@
+import { horizontalKeyDestination, overflowInstruction, overflowState } from './content-navigation.js';
+
 const KATEX_VERSION = '0.18.4';
 const KATEX_URL = `https://cdn.jsdelivr.net/npm/katex@${KATEX_VERSION}/dist/katex.min.js`;
 const KATEX_INTEGRITY = 'sha384-ykMNcWQhhTUb0YV9SPpPUFURHZ+tWmubkakGBP+OgNK/UXdO2gtzglWx0Rj9hnO3';
-const MATH_CSS = 'css/math.css?v=r1';
+const MATH_CSS = 'css/math.css?v=r2';
 const MATH_CACHE = 'obb-shell-v29';
+const MATH_KEYS = 'ArrowLeft ArrowRight Home End Shift+PageUp Shift+PageDown';
 
 let markedInstalled = false;
 let engineRequested = false;
 let referenceContext = new Map();
+let mathNavigationInstalled = false;
 
 function escapeHtml(value) {
   return String(value)
@@ -163,11 +167,16 @@ function mathAttributes(meta = {}) {
   return bits.join('');
 }
 
+function equationNumberMarkup(meta = {}) {
+  if (!meta.number) return '';
+  return `<span class="reader-equation-number" aria-label="Equation ${escapeHtml(meta.number)}">(${escapeHtml(meta.number)})</span>`;
+}
+
 function renderedMarkup(tex, displayMode, inner, meta = {}) {
   const tag = displayMode ? 'div' : 'span';
   const modeClass = displayMode ? 'reader-math-display' : 'reader-math-inline';
   const equationClass = displayMode && meta.label ? ' reader-equation' : '';
-  return `<${tag} class="reader-math ${modeClass}${equationClass}" data-math-rendered="true" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}>${inner}</${tag}>`;
+  return `<${tag} class="reader-math ${modeClass}${equationClass}" data-math-rendered="true" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}>${inner}${equationNumberMarkup(meta)}</${tag}>`;
 }
 
 function pendingMarkup(tex, displayMode, meta = {}) {
@@ -175,7 +184,7 @@ function pendingMarkup(tex, displayMode, meta = {}) {
   const modeClass = displayMode ? 'reader-math-display' : 'reader-math-inline';
   const equationClass = displayMode && meta.label ? ' reader-equation' : '';
   const raw = displayMode ? `$$${tex}$$` : `$${tex}$`;
-  return `<${tag} class="reader-math ${modeClass}${equationClass} reader-math-pending" data-math-rendered="false" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}><code>${escapeHtml(raw)}</code></${tag}>`;
+  return `<${tag} class="reader-math ${modeClass}${equationClass} reader-math-pending" data-math-rendered="false" data-math-source="${sourceAttribute(tex)}"${mathAttributes(meta)}><code>${escapeHtml(raw)}</code>${equationNumberMarkup(meta)}</${tag}>`;
 }
 
 export function renderMath(tex, displayMode = false, meta = {}) {
@@ -197,7 +206,7 @@ export function renderEquationRef(label) {
   if (!ref) {
     return '<span class="reader-equation-ref reader-academic-missing">(?)</span>';
   }
-  return `<a class="reader-equation-ref" href="#eq-${safeId(ref.label)}" data-academic-offset="${ref.offset}" data-equation-ref="${escapeHtml(ref.label)}">(${ref.number})</a>`;
+  return `<a class="reader-equation-ref" href="#eq-${safeId(ref.label)}" data-academic-offset="${ref.offset}" data-equation-ref="${escapeHtml(ref.label)}" aria-label="Equation ${ref.number}">(${ref.number})</a>`;
 }
 
 export function installMarkedMath(marked = globalThis.window?.marked) {
@@ -253,7 +262,9 @@ function hydratePendingMath() {
     try {
       const tex = decodeURIComponent(element.dataset.mathSource || '');
       const displayMode = element.classList.contains('reader-math-display');
+      const number = element.querySelector('.reader-equation-number');
       element.innerHTML = globalThis.katex.renderToString(tex, katexOptions(displayMode));
+      if (number) element.appendChild(number);
       element.classList.remove('reader-math-pending');
       element.dataset.mathRendered = 'true';
     } catch (error) {
@@ -261,6 +272,7 @@ function hydratePendingMath() {
       console.warn('Could not hydrate LaTeX math', error);
     }
   });
+  syncMathNavigation();
 }
 
 function cacheMathEngine() {
@@ -319,9 +331,98 @@ function protectMathInteractions() {
   }, { capture: true, passive: true });
 }
 
+function mathOverflowHint() {
+  let hint = document.getElementById('readerMathOverflowHint');
+  if (hint) return hint;
+  hint = document.createElement('p');
+  hint.id = 'readerMathOverflowHint';
+  hint.className = 'sr-only';
+  hint.textContent = overflowInstruction('math');
+  document.body.appendChild(hint);
+  return hint;
+}
+
+function clearMathNavigation(element) {
+  if (element.dataset.mathManagedTabindex === 'true') element.removeAttribute('tabindex');
+  if (element.dataset.mathManagedDescribedby === 'true') element.removeAttribute('aria-describedby');
+  element.removeAttribute('aria-keyshortcuts');
+  delete element.dataset.mathOverflow;
+  delete element.dataset.mathManagedTabindex;
+  delete element.dataset.mathManagedDescribedby;
+  delete element.dataset.overflowStart;
+  delete element.dataset.overflowEnd;
+}
+
+function decorateMathNavigation(element) {
+  const edge = overflowState(element);
+  if (!edge.overflow) {
+    clearMathNavigation(element);
+    return;
+  }
+  element.dataset.mathOverflow = 'true';
+  if (!element.hasAttribute('tabindex')) {
+    element.tabIndex = 0;
+    element.dataset.mathManagedTabindex = 'true';
+  }
+  if (!element.hasAttribute('aria-describedby')) {
+    element.setAttribute('aria-describedby', mathOverflowHint().id);
+    element.dataset.mathManagedDescribedby = 'true';
+  }
+  element.setAttribute('aria-keyshortcuts', MATH_KEYS);
+  element.dataset.overflowStart = edge.atStart ? 'true' : 'false';
+  element.dataset.overflowEnd = edge.atEnd ? 'true' : 'false';
+}
+
+function syncMathNavigation() {
+  if (typeof document === 'undefined') return;
+  document.querySelectorAll('.reader-math-display').forEach(decorateMathNavigation);
+}
+
+function onMathKeyDown(event) {
+  const element = event.target?.closest?.('.reader-math-display[data-math-overflow="true"]');
+  if (!element || event.metaKey || event.ctrlKey || event.altKey) return;
+  const nextLeft = horizontalKeyDestination({
+    key: event.key,
+    shiftKey: event.shiftKey,
+    scrollLeft: element.scrollLeft,
+    scrollWidth: element.scrollWidth,
+    clientWidth: element.clientWidth,
+  });
+  if (nextLeft == null) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  element.scrollTo({
+    left: nextLeft,
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+  });
+}
+
+function onMathScroll(event) {
+  const element = event.target;
+  if (!(element instanceof Element) || element.dataset.mathOverflow !== 'true') return;
+  const edge = overflowState(element);
+  element.dataset.overflowStart = edge.atStart ? 'true' : 'false';
+  element.dataset.overflowEnd = edge.atEnd ? 'true' : 'false';
+}
+
+function installMathNavigation() {
+  if (mathNavigationInstalled || typeof document === 'undefined') return;
+  mathNavigationInstalled = true;
+  syncMathNavigation();
+  const root = document.getElementById('bookStage') || document.body;
+  const observer = new MutationObserver(() => window.requestAnimationFrame(syncMathNavigation));
+  observer.observe(root, { childList: true, subtree: true });
+  window.addEventListener('resize', syncMathNavigation, { passive: true });
+  // Window capture runs before the Reader's document-level page key handler,
+  // so an overflowing equation owns horizontal exploration in both modes.
+  window.addEventListener('keydown', onMathKeyDown, true);
+  document.addEventListener('scroll', onMathScroll, true);
+}
+
 if (typeof window !== 'undefined') {
   installStyles();
   installMarkedMath();
   protectMathInteractions();
+  installMathNavigation();
   requestMathEngine();
 }
