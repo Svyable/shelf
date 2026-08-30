@@ -14,5 +14,6 @@ assert.equal(horizontalKeyDestination({ key: 'PageUp', shiftKey: true, scrollLef
 assert.equal(horizontalKeyDestination({ key: 'ArrowRight', scrollLeft: 0, scrollWidth: 400, clientWidth: 400 }), null);
 assert.match(overflowInstruction('table'), /Scrollable table/);
 assert.match(overflowInstruction('code'), /Scrollable code block/);
+assert.match(overflowInstruction('math'), /Scrollable equation/);
 
 console.log('content navigation tests ok');
