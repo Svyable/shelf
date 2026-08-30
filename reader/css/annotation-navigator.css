@@ -26,6 +26,7 @@
 }
 
 .notes-card-header,
+.notes-backup-tools,
 .note-inspector-nav,
 .note-inspector-actions {
   display: flex;
@@ -39,7 +40,8 @@
 
 .notes-kicker,
 .notes-summary,
-.note-chapter {
+.note-chapter,
+.notes-backup-status {
   margin: 0;
   color: var(--muted);
   font-size: .78rem;
@@ -57,6 +59,21 @@
 .notes-search-wrap input {
   width: 100%;
   min-height: 42px;
+}
+
+.notes-backup-tools {
+  min-height: 34px;
+  flex-wrap: wrap;
+}
+
+.notes-backup-tools .ghost-btn {
+  min-height: 34px;
+}
+
+.notes-backup-status {
+  min-width: 0;
+  flex: 1 1 220px;
+  line-height: 1.35;
 }
 
 .notes-layout {
@@ -113,6 +130,7 @@
 
 .note-result:focus-visible,
 .note-inspector button:focus-visible,
+.notes-backup-tools button:focus-visible,
 .notes-search-wrap input:focus-visible,
 .note-inspector textarea:focus-visible {
   outline: 2px solid var(--accent);
@@ -209,6 +227,18 @@ mark.note-mark[data-note-landing="true"] {
     padding-bottom: max(16px, env(safe-area-inset-bottom));
   }
 
+  .notes-backup-tools {
+    align-items: stretch;
+  }
+
+  .notes-backup-tools .ghost-btn {
+    flex: 1 1 120px;
+  }
+
+  .notes-backup-status {
+    flex-basis: 100%;
+  }
+
   .notes-layout {
     grid-template-columns: 1fr;
     grid-template-rows: minmax(150px, .78fr) minmax(260px, 1.22fr);
@@ -224,6 +254,16 @@ mark.note-mark[data-note-landing="true"] {
     width: calc(100vw - max(16px, env(safe-area-inset-left)) - max(16px, env(safe-area-inset-right)));
     max-height: calc(100dvh - 10px);
     gap: 8px;
+  }
+
+  .notes-backup-tools {
+    flex-wrap: nowrap;
+  }
+
+  .notes-backup-status {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .notes-layout {
