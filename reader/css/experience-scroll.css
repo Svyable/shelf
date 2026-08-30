@@ -330,3 +330,82 @@
     font-size: 3em;
   }
 }
+
+/* Refined paged-mode leaf turn: finish before app.js clears the turn state,
+   keep the sheet on the compositor, and add mid-turn lift/shadow so the
+   movement reads as a single continuous page instead of a flat rotation. */
+[data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active {
+  will-change: transform, opacity, box-shadow;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  animation-duration: 540ms;
+  animation-timing-function: cubic-bezier(0.32, 0.02, 0.18, 1);
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active {
+  animation-name: smoothLeafNext;
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active {
+  animation-name: smoothLeafPrev;
+}
+
+@keyframes smoothLeafNext {
+  0% {
+    transform: translateZ(0) rotateY(0deg) scaleX(1);
+    box-shadow: inset 18px 0 28px -22px #000a, 0 12px 40px var(--shadow);
+  }
+  38% {
+    transform: translateZ(18px) rotateY(-49deg) scaleX(0.995);
+    box-shadow: inset 28px 0 34px -18px #000b, -12px 18px 34px color-mix(in srgb, var(--shadow) 86%, transparent);
+  }
+  72% {
+    transform: translateZ(8px) rotateY(-92deg) scaleX(0.992);
+    box-shadow: inset 34px 0 40px -16px #000c, -18px 14px 28px color-mix(in srgb, var(--shadow) 72%, transparent);
+  }
+  100% {
+    transform: translateZ(0) rotateY(-108deg) scaleX(1);
+    box-shadow: inset 20px 0 30px -20px #000a, -8px 10px 18px color-mix(in srgb, var(--shadow) 52%, transparent);
+  }
+}
+
+@keyframes smoothLeafPrev {
+  0% {
+    transform: translateZ(0) rotateY(0deg) scaleX(1);
+    box-shadow: inset -18px 0 28px -22px #000a, 0 12px 40px var(--shadow);
+  }
+  38% {
+    transform: translateZ(18px) rotateY(49deg) scaleX(0.995);
+    box-shadow: inset -28px 0 34px -18px #000b, 12px 18px 34px color-mix(in srgb, var(--shadow) 86%, transparent);
+  }
+  72% {
+    transform: translateZ(8px) rotateY(92deg) scaleX(0.992);
+    box-shadow: inset -34px 0 40px -16px #000c, 18px 14px 28px color-mix(in srgb, var(--shadow) 72%, transparent);
+  }
+  100% {
+    transform: translateZ(0) rotateY(108deg) scaleX(1);
+    box-shadow: inset -20px 0 30px -20px #000a, 8px 10px 18px color-mix(in srgb, var(--shadow) 52%, transparent);
+  }
+}
+
+[data-reader-mode="paged"] .page-surface.turning {
+  animation: pageSettle 220ms cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+@keyframes pageSettle {
+  from { opacity: 0.78; transform: translateZ(-2px); }
+  to { opacity: 1; transform: translateZ(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reader-mode="paged"] .pages-wrapper.turn-next #pageRight.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-next:not(:has(#pageRight.active)) #pageLeft.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active,
+  [data-reader-mode="paged"] .page-surface.turning {
+    animation: none;
+  }
+}
