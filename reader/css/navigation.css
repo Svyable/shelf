@@ -114,6 +114,27 @@
   outline-offset: 2px;
 }
 
+/* Wide tables and code are reading destinations, not accidental page-turn
+   traps. The runtime adds this state only when horizontal overflow exists. */
+[data-reader-overflow="true"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+[data-reader-overflow="true"][data-overflow-start="false"] {
+  box-shadow: inset 12px 0 12px -14px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+[data-reader-overflow="true"][data-overflow-end="false"] {
+  box-shadow: inset -12px 0 12px -14px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+[data-reader-overflow="true"][data-overflow-start="false"][data-overflow-end="false"] {
+  box-shadow:
+    inset 12px 0 12px -14px color-mix(in srgb, var(--accent) 60%, transparent),
+    inset -12px 0 12px -14px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
 @media (pointer: coarse) {
   .page-nav .nav-btn {
     min-width: 3.25rem;
@@ -135,6 +156,12 @@
   .nav-gesture-preview {
     top: 4%;
     bottom: 4%;
+  }
+}
+
+@media (forced-colors: active) {
+  [data-reader-overflow="true"]:focus-visible {
+    outline-color: Highlight;
   }
 }
 
