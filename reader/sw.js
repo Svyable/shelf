@@ -1,6 +1,6 @@
 importScripts('./js/offline-cache.js');
 
-const CACHE = 'obb-shell-v70';
+const CACHE = 'obb-shell-v71';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -8,6 +8,7 @@ const SHELL = [
   './css/style.css',
   './css/experience.css',
   './css/experience-scroll.css',
+  './css/scroll-performance.css',
   './css/typesetting.css',
   './css/atmosphere.css',
   './css/atmosphere-library.css',
@@ -46,6 +47,8 @@ const SHELL = [
   './js/page-drag.js',
   './js/app.js',
   './js/experience.js',
+  './js/scroll-performance-model.js',
+  './js/scroll-performance.js',
   './js/gui.js',
   './js/dialog-stack.js',
   './js/pwa-update-model.js',

@@ -1,0 +1,15 @@
+/* Progressive long-book rendering for Continuous mode. The full DOM stays intact
+   for canonical anchors, find-in-page, selection, notes, and assistive tech. */
+@supports (content-visibility: auto) and (contain-intrinsic-block-size: auto 1000px) {
+  html[data-reader-mode="scroll"] .scroll-chapter.reader-virtual-chapter {
+    content-visibility: auto;
+    contain-intrinsic-block-size: auto var(--reader-chapter-intrinsic-size, 1600px);
+  }
+}
+
+@media print {
+  .scroll-chapter.reader-virtual-chapter {
+    content-visibility: visible !important;
+    contain-intrinsic-block-size: none !important;
+  }
+}
