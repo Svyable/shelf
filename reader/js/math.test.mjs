@@ -56,12 +56,18 @@ assert.equal(refs.get('eq:sum').number, 1);
 assert.ok(refs.get('eq:sum').offset > 0);
 assert.ok(renderEquationRef('eq:sum').includes('(1)'));
 assert.ok(renderEquationRef('eq:sum').includes('data-academic-offset='));
+assert.ok(renderEquationRef('eq:sum').includes('aria-label="Equation 1"'));
 assert.ok(renderEquationRef('missing').includes('reader-academic-missing'));
 
 const fallback = renderMath('x < y', false);
 assert.ok(fallback.includes('reader-math-pending'));
 assert.ok(fallback.includes('x &lt; y'));
 assert.ok(fallback.includes('data-math-source='));
+
+const numberedFallback = renderMath('x+y=1', true, { label: 'eq:sum', number: 1 });
+assert.ok(numberedFallback.includes('reader-equation-number'));
+assert.ok(numberedFallback.includes('aria-label="Equation 1"'));
+assert.ok(numberedFallback.includes('>(1)</span>'));
 
 let extensionConfig = null;
 const fakeMarked = {
@@ -91,5 +97,7 @@ assert.ok(rendered.includes('<math data-display="true">'));
 const numbered = renderMath('x+y=1', true, { label: 'eq:sum', number: 1 });
 assert.ok(numbered.includes('id="eq-eq:sum"'));
 assert.ok(numbered.includes('data-equation-number="1"'));
+assert.ok(numbered.includes('reader-equation-number'));
+assert.ok(numbered.includes('aria-label="Equation 1"'));
 
 console.log('math tests ok');
