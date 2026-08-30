@@ -1,3 +1,4 @@
+import './selection-actions.js';
 import { fetchText } from './base.js';
 import { parseBookReadme } from './catalog.js';
 import { parseRoute } from './router.js';
