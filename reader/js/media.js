@@ -9,6 +9,7 @@ import {
 
 import('./cover-runtime.js').catch((error) => console.warn('Cover presentation could not be loaded', error));
 import('./formats.js').catch((error) => console.warn('Publication format enhancements could not be loaded', error));
+import('./content-scroll-regions.js').catch((error) => console.warn('Content scroll regions could not be loaded', error));
 
 const MEDIA_CSS = 'css/media.css?v=r2';
 const loadedSources = new Set();
