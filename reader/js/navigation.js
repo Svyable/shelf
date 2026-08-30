@@ -1,5 +1,6 @@
 import { installReadingSurface } from './reading-surface.js';
 import { installReadingContinuity } from './reading-continuity.js';
+import { horizontalKeyDestination, overflowInstruction, overflowState } from './content-navigation.js';
 
 const state = {
   pointerId: null,
@@ -266,13 +267,110 @@ function onPageClick(event) {
   else if (x >= rect.width - edge) requestTurn(1);
 }
 
+function overflowHint() {
+  let hint = document.getElementById('readerOverflowHint');
+  if (hint) return hint;
+  hint = document.createElement('p');
+  hint.id = 'readerOverflowHint';
+  hint.className = 'sr-only';
+  hint.textContent = overflowInstruction();
+  document.body.appendChild(hint);
+  return hint;
+}
+
+function syncOverflowEdgeState(el) {
+  const edge = overflowState(el);
+  el.dataset.overflowStart = edge.atStart ? 'true' : 'false';
+  el.dataset.overflowEnd = edge.atEnd ? 'true' : 'false';
+}
+
+function decorateOverflowTarget(el) {
+  const edge = overflowState(el);
+  if (!edge.overflow) {
+    if (el.dataset.readerManagedTabindex === 'true') el.removeAttribute('tabindex');
+    if (el.dataset.readerManagedDescribedby === 'true') el.removeAttribute('aria-describedby');
+    if (el.dataset.readerManagedRole === 'true') el.removeAttribute('role');
+    if (el.dataset.readerManagedLabel === 'true') el.removeAttribute('aria-label');
+    delete el.dataset.readerOverflow;
+    delete el.dataset.readerManagedTabindex;
+    delete el.dataset.readerManagedDescribedby;
+    delete el.dataset.readerManagedRole;
+    delete el.dataset.readerManagedLabel;
+    delete el.dataset.overflowStart;
+    delete el.dataset.overflowEnd;
+    return;
+  }
+
+  el.dataset.readerOverflow = 'true';
+  if (!el.hasAttribute('tabindex')) {
+    el.tabIndex = 0;
+    el.dataset.readerManagedTabindex = 'true';
+  }
+  if (!el.hasAttribute('aria-describedby')) {
+    el.setAttribute('aria-describedby', overflowHint().id);
+    el.dataset.readerManagedDescribedby = 'true';
+  }
+  if (el.matches('pre')) {
+    if (!el.hasAttribute('role')) {
+      el.setAttribute('role', 'region');
+      el.dataset.readerManagedRole = 'true';
+    }
+    if (!el.hasAttribute('aria-label')) {
+      el.setAttribute('aria-label', 'Scrollable code block');
+      el.dataset.readerManagedLabel = 'true';
+    }
+  }
+  el.setAttribute('aria-keyshortcuts', 'ArrowLeft ArrowRight Home End Shift+PageUp Shift+PageDown');
+  syncOverflowEdgeState(el);
+}
+
+function syncOverflowTargets() {
+  document.querySelectorAll(
+    '.page-inner pre, .page-inner table, .scroll-document pre, .scroll-document table'
+  ).forEach(decorateOverflowTarget);
+}
+
+function installOverflowNavigation() {
+  syncOverflowTargets();
+  const root = document.getElementById('bookStage') || document.body;
+  const observer = new MutationObserver(() => window.requestAnimationFrame(syncOverflowTargets));
+  observer.observe(root, { childList: true, subtree: true });
+  window.addEventListener('resize', syncOverflowTargets, { passive: true });
+  document.addEventListener('scroll', (event) => {
+    const target = event.target;
+    if (target instanceof Element && target.dataset.readerOverflow === 'true') {
+      syncOverflowEdgeState(target);
+    }
+  }, true);
+}
+
 function navKey(event) {
-  return ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', ' '].includes(event.key);
+  return ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key);
 }
 
 function onKeyDown(event) {
   if (!navKey(event)) return;
   if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+  const overflow = event.target?.closest?.('[data-reader-overflow="true"]');
+  if (overflow && !keyboardInteractiveTarget(event.target)) {
+    const nextLeft = horizontalKeyDestination({
+      key: event.key,
+      shiftKey: event.shiftKey,
+      scrollLeft: overflow.scrollLeft,
+      scrollWidth: overflow.scrollWidth,
+      clientWidth: overflow.clientWidth,
+    });
+    if (nextLeft != null) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      overflow.scrollTo({
+        left: nextLeft,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+      return;
+    }
+  }
 
   if (keyboardInteractiveTarget(event.target)) {
     // Do not reinterpret keys while a real control owns focus.
@@ -300,6 +398,8 @@ function onKeyDown(event) {
     event.stopImmediatePropagation();
     return;
   }
+
+  if (event.key === 'Home' || event.key === 'End') return;
 
   event.preventDefault();
   event.stopImmediatePropagation();
@@ -349,6 +449,7 @@ function syncContext() {
     resetGesture();
   }
   syncNavSemantics();
+  syncOverflowTargets();
 }
 
 function initialize() {
@@ -359,6 +460,7 @@ function initialize() {
   installReadingContinuity();
   loadStyles();
   installGestureIndicators();
+  installOverflowNavigation();
   tuneHint();
   syncNavSemantics();
   installQueueObserver();

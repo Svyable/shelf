@@ -1,6 +1,6 @@
 importScripts('./js/offline-cache.js');
 
-const CACHE = 'obb-shell-v53';
+const CACHE = 'obb-shell-v54';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -27,6 +27,7 @@ const SHELL = [
   './vendor/marked.min.js',
   './js/atmosphere.js',
   './js/navigation.js',
+  './js/content-navigation.js',
   './js/reading-surface.js',
   './js/viewport-stability.js',
   './js/immersive-chrome.js',
