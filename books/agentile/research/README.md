@@ -31,6 +31,20 @@ Sources checked for this draft:
 
 Counterevidence preserved in the chapter: autonomy may trade latency and compute for task performance; long chains can compound errors; a system that requires complete human re-verification may shift rather than remove labor; and broad credentials can make a less-capable model more consequential than a stronger but isolated one.
 
+## Chapter 3 — The Falling Cost of Delegation
+
+Chapter 3 frames agent economics around the all-in cost of causing a reliable result: instruction, execution, verification, and correction. It distinguishes task-level productivity from the larger effect of moving previously uneconomic errands above the threshold where delegation becomes worthwhile.
+
+Sources checked for this draft:
+
+- Ronald H. Coase, Nobel Prize lecture (1991), revisiting “The Nature of the Firm”: identifies the costs of discovering prices, negotiating, contracting, inspecting, and settling disputes as transaction costs and explains how they shape what activity occurs through markets versus firms. https://www.nobelprize.org/prizes/economic-sciences/1991/coase/lecture/
+- Nobel Prize press release for the 1991 economics prize: summarizes Coase’s argument that firms expand while internal coordination is cheaper than market contracting and that transaction costs affect organizational size. https://www.nobelprize.org/prizes/economic-sciences/1991/press-release/1000/
+- Erik Brynjolfsson, Danielle Li, and Lindsey R. Raymond, “Generative AI at Work,” NBER Working Paper 31161, revised November 2023 and later published in *The Quarterly Journal of Economics* (2025): study of 5,179 customer-support agents finding an average productivity increase of about 14%, with much larger gains for novice and lower-skilled workers and minimal effects for the most experienced workers. https://www.nber.org/papers/w31161
+- Joel Becker, Nate Rush, Beth Barnes, and David Rein, METR, “Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity” (July 10, 2025): randomized study of experienced developers on familiar repositories finding that access to early-2025 AI tools increased completion time by 19% in that setting despite participants expecting and perceiving speedups. https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/
+- Harvard Business School AI Institute, research index for “Navigating the Jagged Technological Frontier”: preserves the broader finding that generative-AI productivity and quality effects vary by whether a task lies inside or outside the technology’s capability frontier. https://aiinstitute.hbs.edu/arts-and-science-research/
+
+Counterevidence preserved in the chapter: delegation costs can rise when briefing is difficult, context is missing, expert workflows are interrupted, outputs are hard to verify, or subtle errors make review expensive. The chapter therefore makes no universal productivity claim.
+
 ## Falsification questions
 
 1. Where does cheap delegation increase total work rather than reduce headcount?
@@ -43,4 +57,4 @@ Counterevidence preserved in the chapter: autonomy may trade latency and compute
 
 ## Draft status
 
-Front matter and Chapters 1, 2, 6, 10, and 12 are complete working chapters. Chapter 13 is partial. Other planned chapters are not yet present in the promoted draft.
+Front matter and Chapters 1, 2, 3, 6, 10, and 12 are complete working chapters. Chapter 13 is partial. Other planned chapters are not yet present in the promoted draft.
