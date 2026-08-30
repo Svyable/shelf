@@ -1,0 +1,30 @@
+.search-landing-mark {
+  background: rgba(212, 170, 82, .28);
+  background: color-mix(in srgb, currentColor 12%, rgba(212, 170, 82, .5));
+  color: inherit;
+  border-radius: .18em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: .02em .08em;
+  margin: 0 -.08em;
+  outline: 1px solid rgba(212, 170, 82, .62);
+  outline: 1px solid color-mix(in srgb, currentColor 26%, transparent);
+  outline-offset: .08em;
+  animation: search-landing-arrive 180ms ease-out both;
+}
+
+@keyframes search-landing-arrive {
+  from { background-color: transparent; outline-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-landing-mark { animation: none; }
+}
+
+@media (forced-colors: active) {
+  .search-landing-mark {
+    background: Highlight;
+    color: HighlightText;
+    outline: 2px solid Highlight;
+  }
+}

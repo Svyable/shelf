@@ -1,3 +1,7 @@
+import('./search-landing.js').catch((error) => {
+  console.warn('Search landing context could not be loaded', error);
+});
+
 export function nextSearchIndex(current, total, command) {
   if (!Number.isInteger(total) || total <= 0) return -1;
   const start = Number.isInteger(current) && current >= 0 && current < total ? current : -1;
@@ -36,12 +40,20 @@ export function hrefMatchesHash(href, hash) {
 }
 
 function ensureStylesheet() {
-  if (document.querySelector('link[data-search-navigation]')) return;
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = new URL('../css/search-navigation.css', import.meta.url).href;
-  link.dataset.searchNavigation = 'true';
-  document.head.appendChild(link);
+  if (!document.querySelector('link[data-search-navigation]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = new URL('../css/search-navigation.css', import.meta.url).href;
+    link.dataset.searchNavigation = 'true';
+    document.head.appendChild(link);
+  }
+  if (!document.querySelector('link[data-search-landing]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = new URL('../css/search-landing.css', import.meta.url).href;
+    link.dataset.searchLanding = 'true';
+    document.head.appendChild(link);
+  }
 }
 
 function installSearchNavigation() {

@@ -1,6 +1,6 @@
 importScripts('./js/offline-cache.js');
 
-const CACHE = 'obb-shell-v46';
+const CACHE = 'obb-shell-v47';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -17,6 +17,7 @@ const SHELL = [
   './css/reading-content.css',
   './css/gui.css',
   './css/search-navigation.css',
+  './css/search-landing.css',
   './css/media.css',
   './css/formats.css',
   './css/math.css',
@@ -35,6 +36,7 @@ const SHELL = [
   './js/gui.js',
   './js/dialog-stack.js',
   './js/search-navigation.js',
+  './js/search-landing.js',
   './js/media.js',
   './js/formats.js',
   './js/math.js',
