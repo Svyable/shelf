@@ -15,6 +15,7 @@ body:
       label: Book
       description: Which book is this about?
       options:
+        - agentile
         - leveraging-luck
         - the-exponentiality
         - _TEMPLATE
