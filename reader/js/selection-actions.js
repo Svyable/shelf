@@ -2,10 +2,16 @@ import { fetchText } from './base.js';
 import { parseBookReadme } from './catalog.js';
 import { addNote, applyNotes, loadNotes, selectionSourceAnchor } from './notes.js';
 import { parseRoute } from './router.js';
-import { normalizeSelectionSnapshot, selectionSnapshotUsable } from './selection-memory.js';
+import {
+  normalizeSelectionSnapshot,
+  selectionAnchorTargetIndex,
+  selectionSnapshotUsable,
+} from './selection-memory.js';
 
 let remembered = null;
 let fallbackPending = null;
+let resumeArmed = false;
+let resumeTimer = 0;
 const chapterCache = new Map();
 
 function readerMode() {
@@ -28,6 +34,7 @@ function liveSelection() {
   return normalizeSelectionSnapshot({
     text,
     slug: route.slug,
+    chapter: scroll?.dataset.chapter || route.chapter || '',
     mode: readerMode(),
     anchor: selectionSourceAnchor(selection),
     offset,
@@ -35,17 +42,36 @@ function liveSelection() {
   });
 }
 
+function setResumedActions(active) {
+  const pop = document.getElementById('selPop');
+  if (pop) pop.toggleAttribute('data-selection-resumed', active);
+  const card = document.getElementById('selCard');
+  const report = document.getElementById('selReport');
+  if (active) {
+    if (card) card.hidden = true;
+    if (report) report.hidden = true;
+  } else if (readerMode() === 'paged') {
+    if (card) card.hidden = false;
+    if (report) report.hidden = false;
+  }
+}
+
 function rememberLiveSelection() {
   const next = liveSelection();
-  if (next) remembered = next;
+  if (next) {
+    remembered = next;
+    resumeArmed = !!next.anchor;
+    setResumedActions(false);
+  }
   return next;
 }
 
-function usableRemembered() {
+function usableRemembered({ allowModeChange = false } = {}) {
   const route = parseRoute();
   return selectionSnapshotUsable(remembered, {
     slug: route.slug,
     mode: readerMode(),
+    allowModeChange,
   }) ? remembered : null;
 }
 
@@ -59,6 +85,7 @@ async function contentsFor(slug) {
 }
 
 async function chapterFor(snapshot) {
+  if (snapshot.chapter) return snapshot.chapter;
   const scroll = snapshot.node?.closest?.('.scroll-block[data-chapter], .scroll-chapter[data-chapter]');
   if (scroll?.dataset.chapter) return scroll.dataset.chapter;
 
@@ -101,13 +128,102 @@ function refreshNote(chapter, slug) {
 
 function fallbackSelection() {
   if (liveSelection()) return null;
-  return usableRemembered();
+  return usableRemembered({ allowModeChange: true });
+}
+
+function sourceTarget(snapshot) {
+  if (!snapshot?.anchor) return null;
+  const root = readerMode() === 'scroll'
+    ? document.querySelector('#scrollReader:not([hidden])')
+    : document.querySelector('#pagesWrapper');
+  if (!root) return null;
+
+  const candidates = [...root.querySelectorAll('[data-source-start][data-source-end]')]
+    .filter((element) => element.getClientRects().length > 0)
+    .map((element) => ({
+      element,
+      start: Number(element.dataset.sourceStart),
+      end: Number(element.dataset.sourceEnd),
+    }))
+    .filter((entry) => Number.isFinite(entry.start) && Number.isFinite(entry.end));
+  const index = selectionAnchorTargetIndex(snapshot.anchor, candidates);
+  return index >= 0 ? candidates[index].element : null;
+}
+
+function positionResumedActions(target) {
+  const pop = document.getElementById('selPop');
+  if (!pop || !target) return false;
+  const rect = target.getBoundingClientRect();
+  if (!rect.width && !rect.height) return false;
+  pop.hidden = false;
+  setResumedActions(true);
+
+  const vv = window.visualViewport;
+  const leftOff = vv ? vv.offsetLeft : 0;
+  const topOff = vv ? vv.offsetTop : 0;
+  const vw = vv ? vv.width : window.innerWidth;
+  const vh = vv ? vv.height : window.innerHeight;
+  const popW = Math.min(pop.offsetWidth || 180, Math.max(0, vw - 16));
+  const popH = pop.offsetHeight || 38;
+  const left = Math.min(
+    Math.max(8 + leftOff, rect.left + leftOff),
+    leftOff + vw - popW - 8
+  );
+  const above = rect.top + topOff - popH - 8;
+  const below = rect.bottom + topOff + 8;
+  const top = above >= topOff + 8
+    ? above
+    : Math.min(below, topOff + vh - popH - 8);
+  pop.style.left = `${left}px`;
+  pop.style.top = `${Math.max(topOff + 8, top)}px`;
+  return true;
+}
+
+function resumeSelectionActions() {
+  clearTimeout(resumeTimer);
+  if (!resumeArmed || document.body.dataset.stage !== 'read') return false;
+  if (document.querySelector('.toc-overlay.active, .stats-overlay.active, .search-overlay.active')) return false;
+  const snapshot = usableRemembered({ allowModeChange: true });
+  if (!snapshot?.anchor) return false;
+  const target = sourceTarget(snapshot);
+  return positionResumedActions(target);
+}
+
+function scheduleResume(delay = 220) {
+  clearTimeout(resumeTimer);
+  resumeTimer = window.setTimeout(() => {
+    if (resumeSelectionActions()) return;
+    resumeTimer = window.setTimeout(resumeSelectionActions, 240);
+  }, delay);
+}
+
+function disarmResume() {
+  resumeArmed = false;
+  clearTimeout(resumeTimer);
+  setResumedActions(false);
 }
 
 document.addEventListener('selectionchange', rememberLiveSelection);
 document.addEventListener('mouseup', rememberLiveSelection);
 document.addEventListener('pointerdown', (event) => {
-  if (event.target.closest?.('#selPop')) rememberLiveSelection();
+  if (event.target.closest?.('#selPop, #settingsBtn, #settingsPanel')) rememberLiveSelection();
+}, true);
+
+const modeObserver = new MutationObserver(() => {
+  if (resumeArmed) scheduleResume(260);
+});
+modeObserver.observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ['data-reader-mode'],
+});
+window.addEventListener('resize', () => {
+  if (resumeArmed) scheduleResume(260);
+}, true);
+window.addEventListener('orientationchange', () => {
+  if (resumeArmed) scheduleResume(320);
+}, true);
+document.addEventListener('click', (event) => {
+  if (resumeArmed && event.target.closest?.('#settingsClose')) scheduleResume(80);
 }, true);
 
 document.addEventListener('click', (event) => {
@@ -119,6 +235,7 @@ document.addEventListener('click', (event) => {
   event.preventDefault();
   event.stopImmediatePropagation();
   document.getElementById('selPop')?.setAttribute('hidden', '');
+  disarmResume();
 
   if (target.id === 'selCopy') {
     copy(snapshot.text);
