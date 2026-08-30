@@ -4,6 +4,15 @@ import('./cover-design.js').catch((error) => {
 
 const $ = (id) => document.getElementById(id);
 
+function installDeskPolish() {
+  if (document.querySelector('link[data-desk-polish]')) return;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = new URL('./desk-polish.css?v=2', import.meta.url).href;
+  link.dataset.deskPolish = 'true';
+  document.head.appendChild(link);
+}
+
 function hideAuthoringTools() {
   const start = $('startBookLink');
   const studio = $('newPublicationStudio');
@@ -29,6 +38,7 @@ async function applyAuthoringBoundary() {
 }
 
 function initialize() {
+  installDeskPolish();
   $('repoForm')?.addEventListener('submit', hideAuthoringTools);
   applyAuthoringBoundary();
 }
