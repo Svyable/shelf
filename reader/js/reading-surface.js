@@ -1,4 +1,5 @@
 import { stabilizeViewport, textEntryTarget } from './viewport-stability.js';
+import { installImmersiveChrome } from './immersive-chrome.js';
 
 const DEFAULT_VIEWPORT = Object.freeze({ width: 1280, height: 800 });
 
@@ -132,35 +133,6 @@ function watchAdaptiveStyles(requestRepaginate) {
   observer.observe(document.head, { childList: true });
 }
 
-function installImmersiveChromeToggle() {
-  const wrapper = document.getElementById('pagesWrapper');
-  if (!wrapper) return;
-
-  wrapper.addEventListener('click', (event) => {
-    if (root().dataset.readerDevice !== 'phone') return;
-    if (root().dataset.readerPointer !== 'coarse') return;
-    if (document.body.dataset.stage !== 'read') return;
-    if (event.target.closest('a, button, input, textarea, select, mark, .sel-pop')) return;
-    if (window.getSelection?.().toString().trim()) return;
-    if (document.querySelector('#tocOverlay.active, #progressPanel.active, #settingsPanel.active, #searchOverlay.active, #noteDialog.active, #helpOverlay.active')) return;
-
-    const rect = wrapper.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const ratio = rect.width ? x / rect.width : 0;
-    if (ratio < .34 || ratio > .66) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    document.body.classList.toggle('reader-chrome-hidden');
-  }, true);
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && document.body.classList.contains('reader-chrome-hidden')) {
-      document.body.classList.remove('reader-chrome-hidden');
-    }
-  }, true);
-}
-
 export function installReadingSurface() {
   const el = root();
   if (el.dataset.readingSurfaceEnhanced === 'true') return;
@@ -185,8 +157,6 @@ export function installReadingSurface() {
     const toggle = document.getElementById('viewModeBtn');
     const spreadVisible = !!right?.classList.contains('active');
     if (!spreadVisible) {
-      // The layout is already comfortable. Mark this viewport as handled so a
-      // later explicit user request for Spread is respected until geometry changes.
       autoCollapseKey = key;
       return;
     }
@@ -214,9 +184,6 @@ export function installReadingSurface() {
     if (decision.transientKeyboard) {
       el.dataset.readerViewportOccluded = 'keyboard';
       syncViewport(stableViewport, { allowAutoCollapse: false });
-      // The core Reader also listens to these events to repaginate. A software
-      // keyboard changes the visual viewport temporarily, not the book's layout
-      // contract, so keep that transient resize from reaching those handlers.
       event?.stopImmediatePropagation?.();
       return;
     }
@@ -228,7 +195,7 @@ export function installReadingSurface() {
 
   syncViewport();
   watchAdaptiveStyles(requestRepaginate);
-  installImmersiveChromeToggle();
+  installImmersiveChrome();
 
   const coarseQuery = window.matchMedia?.('(pointer: coarse)');
   coarseQuery?.addEventListener?.('change', onViewport);
@@ -253,6 +220,8 @@ export function installReadingSurface() {
   const stageObserver = new MutationObserver(() => {
     if (document.body.dataset.stage !== 'read') {
       document.body.classList.remove('reader-chrome-hidden');
+      document.body.classList.remove('reader-chrome-visible');
+      delete document.body.dataset.readerChrome;
       return;
     }
     window.setTimeout(() => maybeAutoCollapseSpread(stableViewport), 0);
