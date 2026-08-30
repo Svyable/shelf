@@ -6,7 +6,7 @@
 | **Status**    | Drafting |
 | **Drafting Source** | Svyable Desk |
 | **Publication Surface** | Public, unlisted Shelf proof |
-| **Chapters**  | 3 of 18 planned drafted |
+| **Chapters**  | 4 of 18 planned drafted |
 
 *The Birth of a New Force in the Economy*
 
@@ -20,3 +20,4 @@ This is an incomplete public proof copied from the committed Desk draft. It is i
 - [x] [Ch 1 — The First Hire Who Wasn't Hired](manuscript/ch01-the-first-hire-who-wasnt-hired.md)
 - [x] [Ch 6 — The Vanishing Queue](manuscript/ch06-the-vanishing-queue.md)
 - [x] [Ch 10 — The One-Person Corporation](manuscript/ch10-the-one-person-corporation.md)
+- [x] [Ch 12 — The Skill of Having Work Done](manuscript/ch12-the-skill-of-having-work-done.md)
