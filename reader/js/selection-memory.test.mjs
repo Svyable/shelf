@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
 import {
+  SELECTION_SNAPSHOT_TTL,
   normalizeSelectionSnapshot,
   selectionAnchorTargetIndex,
   selectionSnapshotUsable,
 } from './selection-memory.js';
+
+assert.equal(SELECTION_SNAPSHOT_TTL, 15000);
 
 const precise = normalizeSelectionSnapshot({
   text: '  selected   words  ',
