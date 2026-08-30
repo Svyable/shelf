@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { classifyViewport, formatReadingStatus } from './reading-surface.js';
+import { classifyViewport, formatReadingStatus, readingFocusTarget } from './reading-surface.js';
 
 test('classifies a phone portrait viewport', () => {
   assert.deepEqual(
@@ -67,4 +67,29 @@ test('formats continuous reading position as settled book progress', () => {
 test('omits unavailable location details without producing broken speech', () => {
   assert.equal(formatReadingStatus({ mode: 'scroll' }), 'Continuous reading.');
   assert.equal(formatReadingStatus({ mode: 'paged', currentPage: '3' }), 'Pages. Page 3.');
+});
+
+test('lands paged focus on the visible left page', () => {
+  assert.equal(
+    readingFocusTarget({ stage: 'read', mode: 'paged', leftActive: true }),
+    'pageLeft'
+  );
+});
+
+test('lands continuous focus on the visible scroll reader', () => {
+  assert.equal(
+    readingFocusTarget({ stage: 'read', mode: 'scroll', scrollVisible: true }),
+    'scrollReader'
+  );
+});
+
+test('falls back to the paged group while reading content is settling', () => {
+  assert.equal(readingFocusTarget({ stage: 'read', mode: 'paged' }), 'pagesWrapper');
+});
+
+test('does not claim a hidden reading surface outside the read stage', () => {
+  assert.equal(
+    readingFocusTarget({ stage: 'cover', mode: 'scroll', scrollVisible: true }),
+    'bookStage'
+  );
 });
