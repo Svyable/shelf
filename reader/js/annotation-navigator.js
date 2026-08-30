@@ -9,8 +9,14 @@ import {
   noteTarget,
   orderNotes,
 } from './annotation-navigator-model.js';
+import {
+  buildAnnotationBackup,
+  mergeAnnotationBackup,
+  parseAnnotationBackup,
+} from './annotation-backup.js';
 
-const STYLE_HREF = 'css/annotation-navigator.css?v=r1';
+const STYLE_HREF = 'css/annotation-navigator.css?v=r2';
+const MAX_IMPORT_BYTES = 5 * 1024 * 1024;
 const chapterCache = new Map();
 let rows = [];
 let visibleRows = [];
@@ -31,17 +37,19 @@ function installStyles() {
 }
 
 async function chapterInfo(slug) {
-  if (!slug) return { order: [], titles: {} };
+  if (!slug) return { order: [], titles: {}, title: '' };
   if (chapterCache.has(slug)) return chapterCache.get(slug);
   const pending = fetchText(`books/${slug}/README.md`)
     .then((markdown) => {
-      const contents = parseBookReadme(markdown, slug).contents || [];
+      const book = parseBookReadme(markdown, slug);
+      const contents = book.contents || [];
       return {
         order: contents.map((chapter) => chapter.id),
         titles: Object.fromEntries(contents.map((chapter) => [chapter.id, chapter.title || chapter.id])),
+        title: book.title || slug,
       };
     })
-    .catch(() => ({ order: [], titles: {} }));
+    .catch(() => ({ order: [], titles: {}, title: slug }));
   chapterCache.set(slug, pending);
   return pending;
 }
@@ -76,6 +84,12 @@ function ensureUi() {
         <span class="sr-only">Search notes and highlights</span>
         <input type="search" id="notesSearch" placeholder="Search quotes or notes…" autocomplete="off">
       </label>
+      <div class="notes-backup-tools" aria-label="Annotation backup">
+        <button type="button" class="ghost-btn" id="notesExportBackup">Export backup</button>
+        <button type="button" class="ghost-btn" id="notesImportBackup">Import backup</button>
+        <input type="file" id="notesImportFile" accept="application/json,.json" hidden>
+        <span class="notes-backup-status" id="notesBackupStatus" role="status" aria-live="polite"></span>
+      </div>
       <div class="notes-layout">
         <div class="notes-browser">
           <p class="notes-summary" id="notesSummary"></p>
@@ -106,9 +120,12 @@ function ensureUi() {
 
 function announce(message) {
   const live = $('notesLive');
-  if (!live) return;
-  live.textContent = '';
-  requestAnimationFrame(() => { live.textContent = message; });
+  if (live) {
+    live.textContent = '';
+    requestAnimationFrame(() => { live.textContent = message; });
+  }
+  const status = $('notesBackupStatus');
+  if (status && /backup|import|export|annotation/i.test(message)) status.textContent = message;
 }
 
 function updateHeaderCount() {
@@ -212,7 +229,11 @@ function updateSelectedNote() {
   const notes = loadNotes(route.slug);
   const index = notes.findIndex((note) => note.id === selectedId);
   if (index < 0) return;
-  notes[index] = { ...notes[index], body: $('noteInspectorBody')?.value.trim() || '' };
+  notes[index] = {
+    ...notes[index],
+    body: $('noteInspectorBody')?.value.trim() || '',
+    updatedAt: Date.now(),
+  };
   saveNotes(route.slug, notes);
   refreshRenderedHighlights();
   void refresh();
@@ -281,14 +302,71 @@ function jumpToSelected() {
   scheduleLanding();
 }
 
+function downloadJson(filename, value) {
+  const blob = new Blob([JSON.stringify(value, null, 2) + '\n'], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+  window.setTimeout(() => URL.revokeObjectURL(link.href), 0);
+}
+
+async function exportAnnotationBackup() {
+  const route = parseRoute();
+  if (!route.slug) return;
+  const info = await chapterInfo(route.slug);
+  const notes = loadNotes(route.slug);
+  const backup = buildAnnotationBackup({ slug: route.slug, title: info.title, notes });
+  downloadJson(`${route.slug}-annotations.bookself.json`, backup);
+  announce(`Annotation backup exported with ${backup.notes.length} ${backup.notes.length === 1 ? 'annotation' : 'annotations'}.`);
+}
+
+async function importAnnotationBackup(file) {
+  const route = parseRoute();
+  if (!route.slug || !file) return;
+  if (file.size > MAX_IMPORT_BYTES) {
+    announce('Annotation backup is too large to import.');
+    return;
+  }
+  let text = '';
+  try {
+    text = await file.text();
+  } catch {
+    announce('Annotation backup could not be read.');
+    return;
+  }
+  const parsed = parseAnnotationBackup(text, route.slug);
+  if (!parsed.ok) {
+    announce(parsed.error);
+    return;
+  }
+  const merged = mergeAnnotationBackup(loadNotes(route.slug), parsed.backup.notes);
+  if (!merged.added && !merged.updated) {
+    announce(`Annotation import complete. No changes; ${merged.skipped} already present.`);
+    return;
+  }
+  saveNotes(route.slug, merged.notes);
+  refreshRenderedHighlights();
+  await refresh({ preserveSelection: false });
+  announce(`Annotation import complete: ${merged.added} added, ${merged.updated} updated, ${merged.skipped} already present.`);
+}
+
 function bindEvents() {
   $('notesBtn')?.addEventListener('click', () => {
     void refresh({ preserveSelection: false }).then(() => {
+      $('notesBackupStatus').textContent = '';
       $('notesOverlay')?.classList.add('active');
     });
   });
   $('notesClose')?.addEventListener('click', () => $('notesOverlay')?.classList.remove('active'));
   $('notesSearch')?.addEventListener('input', () => void refresh({ preserveSelection: false }));
+  $('notesExportBackup')?.addEventListener('click', () => void exportAnnotationBackup());
+  $('notesImportBackup')?.addEventListener('click', () => $('notesImportFile')?.click());
+  $('notesImportFile')?.addEventListener('change', (event) => {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    void importAnnotationBackup(file).finally(() => { input.value = ''; });
+  });
   $('notesResults')?.addEventListener('click', (event) => {
     const button = event.target.closest('.note-result[data-note-id]');
     if (!button) return;
