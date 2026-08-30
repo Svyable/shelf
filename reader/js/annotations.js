@@ -1,6 +1,7 @@
 import './selection-actions.js';
 import './annotation-navigator.js';
 import './annotation-navigator-modal.js';
+import './reader-state-backup-runtime.js';
 import { fetchText } from './base.js';
 import { parseBookReadme } from './catalog.js';
 import { parseRoute } from './router.js';
