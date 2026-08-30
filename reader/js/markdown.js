@@ -2,8 +2,11 @@ import { fileUrl } from './base.js';
 import { installMarkedMath, setMathReferenceContext } from './math.js';
 import { installMarkedAcademic, setAcademicContext } from './academic.js';
 import { withSourceRange } from './reading-position.js';
+import { createBoundedPairCache } from './derivation-cache.js';
 
 const CHAPTER = '(?:manuscript\\/)?((?:ch[\\w-]+|front-matter|back-matter)(?:\\.md)?)';
+const blockCache = createBoundedPairCache(96);
+const headingCache = createBoundedPairCache(192);
 let wikiInstalled = false;
 let wikiSlug = '';
 
@@ -99,22 +102,31 @@ export function renderMarkdown(markdown, slug) {
 }
 
 export function headingOffsets(markdown) {
+  const source = String(markdown ?? '');
+  const cached = headingCache.get('headings', source);
+  if (cached) return cached;
+
   const heads = [];
   const re = /^(#{1,3})\s+(.+)$/gm;
   let m;
-  while ((m = re.exec(markdown))) {
+  while ((m = re.exec(source))) {
     heads.push({
       level: m[1].length,
       title: m[2].trim(),
       offset: m.index,
     });
   }
-  return heads;
+  return headingCache.set('headings', source, heads);
 }
 
 export function blocksFromMarkdown(markdown, slug) {
-  prepareMarkdown(markdown, slug);
-  const tokens = window.marked.lexer(markdown);
+  const source = String(markdown ?? '');
+  const scope = String(slug || '');
+  const cached = blockCache.get(scope, source);
+  if (cached) return cached;
+
+  prepareMarkdown(source, scope);
+  const tokens = window.marked.lexer(source);
   const blocks = [];
   let offset = 0;
   for (const token of tokens) {
@@ -124,7 +136,7 @@ export function blocksFromMarkdown(markdown, slug) {
     offset = end;
     if (token.type === 'space' || raw.trim() === '') continue;
     const html = withSourceRange(
-      rewriteUrls(window.marked.parser([token]), slug),
+      rewriteUrls(window.marked.parser([token]), scope),
       start,
       end
     );
@@ -132,11 +144,16 @@ export function blocksFromMarkdown(markdown, slug) {
   }
   if (blocks.length === 0) {
     blocks.push({
-      html: withSourceRange('<p></p>', 0, markdown.length),
+      html: withSourceRange('<p></p>', 0, source.length),
       start: 0,
-      end: markdown.length,
-      raw: markdown,
+      end: source.length,
+      raw: source,
     });
   }
-  return blocks;
+  return blockCache.set(scope, source, blocks);
+}
+
+export function clearMarkdownDerivationCaches() {
+  blockCache.clear();
+  headingCache.clear();
 }
