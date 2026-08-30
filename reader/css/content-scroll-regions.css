@@ -1,0 +1,64 @@
+/* Interactive overflow regions
+   ----------------------------
+   Geometry-neutral affordances for code/table blocks that are actually wider
+   than their reading column. Pagination measurement remains owned by the base
+   reading-content rules; these styles only affect interaction and paint. */
+
+.reader-scroll-region {
+  touch-action: pan-x pan-y;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  transition: box-shadow 140ms ease, outline-color 140ms ease;
+}
+
+.reader-scroll-region.can-scroll-right:not(.can-scroll-left) {
+  box-shadow: inset -14px 0 12px -14px color-mix(in srgb, var(--text-primary) 50%, transparent);
+}
+
+.reader-scroll-region.can-scroll-left:not(.can-scroll-right) {
+  box-shadow: inset 14px 0 12px -14px color-mix(in srgb, var(--text-primary) 50%, transparent);
+}
+
+.reader-scroll-region.can-scroll-left.can-scroll-right {
+  box-shadow:
+    inset 14px 0 12px -14px color-mix(in srgb, var(--text-primary) 50%, transparent),
+    inset -14px 0 12px -14px color-mix(in srgb, var(--text-primary) 50%, transparent);
+}
+
+.reader-scroll-region:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (pointer: coarse) {
+  .reader-scroll-region {
+    scrollbar-width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reader-scroll-region {
+    transition: none;
+    scroll-behavior: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .reader-scroll-region.can-scroll-left,
+  .reader-scroll-region.can-scroll-right {
+    box-shadow: none;
+    border-inline-color: CanvasText;
+  }
+
+  .reader-scroll-region:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+@media print {
+  .reader-scroll-region {
+    box-shadow: none !important;
+    outline: 0 !important;
+  }
+}
