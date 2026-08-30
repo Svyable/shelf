@@ -1,0 +1,148 @@
+/* Human page-turn motion
+   ----------------------
+   Motion is isolated from layout so page choreography can evolve without
+   changing pagination geometry. The visible leaf lands just shy of 90deg;
+   the core swaps content 12ms later, avoiding a hidden-backface blank interval. */
+
+:root {
+  --reader-turn-duration: 548ms;
+  --reader-turn-ease: linear;
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="spread"] #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="single"] #pageLeft.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active {
+  z-index: 5;
+  overflow: visible;
+  animation-duration: var(--reader-turn-duration);
+  animation-timing-function: var(--reader-turn-ease);
+  animation-fill-mode: both;
+  will-change: transform, box-shadow, filter;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="spread"] #pageRight.active,
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="single"] #pageLeft.active {
+  transform-origin: left center;
+  animation-name: readerHumanLeafNext;
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active {
+  transform-origin: right center;
+  animation-name: readerHumanLeafPrev;
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="spread"] #pageRight.active::after,
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="single"] #pageLeft.active::after,
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  animation: readerPaperSheen var(--reader-turn-duration) linear both;
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="spread"] #pageRight.active::after,
+[data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="single"] #pageLeft.active::after {
+  background: linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.20) 42%, rgba(0,0,0,.18) 88%, rgba(0,0,0,.28));
+}
+
+[data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active::after {
+  background: linear-gradient(270deg, rgba(255,255,255,.04), rgba(255,255,255,.20) 42%, rgba(0,0,0,.18) 88%, rgba(0,0,0,.28));
+}
+
+@keyframes readerHumanLeafNext {
+  0% {
+    transform: translate3d(0,0,0) rotateY(0deg) rotateX(0deg) scaleX(1);
+    filter: brightness(1);
+    box-shadow: inset 18px 0 28px -22px #0008, 0 12px 40px var(--shadow);
+  }
+  12% {
+    transform: translate3d(-1px,0,7px) rotateY(-7deg) rotateX(.1deg) scaleX(.999);
+    filter: brightness(1.005);
+  }
+  35% {
+    transform: translate3d(-5px,0,21px) rotateY(-27deg) rotateX(.35deg) scaleX(.997);
+    filter: brightness(.99);
+    box-shadow: inset 24px 0 34px -22px #0009, -7px 16px 34px color-mix(in srgb, var(--shadow) 62%, transparent);
+  }
+  62% {
+    transform: translate3d(-9px,0,29px) rotateY(-52deg) rotateX(.55deg) scaleX(.994);
+    filter: brightness(.965);
+    box-shadow: inset 32px 0 42px -20px #000b, -15px 22px 44px color-mix(in srgb, var(--shadow) 80%, transparent);
+  }
+  84% {
+    transform: translate3d(-7px,0,17px) rotateY(-76deg) rotateX(.28deg) scaleX(.996);
+    filter: brightness(.94);
+    box-shadow: inset 38px 0 48px -18px #000c, -18px 15px 34px color-mix(in srgb, var(--shadow) 68%, transparent);
+  }
+  100% {
+    transform: translate3d(-2px,0,2px) rotateY(-89.5deg) rotateX(0deg) scaleX(1);
+    filter: brightness(.945);
+    box-shadow: inset 28px 0 38px -18px #000b, -5px 8px 16px color-mix(in srgb, var(--shadow) 42%, transparent);
+  }
+}
+
+@keyframes readerHumanLeafPrev {
+  0% {
+    transform: translate3d(0,0,0) rotateY(0deg) rotateX(0deg) scaleX(1);
+    filter: brightness(1);
+    box-shadow: inset -18px 0 28px -22px #0008, 0 12px 40px var(--shadow);
+  }
+  12% {
+    transform: translate3d(1px,0,7px) rotateY(7deg) rotateX(.1deg) scaleX(.999);
+    filter: brightness(1.005);
+  }
+  35% {
+    transform: translate3d(5px,0,21px) rotateY(27deg) rotateX(.35deg) scaleX(.997);
+    filter: brightness(.99);
+    box-shadow: inset -24px 0 34px -22px #0009, 7px 16px 34px color-mix(in srgb, var(--shadow) 62%, transparent);
+  }
+  62% {
+    transform: translate3d(9px,0,29px) rotateY(52deg) rotateX(.55deg) scaleX(.994);
+    filter: brightness(.965);
+    box-shadow: inset -32px 0 42px -20px #000b, 15px 22px 44px color-mix(in srgb, var(--shadow) 80%, transparent);
+  }
+  84% {
+    transform: translate3d(7px,0,17px) rotateY(76deg) rotateX(.28deg) scaleX(.996);
+    filter: brightness(.94);
+    box-shadow: inset -38px 0 48px -18px #000c, 18px 15px 34px color-mix(in srgb, var(--shadow) 68%, transparent);
+  }
+  100% {
+    transform: translate3d(2px,0,2px) rotateY(89.5deg) rotateX(0deg) scaleX(1);
+    filter: brightness(.945);
+    box-shadow: inset -28px 0 38px -18px #000b, 5px 8px 16px color-mix(in srgb, var(--shadow) 42%, transparent);
+  }
+}
+
+@keyframes readerPaperSheen {
+  0%, 8% { opacity: 0; }
+  38% { opacity: .22; }
+  68% { opacity: .34; }
+  100% { opacity: .15; }
+}
+
+[data-reader-mode="paged"] .page-surface.turning {
+  animation: readerDestinationSettle 190ms cubic-bezier(.18,.74,.2,1);
+}
+
+@keyframes readerDestinationSettle {
+  from { opacity: .9; transform: translate3d(0,1px,-1px); filter: brightness(.98); }
+  to { opacity: 1; transform: translate3d(0,0,0); filter: brightness(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="spread"] #pageRight.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-next[data-reader-spread="single"] #pageLeft.active,
+  [data-reader-mode="paged"] .pages-wrapper.turn-prev #pageLeft.active,
+  [data-reader-mode="paged"] .page-surface.turning,
+  [data-reader-mode="paged"] .page-surface::after {
+    animation: none !important;
+    filter: none !important;
+  }
+}
