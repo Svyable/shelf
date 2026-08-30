@@ -1,6 +1,6 @@
 importScripts('./js/offline-cache.js');
 
-const CACHE = 'obb-shell-v50';
+const CACHE = 'obb-shell-v51';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -87,6 +87,32 @@ function cacheableExternal(url) {
     || url.origin === 'https://fonts.gstatic.com';
 }
 
+async function cacheRequest(cache, href) {
+  const request = new Request(href, { credentials: 'same-origin' });
+  const existing = await cache.match(request, { ignoreSearch: true });
+  if (existing) return existing;
+  const response = await fetch(request);
+  if (!response.ok) return null;
+  try {
+    await cache.put(request, response.clone());
+  } catch {
+    // A full cache must not interfere with the book currently being read.
+  }
+  return response;
+}
+
+async function warmChapterMedia(cache, chapterResponse, chapterUrl, publicationUrl) {
+  if (!chapterResponse?.ok) return;
+  let markdown;
+  try {
+    markdown = await chapterResponse.text();
+  } catch {
+    return;
+  }
+  const media = self.BookselfOfflineCache.mediaLinks(markdown, chapterUrl, publicationUrl);
+  await Promise.allSettled(media.map((href) => cacheRequest(cache, href)));
+}
+
 async function warmPublication(readmeResponse, readmeUrl) {
   if (!readmeResponse?.ok) return;
   let markdown;
@@ -101,16 +127,9 @@ async function warmPublication(readmeResponse, readmeUrl) {
   const cache = await caches.open(CACHE);
 
   await Promise.allSettled(chapters.map(async (href) => {
-    const request = new Request(href, { credentials: 'same-origin' });
-    const existing = await cache.match(request, { ignoreSearch: true });
-    if (existing) return;
-    const response = await fetch(request);
-    if (!response.ok) return;
-    try {
-      await cache.put(request, response.clone());
-    } catch {
-      // A full cache must not interfere with the book currently being read.
-    }
+    const response = await cacheRequest(cache, href);
+    if (!response) return;
+    await warmChapterMedia(cache, response.clone(), href, readmeUrl.href);
   }));
 }
 

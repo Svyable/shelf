@@ -1,5 +1,7 @@
 (function installOfflineCacheHelpers(scope) {
   const MARKDOWN_LINK = /(?<!!)\[[^\]]*\]\((?:<([^>]+)>|([^\s)]+))(?:\s+["'][^"']*["'])?\)/g;
+  const MARKDOWN_IMAGE = /!\[[^\]]*\]\((?:<([^>]+)>|([^\s)]+))(?:\s+["'][^"']*["'])?\)/g;
+  const MEDIA_EXT = /\.(?:avif|gif|jpe?g|png|svg|webp)$/i;
 
   function publicationRoot(baseUrl) {
     const base = new URL(baseUrl);
@@ -38,6 +40,34 @@
     return urls;
   }
 
+  function mediaLinks(markdown, baseUrl, publicationUrl, limit = 96) {
+    const root = publicationRoot(publicationUrl || baseUrl);
+    const urls = [];
+    const seen = new Set();
+    MARKDOWN_IMAGE.lastIndex = 0;
+    let match;
+
+    while ((match = MARKDOWN_IMAGE.exec(markdown || '')) && urls.length < limit) {
+      const raw = match[1] || match[2] || '';
+      let url;
+      try {
+        url = new URL(raw, baseUrl);
+      } catch {
+        continue;
+      }
+      url.hash = '';
+      url.search = '';
+      if (url.origin !== root.origin) continue;
+      if (!url.pathname.startsWith(root.pathname)) continue;
+      if (!MEDIA_EXT.test(url.pathname)) continue;
+      const key = url.href;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      urls.push(key);
+    }
+    return urls;
+  }
+
   function isPublicationReadme(url) {
     try {
       return /\/books\/[^/]+\/README\.md$/i.test(new URL(url).pathname);
@@ -48,6 +78,7 @@
 
   scope.BookselfOfflineCache = Object.freeze({
     chapterLinks,
+    mediaLinks,
     isPublicationReadme,
   });
 })(globalThis);
