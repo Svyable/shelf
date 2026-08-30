@@ -1,3 +1,5 @@
+import { navigationHistoryState } from './reading-trail-model.js';
+
 /** Routes: hash #/b/<slug>/<chapter>/<offset> and query ?b=&c=&o= */
 
 export function parseHash(hash = window.location.hash) {
@@ -55,11 +57,18 @@ function withHash(hash) {
 export function go(hash, { replace = false } = {}) {
   const next = withHash(hash);
   const route = parseHash(next);
+  const fromRoute = parseRoute();
   const search = queryFor(route);
   const url = `${window.location.pathname}${search}${next}`;
   const here = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   if (url === here) return;
-  if (replace) history.replaceState(null, '', url);
-  else history.pushState(null, '', url);
+
+  const state = navigationHistoryState(history.state, fromRoute, route, { replace });
+  if (replace) history.replaceState(state, '', url);
+  else history.pushState(state, '', url);
   window.dispatchEvent(new HashChangeEvent('hashchange'));
+}
+
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  import('./reading-trail.js').catch(() => {});
 }
