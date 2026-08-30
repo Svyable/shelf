@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {
   setAcademicContext,
   academicPreviewModel,
+  academicJumpModel,
   academicPreviewPlacement,
   tokenizeFootnoteDefinition,
   tokenizeFootnoteRef,
@@ -34,6 +35,10 @@ assert.equal(
   tokenizeFootnoteDefinition('[^note]: A footnote with context.\n').body,
   'A footnote with context.'
 );
+assert.equal(
+  tokenizeFootnoteDefinition('[^note]: A footnote with context.\n').offset,
+  ctx.footnotes.get('note').offset
+);
 
 assert.deepEqual(tokenizeCitationRef('[@git|Chacon and Straub, 2014] next'), {
   raw: '[@git|Chacon and Straub, 2014]',
@@ -42,8 +47,13 @@ assert.deepEqual(tokenizeCitationRef('[@git|Chacon and Straub, 2014] next'), {
   offset: ctx.citations.get('git').offset,
 });
 assert.equal(tokenizeCitationDefinition('[@git]: A source.\n').body, 'A source.');
+assert.equal(
+  tokenizeCitationDefinition('[@git]: A source.\n').offset,
+  ctx.citations.get('git').offset
+);
 
-assert.deepEqual(academicPreviewModel('footnote', 'note'), {
+const footnoteModel = academicPreviewModel('footnote', 'note');
+assert.deepEqual(footnoteModel, {
   kind: 'footnote',
   key: 'note',
   offset: ctx.footnotes.get('note').offset,
@@ -60,6 +70,26 @@ assert.deepEqual(academicPreviewModel('citation', 'git'), {
   targetId: 'ref-git',
 });
 assert.equal(academicPreviewModel('citation', 'missing'), null);
+
+assert.deepEqual(academicJumpModel(footnoteModel, {
+  view: 'read',
+  slug: 'example book',
+  chapter: 'ch01-intro.md',
+  offset: 37,
+}), {
+  kind: 'footnote',
+  key: 'note',
+  label: 'Footnote 1',
+  targetId: 'fn-note',
+  targetOffset: ctx.footnotes.get('note').offset,
+  returnOffset: 37,
+  targetHash: `#/b/example%20book/ch01-intro.md/${ctx.footnotes.get('note').offset}`,
+  returnHash: '#/b/example%20book/ch01-intro.md/37',
+});
+assert.equal(
+  academicJumpModel(footnoteModel, { view: 'cover', slug: 'example book' }),
+  null
+);
 
 assert.deepEqual(
   academicPreviewPlacement(
@@ -108,5 +138,36 @@ const footnoteHtml = footnoteExtension.renderer({ key: 'note', number: 1, offset
 assert.match(footnoteHtml, /data-academic-kind="footnote"/);
 assert.match(footnoteHtml, /aria-haspopup="dialog"/);
 assert.match(footnoteHtml, /aria-expanded="false"/);
+
+const definitionParser = {
+  parser: {
+    parseInline() {
+      return 'Rendered body';
+    },
+  },
+};
+const footnoteDefinition = config.extensions.find((entry) => entry.name === 'bookselfFootnoteDefinition');
+const footnoteDefinitionHtml = footnoteDefinition.renderer.call(definitionParser, {
+  key: 'note',
+  number: 1,
+  offset: 123,
+  tokens: [],
+});
+assert.match(footnoteDefinitionHtml, /role="note"/);
+assert.match(footnoteDefinitionHtml, /tabindex="-1"/);
+assert.match(footnoteDefinitionHtml, /data-academic-target="footnote"/);
+assert.match(footnoteDefinitionHtml, /data-academic-offset="123"/);
+assert.match(footnoteDefinitionHtml, /aria-label="Footnote 1"/);
+
+const citationDefinition = config.extensions.find((entry) => entry.name === 'bookselfCitationDefinition');
+const citationDefinitionHtml = citationDefinition.renderer.call(definitionParser, {
+  key: 'git',
+  offset: 321,
+  tokens: [],
+});
+assert.match(citationDefinitionHtml, /tabindex="-1"/);
+assert.match(citationDefinitionHtml, /data-academic-target="citation"/);
+assert.match(citationDefinitionHtml, /data-academic-offset="321"/);
+assert.match(citationDefinitionHtml, /aria-label="Reference git"/);
 
 console.log('academic tests ok');
