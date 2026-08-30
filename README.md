@@ -1,69 +1,88 @@
 # Svyable Shelf
 
-Sven Hardy Benson's **public shelf** in a [Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)
-setup. The books here are released editions meant to be read. Drafts and the
-next revision of a published book stay on the private Desk until they are
-deliberately released.
+**Released editions. Read like books.**
 
-Desk and Shelf are separate Git repositories with separate histories. This
-public repository does **not** point into or read the private Desk. A release
-copies a committed publication snapshot into Shelf; after that, the public copy
-is independent until the next release.
+Svyable Shelf is the public reading library for books by Sven Hardy Benson and the live reference deployment of [Bookself](https://github.com/Svyable/bookself). The working copy moves on the [Desk](https://github.com/Svyable/desk); Shelf holds the public snapshots readers can actually open, cite, share, and return to.
 
-This repository is the first public implementation of the Bookself platform.
-Its identity and released books belong here; the shared Reader and Publishing
-Desk come from [Svyable/bookself](https://github.com/Svyable/bookself).
+**[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See the working Desk →](https://github.com/Svyable/desk)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-**Read:** [svyable.github.io/shelf/reader](https://svyable.github.io/shelf/reader/)  
-**Publishing Desk:** [svyable.github.io/shelf/desk](https://svyable.github.io/shelf/desk/)  
-**Books (this shelf):** [github.com/Svyable/shelf](https://github.com/Svyable/shelf)  
-**Software:** [github.com/Svyable/bookself](https://github.com/Svyable/bookself)  
-**Workflow:** [Bookself](https://github.com/Svyable/bookself/blob/main/docs/bookself.md)
-
-## What belongs here
-
-Bookself keeps platform software separate from an individual deployment:
-
-- `reader/` and `desk/` are **shared Bookself UI** and should stay aligned with
-  the upstream platform.
-- `books/`, this `README.md`, and `imprint.json` are **this Shelf's released
-  content and identity**.
-- `imprint.json` is where Svyable-specific branding and repository identity
-  belong; shared Reader/Desk code should not depend on those values.
-
-Platform UI upgrades are developed in Bookself and synchronized to both the
-private Desk and public Shelf. The canonical upstream command is
-`scripts/sync-ui.sh`; the older `sync-reader.sh` name remains a compatibility
-alias in Bookself. That UI synchronization is also a copy operation, not a
-runtime dependency on the platform repository.
+> **3 author publication projects · 8 Reader style specimens · one public reading surface**
 
 ## The books
 
-| Book | Authors |
-|------|---------|
-| [Leveraging Luck](books/leveraging-luck/) | Sven Hardy Benson |
-| [Silent Cartel](books/silent-cartel/) | Sven Hardy Benson |
-| [The Common Book](books/style-common-book/) | Bookself Studio |
-| [The Lamplight Room](books/style-lamplight-room/) | Bookself Studio |
-| [A Clear Margin](books/style-clear-margin/) | Bookself Studio |
-| [Field Notes Quarterly](books/style-field-notes/) | Bookself Studio |
-| [Poems at the Window](books/style-poems-at-window/) | Bookself Studio |
-| [After Midnight](books/style-after-midnight/) | Bookself Studio |
-| [Easy Reading](books/style-easy-reading/) | Bookself Studio |
-| [Study in Green](books/style-quiet-study/) | Bookself Studio |
+Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
 
-The eight Bookself Studio volumes are deliberately small **Reader style
-specimens**. Each is a real Markdown publication with a copyable `reader.json`
-that demonstrates one named author preset.
+| Book | State | Chapters | What it is | Read |
+|---|---|---:|---|---|
+| [**Leveraging Luck**](books/leveraging-luck/) | ✅ Released | 10 / 10 | *An Optimistic Guide to Life* — a practical book about luck, mindset, leverage, action, and making more of favorable randomness. | [Read →](https://svyable.github.io/shelf/reader/#/b/leveraging-luck/) |
+| [**Silent Cartel**](books/silent-cartel/) | ✅ Released | 21 / 21 | How pricing algorithms, shared vendors, data, and automated behavior complicate the old assumption that collusion must begin with an explicit conversation. | [Read →](https://svyable.github.io/shelf/reader/#/b/silent-cartel/) |
+| [**The Exponentiality**](books/the-exponentiality/) | 🟡 Public draft | Prologue drafted | A public in-progress Bookself volume. It is present on Shelf but is still marked `Drafting`, so it is not treated as a released catalog entry by the Reader. | [Read draft →](https://svyable.github.io/shelf/reader/#/b/the-exponentiality/) |
 
-*The Exponentiality* is on the private Desk (`books/the-exponentiality/`) and
-not yet on the shelf. *The Unbounding* stays on the private Desk until it is
-released here.
+**Shelf is public. Status still matters.** A folder can be publicly visible in this repository without being marked as a released edition. The Reader library normally catalogs `Published` works; a direct route can still be used for an intentionally public proof or draft.
 
-## Reader style options
+## Reader style gallery
 
-Authors and stylists can recommend a starting reading composition with a named
-preset in `books/<slug>/reader.json`:
+These eight tiny Bookself Studio publications are real Markdown volumes built to demonstrate how dramatically the same Reader can feel when a publication recommends a different starting composition.
+
+| Specimen | Preset | Reading feel | Open |
+|---|---|---|---|
+| [**The Common Book**](books/style-common-book/) | `book` | Ivory, Source Serif 4, balanced paged reading | [Open →](https://svyable.github.io/shelf/reader/#/b/style-common-book/) |
+| [**The Lamplight Room**](books/style-lamplight-room/) | `literary` | Parchment, Literata, classic indents, pages | [Open →](https://svyable.github.io/shelf/reader/#/b/style-lamplight-room/) |
+| [**A Clear Margin**](books/style-clear-margin/) | `modern-essay` | Porcelain, IBM Plex Sans, wide scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-clear-margin/) |
+| [**Field Notes Quarterly**](books/style-field-notes/) | `editorial` | Linen, humanist sans, compact editorial scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-field-notes/) |
+| [**Poems at the Window**](books/style-poems-at-window/) | `poetry` | Ivory, classic serif, airy open scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-poems-at-window/) |
+| [**After Midnight**](books/style-after-midnight/) | `night-story` | Midnight, Lora, narrow warm paged reading | [Open →](https://svyable.github.io/shelf/reader/#/b/style-after-midnight/) |
+| [**Easy Reading**](books/style-easy-reading/) | `accessible` | High contrast, Atkinson Hyperlegible, larger scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-easy-reading/) |
+| [**Study in Green**](books/style-quiet-study/) | `quiet-study` | Sage, Literata, narrow left-aligned study scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-quiet-study/) |
+
+**The publication can suggest. The reader decides.** A book can recommend type, paper, spacing, measure, Pages/Scroll mode, and atmosphere in `reader.json`; a reader's personal changes stay in that browser and never rewrite the publication.
+
+## Desk and Shelf are different promises
+
+**Desk means work in motion. Shelf means a public snapshot.**
+
+```text
+                  Svyable Desk                         Svyable Shelf
+              ──────────────────                   ──────────────────
+idea → research → manuscript → revision → commit → release snapshot → edition
+                       ↑                                  │
+                  Desk Reader                        Shelf Reader
+                 working proof                     public reading
+```
+
+Desk and Shelf are separate Git repositories with separate histories. A release copies a committed publication snapshot into Shelf. The public copy does not reach back into the private working repository, and later Desk edits do not silently rewrite a Shelf edition.
+
+That separation is one of Bookself's core ideas: **publication is an intentional Git event, not whatever happens to be the newest file on an author's laptop.**
+
+## What lives in this repository
+
+| Path | Job |
+|---|---|
+| `books/` | Public publication snapshots owned by this Shelf |
+| `reader/` | Shared Bookself reading interface |
+| `desk/` | Shared Bookself publishing/readiness interface |
+| `imprint.json` | Svyable Shelf identity and repository links |
+| `README.md` | Human-facing library catalog and deployment guide |
+
+Shared Reader/Desk improvements originate in [Svyable/bookself](https://github.com/Svyable/bookself). This repository owns its books, identity, and release history.
+
+## Releasing a new edition
+
+A normal release starts from the committed working copy on Desk and prepares a Shelf snapshot locally:
+
+```bash
+python3 scripts/release-book.py <slug> ../shelf
+```
+
+The release process verifies the publication, copies the committed snapshot, updates the public catalog, and leaves the Shelf change inspectable before it is committed. No CMS, database, or required GitHub Actions build sits between the Markdown and the Reader.
+
+Do not turn a released Shelf book back into `Drafting` merely because its next edition is being revised. Revise on Desk; replace the Shelf snapshot deliberately when the next edition is ready.
+
+See [Revising a published book](https://github.com/Svyable/bookself/blob/main/docs/revisions.md) and the full [Bookself workflow](https://github.com/Svyable/bookself/blob/main/docs/bookself.md).
+
+## Reader presentation
+
+A publication can recommend a starting composition with `books/<slug>/reader.json`:
 
 ```json
 {
@@ -72,75 +91,27 @@ preset in `books/<slug>/reader.json`:
 }
 ```
 
-| Preset | Example | Starting composition |
-|---|---|---|
-| `book` | [The Common Book](books/style-common-book/) | ivory · Source Serif 4 · balanced paged reading |
-| `literary` | [The Lamplight Room](books/style-lamplight-room/) | parchment · Literata · classic indents · pages |
-| `modern-essay` | [A Clear Margin](books/style-clear-margin/) | porcelain · IBM Plex Sans · wide left-aligned scroll |
-| `editorial` | [Field Notes Quarterly](books/style-field-notes/) | linen · humanist sans · compact editorial scroll |
-| `poetry` | [Poems at the Window](books/style-poems-at-window/) | ivory · classic serif · airy open scroll |
-| `night-story` | [After Midnight](books/style-after-midnight/) | midnight · Lora · narrow warm paged reading |
-| `accessible` | [Easy Reading](books/style-easy-reading/) | high contrast · Atkinson Hyperlegible · larger narrow scroll |
-| `quiet-study` | [Study in Green](books/style-quiet-study/) | sage · Literata · narrow left-aligned study scroll |
+Presets are shorthand, not locked themes. Publications can recommend warmth, font, size, tracking, leading, measure, alignment, paragraph rhythm, indentation, Pages/Scroll mode, and hyphenation. Readers remain in control of their own local presentation.
 
-A preset is shorthand, not a locked theme. `reader.json` can fine-tune the
-recommended theme, warmth, font, size, weight, tracking, leading, measure,
-alignment, paragraph rhythm, indentation, Pages/Scroll mode, and hyphenation.
+## More on the Shelf
 
-**The publication can suggest. The reader decides.** If a reader changes the
-font, text size, spacing, alignment, mode, or atmosphere, that personalization
-belongs only to that browser. It does not edit `reader.json`, change Git, or
-change any other reader's experience. **Use this book's design** clears the
-local ownership markers and reapplies the publication recommendation.
-
-For a normal publication or new edition, prepare the release from the private
-Desk with `scripts/release-book.sh <slug> ../shelf`. The command runs locally,
-copies the committed Desk snapshot, sets the Shelf copy to `Published`, updates
-this catalog row, verifies the copied publication files, and stops before
-commit or push so the public diff can be reviewed.
-
-No private-Desk GitHub Actions job is required to prepare that release, and
-this Shelf does not require an Actions build to turn Markdown into a separate
-artifact. GitHub Pages serves the committed Reader and publication files
-straight from the repository source configured for Pages.
-
-Do not change a released Shelf book to `Drafting` or `Revision in progress`
-just to work on its next edition. That can hide the book from the Reader without
-making its files private. Revise on Desk and release the replacement when it is
-ready.
-
-See [Revising a published book](https://github.com/Svyable/bookself/blob/main/docs/revisions.md).
-
-## The web shelf
+### Web shelf
 
 - [QNTLab](https://qntlab.app/) — Build + Test = Run
 
-The web shelf is for external work that should have the presence of a bound
-volume. The Reader gives it a spine and cover, while the original website
-remains the source of truth.
+The web shelf is for external work that should have the presence of a bound volume while the original website remains the source of truth.
 
-## The stand
+### The stand
 
 - [Geek to Me](https://geektome.lovable.app/)
 
-The stand is for external creations that should feel more like a magazine,
-feature, or quick doorway. The linked site remains the source of truth.
+The stand is for external creations that should feel more like a magazine, feature, or quick doorway.
 
-## How it works
+## Rights
 
-This repository is the public half of a Bookself installation.
+**Open tools. Author-owned words.**
 
-- **One released publication, one folder** under `books/<slug>/`.
-- **Plain Markdown** is the source of truth for the released Shelf snapshot.
-- **GitHub history** is the release and rollback history for this public copy.
-- **The Reader** (`reader/`) turns published Markdown into the reading
-  experience with no build step.
-- **The Publishing Desk** (`desk/`) reads the same repository state and makes
-  readiness and publication mismatches visible without adding a CMS.
-- **CI/CD is optional.** Reading and publishing do not depend on an Actions
-  workflow or hosted build artifact.
-
-The software is MIT. The manuscripts are not. See [LICENSE](LICENSE).
+Bookself software is open source. Publication content is not automatically open merely because it is publicly readable. See [LICENSE](LICENSE), [RIGHTS.md](RIGHTS.md), and any publication-specific `RIGHTS.md` / `rights.json` for the applicable rights boundary.
 
 ## Local preview
 
@@ -148,7 +119,4 @@ The software is MIT. The manuscripts are not. See [LICENSE](LICENSE).
 python3 -m http.server
 ```
 
-Then open:
-
-- [http://127.0.0.1:8000/reader/](http://127.0.0.1:8000/reader/)
-- [http://127.0.0.1:8000/desk/](http://127.0.0.1:8000/desk/)
+Then open `http://127.0.0.1:8000/reader/` for the Reader or `http://127.0.0.1:8000/desk/` for the publishing view.
