@@ -7,7 +7,7 @@ const source = fs.readFileSync(new URL('./offline-cache.js', import.meta.url), '
 const context = { URL };
 context.globalThis = context;
 vm.runInNewContext(source, context);
-const { chapterLinks, isPublicationReadme } = context.BookselfOfflineCache;
+const { chapterLinks, mediaLinks, isPublicationReadme } = context.BookselfOfflineCache;
 
 test('chapterLinks discovers publication markdown once and keeps repository boundaries', () => {
   const markdown = `
@@ -30,6 +30,36 @@ test('chapterLinks discovers publication markdown once and keeps repository boun
 test('chapterLinks enforces a bounded warm-up list', () => {
   const markdown = Array.from({ length: 6 }, (_, i) => `[${i}](ch${i}.md)`).join('\n');
   assert.equal(chapterLinks(markdown, 'https://reader.test/books/demo/README.md', 3).length, 3);
+});
+
+test('mediaLinks discovers supported chapter figures without crossing publication boundaries', () => {
+  const markdown = `
+![Figure](../media/figure-1.png "Figure 1")
+![Portrait](../media/portrait.webp#crop)
+![Duplicate](../media/figure-1.png)
+![External](https://cdn.example/figure.jpg)
+![Other book](../../other/media/map.svg)
+![Not media](../media/data.csv)
+  `;
+  assert.deepEqual(
+    [...mediaLinks(
+      markdown,
+      'https://reader.test/books/demo/manuscript/ch01.md',
+      'https://reader.test/books/demo/README.md'
+    )],
+    [
+      'https://reader.test/books/demo/media/figure-1.png',
+      'https://reader.test/books/demo/media/portrait.webp',
+    ]
+  );
+});
+
+test('mediaLinks enforces a bounded warm-up list', () => {
+  const markdown = Array.from({ length: 6 }, (_, i) => `![${i}](media/${i}.jpg)`).join('\n');
+  assert.equal(
+    mediaLinks(markdown, 'https://reader.test/books/demo/ch01.md', 'https://reader.test/books/demo/README.md', 3).length,
+    3
+  );
 });
 
 test('isPublicationReadme accepts deployed book paths only', () => {
