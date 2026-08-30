@@ -68,6 +68,41 @@
   line-height: 1.5;
 }
 
+.reader-footnote[data-academic-landed="true"],
+.reader-reference[data-academic-landed="true"] {
+  position: relative;
+  outline: 2px solid color-mix(in srgb, var(--accent) 72%, transparent);
+  outline-offset: 0.28rem;
+}
+
+.reader-footnote:focus,
+.reader-reference:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 72%, transparent);
+  outline-offset: 0.28rem;
+}
+
+.reader-academic-return {
+  position: fixed;
+  z-index: 1210;
+  inset-inline-start: 50%;
+  bottom: max(1rem, calc(env(safe-area-inset-bottom) + 0.65rem));
+  min-height: 2.55rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 52%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--page-bg) 94%, var(--accent) 6%);
+  box-shadow: 0 0.55rem 1.6rem rgb(0 0 0 / 0.16);
+  color: var(--accent);
+  font: 700 0.86rem/1.2 system-ui, sans-serif;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.reader-academic-return:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 .reader-academic-missing {
   color: var(--text-secondary);
   text-decoration: none;
@@ -160,6 +195,11 @@
   .reader-academic-preview__actions button {
     min-height: 2.65rem;
   }
+
+  .reader-academic-return {
+    min-height: 2.8rem;
+    max-width: calc(100vw - 2rem);
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -179,6 +219,22 @@
   }
 }
 
+@media (forced-colors: active) {
+  .reader-footnote[data-academic-landed="true"],
+  .reader-reference[data-academic-landed="true"],
+  .reader-footnote:focus,
+  .reader-reference:focus,
+  .reader-academic-return:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .reader-academic-return {
+    border-color: ButtonText;
+    background: Canvas;
+    color: LinkText;
+  }
+}
+
 @media print {
   .reader-figure,
   .reader-footnote,
@@ -186,7 +242,8 @@
     break-inside: avoid;
   }
 
-  .reader-academic-preview {
+  .reader-academic-preview,
+  .reader-academic-return {
     display: none !important;
   }
 }
