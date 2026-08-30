@@ -1,4 +1,5 @@
 import './page-drag.js';
+import './reader-keyboard-runtime.js';
 
 queueMicrotask(() => {
   import('./semantic-progress.js').catch((error) => {
