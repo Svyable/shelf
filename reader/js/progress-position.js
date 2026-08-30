@@ -38,3 +38,41 @@ export function progressAt(map, chapterId, offset = 0) {
     chapterPercent: Math.round(chapter * 100),
   };
 }
+
+export function positionAtProgress(map, bookProgress = 0) {
+  const entries = map?.entries || [];
+  const total = Math.max(0, Number(map?.total) || 0);
+  if (!entries.length || total <= 0) {
+    return {
+      book: 0,
+      percent: 0,
+      chapterId: null,
+      title: '',
+      offset: 0,
+      chapterPercent: 0,
+    };
+  }
+
+  const raw = Number(bookProgress);
+  const book = Number.isFinite(raw) ? clamp(raw, 0, 1) : 0;
+  const absolute = book * total;
+  const readable = entries.filter((entry) => entry.length > 0);
+  const candidates = readable.length ? readable : entries;
+  let entry = candidates[candidates.length - 1];
+
+  if (absolute < total) {
+    entry = candidates.find((candidate) => absolute < candidate.start + candidate.length) || entry;
+  }
+
+  const offset = clamp(Math.round(absolute - entry.start), 0, entry.length);
+  const chapter = entry.length ? offset / entry.length : 0;
+
+  return {
+    book,
+    percent: Math.round(book * 100),
+    chapterId: entry.id,
+    title: entry.title,
+    offset,
+    chapterPercent: Math.round(chapter * 100),
+  };
+}
