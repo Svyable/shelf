@@ -1,0 +1,43 @@
+.reader-update-notice {
+  position: fixed;
+  left: 50%;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 96;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: min(42rem, calc(100vw - 2rem));
+  padding: .9rem 1rem;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: .9rem;
+  background: color-mix(in srgb, var(--bg-primary, #171411) 94%, transparent);
+  color: var(--text-primary, inherit);
+  box-shadow: 0 .8rem 2rem rgba(0, 0, 0, .22);
+  backdrop-filter: blur(14px);
+  transform: translateX(-50%);
+}
+.reader-update-notice[hidden] { display: none; }
+.reader-update-copy { display: grid; gap: .15rem; min-width: 0; }
+.reader-update-copy strong { font-size: .92rem; }
+.reader-update-copy span { font-size: .82rem; line-height: 1.35; opacity: .78; }
+.reader-update-actions { display: flex; gap: .5rem; margin-left: auto; flex: none; }
+.reader-update-actions button { min-height: 2.5rem; white-space: nowrap; }
+body[data-stage="read"] .reader-update-notice {
+  bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 4.35rem);
+}
+.reader-update-notice[data-state="applying"] { opacity: .82; }
+@media (max-width: 620px) {
+  .reader-update-notice { align-items: stretch; flex-direction: column; gap: .7rem; width: calc(100vw - 1rem); padding: .8rem; }
+  .reader-update-actions { display: grid; grid-template-columns: 1fr 1.25fr; width: 100%; margin: 0; }
+  .reader-update-actions button { width: 100%; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .reader-update-notice { left: max(.7rem, env(safe-area-inset-left)); right: max(.7rem, env(safe-area-inset-right)); bottom: max(.7rem, env(safe-area-inset-bottom)); width: auto; transform: none; }
+  body[data-stage="read"] .reader-update-notice { bottom: max(.7rem, env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reader-update-notice { scroll-behavior: auto; }
+}
+@media (forced-colors: active) {
+  .reader-update-notice { border-color: CanvasText; background: Canvas; color: CanvasText; box-shadow: none; backdrop-filter: none; }
+}
