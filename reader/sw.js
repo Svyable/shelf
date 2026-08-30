@@ -1,6 +1,6 @@
 importScripts('./js/offline-cache.js');
 
-const CACHE = 'obb-shell-v66';
+const CACHE = 'obb-shell-v67';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -22,6 +22,7 @@ const SHELL = [
   './css/annotation-navigator.css',
   './css/reader-state-backup.css',
   './css/pwa-update.css',
+  './css/offline-readiness.css',
   './css/reading-trail.css',
   './css/cover-design.css',
   './css/media.css',
@@ -47,6 +48,8 @@ const SHELL = [
   './js/dialog-stack.js',
   './js/pwa-update-model.js',
   './js/pwa-update.js',
+  './js/offline-readiness-model.js',
+  './js/offline-readiness.js',
   './js/search-navigation.js',
   './js/search-landing.js',
   './js/cover-presentation.js',
@@ -90,8 +93,67 @@ self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));
 });
 
+async function publicationReadiness(url) {
+  if (!self.BookselfOfflineCache.isPublicationReadme(url)) return null;
+  const cache = await caches.open(CACHE);
+  const readmeRequest = new Request(url, { credentials: 'same-origin' });
+  const readmeResponse = await cache.match(readmeRequest, { ignoreSearch: true });
+  if (!readmeResponse) {
+    return { hasReadme: false, totalChapters: 0, cachedChapters: 0, totalMedia: 0, cachedMedia: 0 };
+  }
+
+  let readme = '';
+  try {
+    readme = await readmeResponse.clone().text();
+  } catch {
+    return { hasReadme: true, totalChapters: 0, cachedChapters: 0, totalMedia: 0, cachedMedia: 0 };
+  }
+
+  const chapters = self.BookselfOfflineCache.chapterLinks(readme, url);
+  let cachedChapters = 0;
+  let totalMedia = 0;
+  let cachedMedia = 0;
+
+  for (const href of chapters) {
+    const response = await cache.match(new Request(href, { credentials: 'same-origin' }), { ignoreSearch: true });
+    if (!response) continue;
+    cachedChapters += 1;
+    let markdown = '';
+    try {
+      markdown = await response.clone().text();
+    } catch {
+      continue;
+    }
+    const media = self.BookselfOfflineCache.mediaLinks(markdown, href, url);
+    totalMedia += media.length;
+    for (const mediaHref of media) {
+      const cached = await cache.match(new Request(mediaHref, { credentials: 'same-origin' }), { ignoreSearch: true });
+      if (cached) cachedMedia += 1;
+    }
+  }
+
+  return {
+    hasReadme: true,
+    totalChapters: chapters.length,
+    cachedChapters,
+    totalMedia,
+    cachedMedia,
+  };
+}
+
 self.addEventListener('message', (event) => {
-  if (event.data?.type === 'BOOKSELF_ACTIVATE_UPDATE') self.skipWaiting();
+  if (event.data?.type === 'BOOKSELF_ACTIVATE_UPDATE') {
+    self.skipWaiting();
+    return;
+  }
+  if (event.data?.type !== 'BOOKSELF_OFFLINE_READINESS') return;
+  const port = event.ports?.[0];
+  if (!port) return;
+  event.waitUntil(
+    publicationReadiness(event.data.url)
+      .then((readiness) => port.postMessage({ readiness }))
+      .catch(() => port.postMessage({ readiness: null }))
+  );
 });
 
 self.addEventListener('activate', (event) => {

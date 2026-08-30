@@ -1,3 +1,4 @@
+import './offline-readiness.js';
 import {
   activationMessage,
   shouldOfferReaderUpdate,
