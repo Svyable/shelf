@@ -2,7 +2,7 @@ importScripts('./js/offline-cache.js');
 importScripts('./js/offline-fetch-policy.js');
 importScripts('./js/offline-storage-budget.js');
 
-const CACHE = 'obb-shell-v88';
+const CACHE = 'obb-shell-v89';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -107,6 +107,8 @@ const SHELL = [
   './js/selection-marker.js',
   './js/selection-actions.js',
   './js/search.js',
+  './js/progressive-library-search-model.js',
+  './js/progressive-library-search.js',
   './js/export.js',
   './js/offline-cache.js',
   './js/offline-fetch-policy.js',

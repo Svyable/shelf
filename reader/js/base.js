@@ -21,6 +21,9 @@ queueMicrotask(() => {
   import('./reading-guide.js').catch((error) => {
     console.warn('Reading guide could not be loaded', error);
   });
+  import('./progressive-library-search.js').catch((error) => {
+    console.warn('Progressive library search could not be loaded', error);
+  });
 });
 
 /** Repo-root URL prefix so fetches work at / and at /<repo>/ */
