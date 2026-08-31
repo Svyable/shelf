@@ -24,6 +24,11 @@ queueMicrotask(() => {
   import('./progressive-library-search.js').catch((error) => {
     console.warn('Progressive library search could not be loaded', error);
   });
+  import('./reading-session.js')
+    .then(({ installReadingSession }) => installReadingSession())
+    .catch((error) => {
+      console.warn('Active reading-time enhancement could not be loaded', error);
+    });
 });
 
 /** Repo-root URL prefix so fetches work at / and at /<repo>/ */

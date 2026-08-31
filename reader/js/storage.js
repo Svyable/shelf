@@ -68,18 +68,34 @@ export function saveBookmarks(slug, bookmarks) {
   localStorage.setItem(bookKey(slug, 'bookmarks'), JSON.stringify(bookmarks));
 }
 
+export function normalizeStats(stats = {}) {
+  const chapters = Array.isArray(stats.chapters) ? stats.chapters : [];
+  const legacyMinutes = Math.max(0, Math.floor(Number(stats.minutes) || 0));
+  const active = Number(stats.activeSeconds);
+  const hasActiveSeconds = Number.isFinite(active) && active >= 0;
+  const activeSeconds = hasActiveSeconds ? Math.floor(active) : null;
+  const normalized = {
+    ...stats,
+    minutes: hasActiveSeconds ? Math.floor(activeSeconds / 60) : legacyMinutes,
+    chapters,
+  };
+  if (hasActiveSeconds) normalized.activeSeconds = activeSeconds;
+  else delete normalized.activeSeconds;
+  return normalized;
+}
+
 export function loadStats(slug) {
   try {
-    return {
+    return normalizeStats({
       minutes: 0,
       chapters: [],
       ...JSON.parse(localStorage.getItem(bookKey(slug, 'stats')) || '{}'),
-    };
+    });
   } catch {
     return { minutes: 0, chapters: [] };
   }
 }
 
 export function saveStats(slug, stats) {
-  localStorage.setItem(bookKey(slug, 'stats'), JSON.stringify(stats));
+  localStorage.setItem(bookKey(slug, 'stats'), JSON.stringify(normalizeStats(stats)));
 }
