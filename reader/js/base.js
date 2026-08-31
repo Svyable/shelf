@@ -6,7 +6,7 @@ import { parseRoute } from './router.js';
 import { createAsyncResourceCache } from './resource-cache.js';
 import { installNavigationPrefetch } from './navigation-prefetch.js';
 import { createStartupCatalogPrimer, catalogCoverCandidates } from './startup-catalog-primer.js';
-import { createStartupPublicationPrimer } from './startup-publication-primer.js';
+import { createStartupPublicationPrimer, startupAcquisitionPlan } from './startup-publication-primer.js';
 
 queueMicrotask(() => {
   import('./semantic-progress.js').catch((error) => {
@@ -98,23 +98,27 @@ export async function firstExisting(relativePaths) {
   return null;
 }
 
+const startupPlan = startupAcquisitionPlan(navigator.connection || {});
+
 const startupCatalogPrimer = createStartupCatalogPrimer({
   loadPortal: () => fetchText('README.md'),
   parsePortal: parsePortalCatalog,
   loadHub: (slug) => fetchText(`books/${slug}/README.md`),
   parseHub: parseBookReadme,
   loadCover: (slug) => firstExisting(catalogCoverCandidates(slug)),
-  concurrency: 4,
+  concurrency: Math.max(1, startupPlan.catalogConcurrency),
 });
 
 const startupPrimer = createStartupPublicationPrimer({
   loadReadme: (slug) => fetchText(`books/${slug}/README.md`),
   parseReadme: parseBookReadme,
   loadChapter: (slug, chapter) => fetchText(`books/${slug}/${chapter.file}`),
-  concurrency: 2,
+  concurrency: startupPlan.publicationConcurrency,
+  warmRemainder: startupPlan.warmPublicationRemainder,
 });
 
 function primeInitialCatalog() {
+  if (!startupPlan.primeCatalog) return;
   startupCatalogPrimer.prime().catch(() => {
     // Catalog priming is opportunistic. The canonical loader retries and owns errors.
   });
@@ -134,8 +138,10 @@ function primeInitialPublication() {
   primePublication(route);
 }
 
-primeInitialCatalog();
+// Give intentional route work first opportunity to acquire its requested chapter;
+// speculative catalog warming follows only when the connection budget permits it.
 primeInitialPublication();
+primeInitialCatalog();
 
 if (typeof document !== 'undefined') {
   installNavigationPrefetch(document, {
