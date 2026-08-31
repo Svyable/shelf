@@ -12,6 +12,9 @@ queueMicrotask(() => {
   import('./semantic-progress.js').catch((error) => {
     console.warn('Semantic reading progress could not be loaded', error);
   });
+  import('./content-inspector.js').catch((error) => {
+    console.warn('Expanded content inspection could not be loaded', error);
+  });
 });
 
 /** Repo-root URL prefix so fetches work at / and at /<repo>/ */
