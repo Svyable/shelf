@@ -8,6 +8,33 @@ export function orderedPublicationFiles(contents = [], targetChapter = null) {
   return [rows[targetIndex], ...rows.slice(0, targetIndex), ...rows.slice(targetIndex + 1)];
 }
 
+export function startupAcquisitionPlan(connection = {}) {
+  const effectiveType = String(connection?.effectiveType || '').toLowerCase();
+  const constrained = !!connection?.saveData || effectiveType === 'slow-2g' || effectiveType === '2g';
+  if (constrained) {
+    return Object.freeze({
+      primeCatalog: false,
+      catalogConcurrency: 0,
+      warmPublicationRemainder: false,
+      publicationConcurrency: 1,
+    });
+  }
+  if (effectiveType === '3g') {
+    return Object.freeze({
+      primeCatalog: true,
+      catalogConcurrency: 2,
+      warmPublicationRemainder: true,
+      publicationConcurrency: 1,
+    });
+  }
+  return Object.freeze({
+    primeCatalog: true,
+    catalogConcurrency: 4,
+    warmPublicationRemainder: true,
+    publicationConcurrency: 2,
+  });
+}
+
 export async function runBounded(items, worker, { concurrency = 2 } = {}) {
   const queue = Array.isArray(items) ? items.slice() : [];
   const limit = Math.max(1, Math.floor(Number(concurrency) || 1));
@@ -34,6 +61,7 @@ export function createStartupPublicationPrimer({
   parseReadme,
   loadChapter,
   concurrency = 2,
+  warmRemainder = true,
 } = {}) {
   if (typeof loadReadme !== 'function' || typeof parseReadme !== 'function' || typeof loadChapter !== 'function') {
     throw new TypeError('startup publication primer requires readme, parser, and chapter loaders');
@@ -53,14 +81,28 @@ export function createStartupPublicationPrimer({
         const ordered = orderedPublicationFiles(meta?.contents, chapter);
         if (!ordered.length) return { status: 'complete', loaded: 0 };
 
-        // Resolve the requested/first chapter before lower-priority warming.
+        // Resolve the requested/first chapter before any speculative warming.
         await loadChapter(slug, ordered[0]);
         const rest = ordered.slice(1);
+        const allowRemainder = typeof warmRemainder === 'function'
+          ? !!warmRemainder({ slug, chapter: ordered[0], meta })
+          : !!warmRemainder;
+        if (!allowRemainder || !rest.length) {
+          return {
+            status: 'complete',
+            loaded: 1,
+            failed: 0,
+            deferred: rest.length,
+            first: ordered[0].id || ordered[0].file,
+          };
+        }
+
         const settled = await runBounded(rest, (item) => loadChapter(slug, item), { concurrency });
         return {
           status: 'complete',
           loaded: 1 + settled.filter((entry) => entry?.status === 'fulfilled').length,
           failed: settled.filter((entry) => entry?.status === 'rejected').length,
+          deferred: 0,
           first: ordered[0].id || ordered[0].file,
         };
       })();
