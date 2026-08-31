@@ -50,7 +50,15 @@ test('budget monitor coalesces concurrent storage estimates', async () => {
   let calls = 0;
   let resolveEstimate;
   const gate = new Promise((resolve) => { resolveEstimate = resolve; });
-  const monitor = createBudgetMonitor({ estimate: async () => { calls += 1; await gate; return { usage: 20, quota: 100 }; }, ttlMs: 1000, now: () => 10 });
+  const monitor = createBudgetMonitor({
+    estimate: async () => {
+      calls += 1;
+      await gate;
+      return { usage: 20, quota: 100 };
+    },
+    ttlMs: 1000,
+    now: () => 10,
+  });
   const first = monitor.canWarm('media');
   const second = monitor.canWarm('chapter');
   resolveEstimate();
@@ -62,7 +70,11 @@ test('budget monitor coalesces concurrent storage estimates', async () => {
 test('budget monitor reuses fresh estimates and refreshes expired ones', async () => {
   let now = 0;
   let calls = 0;
-  const monitor = createBudgetMonitor({ estimate: async () => ({ usage: ++calls * 10, quota: 100 }), ttlMs: 50, now: () => now });
+  const monitor = createBudgetMonitor({
+    estimate: async () => ({ usage: ++calls * 10, quota: 100 }),
+    ttlMs: 50,
+    now: () => now,
+  });
   assert.equal((await monitor.canWarm('media')).usage, 10);
   now = 25;
   assert.equal((await monitor.canWarm('media')).usage, 10);
@@ -74,7 +86,15 @@ test('budget monitor reuses fresh estimates and refreshes expired ones', async (
 
 test('invalid estimator failure fails open and can recover later', async () => {
   let calls = 0;
-  const monitor = createBudgetMonitor({ estimate: async () => { calls += 1; if (calls === 1) throw new Error('estimate unavailable'); return { usage: 95, quota: 100 }; }, ttlMs: 0, now: () => calls });
+  const monitor = createBudgetMonitor({
+    estimate: async () => {
+      calls += 1;
+      if (calls === 1) throw new Error('estimate unavailable');
+      return { usage: 95, quota: 100 };
+    },
+    ttlMs: 0,
+    now: () => calls,
+  });
   assert.equal((await monitor.canWarm('media')).allow, true);
   assert.equal((await monitor.canWarm('media')).allow, false);
   assert.equal(calls, 2);
