@@ -3,7 +3,7 @@ importScripts('./js/offline-fetch-policy.js');
 importScripts('./js/offline-storage-budget.js');
 importScripts('./js/offline-shell-install.js');
 
-const CACHE = 'obb-shell-v90';
+const CACHE = 'obb-shell-v91';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -33,6 +33,7 @@ const SHELL = [
   './css/bookmark-atlas.css',
   './css/cover-design.css',
   './css/content-inspector.css',
+  './css/direct-route-preview.css',
   './css/media.css',
   './css/formats.css',
   './css/math.css',
@@ -117,6 +118,8 @@ const SHELL = [
   './js/reading-wake-lock.js',
   './js/reading-guide-model.js',
   './js/reading-guide.js',
+  './js/direct-route-preview-model.js',
+  './js/direct-route-preview.js',
   './js/export.js',
   './js/offline-cache.js',
   './js/offline-fetch-policy.js',
@@ -138,6 +141,7 @@ const OPTIONAL_SHELL = new Set([
   './css/reading-trail.css',
   './css/bookmark-atlas.css',
   './css/content-inspector.css',
+  './css/direct-route-preview.css',
   './js/content-scroll-region-model.js',
   './js/content-scroll-regions.js',
   './js/pwa-update-model.js',
@@ -168,6 +172,8 @@ const OPTIONAL_SHELL = new Set([
   './js/reading-wake-lock.js',
   './js/reading-guide-model.js',
   './js/reading-guide.js',
+  './js/direct-route-preview-model.js',
+  './js/direct-route-preview.js',
   './js/progress-position.js',
   './js/semantic-progress.js',
 ]);
