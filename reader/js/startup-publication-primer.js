@@ -35,6 +35,10 @@ export function startupAcquisitionPlan(connection = {}) {
   });
 }
 
+export function publicationPrefetchDepth(intent = 'route') {
+  return intent === 'hover' || intent === 'focus' ? 'target' : 'publication';
+}
+
 export async function runBounded(items, worker, { concurrency = 2 } = {}) {
   const queue = Array.isArray(items) ? items.slice() : [];
   const limit = Math.max(1, Math.floor(Number(concurrency) || 1));
@@ -67,50 +71,56 @@ export function createStartupPublicationPrimer({
     throw new TypeError('startup publication primer requires readme, parser, and chapter loaders');
   }
 
-  let active = null;
+  const active = new Map();
 
-  return {
-    prime({ slug, chapter = null } = {}) {
-      if (!slug) return Promise.resolve({ status: 'skipped', loaded: 0 });
-      const key = `${slug}:${chapter || ''}`;
-      if (active?.key === key) return active.promise;
+  function prime({ slug, chapter = null, intent = 'route' } = {}) {
+    if (!slug) return Promise.resolve({ status: 'skipped', loaded: 0 });
+    const depth = publicationPrefetchDepth(intent);
+    const key = `${slug}:${chapter || ''}:${depth}`;
+    if (active.has(key)) return active.get(key);
 
-      const promise = (async () => {
-        const readme = await loadReadme(slug);
-        const meta = parseReadme(readme, slug);
-        const ordered = orderedPublicationFiles(meta?.contents, chapter);
-        if (!ordered.length) return { status: 'complete', loaded: 0 };
+    const promise = (async () => {
+      const readme = await loadReadme(slug);
+      const meta = parseReadme(readme, slug);
+      const ordered = orderedPublicationFiles(meta?.contents, chapter);
+      if (!ordered.length) return { status: 'complete', loaded: 0, depth };
 
-        // Resolve the requested/first chapter before any speculative warming.
-        await loadChapter(slug, ordered[0]);
-        const rest = ordered.slice(1);
-        const allowRemainder = typeof warmRemainder === 'function'
-          ? !!warmRemainder({ slug, chapter: ordered[0], meta })
-          : !!warmRemainder;
-        if (!allowRemainder || !rest.length) {
-          return {
-            status: 'complete',
-            loaded: 1,
-            failed: 0,
-            deferred: rest.length,
-            first: ordered[0].id || ordered[0].file,
-          };
-        }
-
-        const settled = await runBounded(rest, (item) => loadChapter(slug, item), { concurrency });
+      // Resolve the requested/first chapter before any speculative warming.
+      await loadChapter(slug, ordered[0]);
+      const rest = ordered.slice(1);
+      const connectionAllowsRemainder = typeof warmRemainder === 'function'
+        ? !!warmRemainder({ slug, chapter: ordered[0], meta, intent })
+        : !!warmRemainder;
+      const allowRemainder = depth === 'publication' && connectionAllowsRemainder;
+      if (!allowRemainder || !rest.length) {
         return {
           status: 'complete',
-          loaded: 1 + settled.filter((entry) => entry?.status === 'fulfilled').length,
-          failed: settled.filter((entry) => entry?.status === 'rejected').length,
-          deferred: 0,
+          loaded: 1,
+          failed: 0,
+          deferred: rest.length,
           first: ordered[0].id || ordered[0].file,
+          depth,
         };
-      })();
+      }
 
-      active = { key, promise };
-      const clear = () => { if (active?.promise === promise) active = null; };
-      promise.then(clear, clear);
-      return promise;
-    },
-  };
+      const settled = await runBounded(rest, (item) => loadChapter(slug, item), { concurrency });
+      return {
+        status: 'complete',
+        loaded: 1 + settled.filter((entry) => entry?.status === 'fulfilled').length,
+        failed: settled.filter((entry) => entry?.status === 'rejected').length,
+        deferred: 0,
+        first: ordered[0].id || ordered[0].file,
+        depth,
+      };
+    })();
+
+    active.set(key, promise);
+    const clear = () => {
+      if (active.get(key) === promise) active.delete(key);
+    };
+    promise.then(clear, clear);
+    return promise;
+  }
+
+  return Object.freeze({ prime });
 }
