@@ -28,6 +28,66 @@ export function zoomMediaView(view = {}, delta = 0, geometry = {}) {
   if (scale === MIN_MEDIA_SCALE) return { scale, x: 0, y: 0 };
   return constrainMediaView({ ...current, scale }, geometry);
 }
+
+/**
+ * Zoom around a viewport-local focal point so the detail under a finger remains
+ * visually anchored instead of drifting toward the image centre.
+ */
+export function zoomMediaViewAt(view = {}, scale = MIN_MEDIA_SCALE, focal = {}, geometry = {}) {
+  const current = constrainMediaView(view, geometry);
+  const nextScale = clampMediaScale(scale);
+  if (nextScale === MIN_MEDIA_SCALE) return { scale: MIN_MEDIA_SCALE, x: 0, y: 0 };
+  const viewportWidth = Math.max(0, finite(geometry.viewportWidth));
+  const viewportHeight = Math.max(0, finite(geometry.viewportHeight));
+  const fx = finite(focal.x, viewportWidth / 2);
+  const fy = finite(focal.y, viewportHeight / 2);
+  const cx = viewportWidth / 2;
+  const cy = viewportHeight / 2;
+  const ratio = nextScale / Math.max(MIN_MEDIA_SCALE, current.scale);
+  const x = (fx - cx) - ((fx - cx - current.x) * ratio);
+  const y = (fy - cy) - ((fy - cy - current.y) * ratio);
+  return constrainMediaView({ scale: nextScale, x, y }, geometry);
+}
+
+/**
+ * Resolve a two-finger pinch from its starting view and centres. The distance
+ * ratio controls zoom; centre movement simultaneously pans. This keeps a pinch
+ * continuous even when the fingers translate while changing distance.
+ */
+export function pinchMediaView(
+  startView = {},
+  startDistance = 0,
+  currentDistance = 0,
+  startCenter = {},
+  currentCenter = {},
+  geometry = {}
+) {
+  const start = constrainMediaView(startView, geometry);
+  const distance0 = Math.max(1, finite(startDistance, 1));
+  const distance1 = Math.max(1, finite(currentDistance, distance0));
+  const scale = clampMediaScale(start.scale * (distance1 / distance0));
+  if (scale === MIN_MEDIA_SCALE) return { scale: MIN_MEDIA_SCALE, x: 0, y: 0 };
+
+  const viewportWidth = Math.max(0, finite(geometry.viewportWidth));
+  const viewportHeight = Math.max(0, finite(geometry.viewportHeight));
+  const startX = finite(startCenter.x, viewportWidth / 2);
+  const startY = finite(startCenter.y, viewportHeight / 2);
+  const currentX = finite(currentCenter.x, startX);
+  const currentY = finite(currentCenter.y, startY);
+  const cx = viewportWidth / 2;
+  const cy = viewportHeight / 2;
+  const ratio = scale / Math.max(MIN_MEDIA_SCALE, start.scale);
+  const x = (currentX - cx) - ((startX - cx - start.x) * ratio);
+  const y = (currentY - cy) - ((startY - cy - start.y) * ratio);
+  return constrainMediaView({ scale, x, y }, geometry);
+}
+
+export function toggleMediaZoomAt(view = {}, focal = {}, geometry = {}, expandedScale = 2) {
+  const current = constrainMediaView(view, geometry);
+  if (current.scale > MIN_MEDIA_SCALE) return resetMediaView();
+  return zoomMediaViewAt(current, expandedScale, focal, geometry);
+}
+
 export function panMediaView(view = {}, dx = 0, dy = 0, geometry = {}) {
   return constrainMediaView({ ...view, x: finite(view.x) + finite(dx), y: finite(view.y) + finite(dy) }, geometry);
 }
