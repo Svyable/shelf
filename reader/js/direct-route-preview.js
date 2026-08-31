@@ -3,6 +3,7 @@ import { parseBookReadme } from './catalog.js';
 import { parseRoute } from './router.js';
 import {
   normalizeReadRoute,
+  samePreviewRoute,
   selectPreviewChapter,
   projectPreviewParagraphs,
   shouldShowPreview,
@@ -16,13 +17,6 @@ function canonicalReady() {
   const paged = !!document.querySelector('#pageLeft .page-inner')?.textContent?.trim();
   const continuous = !!document.querySelector('#scrollReader .scroll-document, #scrollReader [data-chapter]')?.textContent?.trim();
   return { paged, continuous, ready: paged || continuous };
-}
-
-function sameRoute(a, b) {
-  return !!a && !!b
-    && a.slug === b.slug
-    && a.chapter === b.chapter
-    && a.offset === b.offset;
 }
 
 function ensureStyle() {
@@ -72,8 +66,13 @@ function renderPreview({ book, chapter, paragraphs }) {
   return region;
 }
 
-function watchCanonicalHandoff(region) {
+function watchCanonicalHandoff(region, initialRoute) {
   const finishIfReady = () => {
+    const currentRoute = normalizeReadRoute(parseRoute());
+    if (!samePreviewRoute(initialRoute, currentRoute)) {
+      region.remove();
+      return true;
+    }
     const ready = canonicalReady();
     const state = previewCompletionState({
       stage: document.body?.dataset?.stage || '',
@@ -118,7 +117,7 @@ export async function installDirectRoutePreview() {
     const markdown = await fetchText(`books/${initial.slug}/${chapter.file}`);
     const current = normalizeReadRoute(parseRoute());
     const nowReady = canonicalReady();
-    if (!sameRoute(initial, current) || nowReady.ready) return { status: 'superseded' };
+    if (!samePreviewRoute(initial, current) || nowReady.ready) return { status: 'superseded' };
 
     const paragraphs = projectPreviewParagraphs(
       markdown,
@@ -126,7 +125,7 @@ export async function installDirectRoutePreview() {
     );
     if (!paragraphs.length) return { status: 'empty' };
     const region = renderPreview({ book, chapter, paragraphs });
-    watchCanonicalHandoff(region);
+    watchCanonicalHandoff(region, initial);
     return { status: 'shown', chapter: chapter.id, paragraphs: paragraphs.length };
   } catch (error) {
     console.warn('Direct-route first paint could not be shown', error);
