@@ -27,6 +27,9 @@ queueMicrotask(() => {
   import('./accessibility-surfaces.js').catch((error) => {
     console.warn('Accessibility surface isolation could not be loaded', error);
   });
+  import('./direct-route-preview.js').catch((error) => {
+    console.warn('Direct-route first paint could not be loaded', error);
+  });
   import('./reading-session.js')
     .then(({ installReadingSession }) => installReadingSession())
     .catch((error) => {
