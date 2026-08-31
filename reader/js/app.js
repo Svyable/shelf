@@ -18,6 +18,7 @@ import {
   saveStats,
 } from './storage.js';
 import { parseRoute, libraryHash, coverHash, readHash, go } from './router.js';
+import { createLatestRouteQueue, routeNeedsCatalog } from './route-queue.js';
 import {
   loadNotes,
   addNote,
@@ -47,7 +48,6 @@ const app = {
   selTimer: null,
   pubFilter: 'All',
   pendingNote: null,
-  routing: false,
   sortMode: 'title',
   turning: false,
 };
@@ -1158,8 +1158,7 @@ async function turn(delta) {
   go(readHash(app.slug, chapterOfPage(app.pageIndex), currentOffset()), { replace: true });
 }
 
-async function onRoute() {
-  const route = parseRoute();
+async function onRoute(route = parseRoute()) {
   $('tocOverlay').classList.remove('active');
   $('progressPanel').classList.remove('active');
   $('settingsPanel').classList.remove('active');
@@ -1713,25 +1712,28 @@ async function init() {
   app.prefs = loadPrefs();
   applyPrefs();
   bindUi();
-  try {
-    await loadCatalog();
-  } catch (err) {
+
+  const catalogReady = loadCatalog().catch((err) => {
     console.error(err);
     $('shelfError').hidden = false;
     $('shelfError').textContent =
       'Could not load the library catalog. Serve the repository root (not file://) so Markdown can be fetched.';
-  }
-  const requestRoute = () => {
-    if (app.routing) return;
-    app.routing = true;
-    queueMicrotask(() => {
-      app.routing = false;
-      onRoute();
-    });
-  };
+  });
+
+  const routeQueue = createLatestRouteQueue(async (route) => {
+    if (routeNeedsCatalog(route)) await catalogReady;
+    await onRoute(route);
+  }, {
+    onError(error) {
+      console.error('Reader route failed', error);
+    },
+  });
+
+  const requestRoute = () => routeQueue.request(parseRoute());
   window.addEventListener('hashchange', requestRoute);
   window.addEventListener('popstate', requestRoute);
-  await onRoute();
+  requestRoute();
+
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register(new URL('../sw.js', import.meta.url)).catch(() => {});
   }
