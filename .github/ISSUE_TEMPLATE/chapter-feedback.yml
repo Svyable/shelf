@@ -16,6 +16,7 @@ body:
       description: Which book is this about?
       options:
         - agentile
+        - face-the-strange
         - leveraging-luck
         - the-exponentiality
         - _TEMPLATE
