@@ -1,7 +1,7 @@
 import { fetchText } from './base.js';
 import { parseBookReadme } from './catalog.js';
 import { addNote, applyNotes, loadNotes, selectionSourceAnchor } from './notes.js';
-import { parseRoute } from './router.js';
+import { parseRoute, readHash } from './router.js';
 import {
   SELECTION_SNAPSHOT_TTL,
   normalizeSelectionSnapshot,
@@ -45,13 +45,14 @@ function liveSelection() {
   const route = parseRoute();
   if (!readingNode || !route.slug) return null;
   const scroll = readingNode.closest?.('.scroll-block');
-  const offset = Number(scroll?.dataset.offset) || Number(route.offset) || 0;
+  const anchor = selectionSourceAnchor(selection);
+  const offset = anchor?.start ?? (Number(scroll?.dataset.offset) || Number(route.offset) || 0);
   return normalizeSelectionSnapshot({
     text,
     slug: route.slug,
-    chapter: scroll?.dataset.chapter || route.chapter || '',
+    chapter: scroll?.dataset.chapter || (readerMode() === 'scroll' ? route.chapter : '') || '',
     mode: readerMode(),
-    anchor: selectionSourceAnchor(selection),
+    anchor,
     offset,
     node,
   });
@@ -116,6 +117,11 @@ async function chapterFor(snapshot) {
   return parseRoute().chapter || '';
 }
 
+function selectionUrl(snapshot, chapter) {
+  const hash = readHash(snapshot.slug, chapter, snapshot.anchor?.start ?? snapshot.offset ?? 0);
+  return `${window.location.href.split('#')[0]}${hash}`;
+}
+
 function toast(message) {
   const el = document.getElementById('toast');
   if (!el) return;
@@ -143,9 +149,8 @@ function refreshNote(chapter, slug) {
   window.dispatchEvent(new Event('resize'));
 }
 
-function fallbackSelection() {
-  if (liveSelection()) return null;
-  return usableRemembered({ allowModeChange: true });
+function actionableSelection() {
+  return liveSelection() || usableRemembered({ allowModeChange: true });
 }
 
 function sourceTarget(snapshot) {
@@ -286,7 +291,7 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('click', (event) => {
   const target = event.target.closest?.('#selCopy, #selShare, #selNote');
   if (!target) return;
-  const snapshot = fallbackSelection();
+  const snapshot = actionableSelection();
   if (!snapshot) return;
 
   event.preventDefault();
@@ -299,7 +304,10 @@ document.addEventListener('click', (event) => {
     return;
   }
   if (target.id === 'selShare') {
-    copy(`“${snapshot.text}”\n${window.location.href}`);
+    void chapterFor(snapshot).then((chapter) => {
+      if (!chapter) return;
+      copy(`“${snapshot.text}”\n${selectionUrl(snapshot, chapter)}`);
+    });
     return;
   }
 
@@ -330,7 +338,7 @@ document.addEventListener('click', (event) => {
   fallbackPending = null;
   addNote(pending.slug, {
     chapter: pending.chapter,
-    offset: pending.offset,
+    offset: pending.anchor?.start ?? pending.offset,
     quote: pending.text,
     body: document.getElementById('noteBody')?.value.trim() || '',
     anchor: pending.anchor,
