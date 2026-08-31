@@ -1,5 +1,6 @@
 import './page-drag.js';
 import './reader-keyboard-runtime.js';
+import { createAsyncResourceCache } from './resource-cache.js';
 
 queueMicrotask(() => {
   import('./semantic-progress.js').catch((error) => {
@@ -8,6 +9,8 @@ queueMicrotask(() => {
 });
 
 /** Repo-root URL prefix so fetches work at / and at /<repo>/ */
+
+const documentCache = createAsyncResourceCache({ limit: 256 });
 
 export function repoBase() {
   const path = window.location.pathname.replace(/index\.html$/, '');
@@ -25,24 +28,34 @@ export function fileUrl(relativePath) {
   return `${base}${clean}`;
 }
 
-export async function fetchDocument(relativePath) {
+export function fetchDocument(relativePath) {
   const url = fileUrl(relativePath);
-  const res = await fetch(url, { cache: 'no-cache' });
-  if (!res.ok) {
-    const err = new Error(`Could not load ${relativePath} (${res.status})`);
-    err.status = res.status;
-    err.url = url;
-    throw err;
-  }
-  return {
-    text: await res.text(),
-    modified: res.headers.get('Last-Modified'),
-  };
+  return documentCache.load(url, async () => {
+    const res = await fetch(url, { cache: 'no-cache' });
+    if (!res.ok) {
+      const err = new Error(`Could not load ${relativePath} (${res.status})`);
+      err.status = res.status;
+      err.url = url;
+      throw err;
+    }
+    return Object.freeze({
+      text: await res.text(),
+      modified: res.headers.get('Last-Modified'),
+    });
+  });
 }
 
 export async function fetchText(relativePath) {
   const doc = await fetchDocument(relativePath);
   return doc.text;
+}
+
+export function invalidateDocument(relativePath) {
+  return documentCache.invalidate(fileUrl(relativePath));
+}
+
+export function clearDocumentCache() {
+  documentCache.clear();
 }
 
 export async function fileExists(relativePath) {
