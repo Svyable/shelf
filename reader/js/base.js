@@ -4,6 +4,7 @@ import './one-handed-actions.js';
 import { parseBookReadme, parsePortalCatalog } from './catalog.js';
 import { parseRoute } from './router.js';
 import { createAsyncResourceCache } from './resource-cache.js';
+import { installNavigationPrefetch } from './navigation-prefetch.js';
 import { createStartupCatalogPrimer, catalogCoverCandidates } from './startup-catalog-primer.js';
 import { createStartupPublicationPrimer } from './startup-publication-primer.js';
 
@@ -119,13 +120,27 @@ function primeInitialCatalog() {
   });
 }
 
+function primePublication(route) {
+  if (!route?.slug) return Promise.resolve({ status: 'skipped', loaded: 0 });
+  return startupPrimer.prime({ slug: route.slug, chapter: route.chapter }).catch(() => ({
+    status: 'failed',
+    loaded: 0,
+  }));
+}
+
 function primeInitialPublication() {
   const route = parseRoute();
   if (!route.slug || (route.view !== 'cover' && route.view !== 'read')) return;
-  startupPrimer.prime({ slug: route.slug, chapter: route.chapter }).catch(() => {
-    // Priming is opportunistic. The canonical loader retries and owns errors.
-  });
+  primePublication(route);
 }
 
 primeInitialCatalog();
 primeInitialPublication();
+
+if (typeof document !== 'undefined') {
+  installNavigationPrefetch(document, {
+    base: window.location.href,
+    connection: navigator.connection || {},
+    prime: primePublication,
+  });
+}
