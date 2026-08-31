@@ -1,0 +1,89 @@
+.direct-route-preview {
+  position: fixed;
+  z-index: 34;
+  inset: max(58px, calc(env(safe-area-inset-top) + 48px)) max(12px, env(safe-area-inset-right)) max(58px, calc(env(safe-area-inset-bottom) + 48px)) max(12px, env(safe-area-inset-left));
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable both-edges;
+  opacity: 1;
+  transition: opacity 120ms ease;
+}
+
+.direct-route-preview.is-handing-off {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.direct-route-preview-paper {
+  box-sizing: border-box;
+  width: min(46rem, 100%);
+  max-height: 100%;
+  overflow: auto;
+  padding: clamp(1.4rem, 4vw, 3.2rem) clamp(1.25rem, 5vw, 3.8rem);
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  border-radius: 6px;
+  background: var(--paper, #f3ead9);
+  color: var(--ink, #241f1a);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .32);
+  font-family: var(--reader-font, "Source Serif 4", Georgia, serif);
+  font-size: var(--base-font-size, 18px);
+  line-height: var(--line-height, 1.55);
+}
+
+.direct-route-preview-paper h1 {
+  margin: .1em 0 .8em;
+  font: 600 clamp(1.65rem, 4vw, 2.55rem)/1.05 "Fraunces", Georgia, serif;
+  text-wrap: balance;
+}
+
+.direct-route-preview-paper > p:not(.direct-route-preview-kicker, .direct-route-preview-status) {
+  margin: 0 0 1em;
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+.direct-route-preview-kicker,
+.direct-route-preview-status {
+  margin: 0 0 .75rem;
+  font: 600 .72rem/1.2 system-ui, sans-serif;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  opacity: .68;
+}
+
+.direct-route-preview-status {
+  margin: 1.4rem 0 0;
+  text-transform: none;
+  letter-spacing: .02em;
+}
+
+@media (max-width: 640px), (max-height: 520px) {
+  .direct-route-preview {
+    inset: max(48px, env(safe-area-inset-top)) 0 max(48px, env(safe-area-inset-bottom));
+    place-items: stretch;
+  }
+
+  .direct-route-preview-paper {
+    width: 100%;
+    min-height: 100%;
+    max-height: none;
+    border-inline: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .direct-route-preview { transition: none; }
+}
+
+@media (forced-colors: active) {
+  .direct-route-preview-paper {
+    border: 2px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+}
