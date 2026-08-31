@@ -76,9 +76,75 @@
     }
   }
 
+  function createWarmScheduler({ concurrency = 3 } = {}) {
+    const limit = Math.max(1, Math.min(8, Math.floor(Number(concurrency) || 1)));
+    const pending = new Map();
+    const queue = [];
+    let active = 0;
+
+    function settle(job, outcome, value) {
+      active -= 1;
+      if (pending.get(job.key) === job.promise) pending.delete(job.key);
+      if (outcome === 'resolve') job.resolve(value);
+      else job.reject(value);
+      pump();
+    }
+
+    function pump() {
+      while (active < limit && queue.length) {
+        const job = queue.shift();
+        active += 1;
+        Promise.resolve()
+          .then(job.task)
+          .then(
+            (value) => settle(job, 'resolve', value),
+            (error) => settle(job, 'reject', error)
+          );
+      }
+    }
+
+    function run(key, task) {
+      const normalizedKey = String(key || '');
+      if (!normalizedKey || typeof task !== 'function') {
+        return Promise.reject(new TypeError('Warm scheduler requires a key and task'));
+      }
+      const existing = pending.get(normalizedKey);
+      if (existing) return existing;
+
+      let resolve;
+      let reject;
+      const promise = new Promise((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+      const job = { key: normalizedKey, task, resolve, reject, promise };
+      pending.set(normalizedKey, promise);
+      queue.push(job);
+      pump();
+      return promise;
+    }
+
+    return Object.freeze({
+      run,
+      get concurrency() {
+        return limit;
+      },
+      get active() {
+        return active;
+      },
+      get queued() {
+        return queue.length;
+      },
+      get pending() {
+        return pending.size;
+      },
+    });
+  }
+
   scope.BookselfOfflineCache = Object.freeze({
     chapterLinks,
     mediaLinks,
     isPublicationReadme,
+    createWarmScheduler,
   });
 })(globalThis);
