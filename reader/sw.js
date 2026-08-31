@@ -1,7 +1,7 @@
 importScripts('./js/offline-cache.js');
 importScripts('./js/offline-fetch-policy.js');
 
-const CACHE = 'obb-shell-v77';
+const CACHE = 'obb-shell-v78';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -72,6 +72,7 @@ const SHELL = [
   './js/math.js',
   './js/academic.js',
   './js/base.js',
+  './js/resource-cache.js',
   './js/catalog.js',
   './js/imprint.js',
   './js/presentation.js',
