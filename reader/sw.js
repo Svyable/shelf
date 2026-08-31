@@ -1,7 +1,7 @@
 importScripts('./js/offline-cache.js');
 importScripts('./js/offline-fetch-policy.js');
 
-const CACHE = 'obb-shell-v78';
+const CACHE = 'obb-shell-v79';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -18,6 +18,7 @@ const SHELL = [
   './css/reading-chrome.css',
   './css/reading-content.css',
   './css/content-scroll-regions.css',
+  './css/one-handed-actions.css',
   './css/gui.css',
   './css/search-navigation.css',
   './css/search-landing.css',
@@ -49,6 +50,8 @@ const SHELL = [
   './js/page-drag.js',
   './js/reader-keyboard-policy.js',
   './js/reader-keyboard-runtime.js',
+  './js/one-handed-actions-model.js',
+  './js/one-handed-actions.js',
   './js/app.js',
   './js/pagination-scheduler.js',
   './js/experience.js',

@@ -1,5 +1,6 @@
 import './page-drag.js';
 import './reader-keyboard-runtime.js';
+import './one-handed-actions.js';
 import { createAsyncResourceCache } from './resource-cache.js';
 
 queueMicrotask(() => {
