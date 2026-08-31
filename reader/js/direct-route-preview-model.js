@@ -10,6 +10,13 @@ export function normalizeReadRoute(route) {
   });
 }
 
+export function samePreviewRoute(a, b) {
+  return !!a && !!b
+    && a.slug === b.slug
+    && a.chapter === b.chapter
+    && a.offset === b.offset;
+}
+
 export function selectPreviewChapter(contents, requestedId) {
   const chapters = Array.isArray(contents) ? contents.filter((item) => item?.id && item?.file) : [];
   if (!chapters.length) return null;
@@ -60,7 +67,7 @@ export function shouldShowPreview({ route, canonicalReady = false, stage = 'libr
 }
 
 export function previewCompletionState({ stage, hasPagedContent, hasContinuousContent } = {}) {
-  if (stage === 'library' || stage === 'cover' || stage === 'end') return 'dismiss';
+  if (stage === 'cover' || stage === 'end') return 'dismiss';
   if (stage === 'read' && (hasPagedContent || hasContinuousContent)) return 'dismiss';
   return 'keep';
 }
