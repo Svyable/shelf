@@ -1,9 +1,10 @@
 import './page-drag.js';
 import './reader-keyboard-runtime.js';
 import './one-handed-actions.js';
-import { parseBookReadme } from './catalog.js';
+import { parseBookReadme, parsePortalCatalog } from './catalog.js';
 import { parseRoute } from './router.js';
 import { createAsyncResourceCache } from './resource-cache.js';
+import { createStartupCatalogPrimer, catalogCoverCandidates } from './startup-catalog-primer.js';
 import { createStartupPublicationPrimer } from './startup-publication-primer.js';
 
 queueMicrotask(() => {
@@ -15,6 +16,7 @@ queueMicrotask(() => {
 /** Repo-root URL prefix so fetches work at / and at /<repo>/ */
 
 const documentCache = createAsyncResourceCache({ limit: 256 });
+const existenceCache = createAsyncResourceCache({ limit: 256 });
 
 export function repoBase() {
   const path = window.location.pathname.replace(/index\.html$/, '');
@@ -60,6 +62,7 @@ export function invalidateDocument(relativePath) {
 
 export function clearDocumentCache() {
   documentCache.clear();
+  existenceCache.clear();
 }
 
 export async function fileExists(relativePath) {
@@ -74,18 +77,34 @@ export async function fileExists(relativePath) {
   }
 }
 
+async function existingUrl(relativePath) {
+  const url = fileUrl(relativePath);
+  return existenceCache.load(url, async () => {
+    const res = await fetch(url, { method: 'GET', cache: 'no-cache' });
+    return res.ok ? url : null;
+  });
+}
+
 export async function firstExisting(relativePaths) {
   for (const path of relativePaths) {
-    const url = fileUrl(path);
     try {
-      const res = await fetch(url, { method: 'GET', cache: 'no-cache' });
-      if (res.ok) return url;
+      const url = await existingUrl(path);
+      if (url) return url;
     } catch {
-      /* try next */
+      // Transient probe failures stay retryable and do not block later candidates.
     }
   }
   return null;
 }
+
+const startupCatalogPrimer = createStartupCatalogPrimer({
+  loadPortal: () => fetchText('README.md'),
+  parsePortal: parsePortalCatalog,
+  loadHub: (slug) => fetchText(`books/${slug}/README.md`),
+  parseHub: parseBookReadme,
+  loadCover: (slug) => firstExisting(catalogCoverCandidates(slug)),
+  concurrency: 4,
+});
 
 const startupPrimer = createStartupPublicationPrimer({
   loadReadme: (slug) => fetchText(`books/${slug}/README.md`),
@@ -93,6 +112,12 @@ const startupPrimer = createStartupPublicationPrimer({
   loadChapter: (slug, chapter) => fetchText(`books/${slug}/${chapter.file}`),
   concurrency: 2,
 });
+
+function primeInitialCatalog() {
+  startupCatalogPrimer.prime().catch(() => {
+    // Catalog priming is opportunistic. The canonical loader retries and owns errors.
+  });
+}
 
 function primeInitialPublication() {
   const route = parseRoute();
@@ -102,4 +127,5 @@ function primeInitialPublication() {
   });
 }
 
+primeInitialCatalog();
 primeInitialPublication();
