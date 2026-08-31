@@ -3,6 +3,7 @@ const INTERACTIVE_SELECTOR = 'a, button, input, textarea, select, label, mark, [
 const SURFACE_SELECTOR = '#pagesWrapper, .scroll-reader';
 const AUTO_HIDE_MS = 3200;
 const ROUTE_HIDE_MS = 850;
+const ROUTE_SCROLL_SETTLE_MS = 240;
 const SCROLL_HIDE_PX = 96;
 const SCROLL_REVEAL_PX = 52;
 const SCROLL_TOP_PX = 28;
@@ -37,6 +38,12 @@ export function canHideReaderChrome({
 
 export function manualImmersiveAllowed({ coarse = false, device = '' } = {}) {
   return !!coarse && (device === 'phone' || device === 'tablet');
+}
+
+export function readerScrollPosition({ mode = 'paged', documentY = 0, readerY = 0 } = {}) {
+  const raw = mode === 'scroll' ? readerY : documentY;
+  const value = Number(raw);
+  return Number.isFinite(value) ? Math.max(0, value) : 0;
 }
 
 export function scrollChromeIntent({
@@ -110,11 +117,26 @@ function currentState(manualImmersive = false) {
   };
 }
 
-function scrollY() {
+function documentScrollY() {
   return window.scrollY
     || document.scrollingElement?.scrollTop
     || document.documentElement.scrollTop
     || 0;
+}
+
+function readerScrollY(eventTarget = null) {
+  const target = eventTarget?.id === 'scrollReader'
+    ? eventTarget
+    : document.getElementById('scrollReader');
+  return target?.scrollTop || 0;
+}
+
+function currentScrollY(eventTarget = null) {
+  return readerScrollPosition({
+    mode: scrollMode() ? 'scroll' : 'paged',
+    documentY: documentScrollY(),
+    readerY: readerScrollY(eventTarget),
+  });
 }
 
 function setChromeInert(hidden) {
@@ -132,8 +154,10 @@ export function installImmersiveChrome() {
   let manualImmersive = false;
   let lastFocusMode = focusMode();
   let lastStage = body().dataset.stage || '';
-  let lastScrollY = scrollY();
+  let lastReaderMode = root().dataset.readerMode || 'paged';
+  let lastScrollY = currentScrollY();
   let scrollAccumulated = 0;
+  let suppressScrollUntil = 0;
 
   const clearTimer = () => {
     window.clearTimeout(timer);
@@ -174,9 +198,14 @@ export function installImmersiveChrome() {
     if (autoHide) scheduleHide();
   };
 
-  const resetScrollIntent = () => {
-    lastScrollY = scrollY();
+  const resetScrollIntent = (eventTarget = null) => {
+    lastScrollY = currentScrollY(eventTarget);
     scrollAccumulated = 0;
+  };
+
+  const settleProgrammaticScroll = () => {
+    suppressScrollUntil = performance.now() + ROUTE_SCROLL_SETTLE_MS;
+    resetScrollIntent();
   };
 
   const leaveImmersive = () => {
@@ -186,12 +215,14 @@ export function installImmersiveChrome() {
     setHidden(false);
   };
 
-  const sync = () => {
+  const sync = ({ readerModeChanged = false } = {}) => {
     syncFocusButton();
     lastFocusMode = focusMode();
     lastStage = body().dataset.stage || '';
+    lastReaderMode = root().dataset.readerMode || 'paged';
     syncContract();
     resetScrollIntent();
+    if (readerModeChanged) settleProgrammaticScroll();
     if (lastStage !== 'read') {
       leaveImmersive();
       return;
@@ -201,7 +232,8 @@ export function installImmersiveChrome() {
       return;
     }
     if (lastFocusMode) {
-      scheduleHide(500);
+      reveal();
+      scheduleHide(readerModeChanged ? ROUTE_HIDE_MS : 500);
       return;
     }
     if (!manualImmersive) setHidden(false);
@@ -231,10 +263,15 @@ export function installImmersiveChrome() {
     else hide();
   }, true);
 
-  document.addEventListener('scroll', () => {
-    const current = scrollY();
+  document.addEventListener('scroll', (event) => {
+    const current = currentScrollY(event.target);
     const deltaY = current - lastScrollY;
     lastScrollY = current;
+
+    if (performance.now() < suppressScrollUntil) {
+      scrollAccumulated = 0;
+      return;
+    }
 
     if (
       body().dataset.stage !== 'read'
@@ -299,7 +336,7 @@ export function installImmersiveChrome() {
   });
 
   const routeChanged = () => {
-    resetScrollIntent();
+    settleProgrammaticScroll();
     if (body().dataset.stage === 'read' && (focusMode() || manualImmersive)) {
       reveal();
       scheduleHide(ROUTE_HIDE_MS);
@@ -311,12 +348,15 @@ export function installImmersiveChrome() {
   const observer = new MutationObserver((records) => {
     const mode = focusMode();
     const stage = body().dataset.stage || '';
-    const overlayChanged = records.some((record) => record.target !== body());
+    const readerMode = root().dataset.readerMode || 'paged';
+    const overlayChanged = records.some((record) => record.target !== body() && record.target !== root());
+    const readerModeChanged = readerMode !== lastReaderMode;
     const meaningfulBodyChange = mode !== lastFocusMode || stage !== lastStage;
-    if (!overlayChanged && !meaningfulBodyChange) return;
-    sync();
+    if (!overlayChanged && !meaningfulBodyChange && !readerModeChanged) return;
+    sync({ readerModeChanged });
   });
   observer.observe(body(), { attributes: true, attributeFilter: ['class', 'data-stage'] });
+  observer.observe(root(), { attributes: true, attributeFilter: ['data-reader-mode'] });
   for (const id of ['tocOverlay', 'progressPanel', 'settingsPanel', 'searchOverlay', 'noteDialog', 'helpOverlay']) {
     const overlay = document.getElementById(id);
     if (overlay) observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
