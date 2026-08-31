@@ -24,6 +24,9 @@ queueMicrotask(() => {
   import('./progressive-library-search.js').catch((error) => {
     console.warn('Progressive library search could not be loaded', error);
   });
+  import('./accessibility-surfaces.js').catch((error) => {
+    console.warn('Accessibility surface isolation could not be loaded', error);
+  });
   import('./reading-session.js')
     .then(({ installReadingSession }) => installReadingSession())
     .catch((error) => {
