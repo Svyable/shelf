@@ -1,0 +1,137 @@
+/* Publishing Desk workspace map */
+
+.workspace-map {
+  position: sticky;
+  top: calc(4.2rem + max(.55rem, env(safe-area-inset-top)));
+  z-index: 22;
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  margin: .9rem 0 1.1rem;
+  padding: .38rem;
+  border: 1px solid var(--desk-hairline, var(--border));
+  border-radius: 14px;
+  background: var(--desk-glass, color-mix(in srgb, var(--surface) 88%, transparent));
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--shadow) 24%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(.92);
+  backdrop-filter: blur(18px) saturate(.92);
+}
+
+.workspace-map[hidden] { display: none !important; }
+
+.workspace-map-label {
+  flex: 0 0 auto;
+  padding: 0 .55rem;
+  color: var(--muted);
+  font: 600 .62rem/1 var(--font-ui);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.workspace-map-scroll {
+  display: flex;
+  align-items: center;
+  gap: .16rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.workspace-map button {
+  appearance: none;
+  min-height: 2.25rem;
+  padding: .48rem .68rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  font: 600 .68rem/1 var(--font-ui);
+  white-space: nowrap;
+}
+
+.workspace-map button:hover,
+.workspace-map button:focus-visible,
+.workspace-map button.active {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface-2));
+  color: var(--text);
+  outline: none;
+}
+
+.workspace-map button.active {
+  color: var(--accent);
+}
+
+.workspace-map-find {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  flex: 0 0 auto;
+  border-color: var(--desk-hairline, var(--border)) !important;
+  background: color-mix(in srgb, var(--bg) 34%, transparent) !important;
+}
+
+.workspace-map-find kbd {
+  padding: .18rem .34rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  color: var(--muted);
+  font: 500 .58rem/1 var(--font-ui);
+}
+
+.workspace-map + .summary-grid {
+  margin-top: .65rem;
+}
+
+.workspace-map ~ .desk-controls {
+  top: calc(7.1rem + max(.55rem, env(safe-area-inset-top)));
+}
+
+#summaryGrid,
+#readerDesignStudio,
+#newPublicationStudio,
+#manuscriptList {
+  scroll-margin-top: 8.3rem;
+}
+
+@media (max-width: 850px) {
+  .workspace-map {
+    top: calc(3.8rem + max(.35rem, env(safe-area-inset-top)));
+    margin-inline: -.25rem;
+  }
+
+  .workspace-map-scroll {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .workspace-map-scroll::-webkit-scrollbar { display: none; }
+
+  .workspace-map ~ .desk-controls {
+    top: calc(6.8rem + max(.35rem, env(safe-area-inset-top)));
+  }
+}
+
+@media (max-width: 560px) {
+  .workspace-map {
+    gap: .2rem;
+    border-radius: 12px;
+    padding: .3rem;
+  }
+
+  .workspace-map-label { display: none; }
+  .workspace-map button { min-height: 2.35rem; padding-inline: .62rem; }
+  .workspace-map-find span { display: none; }
+  .workspace-map-find kbd { border: 0; background: transparent; padding: 0; }
+
+  #summaryGrid,
+  #readerDesignStudio,
+  #newPublicationStudio,
+  #manuscriptList {
+    scroll-margin-top: 7.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace-map * { scroll-behavior: auto !important; }
+}

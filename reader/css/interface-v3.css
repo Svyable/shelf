@@ -1,0 +1,280 @@
+/* Bookself interface polish v3
+   Information architecture and library discovery. Builds on interface-v2.css. */
+
+:root {
+  --ui-role-bg: color-mix(in srgb, var(--accent) 9%, var(--bg-secondary));
+  --ui-role-border: color-mix(in srgb, var(--accent) 30%, var(--border));
+  --ui-section-gap: clamp(2rem, 4.5vw, 4.4rem);
+}
+
+.library-view {
+  scroll-padding-top: 5.2rem;
+}
+
+.library-hero {
+  isolation: isolate;
+}
+
+.library-hero::before {
+  content: "LIBRARY";
+  position: absolute;
+  top: -1.25rem;
+  right: 0;
+  z-index: -1;
+  padding: .38rem .62rem;
+  border: 1px solid var(--ui-role-border);
+  border-radius: 999px;
+  background: var(--ui-role-bg);
+  color: var(--text-muted);
+  font: 600 .62rem/1 var(--font-accent);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+html[data-bookself-role="platform"] .library-hero::before { content: "BOOKSELF · PLATFORM"; }
+html[data-bookself-role="shelf"] .library-hero::before { content: "SHELF · RELEASED EDITIONS"; }
+html[data-bookself-role="desk"] .library-hero::before { content: "DESK · WORK IN MOTION"; }
+
+.library-lede a {
+  color: var(--accent);
+  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  text-underline-offset: .18em;
+}
+
+.library-actions::before {
+  content: "Go";
+  align-self: center;
+  margin-right: .2rem;
+  color: var(--text-muted);
+  font: 600 .62rem/1 var(--font-accent);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.library-bar {
+  box-shadow:
+    0 12px 36px color-mix(in srgb, var(--shadow) 27%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--text-primary) 7%, transparent);
+}
+
+.library-bar::before {
+  content: "⌕";
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  color: var(--accent);
+  font: 500 1.05rem/1 var(--font-accent);
+}
+
+.library-bar input::placeholder {
+  color: color-mix(in srgb, var(--text-muted) 90%, transparent);
+}
+
+.continue-card {
+  position: relative;
+  overflow: hidden;
+  max-width: 38rem;
+  padding: 1rem 3.2rem 1rem 1.15rem;
+}
+
+.continue-card::after {
+  content: "→";
+  position: absolute;
+  right: 1.1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font: 500 1.4rem/1 var(--font-accent);
+}
+
+.continue-kicker {
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.continue-card a {
+  display: block;
+  margin-top: .16rem;
+  font: 500 clamp(1.05rem, 2vw, 1.3rem)/1.25 var(--font-display);
+}
+
+.pub-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-bottom: .1rem;
+}
+
+.pub-filters::before {
+  content: "Publisher";
+  margin-right: .25rem;
+  color: var(--text-muted);
+  font: 600 .62rem/1 var(--font-accent);
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.pub-filters button.active {
+  border-color: color-mix(in srgb, var(--accent) 64%, var(--border));
+  background: color-mix(in srgb, var(--accent-glow) 48%, var(--bg-secondary));
+  color: var(--text-primary);
+}
+
+#stacks,
+.library-view > .shelf {
+  margin-top: var(--ui-section-gap);
+}
+
+.stack {
+  margin-bottom: var(--ui-section-gap);
+}
+
+.stack-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.15rem;
+  color: var(--text-secondary);
+}
+
+.stack-title::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, var(--ui-hairline), transparent);
+}
+
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12.75rem, 1fr));
+  align-items: end;
+  justify-items: center;
+  column-gap: clamp(1.3rem, 2.8vw, 2.6rem);
+  row-gap: 2rem;
+  min-height: 0;
+}
+
+.shelf::after {
+  grid-column: 1 / -1;
+  width: 100%;
+  pointer-events: none;
+}
+
+.volume {
+  width: min(13.5rem, 100%);
+}
+
+.volume-open {
+  min-width: 4.2rem;
+  padding: .32rem .55rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-primary) 54%, transparent);
+  color: var(--text-primary);
+  text-align: center;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.empty-shelf,
+.shelf-error {
+  max-width: 42rem;
+  margin: 2.2rem auto;
+  padding: 1.1rem 1.2rem;
+  border: 1px dashed var(--ui-hairline);
+  border-radius: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  background: color-mix(in srgb, var(--bg-secondary) 48%, transparent);
+}
+
+.reader-exit-nav {
+  border-left-color: var(--ui-hairline) !important;
+}
+
+.reader-exit-shelf {
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent) !important;
+  background: color-mix(in srgb, var(--accent-glow) 20%, transparent) !important;
+}
+
+html[data-bookself-role="desk"] .draft-badge {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent), 0 6px 18px color-mix(in srgb, var(--accent-glow) 35%, transparent);
+}
+
+@media (min-width: 980px) {
+  .library-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(25rem, .92fr);
+    column-gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: end;
+  }
+
+  .library-kicker,
+  .library-hero h1,
+  .library-lede,
+  .library-actions {
+    grid-column: 1;
+  }
+
+  .library-kicker { grid-row: 1; }
+  .library-hero h1 { grid-row: 2; }
+  .library-lede { grid-row: 3; }
+  .library-actions { grid-row: 4; margin-bottom: 0; }
+
+  .library-bar {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+    align-self: end;
+    width: 100%;
+    margin-bottom: .4rem;
+  }
+
+  #libraryHits {
+    grid-column: 2;
+    grid-row: 4;
+    width: 100%;
+    max-width: none;
+    align-self: start;
+    margin: .8rem 0 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .library-hero::before {
+    position: static;
+    display: inline-flex;
+    margin-bottom: 1rem;
+  }
+
+  .library-actions::before { display: none; }
+
+  .pub-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: .45rem;
+  }
+  .pub-filters::-webkit-scrollbar { display: none; }
+  .pub-filters::before,
+  .pub-filters button { flex: 0 0 auto; }
+
+  .shelf {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.35rem .7rem;
+  }
+
+  .volume {
+    width: min(10.8rem, 43vw);
+  }
+}
+
+@media (max-width: 390px) {
+  .shelf { grid-template-columns: 1fr; }
+  .volume { width: min(12.2rem, 74vw); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .continue-card::after { transform: translateY(-50%); }
+}

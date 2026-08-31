@@ -1,3 +1,7 @@
+import('./workspace-nav.js').catch((error) => {
+  console.warn('Workspace navigation could not be loaded', error);
+});
+
 import('./cover-design.js').catch((error) => {
   console.warn('Cover design studio could not be loaded', error);
 });
