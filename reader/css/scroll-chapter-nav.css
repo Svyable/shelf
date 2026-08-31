@@ -4,9 +4,6 @@
   left: 50%;
   bottom: max(1rem, calc(.65rem + env(safe-area-inset-bottom)));
   display: grid;
-  grid-template-columns: 3rem minmax(9rem, 18rem) 3rem;
-  align-items: center;
-  gap: .3rem;
   width: max-content;
   max-width: calc(100vw - max(1rem, env(safe-area-inset-left)) - max(1rem, env(safe-area-inset-right)));
   padding: .32rem;
@@ -20,8 +17,27 @@
   -webkit-backdrop-filter: blur(18px);
 }
 
-.scroll-chapter-nav[hidden] { display: none !important; }
-.scroll-chapter-nav[data-loading="true"] .scroll-chapter-nav-center { opacity: .62; }
+.scroll-chapter-nav[hidden],
+.scroll-chapter-nav-row[hidden] {
+  display: none !important;
+}
+
+.scroll-chapter-nav[data-loading="true"] .scroll-chapter-nav-center {
+  opacity: .62;
+}
+
+.scroll-chapter-nav-row {
+  display: grid;
+  grid-template-columns: 3rem minmax(9rem, 18rem) 3rem;
+  align-items: center;
+  gap: .3rem;
+}
+
+.scroll-chapter-nav-chapters + .scroll-chapter-nav-sections {
+  margin-top: .18rem;
+  padding-top: .18rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+}
 
 .scroll-chapter-nav-button {
   display: grid;
@@ -34,6 +50,10 @@
   color: var(--text-primary);
   font: 400 1.65rem/1 var(--font-accent);
   touch-action: manipulation;
+}
+
+.scroll-chapter-nav-section-button {
+  font-size: 1rem;
 }
 
 .scroll-chapter-nav-button:disabled {
@@ -86,10 +106,16 @@ body.reader-chrome-hidden .scroll-chapter-nav {
   bottom: max(7.7rem, calc(7.15rem + env(safe-area-inset-bottom)));
 }
 
+html[data-reader-mode="paged"] .scroll-chapter-nav {
+  bottom: max(4.2rem, calc(3.65rem + env(safe-area-inset-bottom)));
+}
+
 @media (max-width: 560px) {
   .scroll-chapter-nav {
-    grid-template-columns: 3rem minmax(7.25rem, 1fr) 3rem;
     width: min(22rem, calc(100vw - 1rem - env(safe-area-inset-left) - env(safe-area-inset-right)));
+  }
+  .scroll-chapter-nav-row {
+    grid-template-columns: 3rem minmax(7.25rem, 1fr) 3rem;
   }
 }
 
@@ -98,9 +124,14 @@ body.reader-chrome-hidden .scroll-chapter-nav {
   [data-reader-device="tablet"] .scroll-chapter-nav {
     bottom: max(6.55rem, calc(6rem + env(safe-area-inset-bottom)));
   }
+  html[data-reader-mode="paged"] .scroll-chapter-nav {
+    bottom: max(3.3rem, calc(2.8rem + env(safe-area-inset-bottom)));
+  }
   .scroll-chapter-nav {
-    grid-template-columns: 2.6rem minmax(7rem, 14rem) 2.6rem;
     padding: .22rem;
+  }
+  .scroll-chapter-nav-row {
+    grid-template-columns: 2.6rem minmax(7rem, 14rem) 2.6rem;
   }
   .scroll-chapter-nav-button {
     width: 2.6rem;
@@ -116,15 +147,29 @@ body.reader-chrome-hidden .scroll-chapter-nav {
     box-shadow: none;
     backdrop-filter: none;
   }
-  .scroll-chapter-nav-button { color: ButtonText; }
-  .scroll-chapter-nav-button:not(:disabled):active { background: Highlight; color: HighlightText; }
+  .scroll-chapter-nav-chapters + .scroll-chapter-nav-sections {
+    border-top-color: CanvasText;
+  }
+  .scroll-chapter-nav-button {
+    color: ButtonText;
+  }
+  .scroll-chapter-nav-button:not(:disabled):active {
+    background: Highlight;
+    color: HighlightText;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .scroll-chapter-nav {
     transition: opacity 160ms ease, transform 180ms cubic-bezier(.2,.72,.2,1);
   }
-  .scroll-chapter-nav-center { transition: opacity 120ms ease; }
-  .scroll-chapter-nav-button { transition: background 120ms ease, opacity 120ms ease, transform 120ms ease; }
-  .scroll-chapter-nav-button:not(:disabled):active { transform: scale(.96); }
+  .scroll-chapter-nav-center {
+    transition: opacity 120ms ease;
+  }
+  .scroll-chapter-nav-button {
+    transition: background 120ms ease, opacity 120ms ease, transform 120ms ease;
+  }
+  .scroll-chapter-nav-button:not(:disabled):active {
+    transform: scale(.96);
+  }
 }
