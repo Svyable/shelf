@@ -3,6 +3,7 @@ import {
   PREVIEW_MAX_CHARS,
   PREVIEW_MAX_PARAGRAPHS,
   normalizeReadRoute,
+  samePreviewRoute,
   selectPreviewChapter,
   projectPreviewParagraphs,
   shouldShowPreview,
@@ -18,6 +19,11 @@ eq(normalizeReadRoute({ view: 'cover', slug: 'a' }), null);
 eq(normalizeReadRoute({ view: 'read' }), null);
 eq(normalizeReadRoute({ view: 'read', slug: 'a', chapter: 'ch2', offset: -3 }), { slug: 'a', chapter: 'ch2', offset: 0 });
 eq(normalizeReadRoute({ view: 'read', slug: 'a', offset: '42' }), { slug: 'a', chapter: '', offset: 42 });
+
+const routeA = normalizeReadRoute({ view: 'read', slug: 'a', chapter: 'ch2', offset: 42 });
+eq(samePreviewRoute(routeA, normalizeReadRoute({ view: 'read', slug: 'a', chapter: 'ch2', offset: 42 })), true);
+eq(samePreviewRoute(routeA, normalizeReadRoute({ view: 'read', slug: 'a', chapter: 'ch3', offset: 42 })), false);
+eq(samePreviewRoute(routeA, null), false);
 
 const contents = [{ id: 'front', file: 'front.md' }, { id: 'ch2', file: 'ch2.md' }];
 eq(selectPreviewChapter(contents, 'ch2').id, 'ch2');
@@ -36,17 +42,18 @@ eq(projectPreviewParagraphs('![Alt](../media/a.png)\n\n[[ch02|Next]]\n\n[@x|Smit
 eq(projectPreviewParagraphs('```js\nalert(1)\n```\n\nReadable')[0], 'Readable');
 eq(projectPreviewParagraphs('One\n\nTwo\n\nThree', 0, { maxParagraphs: 2 }), ['One', 'Two']);
 ok(projectPreviewParagraphs('x'.repeat(PREVIEW_MAX_CHARS + 100))[0].endsWith('…'));
-ok(projectPreviewParagraphs(Array.from({length: 20}, (_, i) => `P${i}`).join('\n\n')).length <= PREVIEW_MAX_PARAGRAPHS);
+ok(projectPreviewParagraphs(Array.from({ length: 20 }, (_, i) => `P${i}`).join('\n\n')).length <= PREVIEW_MAX_PARAGRAPHS);
 
 ok(shouldShowPreview({ route: { view: 'read', slug: 'a' }, canonicalReady: false, stage: 'library' }));
 eq(shouldShowPreview({ route: { view: 'read', slug: 'a' }, canonicalReady: true, stage: 'read' }), false);
 eq(shouldShowPreview({ route: { view: 'cover', slug: 'a' }, canonicalReady: false, stage: 'library' }), false);
 eq(shouldShowPreview({ route: { view: 'read', slug: 'a' }, canonicalReady: false, stage: 'cover' }), false);
 
-eq(previewCompletionState({ stage: 'library' }), 'dismiss');
+eq(previewCompletionState({ stage: 'library' }), 'keep');
 eq(previewCompletionState({ stage: 'read', hasPagedContent: true }), 'dismiss');
 eq(previewCompletionState({ stage: 'read', hasContinuousContent: true }), 'dismiss');
 eq(previewCompletionState({ stage: 'read', hasPagedContent: false, hasContinuousContent: false }), 'keep');
+eq(previewCompletionState({ stage: 'cover' }), 'dismiss');
 eq(previewCompletionState({ stage: 'loading' }), 'keep');
 
 console.log(`direct route preview model tests ok (${assertions} assertions)`);
