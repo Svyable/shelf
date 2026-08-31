@@ -70,7 +70,12 @@
       throw new TypeError('Shell install requires at least one core asset');
     }
 
+    // Core Reader files stay atomic: if any of these are unavailable, retaining
+    // the previous service worker is safer than activating a broken Reader.
     await cache.addAll(groups.core);
+
+    // Enhancements are best effort. A missing optional module must not strand a
+    // valid core Reader behind a failed service-worker install.
     const optional = await cacheOptional(cache, groups.optional, options);
     return Object.freeze({
       core: groups.core.length,
