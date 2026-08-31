@@ -1,7 +1,8 @@
 importScripts('./js/offline-cache.js');
 importScripts('./js/offline-fetch-policy.js');
+importScripts('./js/offline-storage-budget.js');
 
-const CACHE = 'obb-shell-v85';
+const CACHE = 'obb-shell-v86';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -108,11 +109,18 @@ const SHELL = [
   './js/export.js',
   './js/offline-cache.js',
   './js/offline-fetch-policy.js',
+  './js/offline-storage-budget.js',
   './js/progress-position.js',
   './js/semantic-progress.js',
 ];
 const SHELL_URLS = self.BookselfOfflineFetchPolicy.shellUrlSet(SHELL, self.location.href);
 const warmScheduler = self.BookselfOfflineCache.createWarmScheduler({ concurrency: 3 });
+const warmBudget = self.BookselfOfflineStorageBudget.createBudgetMonitor({
+  estimate: self.navigator?.storage?.estimate
+    ? () => self.navigator.storage.estimate()
+    : null,
+  ttlMs: 1200,
+});
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));
@@ -228,15 +236,18 @@ async function respondWithPolicy(request, network, kind, sameOrigin) {
   return network.catch(() => cached || Promise.reject(new Error('Network unavailable and no cached response')));
 }
 
-function cacheRequest(cache, href) {
+function cacheRequest(cache, href, kind = 'other') {
   return warmScheduler.run(href, async () => {
     const request = new Request(href, { credentials: 'same-origin' });
     const existing = await cache.match(request, { ignoreSearch: true });
     if (existing) return existing;
+    const decision = await warmBudget.canWarm(kind);
+    if (!decision.allow) return null;
     const response = await fetch(request);
     if (!response.ok) return null;
     try {
       await cache.put(request, response.clone());
+      warmBudget.invalidate();
     } catch {
       // A full cache must not interfere with the book currently being read.
     }
@@ -253,7 +264,7 @@ async function warmChapterMedia(cache, chapterResponse, chapterUrl, publicationU
     return;
   }
   const media = self.BookselfOfflineCache.mediaLinks(markdown, chapterUrl, publicationUrl);
-  await Promise.allSettled(media.map((href) => cacheRequest(cache, href)));
+  await Promise.allSettled(media.map((href) => cacheRequest(cache, href, 'media')));
 }
 
 async function warmPublication(readmeResponse, readmeUrl) {
@@ -270,7 +281,7 @@ async function warmPublication(readmeResponse, readmeUrl) {
   const cache = await caches.open(CACHE);
 
   await Promise.allSettled(chapters.map(async (href) => {
-    const response = await cacheRequest(cache, href);
+    const response = await cacheRequest(cache, href, 'chapter');
     if (!response) return;
     await warmChapterMedia(cache, response.clone(), href, readmeUrl.href);
   }));
