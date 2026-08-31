@@ -6,7 +6,7 @@ Svyable Shelf is the public reading library for books by Sven Hardy Benson and t
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **3 author publication projects · 8 Reader style specimens · one public reading surface**
+> **4 author publication projects · 8 Reader style specimens · one public reading surface**
 
 ## The books
 
@@ -16,6 +16,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 |---|---|---:|---|---|
 | [**Leveraging Luck**](books/leveraging-luck/) | ✅ Released | 10 / 10 | *An Optimistic Guide to Life* — a practical book about luck, mindset, leverage, action, and making more of favorable randomness. | [Read →](https://svyable.github.io/shelf/reader/#/b/leveraging-luck/) |
 | [**Silent Cartel**](books/silent-cartel/) | ✅ Released | 21 / 21 | How pricing algorithms, shared vendors, data, and automated behavior complicate the old assumption that collusion must begin with an explicit conversation. | [Read →](https://svyable.github.io/shelf/reader/#/b/silent-cartel/) |
+| [**Face The Strange**](books/face-the-strange/) | ✅ Released | 25 / 25 | First contact with advanced intelligence may arrive as ordinary work, trust, memory, delegation, and relationship long before society agrees on AGI. | [Read →](https://svyable.github.io/shelf/reader/#/b/face-the-strange/) |
 | [**The Exponentiality**](books/the-exponentiality/) | 🟡 Public draft | Prologue drafted | A public in-progress Bookself volume. It is present on Shelf but is still marked `Drafting`, so it is not treated as a released catalog entry by the Reader. | [Read draft →](https://svyable.github.io/shelf/reader/#/b/the-exponentiality/) |
 
 **Shelf is public. Status still matters.** A folder can be publicly visible in this repository without being marked as a released edition. The Reader library normally catalogs `Published` works; a direct route can still be used for an intentionally public proof or draft.
