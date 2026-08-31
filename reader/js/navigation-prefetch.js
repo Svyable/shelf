@@ -47,10 +47,14 @@ export function createNavigationPrefetchController({
     return routeFromHref(href, { base });
   }
 
+  function primeIntent(route, kind) {
+    return Promise.resolve(prime({ ...route, intent: kind }));
+  }
+
   function run(anchor, kind) {
     const route = routeFor(anchor);
     if (!route || !shouldPrefetchIntent(kind, connection)) return Promise.resolve({ status: 'skipped' });
-    return Promise.resolve(prime(route));
+    return primeIntent(route, kind);
   }
 
   function schedule(anchor) {
@@ -59,7 +63,7 @@ export function createNavigationPrefetchController({
     cancel(anchor);
     const timer = setTimer(() => {
       pending.delete(anchor);
-      prime(route);
+      primeIntent(route, 'hover');
     }, hoverDelay);
     pending.set(anchor, timer);
     return true;
