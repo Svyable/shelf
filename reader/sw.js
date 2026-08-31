@@ -1,7 +1,7 @@
 importScripts('./js/offline-cache.js');
 importScripts('./js/offline-fetch-policy.js');
 
-const CACHE = 'obb-shell-v79';
+const CACHE = 'obb-shell-v80';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -109,6 +109,7 @@ const SHELL = [
   './js/semantic-progress.js',
 ];
 const SHELL_URLS = self.BookselfOfflineFetchPolicy.shellUrlSet(SHELL, self.location.href);
+const warmScheduler = self.BookselfOfflineCache.createWarmScheduler({ concurrency: 3 });
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));
@@ -224,18 +225,20 @@ async function respondWithPolicy(request, network, kind, sameOrigin) {
   return network.catch(() => cached || Promise.reject(new Error('Network unavailable and no cached response')));
 }
 
-async function cacheRequest(cache, href) {
-  const request = new Request(href, { credentials: 'same-origin' });
-  const existing = await cache.match(request, { ignoreSearch: true });
-  if (existing) return existing;
-  const response = await fetch(request);
-  if (!response.ok) return null;
-  try {
-    await cache.put(request, response.clone());
-  } catch {
-    // A full cache must not interfere with the book currently being read.
-  }
-  return response;
+function cacheRequest(cache, href) {
+  return warmScheduler.run(href, async () => {
+    const request = new Request(href, { credentials: 'same-origin' });
+    const existing = await cache.match(request, { ignoreSearch: true });
+    if (existing) return existing;
+    const response = await fetch(request);
+    if (!response.ok) return null;
+    try {
+      await cache.put(request, response.clone());
+    } catch {
+      // A full cache must not interfere with the book currently being read.
+    }
+    return response;
+  });
 }
 
 async function warmChapterMedia(cache, chapterResponse, chapterUrl, publicationUrl) {
