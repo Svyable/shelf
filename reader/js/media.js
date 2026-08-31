@@ -3,7 +3,9 @@ import {
   formatMediaZoom,
   mediaKeyboardAction,
   panMediaView,
+  pinchMediaView,
   resetMediaView,
+  toggleMediaZoomAt,
   zoomMediaView,
 } from './media-viewer.js';
 
@@ -18,6 +20,8 @@ let lightbox = null;
 let lastTrigger = null;
 let view = resetMediaView();
 let drag = null;
+let pinch = null;
+const activePointers = new Map();
 
 function installStyles() {
   if (document.querySelector(`link[href="${MEDIA_CSS}"]`)) return;
@@ -50,6 +54,15 @@ function geometry() {
   };
 }
 
+function viewportPoint(clientX, clientY) {
+  const viewport = lightbox?.querySelector('.reader-media-lightbox-viewport');
+  const rect = viewport?.getBoundingClientRect();
+  return {
+    x: Number(clientX || 0) - (rect?.left || 0),
+    y: Number(clientY || 0) - (rect?.top || 0),
+  };
+}
+
 function renderView(announce = false) {
   if (!lightbox) return;
   const img = lightbox.querySelector('img');
@@ -77,6 +90,54 @@ function resetZoom() {
   renderView(true);
 }
 
+function pointerPair() {
+  const points = [...activePointers.values()];
+  if (points.length < 2) return null;
+  const a = points[0];
+  const b = points[1];
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  return {
+    distance: Math.max(1, Math.hypot(dx, dy)),
+    center: viewportPoint((a.x + b.x) / 2, (a.y + b.y) / 2),
+  };
+}
+
+function beginPinch(viewport) {
+  const pair = pointerPair();
+  if (!pair) return false;
+  pinch = {
+    view: { ...view },
+    distance: pair.distance,
+    center: pair.center,
+  };
+  drag = null;
+  viewport?.classList.add('is-dragging');
+  return true;
+}
+
+function updatePinch() {
+  const pair = pointerPair();
+  if (!pinch || !pair) return false;
+  view = pinchMediaView(
+    pinch.view,
+    pinch.distance,
+    pair.distance,
+    pinch.center,
+    pair.center,
+    geometry()
+  );
+  renderView();
+  return true;
+}
+
+function finishPointer(viewport, pointerId) {
+  activePointers.delete(pointerId);
+  if (pinch && activePointers.size < 2) pinch = null;
+  if (drag?.id === pointerId) drag = null;
+  if (!pinch && !drag) viewport?.classList.remove('is-dragging');
+}
+
 function ensureLightbox() {
   if (lightbox) return lightbox;
   const overlay = document.createElement('div');
@@ -94,7 +155,7 @@ function ensureLightbox() {
         <button type="button" data-media-action="in" aria-label="Zoom in">+</button>
         <button type="button" data-media-action="close" aria-label="Close expanded image">×</button>
       </div>
-      <div class="reader-media-lightbox-viewport" tabindex="0" role="region" aria-label="Expanded figure. Use plus and minus to zoom, arrow keys to pan, Shift plus arrow keys to pan farther, and zero to reset.">
+      <div class="reader-media-lightbox-viewport" tabindex="0" role="region" aria-label="Expanded figure. Pinch or double-tap to zoom. Drag to pan. Keyboard: plus and minus zoom, arrow keys pan, Shift plus arrows pan farther, zero resets.">
         <img alt="" draggable="false">
       </div>
       <p class="reader-media-lightbox-caption"></p>
@@ -109,6 +170,17 @@ function ensureLightbox() {
   });
   const viewport = overlay.querySelector('.reader-media-lightbox-viewport');
   viewport?.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'touch') {
+      activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      viewport.setPointerCapture?.(event.pointerId);
+      if (activePointers.size >= 2) beginPinch(viewport);
+      else if (view.scale > 1) {
+        drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+        viewport.classList.add('is-dragging');
+      }
+      event.preventDefault();
+      return;
+    }
     if (view.scale <= 1 || event.button !== 0) return;
     drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
     viewport.setPointerCapture?.(event.pointerId);
@@ -116,6 +188,13 @@ function ensureLightbox() {
     event.preventDefault();
   });
   viewport?.addEventListener('pointermove', (event) => {
+    if (event.pointerType === 'touch' && activePointers.has(event.pointerId)) {
+      activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      if (pinch && updatePinch()) {
+        event.preventDefault();
+        return;
+      }
+    }
     if (!drag || drag.id !== event.pointerId) return;
     view = panMediaView(view, event.clientX - drag.x, event.clientY - drag.y, geometry());
     drag.x = event.clientX;
@@ -123,9 +202,14 @@ function ensureLightbox() {
     renderView();
     event.preventDefault();
   });
-  const endDrag = () => { drag = null; viewport?.classList.remove('is-dragging'); };
-  viewport?.addEventListener('pointerup', endDrag);
-  viewport?.addEventListener('pointercancel', endDrag);
+  viewport?.addEventListener('pointerup', (event) => finishPointer(viewport, event.pointerId));
+  viewport?.addEventListener('pointercancel', (event) => finishPointer(viewport, event.pointerId));
+  viewport?.addEventListener('lostpointercapture', (event) => finishPointer(viewport, event.pointerId));
+  viewport?.addEventListener('dblclick', (event) => {
+    view = toggleMediaZoomAt(view, viewportPoint(event.clientX, event.clientY), geometry());
+    renderView(true);
+    event.preventDefault();
+  });
   lightbox = overlay;
   return overlay;
 }
@@ -137,10 +221,13 @@ function openLightbox(img) {
   if (!expanded || !caption) return;
   lastTrigger = img;
   view = resetMediaView();
+  drag = null;
+  pinch = null;
+  activePointers.clear();
   expanded.src = img.currentSrc || img.src;
   expanded.alt = img.alt || '';
-  caption.textContent = img.alt || '';
-  caption.hidden = !img.alt;
+  caption.textContent = img.closest('figure')?.querySelector('figcaption')?.textContent?.trim() || img.alt || '';
+  caption.hidden = !caption.textContent;
   overlay.hidden = false;
   expanded.onload = () => { view = resetMediaView(); renderView(); };
   renderView();
@@ -151,6 +238,10 @@ function closeLightbox() {
   if (!lightbox || lightbox.hidden) return;
   lightbox.hidden = true;
   drag = null;
+  pinch = null;
+  activePointers.clear();
+  const viewport = lightbox.querySelector('.reader-media-lightbox-viewport');
+  viewport?.classList.remove('is-dragging');
   const expanded = lightbox.querySelector('img');
   if (expanded) expanded.removeAttribute('src');
   view = resetMediaView();
