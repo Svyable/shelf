@@ -1,7 +1,10 @@
 import './page-drag.js';
 import './reader-keyboard-runtime.js';
 import './one-handed-actions.js';
+import { parseBookReadme } from './catalog.js';
+import { parseRoute } from './router.js';
 import { createAsyncResourceCache } from './resource-cache.js';
+import { createStartupPublicationPrimer } from './startup-publication-primer.js';
 
 queueMicrotask(() => {
   import('./semantic-progress.js').catch((error) => {
@@ -83,3 +86,20 @@ export async function firstExisting(relativePaths) {
   }
   return null;
 }
+
+const startupPrimer = createStartupPublicationPrimer({
+  loadReadme: (slug) => fetchText(`books/${slug}/README.md`),
+  parseReadme: parseBookReadme,
+  loadChapter: (slug, chapter) => fetchText(`books/${slug}/${chapter.file}`),
+  concurrency: 2,
+});
+
+function primeInitialPublication() {
+  const route = parseRoute();
+  if (!route.slug || (route.view !== 'cover' && route.view !== 'read')) return;
+  startupPrimer.prime({ slug: route.slug, chapter: route.chapter }).catch(() => {
+    // Priming is opportunistic. The canonical loader retries and owns errors.
+  });
+}
+
+primeInitialPublication();
