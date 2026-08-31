@@ -2,7 +2,7 @@ importScripts('./js/offline-cache.js');
 importScripts('./js/offline-fetch-policy.js');
 importScripts('./js/offline-storage-budget.js');
 
-const CACHE = 'obb-shell-v86';
+const CACHE = 'obb-shell-v87';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -54,6 +54,7 @@ const SHELL = [
   './js/one-handed-actions-model.js',
   './js/one-handed-actions.js',
   './js/app.js',
+  './js/route-queue.js',
   './js/pagination-scheduler.js',
   './js/experience.js',
   './js/scroll-performance-model.js',
