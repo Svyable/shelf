@@ -1,6 +1,7 @@
 importScripts('./js/offline-cache.js');
+importScripts('./js/offline-fetch-policy.js');
 
-const CACHE = 'obb-shell-v76';
+const CACHE = 'obb-shell-v77';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -99,9 +100,11 @@ const SHELL = [
   './js/search.js',
   './js/export.js',
   './js/offline-cache.js',
+  './js/offline-fetch-policy.js',
   './js/progress-position.js',
   './js/semantic-progress.js',
 ];
+const SHELL_URLS = self.BookselfOfflineFetchPolicy.shellUrlSet(SHELL, self.location.href);
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));
@@ -184,6 +187,39 @@ function cacheableExternal(url) {
     || url.origin === 'https://fonts.gstatic.com';
 }
 
+async function cachedResponse(request, sameOrigin) {
+  const cache = await caches.open(CACHE);
+  return cache.match(request, { ignoreSearch: sameOrigin });
+}
+
+async function networkResponse(request) {
+  const response = await fetch(request);
+  if (!response.ok) return response;
+  try {
+    const cache = await caches.open(CACHE);
+    await cache.put(request, response.clone());
+  } catch {
+    // A full cache must not interfere with the book currently being read.
+  }
+  return response;
+}
+
+function after(ms, value) {
+  return new Promise((resolve) => setTimeout(() => resolve(value), ms));
+}
+
+async function respondWithPolicy(request, network, kind, sameOrigin) {
+  const cached = await cachedResponse(request, sameOrigin);
+  const plan = self.BookselfOfflineFetchPolicy.responsePlan(kind, !!cached);
+
+  if (plan === 'cache-then-network') return cached;
+  if (plan === 'network-with-cache-deadline') {
+    const deadline = self.BookselfOfflineFetchPolicy.deadlineMs(kind);
+    return Promise.race([network, after(deadline, cached)]).catch(() => cached);
+  }
+  return network.catch(() => cached || Promise.reject(new Error('Network unavailable and no cached response')));
+}
+
 async function cacheRequest(cache, href) {
   const request = new Request(href, { credentials: 'same-origin' });
   const existing = await cache.match(request, { ignoreSearch: true });
@@ -238,16 +274,16 @@ self.addEventListener('fetch', (event) => {
   const external = cacheableExternal(url);
   if (!sameOrigin && !external) return;
 
-  const network = fetch(req)
-    .then(async (res) => {
-      try {
-        const cache = await caches.open(CACHE);
-        await cache.put(req, res.clone());
-      } catch {
-        // Reading continues from the network response.
-      }
-      return res;
-    });
+  const kind = self.BookselfOfflineFetchPolicy.classifyRequest(url.href, {
+    sameOrigin,
+    external,
+    shellUrls: SHELL_URLS,
+  });
+  const network = networkResponse(req);
+
+  // Keep revalidation alive even when a cached response wins immediately or
+  // after the publication deadline. The next request then sees the fresh copy.
+  event.waitUntil(network.then(() => {}).catch(() => {}));
 
   if (sameOrigin && self.BookselfOfflineCache.isPublicationReadme(url.href)) {
     event.waitUntil(
@@ -257,7 +293,5 @@ self.addEventListener('fetch', (event) => {
     );
   }
 
-  event.respondWith(
-    network.catch(() => caches.match(req, { ignoreSearch: sameOrigin }))
-  );
+  event.respondWith(respondWithPolicy(req, network, kind, sameOrigin));
 });
