@@ -76,7 +76,7 @@ test('recent optional enhancements include their model/style companions', () => 
 });
 
 test('offline shell generation advances for the repaired enhancement set', () => {
-  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v92['"]/);
+  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v93['"]/);
 });
 
 console.log('offline shell contract tests cover dynamic enhancement parity');

@@ -104,9 +104,19 @@
   transform: translate3d(0,0,0) rotateY(0deg);
 }
 
-.page-nav .nav-btn {
-  min-width: 3rem;
-  min-height: 3rem;
+/* Final page-turn target contract. Adaptive chrome may make the visible button
+   more compact, but it must not undercut the interaction box. Keeping the
+   minimum in one inherited variable prevents device-specific selector
+   specificity from silently shrinking phone/tablet targets. */
+.page-nav {
+  --reader-nav-target: 3rem;
+}
+
+.page-nav .nav-btn,
+[data-reader-device="phone"] .page-nav .nav-btn,
+[data-reader-device="tablet"] .page-nav .nav-btn {
+  min-width: var(--reader-nav-target);
+  min-height: var(--reader-nav-target);
 }
 
 .page-nav .nav-btn:focus-visible {
@@ -136,9 +146,8 @@
 }
 
 @media (pointer: coarse) {
-  .page-nav .nav-btn {
-    min-width: 3.25rem;
-    min-height: 3.25rem;
+  .page-nav {
+    --reader-nav-target: 3.25rem;
   }
 
   .nav-gesture-preview {
