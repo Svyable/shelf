@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {
   orderedPublicationFiles,
+  startupAcquisitionPlan,
   runBounded,
   createStartupPublicationPrimer,
 } from './startup-publication-primer.js';
@@ -15,6 +16,19 @@ assert.deepEqual(orderedPublicationFiles(contents, 'two').map((x) => x.id), ['tw
 assert.deepEqual(orderedPublicationFiles(contents, 'front').map((x) => x.id), ['front', 'one', 'two', 'three']);
 assert.deepEqual(orderedPublicationFiles(contents, 'missing').map((x) => x.id), ['front', 'one', 'two', 'three']);
 assert.deepEqual(orderedPublicationFiles([], 'two'), []);
+
+assert.deepEqual(startupAcquisitionPlan({}), {
+  primeCatalog: true, catalogConcurrency: 4, warmPublicationRemainder: true, publicationConcurrency: 2,
+});
+assert.deepEqual(startupAcquisitionPlan({ effectiveType: '4g' }), startupAcquisitionPlan({}));
+assert.deepEqual(startupAcquisitionPlan({ effectiveType: '3g' }), {
+  primeCatalog: true, catalogConcurrency: 2, warmPublicationRemainder: true, publicationConcurrency: 1,
+});
+assert.deepEqual(startupAcquisitionPlan({ effectiveType: '2g' }), {
+  primeCatalog: false, catalogConcurrency: 0, warmPublicationRemainder: false, publicationConcurrency: 1,
+});
+assert.deepEqual(startupAcquisitionPlan({ effectiveType: 'slow-2g' }), startupAcquisitionPlan({ effectiveType: '2g' }));
+assert.deepEqual(startupAcquisitionPlan({ saveData: true, effectiveType: '4g' }), startupAcquisitionPlan({ effectiveType: '2g' }));
 
 let active = 0;
 let maxActive = 0;
@@ -55,11 +69,26 @@ const result = await p1;
 assert.equal(result.first, 'two');
 assert.equal(result.loaded, 4);
 assert.equal(result.failed, 0);
+assert.equal(result.deferred, 0);
 assert.equal(calls[0], 'readme:book');
 assert.equal(calls[1], 'start:two');
 assert.equal(calls[2], 'done:two');
 assert.deepEqual(calls.filter((x) => x.startsWith('start:')).slice(0, 3), ['start:two', 'start:front', 'start:one']);
 assert.equal(peak, 2);
+
+const constrainedCalls = [];
+const constrainedPrimer = createStartupPublicationPrimer({
+  loadReadme: async () => '# readme',
+  parseReadme: () => ({ contents }),
+  loadChapter: async (_slug, row) => { constrainedCalls.push(row.id); return row.file; },
+  warmRemainder: false,
+});
+const constrainedResult = await constrainedPrimer.prime({ slug: 'book', chapter: 'three' });
+assert.deepEqual(constrainedCalls, ['three']);
+assert.equal(constrainedResult.loaded, 1);
+assert.equal(constrainedResult.failed, 0);
+assert.equal(constrainedResult.deferred, 3);
+assert.equal(constrainedResult.first, 'three');
 
 let attempts = 0;
 const retryPrimer = createStartupPublicationPrimer({
@@ -74,9 +103,10 @@ const retryPrimer = createStartupPublicationPrimer({
 await assert.rejects(retryPrimer.prime({ slug: 'retry', chapter: 'one' }));
 const retry = await retryPrimer.prime({ slug: 'retry', chapter: 'one' });
 assert.equal(retry.loaded, 1);
+assert.equal(retry.deferred, 0);
 assert.equal(attempts, 2);
 
 const skipped = await primer.prime({});
 assert.equal(skipped.status, 'skipped');
 
-console.log('startup publication primer tests ok');
+console.log('startup publication primer tests ok (30 assertions)');
