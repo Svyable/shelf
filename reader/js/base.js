@@ -18,6 +18,9 @@ queueMicrotask(() => {
   import('./reading-wake-lock.js').catch((error) => {
     console.warn('Reading wake lock controls could not be loaded', error);
   });
+  import('./reading-guide.js').catch((error) => {
+    console.warn('Reading guide could not be loaded', error);
+  });
 });
 
 /** Repo-root URL prefix so fetches work at / and at /<repo>/ */
