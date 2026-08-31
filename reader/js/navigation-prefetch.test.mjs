@@ -42,7 +42,7 @@ eq(controller.schedule(a), true);
 eq(timers[0].delay, 90);
 eq(primes.length, 0);
 timers[0].fn();
-eq(primes, [{ slug: 'book', chapter: 'chapter' }]);
+eq(primes, [{ slug: 'book', chapter: 'chapter', intent: 'hover' }]);
 
 controller.schedule(a);
 eq(controller.cancel(a), true);
@@ -50,9 +50,12 @@ ok(timers[1].cleared);
 eq(controller.cancel(a), false);
 
 await controller.run('#/b/second/ch2/0', 'focus');
-eq(primes.at(-1), { slug: 'second', chapter: 'ch2' });
+eq(primes.at(-1), { slug: 'second', chapter: 'ch2', intent: 'focus' });
 await controller.run('#/', 'activate');
 eq(primes.length, 2);
+
+await controller.run('#/b/book/chapter/0', 'activate');
+eq(primes.at(-1), { slug: 'book', chapter: 'chapter', intent: 'activate' });
 
 const constrained = createNavigationPrefetchController({
   prime: (route) => primes.push(route),
@@ -61,9 +64,9 @@ const constrained = createNavigationPrefetchController({
 });
 eq(constrained.schedule('#/b/book/ch1/0'), false);
 await constrained.run('#/b/book/ch1/0', 'focus');
-eq(primes.length, 2);
+eq(primes.length, 3);
 await constrained.run('#/b/book/ch1/0', 'activate');
-eq(primes.at(-1), { slug: 'book', chapter: 'ch1' });
+eq(primes.at(-1), { slug: 'book', chapter: 'ch1', intent: 'activate' });
 
 controller.schedule(a);
 controller.destroy();

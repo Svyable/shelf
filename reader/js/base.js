@@ -152,7 +152,11 @@ function primeInitialCatalog() {
 
 function primePublication(route) {
   if (!route?.slug) return Promise.resolve({ status: 'skipped', loaded: 0 });
-  return startupPrimer.prime({ slug: route.slug, chapter: route.chapter }).catch(() => ({
+  return startupPrimer.prime({
+    slug: route.slug,
+    chapter: route.chapter,
+    intent: route.intent || 'route',
+  }).catch(() => ({
     status: 'failed',
     loaded: 0,
   }));
