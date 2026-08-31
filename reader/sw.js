@@ -1,8 +1,9 @@
 importScripts('./js/offline-cache.js');
 importScripts('./js/offline-fetch-policy.js');
 importScripts('./js/offline-storage-budget.js');
+importScripts('./js/offline-shell-install.js');
 
-const CACHE = 'obb-shell-v89';
+const CACHE = 'obb-shell-v90';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -31,6 +32,7 @@ const SHELL = [
   './css/reading-trail.css',
   './css/bookmark-atlas.css',
   './css/cover-design.css',
+  './css/content-inspector.css',
   './css/media.css',
   './css/formats.css',
   './css/math.css',
@@ -109,13 +111,68 @@ const SHELL = [
   './js/search.js',
   './js/progressive-library-search-model.js',
   './js/progressive-library-search.js',
+  './js/content-inspector-model.js',
+  './js/content-inspector.js',
+  './js/reading-wake-lock-model.js',
+  './js/reading-wake-lock.js',
+  './js/reading-guide-model.js',
+  './js/reading-guide.js',
   './js/export.js',
   './js/offline-cache.js',
   './js/offline-fetch-policy.js',
   './js/offline-storage-budget.js',
+  './js/offline-shell-install.js',
   './js/progress-position.js',
   './js/semantic-progress.js',
 ];
+
+const OPTIONAL_SHELL = new Set([
+  './css/content-scroll-regions.css',
+  './css/search-navigation.css',
+  './css/search-landing.css',
+  './css/selection-marker.css',
+  './css/annotation-navigator.css',
+  './css/reader-state-backup.css',
+  './css/pwa-update.css',
+  './css/offline-readiness.css',
+  './css/reading-trail.css',
+  './css/bookmark-atlas.css',
+  './css/content-inspector.css',
+  './js/content-scroll-region-model.js',
+  './js/content-scroll-regions.js',
+  './js/pwa-update-model.js',
+  './js/pwa-update.js',
+  './js/offline-readiness-model.js',
+  './js/offline-readiness.js',
+  './js/search-navigation.js',
+  './js/search-landing.js',
+  './js/reading-trail-model.js',
+  './js/reading-trail.js',
+  './js/bookmark-atlas-model.js',
+  './js/bookmark-atlas.js',
+  './js/annotation-navigator-model.js',
+  './js/annotation-backup.js',
+  './js/annotation-navigator.js',
+  './js/annotation-navigator-modal.js',
+  './js/reader-state-backup.js',
+  './js/reader-state-backup-runtime.js',
+  './js/reader-state-transaction.js',
+  './js/selection-memory.js',
+  './js/selection-marker.js',
+  './js/selection-actions.js',
+  './js/progressive-library-search-model.js',
+  './js/progressive-library-search.js',
+  './js/content-inspector-model.js',
+  './js/content-inspector.js',
+  './js/reading-wake-lock-model.js',
+  './js/reading-wake-lock.js',
+  './js/reading-guide-model.js',
+  './js/reading-guide.js',
+  './js/progress-position.js',
+  './js/semantic-progress.js',
+]);
+const CORE_SHELL = SHELL.filter((url) => !OPTIONAL_SHELL.has(url));
+
 const SHELL_URLS = self.BookselfOfflineFetchPolicy.shellUrlSet(SHELL, self.location.href);
 const warmScheduler = self.BookselfOfflineCache.createWarmScheduler({ concurrency: 3 });
 const warmBudget = self.BookselfOfflineStorageBudget.createBudgetMonitor({
@@ -126,7 +183,14 @@ const warmBudget = self.BookselfOfflineStorageBudget.createBudgetMonitor({
 });
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));
+  event.waitUntil(
+    caches.open(CACHE).then((cache) => self.BookselfOfflineShellInstall.installShell(
+      cache,
+      SHELL,
+      CORE_SHELL,
+      { concurrency: 4 }
+    ))
+  );
 });
 
 async function publicationReadiness(url) {
