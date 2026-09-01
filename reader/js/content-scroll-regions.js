@@ -1,13 +1,17 @@
 import {
   describedByTokens,
-  horizontalKeyboardAction,
+  horizontalKeyboardDecision,
+  overflowEdgeAnnouncement,
+  scrollRegionEdge,
   scrollRegionMetrics,
 } from './content-scroll-region-model.js';
 
 const REGION_SELECTOR = '.page-inner pre, .page-inner table, .scroll-document pre, .scroll-document table';
 const HELP_ID = 'readerHorizontalScrollHelp';
+const STATUS_ID = 'readerHorizontalScrollStatus';
 const STYLE_HREF = 'css/content-scroll-regions.css?v=r1';
 const watched = new WeakSet();
+const announcedEdges = new WeakMap();
 let resizeObserver = null;
 let refreshRaf = 0;
 
@@ -25,9 +29,22 @@ function ensureHelp() {
   help = document.createElement('p');
   help.id = HELP_ID;
   help.className = 'sr-only';
-  help.textContent = 'Scrollable content. Use Left and Right Arrow to pan horizontally; Home and End move to the edges.';
+  help.textContent = 'Scrollable content. Use Left and Right Arrow to pan horizontally; Home and End move to the edges. In Pages, pressing an Arrow again at that edge continues reading on the adjacent page.';
   document.body.appendChild(help);
   return help;
+}
+
+function ensureStatus() {
+  let status = document.getElementById(STATUS_ID);
+  if (status) return status;
+  status = document.createElement('p');
+  status.id = STATUS_ID;
+  status.className = 'sr-only';
+  status.setAttribute('role', 'status');
+  status.setAttribute('aria-live', 'polite');
+  status.setAttribute('aria-atomic', 'true');
+  document.body.appendChild(status);
+  return status;
 }
 
 function isMeasurementRegion(element) {
@@ -48,13 +65,37 @@ function metricsFor(element) {
   });
 }
 
-function reflect(element) {
+function regionKind(element) {
+  return element?.tagName?.toLowerCase() === 'table' ? 'table' : 'code';
+}
+
+function pagedReading() {
+  return document.body.dataset.stage === 'read'
+    && document.documentElement.dataset.readerMode !== 'scroll';
+}
+
+function announceEdge(element, edge, { force = false } = {}) {
+  if (!element || document.activeElement !== element) return;
+  if (!force && announcedEdges.get(element) === edge) return;
+  announcedEdges.set(element, edge);
+  const message = overflowEdgeAnnouncement({ kind: regionKind(element), edge, paged: pagedReading() });
+  if (!message) return;
+  const status = ensureStatus();
+  status.textContent = '';
+  requestAnimationFrame(() => {
+    if (document.activeElement === element) status.textContent = message;
+  });
+}
+
+function reflect(element, { announce = true } = {}) {
   if (!element?.isConnected || isMeasurementRegion(element)) return;
   const metrics = metricsFor(element);
+  const edge = scrollRegionEdge(metrics);
   element.classList.toggle('reader-scroll-region', metrics.scrollable);
   element.classList.toggle('can-scroll-left', metrics.canScrollLeft);
   element.classList.toggle('can-scroll-right', metrics.canScrollRight);
   element.dataset.readerScrollRegion = metrics.scrollable ? 'true' : 'false';
+  element.dataset.readerScrollEdge = edge;
 
   if (metrics.scrollable) {
     if (!element.hasAttribute('tabindex')) {
@@ -69,6 +110,7 @@ function reflect(element) {
     }
     setDescribedBy(element, false);
   }
+  if (announce) announceEdge(element, edge);
 }
 
 function stopReaderGesture(event) {
@@ -77,15 +119,39 @@ function stopReaderGesture(event) {
   event.stopPropagation();
 }
 
+function onFocus(event) {
+  const region = event.currentTarget;
+  if (!(region instanceof HTMLElement) || region.dataset.readerScrollRegion !== 'true') return;
+  reflect(region, { announce: false });
+  announceEdge(region, region.dataset.readerScrollEdge || 'middle', { force: true });
+}
+
+function clearKeyboardHandoff(region) {
+  queueMicrotask(() => {
+    if (region?.isConnected) delete region.dataset.readerKeyboardHandoff;
+  });
+}
+
 function onKeydown(event) {
   const region = event.currentTarget;
   if (!(region instanceof HTMLElement) || region.dataset.readerScrollRegion !== 'true') return;
-  const action = horizontalKeyboardAction(event.key, event, region.clientWidth);
-  if (!action) return;
+  const metrics = metricsFor(region);
+  const decision = horizontalKeyboardDecision(event.key, event, region.clientWidth, metrics, {
+    allowArrowHandoff: pagedReading(),
+  });
+  if (!decision.consume) {
+    if (decision.handoff) {
+      region.dataset.readerKeyboardHandoff = decision.direction;
+      announceEdge(region, scrollRegionEdge(metrics), { force: true });
+      clearKeyboardHandoff(region);
+    }
+    return;
+  }
 
   event.preventDefault();
   event.stopPropagation();
   const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  const action = decision.action;
   if (action.type === 'delta') {
     region.scrollBy({ left: action.dx, behavior });
   } else {
@@ -104,10 +170,11 @@ function prepare(element) {
     element.addEventListener('touchstart', stopReaderGesture, { passive: true });
     element.addEventListener('touchend', stopReaderGesture, { passive: true });
     element.addEventListener('keydown', onKeydown);
+    element.addEventListener('focus', onFocus);
     element.addEventListener('scroll', () => reflect(element), { passive: true });
     resizeObserver?.observe(element);
   }
-  reflect(element);
+  reflect(element, { announce: false });
 }
 
 function scan(root = document) {
@@ -125,6 +192,7 @@ function scheduleScan() {
 
 installStyles();
 ensureHelp();
+ensureStatus();
 if ('ResizeObserver' in window) {
   resizeObserver = new ResizeObserver((entries) => entries.forEach(({ target }) => reflect(target)));
 }
