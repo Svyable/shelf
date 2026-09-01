@@ -2,6 +2,7 @@ import { fetchText } from './base.js';
 import { parseBookReadme } from './catalog.js';
 import { blocksFromMarkdown } from './markdown.js';
 import { applyNotes, loadNotes } from './notes.js';
+import './direct-route-interactions.js';
 import { go, parseRoute, readHash } from './router.js';
 import {
   appendPreviewBlockWindow,
