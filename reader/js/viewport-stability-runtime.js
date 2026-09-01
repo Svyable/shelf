@@ -1,4 +1,5 @@
 import './scroll-reflow-anchor.js';
+import './immersive-focus.js';
 import { keyboardViewportTransition, textEntryTarget } from './viewport-stability.js';
 
 function snapshot(vv = globalThis.visualViewport) {
