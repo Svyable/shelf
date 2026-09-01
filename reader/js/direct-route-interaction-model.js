@@ -1,5 +1,3 @@
-export const PREVIEW_SELECTION_MAX = 1200;
-
 export function normalizePreviewBookmark(input = {}) {
   const chapter = String(input.chapter || '').trim();
   const offset = Math.max(0, Math.round(Number(input.offset) || 0));
@@ -46,7 +44,7 @@ export function previewVisibleOffset(entries = [], focusY = 0, fallback = 0) {
 }
 
 export function normalizePreviewSelection(text, anchor) {
-  const quote = String(text || '').replace(/\s+/g, ' ').trim().slice(0, PREVIEW_SELECTION_MAX);
+  const quote = String(text || '').replace(/\s+/g, ' ').trim();
   const start = Math.max(0, Math.round(Number(anchor?.start) || 0));
   const end = Math.max(start, Math.round(Number(anchor?.end) || start));
   if (!quote || end <= start) return null;
