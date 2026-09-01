@@ -1,3 +1,5 @@
+import { quoteMatchesText } from './annotation-anchor-model.js';
+
 const key = (slug) => {
   const prefix = (typeof window !== 'undefined' && window.__IMPRINT?.storagePrefix) || 'obb';
   return `${prefix}:${slug}:notes`;
@@ -179,21 +181,42 @@ function clearAppliedNotes(root) {
   root?.normalize?.();
 }
 
-function wrapSourceAnchor(root, note) {
+function sourceSegments(root, note) {
   const anchor = normalizeSourceAnchor(note.anchor);
-  if (!anchor) return false;
+  if (!anchor) return null;
   const elements = [...root.querySelectorAll('[data-source-start][data-source-end]')];
   const ranges = elements.map((el) => ({
     start: Number(el.dataset.sourceStart) || 0,
     end: Number(el.dataset.sourceEnd) || Number(el.dataset.sourceStart) || 0,
   }));
-  const segments = anchorSegmentsForRanges(ranges, anchor);
-  let wrapped = false;
-  for (const segment of segments) {
-    const el = elements[segment.index];
+  return { anchor, elements, ranges, segments: anchorSegmentsForRanges(ranges, anchor) };
+}
+
+function segmentText(state) {
+  let value = '';
+  for (const segment of state.segments) {
+    const el = state.elements[segment.index];
     if (!el) continue;
-    const sourceStart = ranges[segment.index].start;
-    const sourceEnd = ranges[segment.index].end;
+    const sourceStart = state.ranges[segment.index].start;
+    const sourceEnd = state.ranges[segment.index].end;
+    const textLength = el.textContent?.length || 0;
+    const start = textPositionForSourceOffset(sourceStart, sourceEnd, textLength, segment.sourceStart);
+    const end = textPositionForSourceOffset(sourceStart, sourceEnd, textLength, segment.sourceEnd);
+    value += `${el.textContent?.slice(start, Math.max(start + 1, end)) || ''} `;
+  }
+  return value.trim();
+}
+
+function wrapSourceAnchor(root, note) {
+  const state = sourceSegments(root, note);
+  if (!state || !state.segments.length) return false;
+  if (note.quote && !quoteMatchesText(segmentText(state), note.quote)) return false;
+  let wrapped = false;
+  for (const segment of state.segments) {
+    const el = state.elements[segment.index];
+    if (!el) continue;
+    const sourceStart = state.ranges[segment.index].start;
+    const sourceEnd = state.ranges[segment.index].end;
     const textLength = el.textContent?.length || 0;
     const start = textPositionForSourceOffset(sourceStart, sourceEnd, textLength, segment.sourceStart);
     const end = textPositionForSourceOffset(sourceStart, sourceEnd, textLength, segment.sourceEnd);
