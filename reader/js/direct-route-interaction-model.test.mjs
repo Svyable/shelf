@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import {
-  PREVIEW_SELECTION_MAX,
   bookmarkMatches,
   normalizePreviewBookmark,
   normalizePreviewSelection,
@@ -38,8 +37,9 @@ eq(previewVisibleOffset([], 50, 9.4), 9);
 const selection = normalizePreviewSelection('  a   selected\n passage ', { start: 11, end: 22 });
 eq(selection, { quote: 'a selected passage', anchor: { version: 1, start: 11, end: 22 }, offset: 11 });
 eq(normalizePreviewSelection('text', { start: 4, end: 4 }), null);
-const long = normalizePreviewSelection('x'.repeat(PREVIEW_SELECTION_MAX + 20), { start: 1, end: 50 });
-eq(long.quote.length, PREVIEW_SELECTION_MAX);
+const longText = 'x'.repeat(1600);
+const long = normalizePreviewSelection(longText, { start: 1, end: 1700 });
+eq(long.quote.length, 1600);
 
 eq(previewInteractionState({ stage: 'read', hasPreview: true, routeMatches: true, selection }), { active: true, canBookmark: true, canAnnotate: true });
 eq(previewInteractionState({ stage: 'read', hasPreview: true, routeMatches: true }), { active: true, canBookmark: true, canAnnotate: false });
