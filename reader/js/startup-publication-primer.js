@@ -4,8 +4,19 @@ export function orderedPublicationFiles(contents = [], targetChapter = null) {
   const targetIndex = targetChapter
     ? rows.findIndex((row) => row.id === targetChapter)
     : -1;
-  if (targetIndex <= 0) return rows.slice();
-  return [rows[targetIndex], ...rows.slice(0, targetIndex), ...rows.slice(targetIndex + 1)];
+  if (targetIndex < 0) return rows.slice();
+  if (targetIndex === 0) return rows.slice();
+
+  // A deep-linked reader is overwhelmingly likely to continue forward. Warm a
+  // small reading corridor around the target before returning to publication
+  // order so the next chapter is not stuck behind unrelated front matter.
+  const priorityIndexes = [targetIndex, targetIndex + 1, targetIndex + 2, targetIndex - 1]
+    .filter((index) => index >= 0 && index < rows.length);
+  const seen = new Set(priorityIndexes);
+  return [
+    ...priorityIndexes.map((index) => rows[index]),
+    ...rows.filter((_row, index) => !seen.has(index)),
+  ];
 }
 
 export function startupAcquisitionPlan(connection = {}) {
