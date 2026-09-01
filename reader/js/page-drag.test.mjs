@@ -5,6 +5,7 @@ import {
   scrollContainerConsumes,
   scrollLeftAfterPan,
   contentPanHandoff,
+  releaseVelocityFromSamples,
 } from './page-drag.js';
 
 assert.equal(pageDragDecision({ dx: -120, dy: 15, elapsedMs: 300, width: 400 }).commit, true);
@@ -19,6 +20,63 @@ assert.equal(pageDragDecision({ dx: 90, dy: 4, elapsedMs: 200, width: 400 }).dir
 assert.equal(pageDragDecision({ dx: -12, dy: 1, elapsedMs: 10, width: 400 }).fling, false);
 assert.equal(pageDragDecision({ dx: -24, dy: 1, elapsedMs: 30, width: 400 }).fling, true);
 assert.equal(pageDragDecision({ dx: -100, dy: 2, elapsedMs: 120, width: 400, canTurn: false }).commit, false);
+
+// Release intent is based on the recent motion window rather than the average
+// speed over the entire gesture. A deliberate late flick can commit after a
+// slow drag, while an early burst followed by a settled finger cannot.
+assert.ok(releaseVelocityFromSamples([
+  { x: 300, t: 0 },
+  { x: 290, t: 180 },
+  { x: 250, t: 230 },
+], 230) < -0.7);
+assert.equal(releaseVelocityFromSamples([
+  { x: 300, t: 0 },
+  { x: 240, t: 30 },
+  { x: 239, t: 180 },
+], 180), -1 / 150);
+
+const lateFlick = pageDragDecision({
+  dx: -40,
+  dy: 2,
+  elapsedMs: 420,
+  width: 400,
+  releaseVelocityX: -0.8,
+});
+assert.equal(lateFlick.fling, true);
+assert.equal(lateFlick.commit, true);
+assert.ok(lateFlick.projectedRatio >= 0.22);
+
+const settledRelease = pageDragDecision({
+  dx: -40,
+  dy: 2,
+  elapsedMs: 80,
+  width: 400,
+  releaseVelocityX: -0.04,
+});
+assert.equal(settledRelease.fling, false);
+assert.equal(settledRelease.commit, false);
+
+const reversal = pageDragDecision({
+  dx: -40,
+  dy: 2,
+  elapsedMs: 90,
+  width: 400,
+  releaseVelocityX: 0.9,
+});
+assert.equal(reversal.releaseAligned, false);
+assert.equal(reversal.fling, false);
+assert.equal(reversal.commit, false);
+
+// A drag that already crossed the direct distance threshold still commits even
+// if release velocity is near zero: the reader has visibly pulled the page far
+// enough that snapping back would be the surprising outcome.
+assert.equal(pageDragDecision({
+  dx: -100,
+  dy: 3,
+  elapsedMs: 600,
+  width: 400,
+  releaseVelocityX: 0,
+}).commit, true);
 
 const visual = dragVisual(-200, 400);
 assert.equal(visual.progress, -0.5);
@@ -58,4 +116,4 @@ assert.equal(scrollLeftAfterPan({ scrollLeft: 120, deltaX: -35, scrollWidth: 900
 assert.equal(scrollLeftAfterPan({ scrollLeft: 490, deltaX: -40, scrollWidth: 900, clientWidth: 400 }), 500);
 assert.equal(scrollLeftAfterPan({ scrollLeft: 10, deltaX: 40, scrollWidth: 900, clientWidth: 400 }), 0);
 
-console.log('page-drag: 36 assertions passed');
+console.log('page-drag: 45 assertions passed');
