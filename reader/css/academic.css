@@ -126,6 +126,7 @@
   text-align: left;
   text-indent: 0;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .reader-academic-preview:focus {
@@ -185,20 +186,101 @@
   outline-offset: 2px;
 }
 
-@media (max-width: 520px) {
+/*
+ * On compact or coarse-input readers, treat references as a bottom reading sheet
+ * instead of an anchored tooltip. This keeps long notes in thumb reach, avoids
+ * covering the reference line with a tiny floating card, and preserves the
+ * canonical reading surface underneath for immediate dismissal/return.
+ */
+@media (max-width: 640px), (pointer: coarse) {
   .reader-academic-preview {
-    width: calc(100vw - max(20px, env(safe-area-inset-left)) - max(20px, env(safe-area-inset-right)));
-    max-height: min(45dvh, 22rem);
-    padding: 0.8rem 0.85rem 0.72rem;
+    left: max(10px, env(safe-area-inset-left)) !important;
+    right: max(10px, env(safe-area-inset-right)) !important;
+    top: auto !important;
+    bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    width: auto;
+    max-height: min(68dvh, 30rem);
+    padding: 0;
+    border-radius: 1rem;
+    overflow: auto;
+    overscroll-behavior: contain;
+    box-shadow: 0 -0.25rem 2.25rem rgb(0 0 0 / 0.2);
+  }
+
+  .reader-academic-preview::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 0.25rem;
+    margin: 0.48rem auto 0;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text-secondary) 42%, transparent);
+  }
+
+  .reader-academic-preview__header {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    margin: 0;
+    padding: 0.55rem 1rem 0.48rem;
+    background: color-mix(in srgb, var(--page-bg) 97%, var(--accent) 3%);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 54%, transparent);
+  }
+
+  .reader-academic-preview__body {
+    padding: 0.8rem 1rem 0.9rem;
+    font-size: max(0.96rem, 1em);
+    line-height: 1.58;
+  }
+
+  .reader-academic-preview__actions {
+    position: sticky;
+    z-index: 1;
+    bottom: 0;
+    margin: 0;
+    padding: 0.68rem 0.8rem max(0.72rem, env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--page-bg) 97%, var(--accent) 3%);
+    border-top-color: color-mix(in srgb, var(--border) 72%, transparent);
   }
 
   .reader-academic-preview__actions button {
-    min-height: 2.65rem;
+    min-height: 3rem;
+    padding-inline: 0.85rem;
+  }
+
+  .reader-academic-preview__jump {
+    flex: 1 1 auto;
+  }
+
+  .reader-academic-preview__close {
+    flex: 0 0 auto;
   }
 
   .reader-academic-return {
-    min-height: 2.8rem;
+    min-height: 3rem;
     max-width: calc(100vw - 2rem);
+  }
+}
+
+/* Short phone landscape needs the same reachable sheet without consuming the whole reading line. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .reader-academic-preview {
+    left: max(10px, env(safe-area-inset-left)) !important;
+    right: max(10px, env(safe-area-inset-right)) !important;
+    top: auto !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    width: auto;
+    max-height: min(82dvh, 22rem);
+    border-radius: 0.9rem;
+  }
+
+  .reader-academic-preview__body {
+    padding-block: 0.62rem 0.7rem;
+    line-height: 1.46;
+  }
+
+  .reader-academic-preview__actions {
+    padding-block: 0.52rem max(0.56rem, env(safe-area-inset-bottom));
   }
 }
 
@@ -207,10 +289,28 @@
     animation: reader-academic-preview-in 120ms ease-out;
   }
 
+  @media (max-width: 640px), (pointer: coarse) {
+    .reader-academic-preview {
+      animation-name: reader-academic-sheet-in;
+      animation-duration: 150ms;
+    }
+  }
+
   @keyframes reader-academic-preview-in {
     from {
       opacity: 0;
       transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes reader-academic-sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
     }
     to {
       opacity: 1;
@@ -232,6 +332,17 @@
     border-color: ButtonText;
     background: Canvas;
     color: LinkText;
+  }
+
+  .reader-academic-preview,
+  .reader-academic-preview__header,
+  .reader-academic-preview__actions {
+    background: Canvas;
+    border-color: ButtonText;
+  }
+
+  .reader-academic-preview::before {
+    background: ButtonText;
   }
 }
 
