@@ -34,6 +34,9 @@ queueMicrotask(() => {
   import('./scroll-chapter-nav.js').catch((error) => {
     console.warn('Continuous chapter navigation could not be loaded', error);
   });
+  import('./continuous-keyboard.js').catch((error) => {
+    console.warn('Continuous keyboard cadence could not be loaded', error);
+  });
   import('./reading-session.js')
     .then(({ installReadingSession }) => installReadingSession())
     .catch((error) => {
