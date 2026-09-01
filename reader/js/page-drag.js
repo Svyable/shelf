@@ -1,24 +1,75 @@
 const AXIS_LOCK_PX = 10;
 const COMMIT_RATIO = 0.22;
-const FLING_VELOCITY = 0.55;
-const MIN_FLING_RATIO = 0.06;
+const RELEASE_FLING_VELOCITY = 0.52;
+const MIN_FLING_RATIO = 0.055;
+const FLING_PROJECT_MS = 120;
+const RELEASE_SAMPLE_WINDOW_MS = 96;
 const MAX_TILT_DEG = 13;
 const SCROLL_EDGE_PX = 2;
 const EDGE_RESISTANCE_FACTOR = 0.32;
 const EDGE_RESISTANCE_MAX = 0.18;
 
-export function pageDragDecision({ dx, dy, elapsedMs, width, canTurn = true }) {
+export function releaseVelocityFromSamples(samples, nowMs, windowMs = RELEASE_SAMPLE_WINDOW_MS) {
+  const rows = Array.isArray(samples)
+    ? samples.filter((row) => Number.isFinite(row?.x) && Number.isFinite(row?.t))
+    : [];
+  if (rows.length < 2) return 0;
+  const now = Number.isFinite(nowMs) ? nowMs : rows[rows.length - 1].t;
+  const cutoff = now - Math.max(16, Number(windowMs) || RELEASE_SAMPLE_WINDOW_MS);
+  const recent = rows.filter((row) => row.t >= cutoff && row.t <= now);
+  const usable = recent.length >= 2 ? recent : rows.slice(-2);
+  const first = usable[0];
+  const last = usable[usable.length - 1];
+  const elapsed = Math.max(1, last.t - first.t);
+  return (last.x - first.x) / elapsed;
+}
+
+export function pageDragDecision({
+  dx,
+  dy,
+  elapsedMs,
+  width,
+  canTurn = true,
+  releaseVelocityX = null,
+}) {
   const absX = Math.abs(dx);
   const absY = Math.abs(dy);
   const safeWidth = Math.max(1, Number(width) || 1);
   const elapsed = Math.max(1, Number(elapsedMs) || 1);
   const ratio = absX / safeWidth;
-  const velocity = absX / elapsed;
+  const averageVelocity = absX / elapsed;
   const horizontal = absX >= AXIS_LOCK_PX && absX > absY * 1.15;
   const direction = dx < 0 ? 1 : -1;
-  const fling = velocity >= FLING_VELOCITY && ratio >= MIN_FLING_RATIO;
+  const hasReleaseVelocity = Number.isFinite(releaseVelocityX);
+  const signedReleaseVelocity = hasReleaseVelocity
+    ? Number(releaseVelocityX)
+    : (dx < 0 ? -averageVelocity : averageVelocity);
+  const releaseVelocity = Math.abs(signedReleaseVelocity);
+  const releaseDirection = signedReleaseVelocity === 0
+    ? direction
+    : (signedReleaseVelocity < 0 ? 1 : -1);
+  const releaseAligned = releaseDirection === direction;
+  const projectedRatio = Math.min(
+    1,
+    (absX + (releaseAligned ? releaseVelocity * FLING_PROJECT_MS : 0)) / safeWidth
+  );
+  const fling = releaseAligned
+    && releaseVelocity >= RELEASE_FLING_VELOCITY
+    && ratio >= MIN_FLING_RATIO
+    && projectedRatio >= COMMIT_RATIO;
   const commit = !!canTurn && horizontal && (ratio >= COMMIT_RATIO || fling);
-  return { horizontal, commit, direction, ratio, velocity, fling, canTurn: !!canTurn };
+  return {
+    horizontal,
+    commit,
+    direction,
+    ratio,
+    velocity: averageVelocity,
+    releaseVelocity,
+    releaseAligned,
+    projectedRatio,
+    fling,
+    canTurn: !!canTurn,
+  };
 }
 
 export function dragVisual(dx, width, { resisted = false } = {}) {
@@ -98,6 +149,13 @@ function bindPageDrag() {
     scroller: null,
     contentPan: false,
     handedOff: false,
+    samples: [],
+  };
+
+  const sample = (x, t = performance.now()) => {
+    state.samples.push({ x, t });
+    const cutoff = t - RELEASE_SAMPLE_WINDOW_MS * 2;
+    while (state.samples.length > 2 && state.samples[0].t < cutoff) state.samples.shift();
   };
 
   const clearVisual = (animate = true) => {
@@ -117,6 +175,7 @@ function bindPageDrag() {
     state.scroller = null;
     state.contentPan = false;
     state.handedOff = false;
+    state.samples = [];
   };
 
   const reset = () => {
@@ -166,10 +225,14 @@ function bindPageDrag() {
     state.scroller = horizontalScroller(event.target);
     state.contentPan = false;
     state.handedOff = false;
+    state.samples = [];
+    sample(event.clientX, state.t);
   }, { capture: true });
 
   wrap.addEventListener('pointermove', (event) => {
     if (event.pointerId !== state.id) return;
+    const now = performance.now();
+    sample(event.clientX, now);
     const dx = event.clientX - state.x;
     const dy = event.clientY - state.y;
     const absX = Math.abs(dx);
@@ -218,7 +281,9 @@ function bindPageDrag() {
         state.handedOff = true;
         state.x = event.clientX;
         state.y = event.clientY;
-        state.t = performance.now();
+        state.t = now;
+        state.samples = [];
+        sample(event.clientX, now);
       }
       return;
     }
@@ -239,16 +304,20 @@ function bindPageDrag() {
 
   const finish = (event, cancelled = false) => {
     if (event.pointerId !== state.id) return;
+    const now = performance.now();
+    sample(event.clientX, now);
     const dx = event.clientX - state.x;
     const dy = event.clientY - state.y;
     const direction = dx < 0 ? 1 : -1;
     const available = canTurn(direction);
+    const releaseVelocityX = releaseVelocityFromSamples(state.samples, now);
     const decision = pageDragDecision({
       dx,
       dy,
-      elapsedMs: performance.now() - state.t,
+      elapsedMs: now - state.t,
       width: wrap.getBoundingClientRect().width,
       canTurn: available,
+      releaseVelocityX,
     });
     const moved = state.moved;
     const contentPan = state.contentPan;
