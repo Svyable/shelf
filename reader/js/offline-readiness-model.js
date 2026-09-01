@@ -31,6 +31,32 @@ export function offlineReadinessLabel({ supported = true, online = true, readine
   return `Saving for offline · ${normalized.cachedChapters}/${normalized.totalChapters} chapters`;
 }
 
+export function offlineReadinessProgress(readiness = {}) {
+  const normalized = normalizeOfflineReadiness(readiness);
+  const total = normalized.totalChapters + normalized.totalMedia;
+  const cached = normalized.cachedChapters + normalized.cachedMedia;
+  if (!normalized.hasReadme || total <= 0) return normalized.complete ? 1 : 0;
+  return Math.min(1, Math.max(0, cached / total));
+}
+
+export function offlineSaveAction({ supported = true, online = true, readiness = {}, saving = false } = {}) {
+  const normalized = normalizeOfflineReadiness(readiness);
+  if (!supported) return { visible: false, disabled: true, label: 'Offline unavailable' };
+  if (normalized.complete) return { visible: false, disabled: true, label: 'Saved offline' };
+  if (!online) return { visible: false, disabled: true, label: 'Connect to save' };
+  if (saving) return { visible: true, disabled: true, label: 'Keeping offline…' };
+  return { visible: true, disabled: false, label: 'Keep offline' };
+}
+
+export function offlineSaveResultLabel({ result = 'idle', persisted = null } = {}) {
+  if (result === 'saving') return 'Keeping this book offline…';
+  if (result === 'complete' && persisted === true) return 'Book kept offline · storage protected';
+  if (result === 'complete') return 'Book kept offline';
+  if (result === 'partial') return 'Some files could not be kept offline';
+  if (result === 'failed') return 'Could not keep this book offline';
+  return '';
+}
+
 export function shouldKeepOfflineNoticeVisible(state) {
   return state === 'online-saving' || state === 'offline-ready' || state === 'offline-partial';
 }
