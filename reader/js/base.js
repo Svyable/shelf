@@ -22,6 +22,9 @@ queueMicrotask(() => {
   import('./reading-wake-lock.js').catch((error) => {
     console.warn('Reading wake lock controls could not be loaded', error);
   });
+  import('./read-aloud.js').catch((error) => {
+    console.warn('Read-aloud controls could not be loaded', error);
+  });
   import('./reading-guide.js').catch((error) => {
     console.warn('Reading guide could not be loaded', error);
   });
