@@ -131,20 +131,22 @@ function snapshotSurface(mode) {
   const rect = source.getBoundingClientRect();
   if (rect.width < 40 || rect.height < 40) return null;
 
+  const sourceMode = normalizeReaderMode(mode);
   const clone = source.cloneNode(true);
   stripInteractiveSemantics(clone);
   clone.classList.add(SNAPSHOT_CLASS);
-  clone.dataset.readerSnapshotMode = normalizeReaderMode(mode);
+  clone.dataset.readerSnapshotMode = sourceMode;
+  clone.style.setProperty('display', sourceMode === 'scroll' ? 'block' : 'flex', 'important');
   clone.style.left = `${rect.left}px`;
   clone.style.top = `${rect.top}px`;
   clone.style.width = `${rect.width}px`;
   clone.style.height = `${rect.height}px`;
 
   document.body.appendChild(clone);
-  if (normalizeReaderMode(mode) === 'scroll') clone.scrollTop = source.scrollTop;
+  if (sourceMode === 'scroll') clone.scrollTop = source.scrollTop;
   return {
     node: clone,
-    mode: normalizeReaderMode(mode),
+    mode: sourceMode,
     sourceOwnedFocus: source.contains(document.activeElement),
     createdAt: performance.now(),
   };
