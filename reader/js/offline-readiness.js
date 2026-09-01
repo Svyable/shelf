@@ -2,16 +2,23 @@ import { parseRoute } from './router.js';
 import {
   normalizeOfflineReadiness,
   offlineReadinessLabel,
+  offlineReadinessProgress,
   offlineReadinessState,
+  offlineSaveAction,
+  offlineSaveResultLabel,
   shouldKeepOfflineNoticeVisible,
 } from './offline-readiness-model.js';
 
-const STYLE_HREF = 'css/offline-readiness.css?v=r1';
+const STYLE_HREF = 'css/offline-readiness.css?v=r2';
 const QUERY_TYPE = 'BOOKSELF_OFFLINE_READINESS';
 let pollTimer = null;
 let hideTimer = null;
 let requestSerial = 0;
 let lastSlug = null;
+let savingSlug = null;
+let saveResult = 'idle';
+let storagePersisted = null;
+let lastReadiness = {};
 
 function installStyles() {
   if (document.querySelector(`link[href="${STYLE_HREF}"]`)) return;
@@ -28,10 +35,14 @@ function ensureNotice() {
   notice.id = 'offlineReadinessNotice';
   notice.className = 'offline-readiness-notice';
   notice.hidden = true;
-  notice.setAttribute('role', 'status');
-  notice.setAttribute('aria-live', 'polite');
-  notice.setAttribute('aria-atomic', 'true');
-  notice.innerHTML = '<span class="offline-readiness-dot" aria-hidden="true"></span><span class="offline-readiness-label"></span>';
+  notice.innerHTML = `
+    <span class="offline-readiness-dot" aria-hidden="true"></span>
+    <span class="offline-readiness-copy" role="status" aria-live="polite" aria-atomic="true">
+      <span class="offline-readiness-label"></span>
+      <span class="offline-readiness-meter" aria-hidden="true"><span></span></span>
+    </span>
+    <button class="offline-readiness-action" type="button">Keep offline</button>`;
+  notice.querySelector('.offline-readiness-action').addEventListener('click', () => void keepCurrentPublicationOffline());
   document.body.appendChild(notice);
   return notice;
 }
@@ -65,6 +76,68 @@ async function queryReadiness(slug) {
   });
 }
 
+async function requestPersistentStorage() {
+  if (!navigator.storage?.persist) return null;
+  try {
+    if (navigator.storage.persisted && await navigator.storage.persisted()) return true;
+    return await navigator.storage.persist();
+  } catch {
+    return null;
+  }
+}
+
+async function fetchForOffline(href) {
+  const response = await fetch(href, { credentials: 'same-origin' });
+  if (!response.ok) throw new Error(`Offline fetch failed: ${response.status}`);
+  return response;
+}
+
+async function savePublicationOffline(slug) {
+  await import('./offline-cache.js');
+  const helpers = globalThis.BookselfOfflineCache;
+  if (!helpers) throw new Error('Offline cache helpers unavailable');
+
+  const readmeUrl = publicationReadme(slug);
+  const readmeResponse = await fetchForOffline(readmeUrl);
+  const readme = await readmeResponse.clone().text();
+  const chapters = helpers.chapterLinks(readme, readmeUrl);
+  let completedChapters = 0;
+  let completedMedia = 0;
+  let discoveredMedia = 0;
+  const chapterScheduler = helpers.createWarmScheduler({ concurrency: 3 });
+  const mediaScheduler = helpers.createWarmScheduler({ concurrency: 3 });
+
+  await Promise.allSettled(chapters.map((href) => chapterScheduler.run(href, async () => {
+    const chapterResponse = await fetchForOffline(href);
+    const markdown = await chapterResponse.clone().text();
+    const media = helpers.mediaLinks(markdown, href, readmeUrl);
+    discoveredMedia += media.length;
+    completedChapters += 1;
+    lastReadiness = normalizeOfflineReadiness({
+      hasReadme: true,
+      totalChapters: chapters.length,
+      cachedChapters: completedChapters,
+      totalMedia: discoveredMedia,
+      cachedMedia: completedMedia,
+    });
+    render('online-saving', lastReadiness);
+    await Promise.allSettled(media.map((mediaHref) => mediaScheduler.run(mediaHref, async () => {
+      await fetchForOffline(mediaHref);
+      completedMedia += 1;
+      lastReadiness = normalizeOfflineReadiness({
+        hasReadme: true,
+        totalChapters: chapters.length,
+        cachedChapters: completedChapters,
+        totalMedia: discoveredMedia,
+        cachedMedia: completedMedia,
+      });
+      render('online-saving', lastReadiness);
+    })));
+  })));
+
+  return queryReadiness(slug);
+}
+
 function clearTimers() {
   if (pollTimer) window.clearTimeout(pollTimer);
   if (hideTimer) window.clearTimeout(hideTimer);
@@ -80,18 +153,64 @@ function hideNotice() {
 
 function render(state, readiness) {
   const notice = ensureNotice();
-  const label = offlineReadinessLabel({
+  const normalized = normalizeOfflineReadiness(readiness);
+  lastReadiness = normalized;
+  const explicitLabel = offlineSaveResultLabel({ result: saveResult, persisted: storagePersisted });
+  const label = explicitLabel || offlineReadinessLabel({
     supported: state !== 'unsupported',
     online: navigator.onLine,
-    readiness,
+    readiness: normalized,
   });
   notice.dataset.state = state;
   notice.querySelector('.offline-readiness-label').textContent = label;
+  notice.querySelector('.offline-readiness-meter > span').style.transform = `scaleX(${offlineReadinessProgress(normalized)})`;
+
+  const action = offlineSaveAction({
+    supported: state !== 'unsupported',
+    online: navigator.onLine,
+    readiness: normalized,
+    saving: !!savingSlug,
+  });
+  const button = notice.querySelector('.offline-readiness-action');
+  button.hidden = !action.visible;
+  button.disabled = action.disabled;
+  button.textContent = action.label;
   notice.hidden = false;
 
-  if (!shouldKeepOfflineNoticeVisible(state)) {
-    hideTimer = window.setTimeout(hideNotice, state === 'online-ready' ? 3500 : 1800);
+  if (!savingSlug && !shouldKeepOfflineNoticeVisible(state)) {
+    hideTimer = window.setTimeout(hideNotice, state === 'online-ready' ? 4200 : 1800);
   }
+}
+
+async function keepCurrentPublicationOffline() {
+  const route = parseRoute();
+  if (route.view !== 'read' || !route.slug || !navigator.onLine || savingSlug) return;
+  savingSlug = route.slug;
+  saveResult = 'saving';
+  storagePersisted = null;
+  clearTimers();
+  render('online-saving', lastReadiness);
+
+  const persistPromise = requestPersistentStorage();
+  let raw = null;
+  try {
+    raw = await savePublicationOffline(route.slug);
+  } catch {
+    raw = await queryReadiness(route.slug);
+  }
+  storagePersisted = await persistPromise;
+  if (savingSlug !== route.slug || parseRoute().slug !== route.slug) return;
+
+  savingSlug = null;
+  const readiness = normalizeOfflineReadiness(raw || {});
+  lastReadiness = readiness;
+  saveResult = readiness.complete ? 'complete' : raw ? 'partial' : 'failed';
+  render(offlineReadinessState({ supported: !!raw, online: navigator.onLine, readiness }), readiness);
+  hideTimer = window.setTimeout(() => {
+    saveResult = 'idle';
+    if (readiness.complete && navigator.onLine) hideNotice();
+    else void syncReadiness();
+  }, 5200);
 }
 
 async function syncReadiness() {
@@ -99,8 +218,14 @@ async function syncReadiness() {
   const route = parseRoute();
   if (route.view !== 'read' || !route.slug) {
     lastSlug = null;
+    savingSlug = null;
+    saveResult = 'idle';
     hideNotice();
     return;
+  }
+  if (lastSlug !== route.slug) {
+    saveResult = 'idle';
+    storagePersisted = null;
   }
   lastSlug = route.slug;
   const serial = ++requestSerial;
@@ -116,7 +241,7 @@ async function syncReadiness() {
   const state = offlineReadinessState({ supported: !!raw, online: navigator.onLine, readiness });
   render(state, readiness);
 
-  if (state === 'online-saving') {
+  if (state === 'online-saving' && !savingSlug) {
     pollTimer = window.setTimeout(syncReadiness, 1400);
   }
 }
