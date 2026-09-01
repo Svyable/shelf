@@ -1,3 +1,4 @@
+import './scroll-reflow-anchor.js';
 import { keyboardViewportTransition, textEntryTarget } from './viewport-stability.js';
 
 function snapshot(vv = globalThis.visualViewport) {
