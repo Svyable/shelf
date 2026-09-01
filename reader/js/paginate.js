@@ -10,6 +10,7 @@ import { withSourceRange } from './reading-position.js';
 
 const SPLITTABLE_TAGS = new Set(['P', 'BLOCKQUOTE', 'LI']);
 const MIN_EDGE_WORDS = 3;
+const MIN_HEADING_FOLLOW_WORDS = 6;
 const MIN_EDGE_ITEMS = 2;
 
 function fits(measureEl, html) {
@@ -45,11 +46,23 @@ export function balancedBreakIndex(best, cursor, total, minEdgeWords = MIN_EDGE_
   // A tiny fragment at the bottom of a page is worse than moving the paragraph.
   if (used < minEdgeWords) return cursor;
 
-  // Avoid leaving one or two words alone at the top of the continuation page.
+  // Avoid leaving a tiny widow alone at the top of the continuation page.
   if (remaining > 0 && remaining < minEdgeWords && used > minEdgeWords) {
     return Math.max(cursor + minEdgeWords, total - minEdgeWords);
   }
   return best;
+}
+
+export function headingFollowerWordMinimum(prefixHtml = '') {
+  return /<h[1-4]\b[^>]*>[\s\S]*<\/h[1-4]>\s*$/i.test(String(prefixHtml || ''))
+    ? MIN_HEADING_FOLLOW_WORDS
+    : MIN_EDGE_WORDS;
+}
+
+export function trailingHeadingRunStart(parts = []) {
+  let index = parts.length;
+  while (index > 0 && /^\s*<h[1-4]\b/i.test(parts[index - 1]?.html || '')) index -= 1;
+  return index < parts.length ? index : -1;
 }
 
 export function balancedStructuredBreakIndex(
@@ -137,7 +150,8 @@ function splitTextBlock(block, measureEl, prefixHtml = '') {
   const text = el.textContent;
   const boundaries = textBoundaries(text);
   const wordCount = boundaries.length;
-  if (wordCount < MIN_EDGE_WORDS + 1) return [block];
+  const minEdgeWords = prefixHtml ? headingFollowerWordMinimum(prefixHtml) : MIN_EDGE_WORDS;
+  if (wordCount < minEdgeWords + 1) return [block];
 
   const starts = [0, ...boundaries.slice(0, -1)];
   const parts = [];
@@ -164,15 +178,16 @@ function splitTextBlock(block, measureEl, prefixHtml = '') {
     if (best === cursor && prefix) return [block];
     if (best === cursor) best = cursor + 1;
 
+    const edgeWords = prefix ? headingFollowerWordMinimum(prefix) : MIN_EDGE_WORDS;
     if (prefix) {
-      const balanced = balancedBreakIndex(best, cursor, wordCount);
+      const balanced = balancedBreakIndex(best, cursor, wordCount, edgeWords);
       if (balanced === cursor) return [block];
       if (balanced < best) {
         const candidate = cloneTextRange(el, starts[cursor], boundaries[balanced - 1]);
         if (candidate && fits(measureEl, `${prefix}${candidate}`)) best = balanced;
       }
     } else {
-      const balanced = balancedBreakIndex(best, cursor, wordCount);
+      const balanced = balancedBreakIndex(best, cursor, wordCount, edgeWords);
       if (balanced > cursor && balanced < best) best = balanced;
     }
 
@@ -358,10 +373,11 @@ export function paginateBlocks(chapterId, blocks, measureEl) {
   const flush = () => {
     if (!current.length) return;
 
-    if (current.length > 1 && isHeading(current[current.length - 1])) {
-      const heading = current.pop();
+    const keepStart = trailingHeadingRunStart(current);
+    if (keepStart > 0) {
+      const headings = current.splice(keepStart);
       pages.push(makePage(chapterId, current));
-      current = [heading];
+      current = headings;
       return;
     }
 
@@ -404,6 +420,7 @@ export function paginateBlocks(chapterId, blocks, measureEl) {
 
   for (const block of blocks) accept(block);
   flush();
+  if (current.length) pages.push(makePage(chapterId, current));
   if (pages.length === 0) {
     pages.push({ chapter: chapterId, start: 0, end: 0, html: '<p></p>' });
   }
