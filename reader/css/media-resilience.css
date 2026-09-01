@@ -1,0 +1,169 @@
+/* Resilient media shared by paged and continuous reading. */
+
+.page-inner img,
+.page-inner video,
+.page-inner iframe,
+.scroll-document img,
+.scroll-document video,
+.scroll-document iframe {
+  max-inline-size: min(100%, var(--reader-media-max-inline, 100%));
+  max-block-size: var(--reader-media-max-block, 72vh);
+  object-fit: contain;
+}
+
+.page-inner img[data-reader-media-aspect],
+.page-inner video[data-reader-media-aspect],
+.scroll-document img[data-reader-media-aspect],
+.scroll-document video[data-reader-media-aspect] {
+  aspect-ratio: var(--reader-media-aspect);
+  block-size: auto;
+}
+
+.page-inner audio,
+.scroll-document audio {
+  inline-size: min(100%, var(--reader-media-max-inline, 100%));
+  max-inline-size: 100%;
+}
+
+.page-inner iframe,
+.scroll-document iframe {
+  inline-size: 100%;
+  min-block-size: min(18rem, 48vh);
+  border: 0;
+}
+
+.page-inner figure,
+.scroll-document figure {
+  max-inline-size: 100%;
+}
+
+.page-inner img[data-reader-media-ready="true"]:not([tabindex="-1"]),
+.scroll-document img[data-reader-media-ready="true"]:not([tabindex="-1"]) {
+  cursor: zoom-in;
+}
+
+.page-inner img[data-reader-media-ready="true"]:focus-visible,
+.scroll-document img[data-reader-media-ready="true"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+.reader-media-inspector {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding:
+    max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+}
+
+.reader-media-inspector-backdrop {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  padding: 0;
+  background: rgb(0 0 0 / 0.78);
+  cursor: zoom-out;
+}
+
+.reader-media-inspector-panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  inline-size: min(96vw, 92rem);
+  block-size: min(94vh, 72rem);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg-primary) 96%, #000 4%);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 0.45);
+}
+
+.reader-media-inspector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-block-size: 3.25rem;
+  padding: .65rem .8rem .65rem 1rem;
+  border-block-end: 1px solid var(--border);
+}
+
+.reader-media-inspector-header h2 {
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font: 600 .84rem/1.3 "IBM Plex Sans", system-ui, sans-serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reader-media-inspector-close {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+}
+
+.reader-media-inspector-stage {
+  display: grid;
+  place-items: center;
+  min-block-size: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: clamp(.5rem, 2vw, 1.5rem);
+}
+
+.reader-media-inspector-stage img {
+  display: block;
+  max-inline-size: 100%;
+  max-block-size: 100%;
+  inline-size: auto;
+  block-size: auto;
+  object-fit: contain;
+  cursor: zoom-out;
+}
+
+.reader-media-inspector-stage:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+
+@media (max-width: 700px), (max-height: 520px) {
+  .reader-media-inspector {
+    padding:
+      max(6px, env(safe-area-inset-top))
+      max(6px, env(safe-area-inset-right))
+      max(6px, env(safe-area-inset-bottom))
+      max(6px, env(safe-area-inset-left));
+  }
+
+  .reader-media-inspector-panel {
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: 10px;
+  }
+}
+
+@media (forced-colors: active) {
+  .reader-media-inspector-panel,
+  .page-inner img[data-reader-media-ready="true"]:focus-visible,
+  .scroll-document img[data-reader-media-ready="true"]:focus-visible {
+    border: 1px solid CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reader-media-inspector,
+  .reader-media-inspector * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
