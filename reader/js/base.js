@@ -45,6 +45,87 @@ queueMicrotask(() => {
 const documentCache = createAsyncResourceCache({ limit: 256 });
 const existenceCache = createAsyncResourceCache({ limit: 256 });
 
+function installPaginationReflowGuard(root = document) {
+  const wrapper = root.getElementById?.('pagesWrapper');
+  if (!wrapper || wrapper.dataset.reflowGuard === 'installed') return;
+  wrapper.dataset.reflowGuard = 'installed';
+
+  const pageNav = root.getElementById?.('pageNav');
+  const live = root.getElementById?.('pageLive');
+  const style = root.createElement?.('style');
+  if (style) {
+    style.dataset.readerReflowGuard = 'true';
+    style.textContent = `
+      #pagesWrapper[aria-busy="true"] .page-inner {
+        opacity: .58;
+        transition: opacity 120ms ease-out;
+      }
+      #pagesWrapper[aria-busy="true"],
+      body[data-reader-reflowing] #pageNav {
+        cursor: progress;
+      }
+      #pagesWrapper[aria-busy="true"] .page-surface,
+      body[data-reader-reflowing] #pageNav {
+        pointer-events: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #pagesWrapper[aria-busy="true"] .page-inner { transition: none; }
+      }
+    `;
+    root.head?.appendChild(style);
+  }
+
+  let busy = wrapper.getAttribute('aria-busy') === 'true';
+  let announceTimer = 0;
+  const setBusy = (next) => {
+    if (busy === next) return;
+    busy = next;
+    document.body?.toggleAttribute('data-reader-reflowing', next);
+    if (pageNav) {
+      if (next) pageNav.setAttribute('aria-disabled', 'true');
+      else pageNav.removeAttribute('aria-disabled');
+    }
+    clearTimeout(announceTimer);
+    if (next) {
+      if (live) live.textContent = 'Updating page layout';
+      return;
+    }
+    announceTimer = window.setTimeout(() => {
+      if (live && !busy) live.textContent = 'Page layout updated';
+    }, 80);
+  };
+
+  setBusy(busy);
+  const observer = new MutationObserver(() => {
+    setBusy(wrapper.getAttribute('aria-busy') === 'true');
+  });
+  observer.observe(wrapper, { attributes: true, attributeFilter: ['aria-busy'] });
+
+  const blocksPageTurn = (event) => {
+    if (!busy || document.body?.dataset.stage !== 'read') return false;
+    if (event.metaKey || event.ctrlKey || event.altKey) return false;
+    return event.key === 'ArrowLeft'
+      || event.key === 'ArrowRight'
+      || event.key === 'ArrowUp'
+      || event.key === 'ArrowDown'
+      || event.key === ' '
+      || event.key === 'PageUp'
+      || event.key === 'PageDown';
+  };
+
+  root.addEventListener('keydown', (event) => {
+    if (!blocksPageTurn(event)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
+
+  wrapper.addEventListener('click', (event) => {
+    if (!busy) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
+}
+
 export function repoBase() {
   const path = window.location.pathname.replace(/index\.html$/, '');
   if (path.endsWith('/reader/') || path.endsWith('/reader')) {
@@ -174,6 +255,7 @@ primeInitialPublication();
 primeInitialCatalog();
 
 if (typeof document !== 'undefined') {
+  installPaginationReflowGuard(document);
   installNavigationPrefetch(document, {
     base: window.location.href,
     connection: navigator.connection || {},
