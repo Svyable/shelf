@@ -172,7 +172,9 @@ function installSearchNavigation() {
       status.textContent = summary.label;
     }
 
-    if (state.active >= 0) state.links[state.active]?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    if (state.active >= 0) {
+      state.links[state.active]?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    }
     if (announce && state.active >= 0) {
       const active = state.links[state.active];
       const title = active?.querySelector('strong')?.textContent?.trim();
@@ -193,8 +195,11 @@ function installSearchNavigation() {
       link.id = `searchResult${index + 1}`;
       link.setAttribute('role', 'option');
     });
+
     const current = state.links.findIndex((link) => hrefMatchesHash(link.href, window.location.hash));
-    const previous = previousHref ? state.links.findIndex((link) => link.getAttribute('href') === previousHref) : -1;
+    const previous = previousHref
+      ? state.links.findIndex((link) => link.getAttribute('href') === previousHref)
+      : -1;
     state.active = current >= 0 ? current : previous >= 0 ? previous : state.links.length ? 0 : -1;
     paint();
   };
@@ -226,7 +231,9 @@ function installSearchNavigation() {
     if (!isCurrentSearch(epoch, searchEpoch, query, activeQuery)) return;
     list.dataset.searching = 'false';
     list.removeAttribute('aria-busy');
-    if (!state.hits.length) list.innerHTML = `<li>${failed ? 'Search could not finish.' : 'No passages found.'}</li>`;
+    if (!state.hits.length) {
+      list.innerHTML = `<li>${failed ? 'Search could not finish.' : 'No passages found.'}</li>`;
+    }
     syncLinks();
   };
 
@@ -237,27 +244,32 @@ function installSearchNavigation() {
     state.hits = [];
     state.active = -1;
     list.replaceChildren();
+
     if (q.length < 2) {
       list.dataset.searching = 'false';
       list.removeAttribute('aria-busy');
       syncLinks();
       return;
     }
+
     const route = parseRoute();
     if (!route.slug) {
       finishSearch(epoch, q, { failed: true });
       return;
     }
+
     list.dataset.searching = 'true';
     list.setAttribute('aria-busy', 'true');
     list.dataset.searchProgress = 'Preparing search…';
     paint();
+
     try {
       const publication = await loadPublication(route.slug);
       if (!isCurrentSearch(epoch, searchEpoch, q, activeQuery)) return;
       const byId = new Map(publication.contents.map((entry) => [entry.id, entry]));
       const order = prioritizedChapterIds(publication.contents, route.chapter);
       let completed = 0;
+
       for (const id of order) {
         if (!isCurrentSearch(epoch, searchEpoch, q, activeQuery)) return;
         const entry = byId.get(id);
@@ -277,6 +289,7 @@ function installSearchNavigation() {
         syncLinks();
         await yieldToReader();
       }
+
       finishSearch(epoch, q);
     } catch (error) {
       console.warn('Cooperative search could not load publication', error);
@@ -290,7 +303,14 @@ function installSearchNavigation() {
   }, true);
 
   input.addEventListener('keydown', (event) => {
-    const commands = { ArrowDown: 'next', ArrowUp: 'previous', PageDown: 'page-next', PageUp: 'page-previous', Home: 'first', End: 'last' };
+    const commands = {
+      ArrowDown: 'next',
+      ArrowUp: 'previous',
+      PageDown: 'page-next',
+      PageUp: 'page-previous',
+      Home: 'first',
+      End: 'last',
+    };
     const command = commands[event.key];
     if (command && state.links.length) {
       event.preventDefault();
@@ -310,6 +330,7 @@ function installSearchNavigation() {
     });
   });
   openButton.addEventListener('click', () => state.links[state.active]?.click());
+
   new MutationObserver(syncLinks).observe(list, { childList: true, subtree: true });
   new MutationObserver(() => paint()).observe(overlay, { attributes: true, attributeFilter: ['class'] });
   window.addEventListener('hashchange', () => {
@@ -320,6 +341,9 @@ function installSearchNavigation() {
 }
 
 if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installSearchNavigation, { once: true });
-  else installSearchNavigation();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', installSearchNavigation, { once: true });
+  } else {
+    installSearchNavigation();
+  }
 }
