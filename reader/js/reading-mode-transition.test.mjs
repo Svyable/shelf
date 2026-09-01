@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import {
   MODE_TRANSITION_FADE_MS,
   modeTargetReady,
@@ -37,5 +38,9 @@ check(modeTransitionFadeMs({ reducedMotion: true }), 0, 'reduced motion removes 
 check(shouldRestoreModeFocus({ sourceOwnedFocus: true, overlayOpen: false, stillReading: true }), true, 'owned reading focus moves to the target surface');
 check(shouldRestoreModeFocus({ sourceOwnedFocus: true, overlayOpen: true, stillReading: true }), false, 'open dialogs keep focus ownership');
 check(shouldRestoreModeFocus({ sourceOwnedFocus: true, overlayOpen: false, stillReading: false }), false, 'leaving reading prevents focus restoration');
+
+const runtime = readFileSync(new URL('./reading-mode-transition.js', import.meta.url), 'utf8');
+check(runtime.includes("clone.style.setProperty('display', sourceMode === 'scroll' ? 'block' : 'flex', 'important')"), true, 'snapshot display overrides the target-mode !important hiding rule');
+check(runtime.includes('pointer-events: none !important'), true, 'transition snapshot and surfaces cannot accept pointer input');
 
 console.log(`reading mode transition model tests ok (${assertions} assertions)`);
