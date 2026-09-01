@@ -16,10 +16,16 @@ const contents = [
   { id: 'two', file: 'two.md' },
   { id: 'three', file: 'three.md' },
 ];
-eq(orderedPublicationFiles(contents, 'two').map((x) => x.id), ['two', 'front', 'one', 'three']);
+eq(orderedPublicationFiles(contents, 'two').map((x) => x.id), ['two', 'three', 'one', 'front']);
 eq(orderedPublicationFiles(contents, 'front').map((x) => x.id), ['front', 'one', 'two', 'three']);
 eq(orderedPublicationFiles(contents, 'missing').map((x) => x.id), ['front', 'one', 'two', 'three']);
 eq(orderedPublicationFiles([], 'two'), []);
+const longContents = ['front', 'one', 'two', 'three', 'four', 'five', 'six'].map((id) => ({ id, file: `${id}.md` }));
+eq(
+  orderedPublicationFiles(longContents, 'three').map((x) => x.id),
+  ['three', 'four', 'five', 'two', 'front', 'one', 'six'],
+  'deep links warm the forward reading corridor before unrelated early chapters'
+);
 
 eq(publicationPrefetchDepth(), 'publication');
 eq(publicationPrefetchDepth('route'), 'publication');
@@ -84,7 +90,7 @@ eq(result.depth, 'publication');
 eq(calls[0], 'readme:book');
 eq(calls[1], 'start:two');
 eq(calls[2], 'done:two');
-eq(calls.filter((x) => x.startsWith('start:')).slice(0, 3), ['start:two', 'start:front', 'start:one']);
+eq(calls.filter((x) => x.startsWith('start:')).slice(0, 3), ['start:two', 'start:three', 'start:one']);
 eq(peak, 2);
 
 const hoverCalls = [];
@@ -100,7 +106,7 @@ eq(hoverResult.loaded, 1);
 eq(hoverResult.deferred, 3);
 eq(hoverResult.depth, 'target');
 const activateResult = await hoverPrimer.prime({ slug: 'hover-book', chapter: 'three', intent: 'activate' });
-eq(hoverCalls, ['three', 'three', 'front', 'one', 'two']);
+eq(hoverCalls, ['three', 'three', 'two', 'front', 'one']);
 eq(activateResult.loaded, 4);
 eq(activateResult.deferred, 0);
 eq(activateResult.depth, 'publication');
@@ -114,7 +120,6 @@ const focusPrimer = createStartupPublicationPrimer({
 const focusResult = await focusPrimer.prime({ slug: 'focus-book', chapter: 'one', intent: 'focus' });
 eq(focusCalls, ['one']);
 eq(focusResult.depth, 'target');
-
 eq(focusResult.deferred, 3);
 
 const constrainedCalls = [];
