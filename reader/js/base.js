@@ -1,6 +1,7 @@
 import './page-drag.js';
 import './reader-keyboard-runtime.js';
 import './one-handed-actions.js';
+import './dialog-focus-runtime.js';
 import { parseBookReadme, parsePortalCatalog } from './catalog.js';
 import { parseRoute } from './router.js';
 import { createAsyncResourceCache } from './resource-cache.js';
