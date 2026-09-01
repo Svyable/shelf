@@ -23,6 +23,14 @@ export function scrollRegionMetrics(
   };
 }
 
+export function scrollRegionEdge(metrics = {}) {
+  if (!metrics.scrollable) return 'none';
+  if (!metrics.canScrollLeft && !metrics.canScrollRight) return 'both';
+  if (!metrics.canScrollLeft) return 'start';
+  if (!metrics.canScrollRight) return 'end';
+  return 'middle';
+}
+
 export function horizontalKeyboardAction(key, event = {}, clientWidth = 0) {
   if (event.altKey || event.ctrlKey || event.metaKey) return null;
   const width = Math.max(1, finite(clientWidth, 1));
@@ -33,6 +41,48 @@ export function horizontalKeyboardAction(key, event = {}, clientWidth = 0) {
   if (key === 'Home') return { type: 'edge', edge: 'start' };
   if (key === 'End') return { type: 'edge', edge: 'end' };
   return null;
+}
+
+export function horizontalKeyboardDecision(
+  key,
+  event = {},
+  clientWidth = 0,
+  metrics = {},
+  { allowArrowHandoff = false } = {}
+) {
+  const action = horizontalKeyboardAction(key, event, clientWidth);
+  if (!action) return { action: null, consume: false, handoff: false };
+
+  if (allowArrowHandoff && action.type === 'delta') {
+    const towardStart = action.dx < 0;
+    const canMove = towardStart ? !!metrics.canScrollLeft : !!metrics.canScrollRight;
+    if (!canMove) {
+      return {
+        action: null,
+        consume: false,
+        handoff: true,
+        direction: towardStart ? 'previous' : 'next',
+      };
+    }
+  }
+
+  return { action, consume: true, handoff: false };
+}
+
+export function overflowEdgeAnnouncement({ kind = 'content', edge = 'middle', paged = false } = {}) {
+  const label = kind === 'table' ? 'table' : kind === 'code' ? 'code block' : 'content';
+  if (edge === 'start') {
+    return paged
+      ? `Start of scrollable ${label}. Left Arrow again turns the previous page.`
+      : `Start of scrollable ${label}.`;
+  }
+  if (edge === 'end') {
+    return paged
+      ? `End of scrollable ${label}. Right Arrow again turns the next page.`
+      : `End of scrollable ${label}.`;
+  }
+  if (edge === 'both') return `Scrollable ${label} fits at both horizontal edges.`;
+  return '';
 }
 
 export function describedByTokens(value, token, enabled = true) {

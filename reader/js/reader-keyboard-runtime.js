@@ -18,11 +18,21 @@ function nativeKeyboardTarget(target) {
   return target instanceof Element && !!target.closest(INTERACTIVE_SELECTOR);
 }
 
+function overflowArrowHandoff(event) {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return false;
+  const region = event.target instanceof Element
+    ? event.target.closest('.reader-scroll-region[data-reader-keyboard-handoff]')
+    : null;
+  if (!region) return false;
+  return region.dataset.readerKeyboardHandoff === (event.key === 'ArrowLeft' ? 'previous' : 'next');
+}
+
 function dialogOpen() {
   return !!document.querySelector(DIALOG_SELECTOR);
 }
 
 function protectNativeKeyboard(event) {
+  if (overflowArrowHandoff(event)) return;
   if (!shouldProtectNativeKey({
     key: event.key,
     interactive: nativeKeyboardTarget(event.target),
