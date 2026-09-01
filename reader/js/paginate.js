@@ -42,7 +42,11 @@ export function balancedBreakIndex(best, cursor, total, minEdgeWords = MIN_EDGE_
   if (best <= cursor || best >= total) return best;
   const used = best - cursor;
   const remaining = total - best;
+
+  // A tiny fragment at the bottom of a page is worse than moving the paragraph.
   if (used < minEdgeWords) return cursor;
+
+  // Avoid leaving a tiny widow alone at the top of the continuation page.
   if (remaining > 0 && remaining < minEdgeWords && used > minEdgeWords) {
     return Math.max(cursor + minEdgeWords, total - minEdgeWords);
   }
@@ -61,11 +65,25 @@ export function trailingHeadingRunStart(parts = []) {
   return index < parts.length ? index : -1;
 }
 
-export function balancedStructuredBreakIndex(best, cursor, total, canDefer = false, minEdgeItems = MIN_EDGE_ITEMS) {
+export function balancedStructuredBreakIndex(
+  best,
+  cursor,
+  total,
+  canDefer = false,
+  minEdgeItems = MIN_EDGE_ITEMS
+) {
   if (best <= cursor || best >= total) return best;
   const used = best - cursor;
   const remaining = total - best;
-  if (canDefer && used < minEdgeItems && total - cursor >= minEdgeItems + 1) return cursor;
+
+  // If a list/table begins near the bottom of an already occupied page and only
+  // one item/row fits, move the structure forward instead of stranding it.
+  if (canDefer && used < minEdgeItems && total - cursor >= minEdgeItems + 1) {
+    return cursor;
+  }
+
+  // When the final continuation would contain a single item/row, rebalance one
+  // item/row onto that continuation if the current fragment can spare it.
   if (remaining > 0 && remaining < minEdgeItems && used > minEdgeItems) {
     return Math.max(cursor + minEdgeItems, total - minEdgeItems);
   }
@@ -78,6 +96,7 @@ function textPoint(root, absoluteOffset) {
   let remaining = Math.max(0, absoluteOffset);
   let node = walker.nextNode();
   let last = null;
+
   while (node) {
     last = node;
     const length = node.nodeValue?.length || 0;
@@ -85,6 +104,7 @@ function textPoint(root, absoluteOffset) {
     remaining -= length;
     node = walker.nextNode();
   }
+
   if (last) return { node: last, offset: last.nodeValue?.length || 0 };
   return { node: root, offset: root.childNodes.length };
 }
@@ -95,6 +115,7 @@ function cloneTextRange(root, start, end) {
   const hi = Math.max(lo, Math.min(total, end));
   const range = document.createRange();
   range.selectNodeContents(root);
+
   if (lo > 0) {
     const point = textPoint(root, lo);
     range.setStart(point.node, point.offset);
@@ -103,6 +124,7 @@ function cloneTextRange(root, start, end) {
     const point = textPoint(root, hi);
     range.setEnd(point.node, point.offset);
   }
+
   const shell = root.cloneNode(false);
   shell.appendChild(range.cloneContents());
   return shell.textContent?.trim() ? shell.outerHTML : '';
@@ -113,34 +135,49 @@ function blockPart(block, html, ratio0, ratio1) {
   const start = block.start + Math.floor(span * ratio0);
   const end = block.start + Math.floor(span * ratio1);
   const boundedEnd = Math.max(end, start + 1);
-  return { html: withSourceRange(html, start, boundedEnd), start, end: boundedEnd, raw: block.raw };
+  return {
+    html: withSourceRange(html, start, boundedEnd),
+    start,
+    end: boundedEnd,
+    raw: block.raw,
+  };
 }
 
 function splitTextBlock(block, measureEl, prefixHtml = '') {
   const el = parsedElement(block.html);
   if (!el || !el.textContent || !SPLITTABLE_TAGS.has(el.tagName)) return [block];
+
   const text = el.textContent;
   const boundaries = textBoundaries(text);
   const wordCount = boundaries.length;
   const minEdgeWords = prefixHtml ? headingFollowerWordMinimum(prefixHtml) : MIN_EDGE_WORDS;
   if (wordCount < minEdgeWords + 1) return [block];
+
   const starts = [0, ...boundaries.slice(0, -1)];
   const parts = [];
   let cursor = 0;
   let prefix = prefixHtml;
   const textLen = Math.max(text.length, 1);
+
   while (cursor < wordCount) {
     let lo = cursor + 1;
     let hi = wordCount;
     let best = cursor;
+
     while (lo <= hi) {
       const mid = Math.floor((lo + hi) / 2);
       const html = cloneTextRange(el, starts[cursor], boundaries[mid - 1]);
-      if (html && fits(measureEl, `${prefix}${html}`)) { best = mid; lo = mid + 1; }
-      else hi = mid - 1;
+      if (html && fits(measureEl, `${prefix}${html}`)) {
+        best = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
     }
+
     if (best === cursor && prefix) return [block];
     if (best === cursor) best = cursor + 1;
+
     const edgeWords = prefix ? headingFollowerWordMinimum(prefix) : MIN_EDGE_WORDS;
     if (prefix) {
       const balanced = balancedBreakIndex(best, cursor, wordCount, edgeWords);
@@ -153,20 +190,26 @@ function splitTextBlock(block, measureEl, prefixHtml = '') {
       const balanced = balancedBreakIndex(best, cursor, wordCount, edgeWords);
       if (balanced > cursor && balanced < best) best = balanced;
     }
+
     const startChar = starts[cursor];
     const endChar = boundaries[best - 1];
     const html = cloneTextRange(el, startChar, endChar);
     if (!html) break;
+
     parts.push(blockPart(block, html, startChar / textLen, endChar / textLen));
     cursor = best;
     prefix = '';
   }
+
   return parts.length ? parts : [block];
 }
 
 function cumulativeWeights(nodes) {
   const cumulative = [0];
-  for (const node of nodes) cumulative.push(cumulative[cumulative.length - 1] + Math.max(1, node.textContent?.trim().length || 0));
+  for (const node of nodes) {
+    const weight = Math.max(1, node.textContent?.trim().length || 0);
+    cumulative.push(cumulative[cumulative.length - 1] + weight);
+  }
   return cumulative;
 }
 
@@ -175,49 +218,74 @@ function splitListBlock(block, measureEl, prefixHtml = '') {
   if (!list || !['UL', 'OL'].includes(list.tagName)) return null;
   const items = [...list.children].filter((child) => child.tagName === 'LI');
   if (items.length < 2) return [block];
+
   const cumulative = cumulativeWeights(items);
   const totalWeight = Math.max(1, cumulative[cumulative.length - 1]);
   const orderedBase = Number.parseInt(list.getAttribute('start') || '1', 10) || 1;
+
   const htmlFor = (start, end) => {
     const shell = list.cloneNode(false);
     if (list.tagName === 'OL' && start > 0) shell.setAttribute('start', String(orderedBase + start));
     for (const item of items.slice(start, end)) shell.appendChild(item.cloneNode(true));
     return shell.outerHTML;
   };
+
   const parts = [];
   let cursor = 0;
   let prefix = prefixHtml;
+
   while (cursor < items.length) {
-    let lo = cursor + 1; let hi = items.length; let best = cursor;
+    let lo = cursor + 1;
+    let hi = items.length;
+    let best = cursor;
+
     while (lo <= hi) {
       const mid = Math.floor((lo + hi) / 2);
       const html = htmlFor(cursor, mid);
-      if (fits(measureEl, `${prefix}${html}`)) { best = mid; lo = mid + 1; } else hi = mid - 1;
+      if (fits(measureEl, `${prefix}${html}`)) {
+        best = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
     }
+
     if (best === cursor && prefix) return [block];
     if (best === cursor) best = cursor + 1;
+
     const balanced = balancedStructuredBreakIndex(best, cursor, items.length, !!prefix);
     if (balanced === cursor && prefix) return [block];
     if (balanced > cursor && balanced < best) best = balanced;
+
     const html = htmlFor(cursor, best);
-    parts.push(blockPart(block, html, cumulative[cursor] / totalWeight, cumulative[best] / totalWeight));
-    cursor = best; prefix = '';
+    parts.push(blockPart(
+      block,
+      html,
+      cumulative[cursor] / totalWeight,
+      cumulative[best] / totalWeight
+    ));
+    cursor = best;
+    prefix = '';
   }
+
   return parts.length ? parts : [block];
 }
 
 function splitTableBlock(block, measureEl, prefixHtml = '') {
   const table = parsedElement(block.html);
   if (!table || table.tagName !== 'TABLE') return null;
+
   const body = table.tBodies?.[0];
   const rows = body ? [...body.rows] : [];
   if (rows.length < 2) return [block];
+
   const caption = table.caption;
   const colgroups = [...table.children].filter((child) => child.tagName === 'COLGROUP');
   const head = table.tHead;
   const foot = table.tFoot;
   const cumulative = cumulativeWeights(rows);
   const totalWeight = Math.max(1, cumulative[cumulative.length - 1]);
+
   const htmlFor = (start, end) => {
     const shell = table.cloneNode(false);
     if (caption && start === 0) shell.appendChild(caption.cloneNode(true));
@@ -229,25 +297,45 @@ function splitTableBlock(block, measureEl, prefixHtml = '') {
     if (foot && end === rows.length) shell.appendChild(foot.cloneNode(true));
     return shell.outerHTML;
   };
+
   const parts = [];
   let cursor = 0;
   let prefix = prefixHtml;
+
   while (cursor < rows.length) {
-    let lo = cursor + 1; let hi = rows.length; let best = cursor;
+    let lo = cursor + 1;
+    let hi = rows.length;
+    let best = cursor;
+
     while (lo <= hi) {
       const mid = Math.floor((lo + hi) / 2);
       const html = htmlFor(cursor, mid);
-      if (fits(measureEl, `${prefix}${html}`)) { best = mid; lo = mid + 1; } else hi = mid - 1;
+      if (fits(measureEl, `${prefix}${html}`)) {
+        best = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
     }
+
     if (best === cursor && prefix) return [block];
     if (best === cursor) best = cursor + 1;
+
     const balanced = balancedStructuredBreakIndex(best, cursor, rows.length, !!prefix);
     if (balanced === cursor && prefix) return [block];
     if (balanced > cursor && balanced < best) best = balanced;
+
     const html = htmlFor(cursor, best);
-    parts.push(blockPart(block, html, cumulative[cursor] / totalWeight, cumulative[best] / totalWeight));
-    cursor = best; prefix = '';
+    parts.push(blockPart(
+      block,
+      html,
+      cumulative[cursor] / totalWeight,
+      cumulative[best] / totalWeight
+    ));
+    cursor = best;
+    prefix = '';
   }
+
   return parts.length ? parts : [block];
 }
 
@@ -259,16 +347,32 @@ function splitBlock(block, measureEl, prefixHtml = '') {
   return splitTextBlock(block, measureEl, prefixHtml);
 }
 
-function makePage(chapterId, parts) { return { chapter: chapterId, start: parts[0].start, end: parts[parts.length - 1].end, html: joinHtml(parts) }; }
-function isHeading(piece) { return /^\s*<h[1-4]\b/i.test(piece.html || ''); }
-function isAtomic(piece) { return /^\s*<(?:pre|figure|img|video|audio|iframe|hr)\b/i.test(piece.html || ''); }
+function makePage(chapterId, parts) {
+  return {
+    chapter: chapterId,
+    start: parts[0].start,
+    end: parts[parts.length - 1].end,
+    html: joinHtml(parts),
+  };
+}
+
+function isHeading(piece) {
+  return /^\s*<h[1-4]\b/i.test(piece.html || '');
+}
+
+function isAtomic(piece) {
+  return /^\s*<(?:pre|figure|img|video|audio|iframe|hr)\b/i.test(piece.html || '');
+}
 
 export function paginateBlocks(chapterId, blocks, measureEl) {
   const pages = [];
   let current = [];
+
   const overflow = () => current.length > 0 && !fits(measureEl, joinHtml(current));
+
   const flush = () => {
     if (!current.length) return;
+
     const keepStart = trailingHeadingRunStart(current);
     if (keepStart > 0) {
       const headings = current.splice(keepStart);
@@ -276,23 +380,30 @@ export function paginateBlocks(chapterId, blocks, measureEl) {
       current = headings;
       return;
     }
+
     pages.push(makePage(chapterId, current));
     current = [];
   };
+
   const accept = (piece) => {
     if (current.length === 0) {
       current = [piece];
       if (overflow()) {
         current = [];
         const bits = isAtomic(piece) ? [piece] : splitBlock(piece, measureEl);
-        if (bits.length === 1) { pages.push(makePage(chapterId, bits)); return; }
+        if (bits.length === 1) {
+          pages.push(makePage(chapterId, bits));
+          return;
+        }
         for (const bit of bits) accept(bit);
       }
       return;
     }
+
     current.push(piece);
     if (!overflow()) return;
     current.pop();
+
     if (!isHeading(piece) && !isAtomic(piece)) {
       const bits = splitBlock(piece, measureEl, joinHtml(current));
       if (bits.length > 1) {
@@ -302,18 +413,24 @@ export function paginateBlocks(chapterId, blocks, measureEl) {
         return;
       }
     }
+
     flush();
     accept(piece);
   };
+
   for (const block of blocks) accept(block);
   flush();
   if (current.length) pages.push(makePage(chapterId, current));
-  if (pages.length === 0) pages.push({ chapter: chapterId, start: 0, end: 0, html: '<p></p>' });
+  if (pages.length === 0) {
+    pages.push({ chapter: chapterId, start: 0, end: 0, html: '<p></p>' });
+  }
   return pages;
 }
 
 export function pageIndexForOffset(pages, chapterId, offset) {
-  const inChapter = pages.map((p, i) => ({ p, i })).filter(({ p }) => p.chapter === chapterId);
+  const inChapter = pages
+    .map((p, i) => ({ p, i }))
+    .filter(({ p }) => p.chapter === chapterId);
   if (!inChapter.length) return 0;
   const hit = inChapter.find(({ p }) => offset >= p.start && offset < p.end);
   if (hit) return hit.i;
