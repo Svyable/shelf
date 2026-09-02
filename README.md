@@ -6,7 +6,7 @@ Svyable Shelf is the public reading library for books by Sven Hardy Benson and t
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **8 author publication projects · 5 released · 3 public drafts/proofs · 8 Reader style specimens**
+> **9 author publication projects · 6 released · 3 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
