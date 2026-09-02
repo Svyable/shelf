@@ -17,6 +17,7 @@ body:
       options:
         - agentile
         - leveraging-luck
+        - the-collective
         - the-exponentiality
         - _TEMPLATE
     validations:

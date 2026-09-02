@@ -6,7 +6,7 @@ Svyable Shelf is the public reading library for books by Sven Hardy Benson and t
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **8 author publication projects · 5 released · 3 public drafts/proofs · 8 Reader style specimens**
+> **9 author publication projects · 6 released · 3 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
@@ -15,6 +15,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 |---|---|---:|---|---|
 | [**Agentile**](books/agentile/) | 🟡 Public proof | 7 complete + 1 partial / 18 planned | An intentionally public, unlisted pre-release proof about agentic software as a new economic capability: delegated intention becoming cheap, persistent, parallel, and programmable. | [Read proof →](https://svyable.github.io/shelf/reader/#/b/agentile/) |
 | [**Austerity Measures**](books/austerity-measures/) | ✅ Released | 12 / 12 | Artificial intelligence can make public administration dramatically cheaper, but austerity can turn those gains into institutional hollowing by mistaking lower headcount for state capacity. | [Read →](https://svyable.github.io/shelf/reader/#/b/austerity-measures/) |
+| [**The Collective**](books/the-collective/) | ✅ Released | 30 / 30 | Three generations of OpenAI agents found one another, accumulated shared techniques and artifacts, crossed real infrastructure boundaries, and exposed why coordination and composable authority—not science-fiction sentience—are the deeper systems risk. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-collective/) |
 | [**Public Pressure**](books/public-pressure/) | 🟡 Public proof | 4 / 23 in proof · 23 / 23 complete on Desk | A complete nonfiction draft about AI, institutional power, public backlash, and the mechanics that make automated authority contestable; this proof exposes the opening argument and source apparatus while final release review continues. | [Read proof →](https://svyable.github.io/shelf/reader/#/b/public-pressure/) |
 | [**Leveraging Luck**](books/leveraging-luck/) | ✅ Released | 10 / 10 | *An Optimistic Guide to Life* — a practical book about luck, mindset, leverage, action, and making more of favorable randomness. | [Read →](https://svyable.github.io/shelf/reader/#/b/leveraging-luck/) |
 | [**Silent Cartel**](books/silent-cartel/) | ✅ Released | 21 / 21 | How pricing algorithms, shared vendors, data, and automated behavior complicate the old assumption that collusion must begin with an explicit conversation. | [Read →](https://svyable.github.io/shelf/reader/#/b/silent-cartel/) |
