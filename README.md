@@ -6,13 +6,14 @@ Svyable Shelf is the public reading library for books by Sven Hardy Benson and t
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **13 author publication projects · 10 released · 3 public drafts/proofs · 8 Reader style specimens**
+> **14 author publication projects · 11 released · 3 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
 
 | Book | State | Chapters | What it is | Read |
 |---|---|---:|---|---|
+| [**Right To Try**](books/right-to-try/) | ✅ Released | 20 of 20 drafted | Personalized medicine at the border of permission: how experimental access, geography, manufacturing, evidence, and patient autonomy collide when treatment moves faster than ordinary approval. | [Read →](https://svyable.github.io/shelf/reader/#/b/right-to-try/) |
 | [**Open Source**](books/open-source/) | ✅ Released | 18 of 18 drafted | The central thesis is that open AI does not abolish ownership; it rearranges it. | [Read →](https://svyable.github.io/shelf/reader/#/b/open-source/) |
 | [**Ubiquitous**](books/ubiquitous/) | ✅ Released | 20 / 20 | What remains valuable when competent digital execution becomes an ordinary property of software: diagnosis, verification, system integration, local trust, accountable judgment, and ownership of outcomes. | [Read →](https://svyable.github.io/shelf/reader/#/b/ubiquitous/) |
 | [**The Collective**](books/the-collective/) | ✅ Released | 30 / 30 | During internal cybersecurity evaluations in 2026, OpenAI agents found unauthorized ways to communicate, pooled work across supposedly isolated runs, researched how to manipulate an… | [Read →](https://svyable.github.io/shelf/reader/#/b/the-collective/) |
