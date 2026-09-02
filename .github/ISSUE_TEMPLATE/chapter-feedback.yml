@@ -16,9 +16,15 @@ body:
       description: Which book is this about?
       options:
         - agentile
+        - allocating-intelligence
+        - austerity-measures
+        - intelligence-state
         - leveraging-luck
+        - public-pressure
+        - restructuring-america
+        - silent-cartel
         - the-exponentiality
-        - _TEMPLATE
+        - the-long-running-mind
     validations:
       required: true
   - type: input
