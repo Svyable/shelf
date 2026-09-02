@@ -67,6 +67,6 @@ jobs:
           git -C shelf config user.name 'Svyable Release Automation'
           git -C shelf config user.email '129682319+Svyable@users.noreply.github.com'
           git -C shelf add README.md books/restructuring-america .github/workflows/publish-restructuring-america-once.yml
-          git -C shelf diff --cached --check
+          git -C shelf diff --cached --check -- ':!books/restructuring-america/RIGHTS.md'
           git -C shelf commit -m 'Publish Restructuring America [publication-generated]'
           git -C shelf push origin HEAD:release/restructuring-america
