@@ -3,7 +3,7 @@ importScripts('./js/offline-fetch-policy.js');
 importScripts('./js/offline-storage-budget.js');
 importScripts('./js/offline-shell-install.js');
 
-const CACHE = 'obb-shell-v97';
+const CACHE = 'obb-shell-v98';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -293,8 +293,8 @@ async function warmChapterMedia(cache, chapterResponse, chapterUrl, publicationU
   await Promise.allSettled(media.map((href) => cacheRequest(cache, href, 'media')));
 }
 
-async function warmPublication(readmeResponse, readmeUrl) {
-  if (!readmeResponse?.ok) return;
+async function warmPublication(readmeResponse, readmeUrl, plan) {
+  if (!readmeResponse?.ok || !plan?.warmChapters) return;
   let markdown;
   try {
     markdown = await readmeResponse.text();
@@ -308,7 +308,7 @@ async function warmPublication(readmeResponse, readmeUrl) {
 
   await Promise.allSettled(chapters.map(async (href) => {
     const response = await cacheRequest(cache, href, 'chapter');
-    if (!response) return;
+    if (!response || !plan.warmMedia) return;
     await warmChapterMedia(cache, response.clone(), href, readmeUrl.href);
   }));
 }
@@ -333,11 +333,14 @@ self.addEventListener('fetch', (event) => {
   event.waitUntil(network.then(() => {}).catch(() => {}));
 
   if (sameOrigin && self.BookselfOfflineCache.isPublicationReadme(url.href)) {
-    event.waitUntil(
-      network
-        .then((res) => warmPublication(res.clone(), url))
-        .catch(() => {})
-    );
+    const plan = self.BookselfOfflineCache.publicationWarmPlan(self.navigator?.connection || {});
+    if (plan.warmChapters) {
+      event.waitUntil(
+        network
+          .then((res) => warmPublication(res.clone(), url, plan))
+          .catch(() => {})
+      );
+    }
   }
 
   event.respondWith(respondWithPolicy(req, network, kind, sameOrigin));

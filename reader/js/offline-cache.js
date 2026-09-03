@@ -76,6 +76,18 @@
     }
   }
 
+  function publicationWarmPlan(connection = {}) {
+    const saveData = connection?.saveData === true;
+    const effectiveType = String(connection?.effectiveType || '').toLowerCase();
+    if (saveData || effectiveType === 'slow-2g' || effectiveType === '2g') {
+      return Object.freeze({ warmChapters: false, warmMedia: false });
+    }
+    if (effectiveType === '3g') {
+      return Object.freeze({ warmChapters: true, warmMedia: false });
+    }
+    return Object.freeze({ warmChapters: true, warmMedia: true });
+  }
+
   function createWarmScheduler({ concurrency = 3 } = {}) {
     const limit = Math.max(1, Math.min(8, Math.floor(Number(concurrency) || 1)));
     const pending = new Map();
@@ -145,6 +157,7 @@
     chapterLinks,
     mediaLinks,
     isPublicationReadme,
+    publicationWarmPlan,
     createWarmScheduler,
   });
 })(globalThis);
