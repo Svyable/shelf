@@ -1,0 +1,49 @@
+name: Temporary legacy-name audit
+
+on:
+  push:
+    branches:
+      - cleanup/sven-hardy-benson-branding
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enumerate visible legacy-name references
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          roots = [Path('README.md'), Path('RIGHTS.md')]
+          roots += sorted(Path('books').rglob('*.md'))
+          roots += sorted(Path('books').rglob('rights.json'))
+
+          legacy = re.compile(r'\bsvyable\b', re.IGNORECASE)
+          raw_url = re.compile(r'https?://[^\s)>\]}]+', re.IGNORECASE)
+          repo_code = re.compile(r'`Svyable/[A-Za-z0-9._/-]+`', re.IGNORECASE)
+          matches = []
+
+          for path in roots:
+              if not path.is_file() or '_TEMPLATE' in path.parts:
+                  continue
+              if legacy.search(path.name):
+                  matches.append((path, 0, '<legacy name in filename>'))
+              text = path.read_text(encoding='utf-8')
+              for line_number, line in enumerate(text.splitlines(), start=1):
+                  visible = raw_url.sub('', line)
+                  visible = repo_code.sub('', visible)
+                  if legacy.search(visible):
+                      matches.append((path, line_number, line.strip()))
+
+          print(f'VISIBLE_MATCH_COUNT={len(matches)}')
+          for path, line_number, line in matches:
+              where = f'{path}:{line_number}' if line_number else str(path)
+              print(f'{where}: {line}')
+
+          if matches:
+              sys.exit(1)
+          PY
