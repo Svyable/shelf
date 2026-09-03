@@ -6,13 +6,14 @@ Svyable Shelf is the public reading library for books by Sven Hardy Benson and t
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **20 author publication projects · 18 released · 2 public drafts/proofs · 8 Reader style specimens**
+> **21 author publication projects · 19 released · 2 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
 
 | Book | State | Chapters | What it is | Read |
 |---|---|---:|---|---|
+| [**The Agentic Consumer Economy: Digital Capitalism in the 2030s**](books/the-agentic-consumer-economy/) | ✅ Released | 23 of 23 drafted | How software agents acting for consumers could reshape search, pricing, loyalty, payments, advertising, platform power, and household bargaining in the 2030s. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-agentic-consumer-economy/) |
 | [**Adjacency**](books/adjacency/) | ✅ Released | 25 of 25 drafted | Learned vector spaces make relation navigable: documents, images, products, papers, molecules, memories, and tools become discoverable by adjacency while judgment shifts to deciding which neighborhood deserves trust. | [Read →](https://svyable.github.io/shelf/reader/#/b/adjacency/) |
 | [**The Compatibility Dividend**](books/the-compatibility-dividend/) | ✅ Released | 20 of 20 drafted | Standards are compressed coordination: shared rules at carefully chosen seams let strangers make complementary decisions without bilateral negotiation. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-compatibility-dividend/) |
 | [**Right To Try**](books/right-to-try/) | ✅ Released | 20 of 20 drafted | Personalized medicine at the border of permission: how experimental access, geography, manufacturing, evidence, and patient autonomy collide when treatment moves faster than ordinary approval. | [Read →](https://svyable.github.io/shelf/reader/#/b/right-to-try/) |
