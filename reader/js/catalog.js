@@ -1,4 +1,4 @@
-/** Parse portal README and publication hubs. No extra config files. */
+/** Parse portal catalog data and publication hubs. */
 
 export function extractSection(markdown, heading) {
   const re = new RegExp(`^##\\s+${heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'im');
@@ -21,6 +21,46 @@ export function parsePortalCatalog(markdown) {
     if (!slugs.includes(slug)) slugs.push(slug);
   }
   return slugs;
+}
+
+export function parsePortalCatalogManifest(value) {
+  let manifest = value;
+  if (typeof value === 'string') {
+    try {
+      manifest = JSON.parse(value);
+    } catch {
+      return null;
+    }
+  }
+  if (!manifest || manifest.version !== 1 || !Array.isArray(manifest.books)) return null;
+  const slugs = [];
+  for (const raw of manifest.books) {
+    const slug = String(raw || '').trim();
+    if (!/^[a-z0-9][a-z0-9-]*$/.test(slug) || slug === '_TEMPLATE') continue;
+    if (!slugs.includes(slug)) slugs.push(slug);
+  }
+  return slugs;
+}
+
+export function applyPortalCatalogManifest(markdown, manifest) {
+  const slugs = parsePortalCatalogManifest(manifest);
+  if (slugs === null) return markdown;
+
+  const rows = slugs.map((slug) => `- [${slug}](books/${slug}/)`).join('\n');
+  const body = rows ? `\n\n${rows}\n` : '\n';
+  const heading = /^##\s+The books\s*$/im;
+  const match = heading.exec(markdown);
+  if (!match) {
+    const spacer = markdown.endsWith('\n') ? '\n' : '\n\n';
+    return `${markdown}${spacer}## The books${body}`;
+  }
+
+  const start = match.index + match[0].length;
+  const next = /^##\s+/m.exec(markdown.slice(start));
+  const end = next ? start + next.index : markdown.length;
+  const suffix = markdown.slice(end);
+  const separator = suffix && !suffix.startsWith('\n') ? '\n' : '';
+  return `${markdown.slice(0, start)}${body}${separator}${suffix}`;
 }
 
 function externalEntries(section) {
@@ -163,6 +203,9 @@ export function parseBookReadme(markdown, slug) {
   const authors = plainInlineText(authorsRaw);
   const chaptersCell = cell(markdown, 'Chapters');
   const formatLabel = cell(markdown, 'Format');
+  const rights = cell(markdown, 'Rights') || 'All Rights Reserved';
+  const aiUse = cell(markdown, 'AI use') || 'AI training and generative use reserved';
+  const rightsFile = cell(markdown, 'Rights file') || '[RIGHTS.md](RIGHTS.md)';
   const contents = [];
   const re = /^- \[[ xX]\] \[([^\]]+)\]\((manuscript\/[^)\s]+)\)/gm;
   let m;
@@ -201,6 +244,9 @@ export function parseBookReadme(markdown, slug) {
     issue: cell(markdown, 'Issue'),
     publicationDate: cell(markdown, 'Publication date') || cell(markdown, 'Date'),
     frequency: cell(markdown, 'Frequency'),
+    rights,
+    aiUse,
+    rightsFile,
     externalLinks: mergeLinks(
       explicitExternalLinks,
       identifierLinks(isbn, doi, explicitExternalLinks)
