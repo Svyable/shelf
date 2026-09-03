@@ -13,6 +13,7 @@ import {
   samePreviewRoute,
   selectPreviewChapter,
   projectPreviewParagraphs,
+  shouldBridgeRouteTransition,
   shouldShowPreview,
   previewCompletionState,
 } from './direct-route-preview-model.js';
@@ -31,6 +32,11 @@ const routeA = normalizeReadRoute({ view: 'read', slug: 'a', chapter: 'ch2', off
 eq(samePreviewRoute(routeA, normalizeReadRoute({ view: 'read', slug: 'a', chapter: 'ch2', offset: 42 })), true);
 eq(samePreviewRoute(routeA, normalizeReadRoute({ view: 'read', slug: 'a', chapter: 'ch3', offset: 42 })), false);
 eq(samePreviewRoute(routeA, null), false);
+eq(shouldBridgeRouteTransition({ previous: null, next: routeA, stage: 'library' }), true);
+eq(shouldBridgeRouteTransition({ previous: null, next: routeA, stage: 'cover' }), true);
+eq(shouldBridgeRouteTransition({ previous: routeA, next: routeA, stage: 'cover' }), false);
+eq(shouldBridgeRouteTransition({ previous: null, next: routeA, stage: 'read' }), false);
+eq(shouldBridgeRouteTransition({ previous: routeA, next: null, stage: 'library' }), false);
 
 const contents = [{ id: 'front', file: 'front.md' }, { id: 'ch2', file: 'ch2.md' }];
 eq(selectPreviewChapter(contents, 'ch2').id, 'ch2');
@@ -88,12 +94,15 @@ ok(shouldShowPreview({ route: { view: 'read', slug: 'a' }, canonicalReady: false
 eq(shouldShowPreview({ route: { view: 'read', slug: 'a' }, canonicalReady: true, stage: 'read' }), false);
 eq(shouldShowPreview({ route: { view: 'cover', slug: 'a' }, canonicalReady: false, stage: 'library' }), false);
 eq(shouldShowPreview({ route: { view: 'read', slug: 'a' }, canonicalReady: false, stage: 'cover' }), false);
+eq(shouldShowPreview({ route: { view: 'read', slug: 'a' }, canonicalReady: false, stage: 'cover', allowCoverStage: true }), true);
+eq(shouldShowPreview({ route: { view: 'read', slug: 'a' }, canonicalReady: true, stage: 'cover', allowCoverStage: true }), false);
 
 eq(previewCompletionState({ stage: 'library' }), 'keep');
 eq(previewCompletionState({ stage: 'read', hasPagedContent: true }), 'dismiss');
 eq(previewCompletionState({ stage: 'read', hasContinuousContent: true }), 'dismiss');
 eq(previewCompletionState({ stage: 'read', hasPagedContent: false, hasContinuousContent: false }), 'keep');
 eq(previewCompletionState({ stage: 'cover' }), 'dismiss');
+eq(previewCompletionState({ stage: 'cover', keepCoverStage: true }), 'keep');
 eq(previewCompletionState({ stage: 'loading' }), 'keep');
 
 console.log(`direct route reading bridge model tests ok (${assertions} assertions)`);
