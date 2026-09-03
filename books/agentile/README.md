@@ -4,7 +4,7 @@
 |---|---|
 | **Author**    | Sven Hardy Benson |
 | **Status**    | Drafting |
-| **Drafting Source** | Svyable Desk |
+| **Drafting Source** | Sven Hardy Benson’s Desk |
 | **Publication Surface** | Public, unlisted Shelf proof |
 | **Chapters**  | 9 complete + 1 partial of 18 planned |
 

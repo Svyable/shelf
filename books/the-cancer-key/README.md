@@ -4,8 +4,8 @@
 |---|---|
 | **Author** | Sven Hardy Benson |
 | **Status** | Published |
-| **Drafting Source** | Svyable Desk |
-| **Publication Surface** | Svyable Shelf |
+| **Drafting Source** | Sven Hardy Benson’s Desk |
+| **Publication Surface** | Sven Hardy Benson’s Shelf |
 | **Chapters** | 28 of 28 |
 | **Reporting Cutoff** | September 1, 2026 |
 

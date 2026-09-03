@@ -20,7 +20,7 @@ Either way, keep the screenshot.
 
 ## Colophon
 
-Drafted for the `Svyable/desk` collection on August 30, 2026.
+Drafted for Sven Hardy Benson’s Desk (`Svyable/desk`) on August 30, 2026.
 
 The initiating idea and source artifact were supplied by Sven Hardy Benson. The manuscript was composed with ChatGPT as an AI collaborator and committed through the connected GitHub workflow.
 
