@@ -42,6 +42,12 @@ const recentCompanions = [
   './js/reading-session.js',
 ];
 
+const removedOfflineReadinessAssets = [
+  './css/offline-readiness.css',
+  './js/offline-readiness-model.js',
+  './js/offline-readiness.js',
+];
+
 test('shell manifest has no duplicate or missing local assets', () => {
   assert.equal(shellList.length, shell.size, 'SHELL should not contain duplicate paths');
   for (const asset of shell) {
@@ -75,8 +81,15 @@ test('recent optional enhancements include their model/style companions', () => 
   }
 });
 
-test('offline shell generation advances for the repaired enhancement set', () => {
-  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v93['"]/);
+test('removed offline readiness surface is absent from the install shell', () => {
+  for (const asset of removedOfflineReadinessAssets) {
+    assert.equal(shell.has(asset), false, `${asset} should not be precached`);
+    assert.equal(optional.has(asset), false, `${asset} should not remain an optional shell asset`);
+  }
+});
+
+test('offline shell generation advances for the removed readiness surface', () => {
+  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v94['"]/);
 });
 
 console.log('offline shell contract tests cover dynamic enhancement parity');
