@@ -1,9 +1,9 @@
 {
   "role": "shelf",
-  "name": "Svyable Shelf",
+  "name": "Sven Hardy Benson’s Shelf",
   "shortName": "Shelf",
-  "description": "Sven Benson's books, read like a book. Built with Bookself.",
-  "kicker": "Sven Benson · Written on GitHub · Read like a book",
+  "description": "Sven Hardy Benson's books, read like a book. Built with Bookself.",
+  "kicker": "Sven Hardy Benson · Written on GitHub · Read like a book",
   "lede": "These published books live in this repository. The reader and publishing desk are shared Bookself software.",
   "credit": "Start your own shelf with Bookself",
   "creditHref": "https://github.com/Svyable/bookself",
