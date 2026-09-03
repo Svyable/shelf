@@ -218,31 +218,87 @@ A technician who leaves behind accurate photos, measurements, equipment identifi
 
 AI can make this documentation nearly frictionless if designed around the work instead of added after it.
 
-The worker speaks. The system structures. The worker confirms. The record becomes searchable.
+The economic value of that record becomes clearest during an emergency.
 
-That sounds small compared with autonomous robots. It may deliver more useful automation in the near term because it improves the information layer around work humans already perform well.
+Routine maintenance is patient. An emergency compresses time.
 
-Water also provides a caution about optimizing one system at the expense of another.
+A leak is active. A pump is down. A tenant has no water. A production process is losing output. A hospital cannot treat the affected system as a classroom exercise. Under pressure, people reach for whatever representation is available: the drawing, the last work order, the alarm screen, the model's summary, the senior technician on the phone.
+
+The quality of those representations determines how much uncertainty the field crew inherits.
+
+This is where a decade of boring documentation can become more valuable than a brilliant answer generated in the moment.
+
+If valve locations were recorded accurately, if substitutions were captured, if settings were preserved, if prior failures include the tests that ruled causes in or out, the response begins with a smaller search space. The technician still has to verify the current state, but does not have to rediscover the entire system while water is moving somewhere it should not.
+
+AI makes this accumulation practical for organizations that historically could not afford it.
+
+A small plumbing company can turn photos and voice notes into a site history. A municipal crew can compare what excavation revealed with what the asset map claimed. A facility can connect recurring alarms with work orders that were previously stored in another system. The memory no longer has to live entirely in the person who happened to be there last time.
+
+That can sound like a threat to experienced workers because some of their scarcity came from remembering what nobody else knew.
+
+It can be.
+
+But there is another interpretation.
+
+When basic memory becomes shared, the experienced worker can spend less of the day being a human filing cabinet and more of it solving the cases where the records conflict with the evidence. Their value migrates from possession of facts toward the ability to adjudicate among them.
+
+That is a better form of expertise.
+
+It is also harder to extract completely because the judgment is produced in contact with the new situation. The record says the valve is closed. The pressure says otherwise. The drawing says the branch turns left. The wall opening says it does not. The sensor says flow is zero. The meter was installed backward.
+
+Physical systems continually create these moments because they accumulate modifications.
+
+Every repair is a tiny revision to the world.
+
+Some revisions are documented. Some are not. Some are performed correctly and later misunderstood. Some are temporary fixes that become permanent because nobody returns. A building is therefore not simply the embodiment of its design documents. It is a versioned system with an imperfect commit history.
+
+People who work on old buildings understand this without needing the metaphor.
+
+The useful AI system should understand it too.
+
+It should treat records as evidence with dates and provenance, not as unquestioned truth. It should make disagreement visible. It should prefer a recent verified measurement over an old assumption when the two conflict. It should help the technician record the resolution so the next person inherits less ambiguity.
+
+That design philosophy connects trade work directly to the larger problem of trustworthy agents.
+
+The question is not whether the machine can retrieve an answer.
+
+The question is whether the system knows the difference between a plan, a prior observation, and the present physical state.
+
+Water makes that distinction impossible to ignore.
+
+It also changes what customers can buy.
+
+A contractor with good data can offer more than emergency response. It can identify repeated failures, propose replacement before catastrophic loss, document risk for owners, and help prioritize capital spending across a portfolio. A utility can target inspection and replacement more intelligently. A facility can decide which assets deserve redundancy and which can run to failure.
+
+These are allocation decisions.
+
+They turn a trade business into an information business without turning it into a software company.
+
+The information has value because it remains attached to the ability to act locally.
+
+That is the pattern this book keeps returning to. Ubiquitous intelligence does not erase physical expertise. It strips away some of the informational friction around it and asks what the worker can do with a clearer view.
+
+The strongest answer is not “the same repair, faster.”
+
+It is a larger responsibility for the system's condition over time.
+
+That responsibility has a different business model. Instead of being paid only when something breaks, the worker can be paid to reduce surprises. The measurable outcome becomes fewer emergencies, less water loss, lower energy waste, longer equipment life, and better capital timing. Some customers will never pay for that sophistication. Others, especially facilities where downtime is costly, already do. AI lowers the administrative cost of offering it to more of them.
+
+Water also warns against optimizing one system as though its neighbors do not exist.
 
 A building can reduce energy use and create a water-management problem. A water-saving fixture can affect drain behavior under conditions the old system did not anticipate. A hot-water strategy can improve efficiency while changing response time or public-health considerations. A utility can reduce pumping cost and alter pressure patterns. A stormwater intervention can shift burden elsewhere if the larger watershed is ignored.
 
-The renaissance skill here is not knowing every discipline equally.
+The renaissance skill is not knowing every discipline equally.
 
-It is knowing that the neighboring disciplines exist before optimizing the one in front of you.
+It is knowing the neighboring disciplines exist before optimizing the one in front of you.
 
-That is why plumbing, building science, controls, energy, and public health increasingly overlap. The better the components become, the more the important failures migrate to their interaction.
-
-People often describe AI as a technology that removes uncertainty through better prediction.
-
-Physical infrastructure offers a corrective.
+That is why plumbing, building science, controls, energy, and public health increasingly overlap. The better the components become, the more important failures migrate to their interaction.
 
 Prediction helps us choose where to look.
 
 Maintenance, inspection, and field work tell us what is actually there.
 
-A water system will never read the dashboard.
-
-It will continue responding to pressure, gravity, temperature, chemistry, material, time, and the human decisions embodied in its construction.
+A water system will never read the dashboard. It will continue responding to pressure, gravity, temperature, chemistry, material, time, and the human decisions embodied in its construction.
 
 The workers who can use abundant intelligence without forgetting those governing realities will not be protected from change.
 
