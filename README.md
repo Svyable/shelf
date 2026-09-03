@@ -6,7 +6,7 @@ Sven Hardy Benson’s Shelf is the public reading library for books by Sven Hard
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **32 author publication projects · 30 released · 2 public drafts/proofs · 8 Reader style specimens**
+> **33 author publication projects · 31 released · 2 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
@@ -45,6 +45,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 | [**Built to Be Alone**](books/the-loneliness-dividend/) | ✅ Released | 19 of 19 drafted | The working thesis is that the unpaid social infrastructure of the twentieth century — a stable workplace with the same coworkers for years, a weekly religious congregation, a union hall… | [Read →](https://svyable.github.io/shelf/reader/#/b/the-loneliness-dividend/) |
 | [**The Mortality Discount**](books/the-mortality-discount/) | ✅ Released | 22 of 22 drafted | Every institution built around a human lifespan — a pension fund, a life insurer, a retirement age, a Social Security trust fund, a mortgage term, a marriage, a career ladder — was priced… | [Read →](https://svyable.github.io/shelf/reader/#/b/the-mortality-discount/) |
 | [**The Never Ending Intelligence**](books/the-never-ending-intelligence/) | ✅ Released | 25 of 25 | The first generation of useful AI agents resembles a function call: give the system context, ask for work, receive an answer, end the process. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-never-ending-intelligence/) |
+| [**The Unbounding**](books/the-unbounding/) | ✅ Released | 19 of 19 drafted | Released Svyable book. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-unbounding/) |
 
 **Shelf is public. Status still matters.** A folder can be publicly visible in this repository without being marked as a released edition. The Reader library normally catalogs `Published` works; a direct route can still be used for an intentionally public proof or draft.
 
