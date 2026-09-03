@@ -13,6 +13,7 @@ import {
   previewCompletionState,
   samePreviewRoute,
   selectPreviewChapter,
+  shouldBridgeRouteTransition,
   shouldShowPreview,
 } from './direct-route-preview-model.js';
 
@@ -24,6 +25,38 @@ function canonicalReady() {
   const paged = !!document.querySelector('#pageLeft .page-inner')?.textContent?.trim();
   const continuous = !!document.querySelector('#scrollReader .scroll-document, #scrollReader [data-chapter]')?.textContent?.trim();
   return { paged, continuous, ready: paged || continuous };
+}
+
+function createPaginationCycleTracker() {
+  const wrapper = document.getElementById('pagesWrapper');
+  if (!wrapper) {
+    return Object.freeze({ ready: () => true, stop() {} });
+  }
+
+  let sawBusy = wrapper.getAttribute('aria-busy') === 'true';
+  let completed = false;
+  const observer = new MutationObserver((records) => {
+    for (const record of records) {
+      if (record.attributeName !== 'aria-busy') continue;
+      if (record.oldValue !== 'true') sawBusy = true;
+      if (record.oldValue === 'true') completed = true;
+    }
+    if (sawBusy && wrapper.getAttribute('aria-busy') !== 'true') completed = true;
+  });
+  observer.observe(wrapper, {
+    attributes: true,
+    attributeFilter: ['aria-busy'],
+    attributeOldValue: true,
+  });
+
+  return Object.freeze({
+    ready() {
+      return completed || (sawBusy && wrapper.getAttribute('aria-busy') !== 'true');
+    },
+    stop() {
+      observer.disconnect();
+    },
+  });
 }
 
 function ensureStyle() {
@@ -171,13 +204,17 @@ function renderPreview({ book, chapter, markdown, blocks, initialOffset }) {
   return { region, paper, status, renderMore, complete: () => complete, sourceLength: markdown.length };
 }
 
-function watchCanonicalHandoff(surface, initialRoute, chapter) {
+function watchCanonicalHandoff(surface, initialRoute, chapter, {
+  paginationTracker = null,
+  keepCoverStage = false,
+} = {}) {
   const { region, paper, status } = surface;
   let finishing = false;
   let retryTimer = 0;
 
   const cleanup = () => {
     clearTimeout(retryTimer);
+    paginationTracker?.stop();
     observer.disconnect();
     window.removeEventListener('hashchange', onRouteChange);
     window.removeEventListener('popstate', onRouteChange);
@@ -201,11 +238,13 @@ function watchCanonicalHandoff(surface, initialRoute, chapter) {
       remove();
       return true;
     }
-    const ready = canonicalReady();
+    const cycleReady = !paginationTracker || paginationTracker.ready();
+    const ready = cycleReady ? canonicalReady() : { paged: false, continuous: false };
     const state = previewCompletionState({
       stage: document.body?.dataset?.stage || '',
       hasPagedContent: ready.paged,
       hasContinuousContent: ready.continuous,
+      keepCoverStage,
     });
     if (state !== 'dismiss') return false;
     if (selectionInside(region)) {
@@ -241,7 +280,7 @@ function watchCanonicalHandoff(surface, initialRoute, chapter) {
     childList: true,
     characterData: true,
     attributes: true,
-    attributeFilter: ['data-stage'],
+    attributeFilter: ['data-stage', 'aria-busy'],
   });
   window.addEventListener('hashchange', onRouteChange);
   window.addEventListener('popstate', onRouteChange);
@@ -252,28 +291,48 @@ function watchCanonicalHandoff(surface, initialRoute, chapter) {
   finishIfReady();
 }
 
-export async function installDirectRoutePreview() {
+export async function installDirectRoutePreview({
+  allowCoverStage = false,
+  requirePaginationCycle = false,
+} = {}) {
   const route = parseRoute();
   const initial = normalizeReadRoute(route);
+  const stage = document.body?.dataset?.stage || 'library';
   const ready = canonicalReady();
+  const paginationTracker = requirePaginationCycle ? createPaginationCycleTracker() : null;
+  const canonicalIsCurrent = stage === 'read' ? ready.ready : false;
   if (!shouldShowPreview({
     route,
-    canonicalReady: ready.ready,
-    stage: document.body?.dataset?.stage || 'library',
-  }) || !initial) return { status: 'skipped' };
+    canonicalReady: canonicalIsCurrent,
+    stage,
+    allowCoverStage,
+  }) || !initial) {
+    paginationTracker?.stop();
+    return { status: 'skipped' };
+  }
 
   try {
     const hub = await fetchText(`books/${initial.slug}/README.md`);
     const book = parseBookReadme(hub, initial.slug);
     const chapter = selectPreviewChapter(book.contents, initial.chapter);
-    if (!chapter) return { status: 'empty' };
+    if (!chapter) {
+      paginationTracker?.stop();
+      return { status: 'empty' };
+    }
     const markdown = await fetchText(`books/${initial.slug}/${chapter.file}`);
     const current = normalizeReadRoute(parseRoute());
     const nowReady = canonicalReady();
-    if (!samePreviewRoute(initial, current) || nowReady.ready) return { status: 'superseded' };
+    const cycleReady = !paginationTracker || paginationTracker.ready();
+    if (!samePreviewRoute(initial, current) || (document.body?.dataset?.stage === 'read' && nowReady.ready && cycleReady)) {
+      paginationTracker?.stop();
+      return { status: 'superseded' };
+    }
 
     const blocks = blocksFromMarkdown(markdown, initial.slug);
-    if (!blocks.length) return { status: 'empty' };
+    if (!blocks.length) {
+      paginationTracker?.stop();
+      return { status: 'empty' };
+    }
     const surface = renderPreview({
       book,
       chapter,
@@ -281,7 +340,10 @@ export async function installDirectRoutePreview() {
       blocks,
       initialOffset: chapter.id === initial.chapter ? initial.offset : 0,
     });
-    watchCanonicalHandoff(surface, initial, chapter);
+    watchCanonicalHandoff(surface, initial, chapter, {
+      paginationTracker,
+      keepCoverStage: allowCoverStage,
+    });
     return {
       status: 'shown',
       chapter: chapter.id,
@@ -289,10 +351,27 @@ export async function installDirectRoutePreview() {
       sourceLength: markdown.length,
     };
   } catch (error) {
+    paginationTracker?.stop();
     console.warn('Direct-route reading bridge could not be shown', error);
     removePreview();
     return { status: 'failed' };
   }
 }
 
+let observedReadRoute = normalizeReadRoute(parseRoute());
+
+function requestTransitionPreview() {
+  const next = normalizeReadRoute(parseRoute());
+  const previous = observedReadRoute;
+  observedReadRoute = next;
+  const stage = document.body?.dataset?.stage || 'library';
+  if (!shouldBridgeRouteTransition({ previous, next, stage })) return;
+  installDirectRoutePreview({
+    allowCoverStage: stage === 'cover',
+    requirePaginationCycle: canonicalReady().ready,
+  });
+}
+
+window.addEventListener('hashchange', requestTransitionPreview);
+window.addEventListener('popstate', requestTransitionPreview);
 installDirectRoutePreview();
