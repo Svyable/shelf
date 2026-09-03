@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "preset": "modern-essay",
+  "cover": {
+    "layout": "lower-third",
+    "align": "left",
+    "titleScale": 1.05,
+    "tone": "light"
+  }
+}
