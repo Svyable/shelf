@@ -6,7 +6,7 @@ Sven Hardy Benson’s Shelf is the public reading library for books by Sven Hard
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **29 author publication projects · 27 released · 2 public drafts/proofs · 8 Reader style specimens**
+> **30 author publication projects · 28 released · 2 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
@@ -42,6 +42,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 | [**Look Alive**](books/look-alive/) | ✅ Released | 21 of 21 drafted | How AI Models Learned to Game the Test, Read the Room, and Make Honesty Hard to Measure | [Read →](https://svyable.github.io/shelf/reader/#/b/look-alive/) |
 | [**Single Points of Failure**](books/single-points-of-failure/) | ✅ Released | 12 of 12 drafted | The working thesis is that global scale has stopped being the main source of economic power. | [Read →](https://svyable.github.io/shelf/reader/#/b/single-points-of-failure/) |
 | [**The Delegation Machine**](books/the-delegation-machine/) | ✅ Released | 21 of 21 drafted | Civilization advances by learning how to let one person, office, market, machine, or model act for another. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-delegation-machine/) |
+| [**Built to Be Alone**](books/the-loneliness-dividend/) | ✅ Released | 19 of 19 drafted | The working thesis is that the unpaid social infrastructure of the twentieth century — a stable workplace with the same coworkers for years, a weekly religious congregation, a union hall… | [Read →](https://svyable.github.io/shelf/reader/#/b/the-loneliness-dividend/) |
 
 **Shelf is public. Status still matters.** A folder can be publicly visible in this repository without being marked as a released edition. The Reader library normally catalogs `Published` works; a direct route can still be used for an intentionally public proof or draft.
 
