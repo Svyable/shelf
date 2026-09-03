@@ -4,11 +4,11 @@
 
 | | |
 |---|---|
-| **Authors**   | @svyable |
+| **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 20 of 20 drafted |
 
-The Intelligence Dilemma asks what schools should preserve when capable AI can help students learn—or help them avoid learning while preserving the appearance that learning occurred.
+The Intelligence Dilemma asks how schools can use abundant machine intelligence to deepen learning without letting polished output become a substitute for student capability.
 
 ## Contents
 
