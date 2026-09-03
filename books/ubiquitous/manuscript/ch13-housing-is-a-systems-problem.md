@@ -319,3 +319,73 @@ Not the person who owns a single artifact.
 The person who improves the probability that a chain of specialists, institutions, money, and physical work produces an occupied building.
 
 When intelligence is ubiquitous, that probability is still scarce.
+
+The existing housing stock makes the systems problem even harder because most of the next decade will not be built on clean sheets of paper.
+
+Homes and apartment buildings arrive with histories: additions, repairs, deferred maintenance, obsolete equipment, undocumented substitutions, insurance claims, utility upgrades, tenant changes, and previous owners who made reasonable decisions under different prices and technologies. A retrofit begins with a building that already contains commitments.
+
+That means renovation is partly an exercise in priced discovery.
+
+A contractor can estimate the visible condition and still find rot behind the wall, an electrical service that changes the scope, a drain where the drawing says none exists, a structural repair hidden by finishes, or an equipment replacement that triggers a code requirement elsewhere. The durable skill is not pretending this uncertainty can be eliminated before work begins. It is structuring the job so uncertainty can be discovered without turning every discovery into a crisis.
+
+This changes what a good estimate looks like.
+
+An estimate is not merely a number produced by measuring quantities and multiplying rates. It is a map of known scope, assumptions, allowances, exclusions, decision points, and the order in which uncertainty will be converted into knowledge. AI can make the arithmetic and documentation dramatically faster. The contractor still has to know which unknowns deserve to be named before the customer signs.
+
+That is trust translated into project structure.
+
+Housing also has an operating phase that development culture routinely underweights.
+
+A building that closes on budget can be a bad building to own. Maintenance access may be poor. Equipment may be theoretically efficient and difficult to service. Controls may be sophisticated enough that nobody on site understands them. Water may migrate through an envelope detail that performed well in a model and badly through ten winters. A cheap component may create expensive labor every time it fails.
+
+Operations are where design assumptions receive a long audit.
+
+AI can make that audit more useful. Work orders, energy data, comfort complaints, leak histories, warranty calls, photographs, and replacement costs can be connected to the decisions that created them. A developer who learns from operating data can change the next project. A contractor who sees which details create callbacks can change the next bid. A manufacturer can see where an installation instruction fails in practice.
+
+This is the same institutional-memory loop that matters in factories and public infrastructure.
+
+It is unusually weak in housing because ownership, construction, design, and operations are often separate businesses with different incentives.
+
+The worker who crosses those boundaries can create value nobody receives from optimizing one handoff at a time.
+
+Insurance adds another system.
+
+As hazards, replacement costs, building age, regional risk, and underwriting practices change, insurability can become a project constraint alongside financing and code. A renovation that reduces energy use but ignores water, fire, wind, or electrical risk may improve one operating metric while leaving the owner exposed somewhere more expensive. A resilient detail can have value that is invisible in first cost and obvious after a loss.
+
+This makes housing judgment increasingly multi-period.
+
+What is cheap to build?
+
+What is cheap to own?
+
+What is cheap to insure?
+
+What is easy to repair?
+
+What will a future buyer understand?
+
+What condition can be verified rather than promised?
+
+The renaissance housing worker becomes fluent in the difference between those questions.
+
+That fluency is valuable because AI will make every one of the narrow answers easier to obtain. The model can compare products, calculate operating costs, summarize code, draft scopes, and retrieve claims about performance. The hard part is deciding which time horizon and which failure mode should govern the choice for this building and this owner.
+
+Existing buildings also create a labor market that is less glamorous and more durable than new development.
+
+Someone has to inspect, maintain, diagnose, retrofit, commission, repair, and eventually replace the systems already in use. Electrification can add heat pumps, panels, controls, storage, and charging to buildings that were not designed for them. Water and envelope upgrades interact with those changes. Aging occupants may require accessibility modifications. New uses can force old buildings to satisfy different operational expectations.
+
+This is not a single trade.
+
+It is a field of adjacent work where physical knowledge, customer trust, code literacy, finance, and intelligent administration reinforce one another.
+
+The important distinction is between being hired to perform a motion and being trusted to improve a building over time.
+
+The first can be standardized aggressively.
+
+The second requires memory of the asset, prioritization under a budget, and judgment about which intervention should happen now and which should wait.
+
+Housing is therefore not only a systems problem before construction.
+
+It is a systems problem for as long as the building exists.
+
+That is a long time to create value.

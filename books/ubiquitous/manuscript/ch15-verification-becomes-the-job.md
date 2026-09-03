@@ -371,3 +371,93 @@ Blind automation wastes consequence.
 Blanket review wastes intelligence.
 
 The skilled verifier designs the middle.
+
+The mature version of this work resembles an assurance case more than a checklist.
+
+A checklist asks whether required steps occurred. An assurance case asks why the organization should believe the system is safe enough, correct enough, or controlled enough for the authority it has been given.
+
+That difference matters because intelligent systems change.
+
+A model version changes. A connector gains a new permission. The distribution of customers shifts. A previously rare input becomes common. A vendor modifies an API. A policy team changes a rule. A new employee discovers that asking the agent in a slightly different way bypasses the control everyone thought was binding.
+
+The boxes can all remain checked while the reason for confidence has disappeared.
+
+A strong verifier keeps the argument current.
+
+What claim are we making about this system?
+
+What evidence supports the claim?
+
+What assumptions make the evidence relevant?
+
+What condition would invalidate the assumption?
+
+Who is watching for that condition?
+
+What happens when it appears?
+
+This is not paperwork for its own sake. It is a way of making confidence inspectable.
+
+Provenance becomes central here.
+
+When an agent produces an answer from a mixture of retrieved documents, remembered context, tool output, and model inference, the organization needs to know which part came from where if the answer later matters. A citation is helpful. A full evidence path is better.
+
+Which source was authoritative at the time?
+
+Which version did the system use?
+
+What transformation occurred before the value reached the decision?
+
+Which step was probabilistic?
+
+Which human approved the exception?
+
+Which action was ultimately executed?
+
+Without this chain, an investigation after failure becomes archaeology.
+
+With it, the incident can become learning.
+
+This makes observability a professional skill outside software.
+
+An accountant working with autonomous workflows may need to understand logs and identity boundaries. A facilities manager may need to know which sensor value caused an automated control change. A lawyer may need to reconstruct which authority an agent relied on before a filing. A construction manager may need to know which drawing revision informed a generated instruction in the field.
+
+The worker does not need to become a distributed-systems engineer.
+
+They need enough technical literacy to ask whether the evidence trail is capable of answering the questions their domain will ask after something goes wrong.
+
+Stop conditions are part of the same architecture.
+
+Automation discussions focus naturally on when the machine should proceed. Good control design also defines when proceeding is evidence of failure.
+
+If two authoritative records disagree, stop.
+
+If an action is outside the range used in evaluation, stop or escalate.
+
+If required evidence is missing, do not replace it with a plausible inference merely because the workflow has a deadline.
+
+If downstream feedback begins moving outside the expected range, reduce authority before the postmortem proves why.
+
+The ability to stop is a capability.
+
+Organizations often underinvest in it because stopping produces visible delay while continuing produces visible throughput.
+
+The paradox is that reliable automation depends on credible interruption.
+
+A factory can run faster because an interlock will stop a dangerous condition. A payment system can move money automatically because some patterns freeze the transaction. An aircraft can rely on automation because pilots retain procedures for modes where the automation is no longer trustworthy.
+
+AI systems need the same respect for boundaries.
+
+That creates another durable role for experts: owning the trip points.
+
+Not manually approving every normal case.
+
+Defining the abnormal case clearly enough that authority contracts before consequence compounds.
+
+The best verifier is therefore not the final person standing between AI and work.
+
+They are the person who makes routine success cheap, abnormal behavior visible, evidence durable, and stopping possible.
+
+That is not a shrinking job.
+
+It is the control layer of ubiquitous intelligence.

@@ -341,3 +341,79 @@ Stewardship means designing with the knowledge that the people who inherit the s
 Ubiquitous intelligence can help those future people recover the reasoning.
 
 It cannot make us care whether there is reasoning worth recovering.
+
+Public engineering also has to survive the moment when normal operations stop.
+
+A water main breaks under a road. A bridge inspection finds something that cannot wait for the next capital cycle. A storm exceeds the system everyone planned around. A control system fails during a heat wave. An emergency detour pushes traffic into streets never intended to carry it. In those moments, the organization discovers whether its competence lives in documents or in people who can reason from the system.
+
+Emergency response is not evidence against automation.
+
+It is evidence about where automation needs an owner.
+
+An intelligent system can retrieve isolation plans, map customers, predict hydraulic effects, identify available equipment, notify affected institutions, draft traffic-control messages, and search decades of work history faster than a human team. That can be enormously valuable when minutes matter.
+
+The hard question is what to do when the records conflict with the field.
+
+Which valve actually closes?
+
+Can the bridge carry emergency loading while a lane is restricted?
+
+Which facility cannot tolerate the interruption the map classifies as ordinary?
+
+Which temporary repair creates a risk that will be forgotten once service is restored?
+
+The worker who can move from data to field evidence and back becomes the stabilizing layer.
+
+This gives emergency work an unexpected role in career development. Routine operations teach procedures. Incidents teach the topology of the system.
+
+People learn which assets are truly critical, which records are trustworthy, which vendors respond, which teams can improvise safely, which communications prevent panic, and which shortcuts create tomorrow’s failure. That knowledge is difficult to acquire from a normal dashboard because the dashboard is designed around the normal state.
+
+A public organization should therefore treat incident learning as part of its engineering system.
+
+Not every incident requires a ceremonial postmortem. The useful question is whether the event exposed a gap in the model the organization uses to operate the asset.
+
+Was an isolation boundary wrong?
+
+Was a dependency missing?
+
+Did a specification make maintenance harder than expected?
+
+Did a procurement choice concentrate risk in one supplier?
+
+Did an emergency procedure assume staff knowledge that is retiring with one person?
+
+AI can help connect these lessons to the places where they should change future work. A maintenance event can update a standard detail. A construction problem can change a procurement specification. A public complaint can become a design criterion. A near miss can create a new inspection point.
+
+This is where standards become living memory rather than static rules.
+
+Engineers sometimes experience standards as constraints imposed from elsewhere. In healthy systems, many standards are compressed histories of failure. A required clearance, test, redundancy, material, or review step may embody an event the current worker never saw.
+
+AI will make it easy to retrieve the rule.
+
+The durable expert wants to retrieve the reason too.
+
+Knowing the reason allows judgment when a new condition does not fit the old form exactly. It also allows obsolete requirements to be challenged intelligently rather than removed because they look inefficient in isolation.
+
+The same principle applies to staffing.
+
+Public agencies can automate enough analytical and administrative work that headcount becomes an attractive target. Some reduction may be sensible. But an owner that cuts too deeply can lose the capacity to recognize when a consultant, contractor, model, or vendor is wrong.
+
+That capacity is not measured by the number of drawings produced internally.
+
+It is measured by whether the institution can define the problem, interrogate an answer, preserve operational knowledge, and take control when the normal chain breaks.
+
+This is why public technical capacity should be thought of as option value.
+
+Most days, the organization may not need every internal skill at full intensity. On the bad day, the ability to understand the asset without waiting for an external party can be worth far more than the annual salary that looked redundant on a spreadsheet.
+
+Resilience often looks inefficient before it is used.
+
+The public engineer of the AI era therefore has a dual task.
+
+Use intelligence aggressively enough that scarce public money is not spent on clerical work machines can do.
+
+Retain enough human and institutional competence that the public still owns the consequence.
+
+That balance will not be found by protecting old job descriptions.
+
+It will be found by asking which capabilities the owner cannot responsibly rent only when something goes wrong.
