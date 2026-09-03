@@ -15,6 +15,7 @@ body:
       label: Book
       description: Which book is this about?
       options:
+        - adjacency
         - agentile
         - allocating-intelligence
         - austerity-measures
