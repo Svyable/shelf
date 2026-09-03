@@ -49,6 +49,7 @@ body:
         - the-world-beneath-the-world
         - triumph-of-the-commons
         - ubiquitous
+        - useful-noise
         - wild-speculation
     validations:
       required: true
