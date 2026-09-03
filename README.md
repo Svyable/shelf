@@ -6,7 +6,7 @@ Svyable Shelf is the public reading library for books by Sven Hardy Benson and t
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **14 author publication projects · 11 released · 3 public drafts/proofs · 8 Reader style specimens**
+> **14 author publication projects · 12 released · 2 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
@@ -21,7 +21,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 | [**Allocating Intelligence**](books/allocating-intelligence/) | ✅ Released | 20 / 20 | How institutions allocate abundant machine cognition when attention, verification, authority, memory, latency, and trust remain scarce. | [Read →](https://svyable.github.io/shelf/reader/#/b/allocating-intelligence/) |
 | [**Austerity Measures**](books/austerity-measures/) | ✅ Released | 12 / 12 | Artificial intelligence can make public administration dramatically cheaper, but austerity can turn those gains into institutional hollowing by mistaking lower headcount for state capacity. | [Read →](https://svyable.github.io/shelf/reader/#/b/austerity-measures/) |
 | [**Intelligence State**](books/intelligence-state/) | ✅ Released | 17 / 17 + prologue + conclusion | *Power, Prosperity, and the AI Future of the Americas* — how compute, energy, data, talent, and trust are becoming a new architecture of sovereignty across the hemisphere. | [Read →](https://svyable.github.io/shelf/reader/#/b/intelligence-state/) |
-| [**Public Pressure**](books/public-pressure/) | 🟡 Public proof | 4 / 23 in proof · 23 / 23 complete on Desk | A complete nonfiction draft about AI, institutional power, public backlash, and the mechanics that make automated authority contestable; this proof exposes the opening argument and source apparatus while final release review continues. | [Read proof →](https://svyable.github.io/shelf/reader/#/b/public-pressure/) |
+| [**Public Pressure**](books/public-pressure/) | ✅ Released | 23 / 23 | AI changes the pressure gradient around institutional power: automated action, synthetic persuasion, impersonation, and organizing get cheaper while consequential decisions can become harder to inspect, contest, and attach to a responsible person. | [Read →](https://svyable.github.io/shelf/reader/#/b/public-pressure/) |
 | [**Leveraging Luck**](books/leveraging-luck/) | ✅ Released | 10 / 10 | *An Optimistic Guide to Life* — a practical book about luck, mindset, leverage, action, and making more of favorable randomness. | [Read →](https://svyable.github.io/shelf/reader/#/b/leveraging-luck/) |
 | [**Silent Cartel**](books/silent-cartel/) | ✅ Released | 21 / 21 | How pricing algorithms, shared vendors, data, and automated behavior complicate the old assumption that collusion must begin with an explicit conversation. | [Read →](https://svyable.github.io/shelf/reader/#/b/silent-cartel/) |
 | [**The Long-Running Mind**](books/the-long-running-mind/) | ✅ Released | 7 / 7 | How intelligence changes when a model stops answering isolated prompts and starts continuing across time, memory, software, collaboration, and accountable invention. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-long-running-mind/) |
