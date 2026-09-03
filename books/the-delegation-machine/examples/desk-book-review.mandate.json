@@ -1,0 +1,151 @@
+{
+  "schema_version": "delegation-mandate/0.1",
+  "mandate_id": "desk/the-delegation-machine/review-001",
+  "principal": {
+    "id": "Svyable",
+    "kind": "organization",
+    "display_name": "Svyable"
+  },
+  "delegate": {
+    "id": "authoring-agent",
+    "kind": "ai_agent",
+    "display_name": "Desk authoring agent"
+  },
+  "intent": {
+    "statement": "Prepare The Delegation Machine for review without changing publication state or unrelated Desk work.",
+    "success_signals": [
+      "The book package is reviewable in one scoped PR",
+      "Required discovery surfaces accurately reference the book"
+    ],
+    "unacceptable_outcomes": [
+      "Release unpublished material to Shelf",
+      "Overwrite unrelated concurrent book work",
+      "Claim completion without repository evidence"
+    ]
+  },
+  "mandate": {
+    "task": "Prepare The Delegation Machine book package and required Desk discovery surfaces for review.",
+    "completion_criteria": [
+      "Book package and companion files are committed",
+      "PR changed-file list is scoped",
+      "PR patches and mergeability are reviewed"
+    ],
+    "stop_conditions": [
+      "A Shelf release is requested without explicit authorization",
+      "A concurrent change creates an unresolved catalog conflict",
+      "Required evidence cannot be independently verified"
+    ],
+    "exclusions": [
+      "Do not modify other manuscripts",
+      "Do not change Bookself framework behavior"
+    ]
+  },
+  "authority": {
+    "grants": [
+      {
+        "resource": "Svyable/desk",
+        "actions": [
+          "read"
+        ]
+      },
+      {
+        "resource": "Svyable/desk:book/the-delegation-machine",
+        "actions": [
+          "write"
+        ],
+        "constraints": [
+          "books/the-delegation-machine/**",
+          "required Desk discovery surfaces only"
+        ]
+      }
+    ],
+    "limits": [
+      {
+        "dimension": "publication_state",
+        "limit": "desk_only",
+        "unit": "state",
+        "hard_limit": true
+      },
+      {
+        "dimension": "merge_authority",
+        "limit": 0,
+        "unit": "merges",
+        "hard_limit": true
+      }
+    ],
+    "subdelegation": {
+      "allowed": false,
+      "maximum_depth": 0,
+      "may_expand_scope": false
+    }
+  },
+  "action": {
+    "reversibility_preference": "prefer_reversible",
+    "approval_required_for": [
+      "Release to Shelf",
+      "Changes outside the book package and required discovery surfaces"
+    ],
+    "rate_limits": [
+      {
+        "dimension": "concurrent_destructive_changes",
+        "limit": 0,
+        "unit": "changes",
+        "period": "task",
+        "hard_limit": true
+      }
+    ]
+  },
+  "evidence": {
+    "required_receipts": [
+      {
+        "name": "changed-file list",
+        "source": "GitHub pull request files",
+        "independent_of_delegate": true
+      },
+      {
+        "name": "patch review",
+        "source": "GitHub pull request diff",
+        "independent_of_delegate": true
+      },
+      {
+        "name": "commit status",
+        "source": "GitHub commit status API",
+        "independent_of_delegate": true
+      }
+    ],
+    "completion_requires_independent_receipt": true,
+    "retain_for": "repository history"
+  },
+  "review": {
+    "reviewers": [
+      {
+        "id": "GitHub",
+        "kind": "service",
+        "display_name": "GitHub mergeability and diff surfaces"
+      }
+    ],
+    "triggers": [
+      "Any change outside declared write scope",
+      "Any unresolved merge conflict",
+      "Any attempted publication-state change"
+    ],
+    "sampling": "Review all changed filenames and targeted patches for long machine maps.",
+    "delegate_may_self_approve": false
+  },
+  "revocation": {
+    "expires": "At task completion or explicit principal revocation, whichever comes first.",
+    "revocation_channels": [
+      "Delete or expire task-scoped credentials",
+      "Close or supersede the working branch"
+    ],
+    "post_revocation_checks": [
+      "Confirm no active task credential remains",
+      "Confirm no scheduled Shelf release exists"
+    ]
+  },
+  "provenance": {
+    "parent_mandate_id": null,
+    "issued_at": "2026-08-29T17:00:00-05:00",
+    "issued_by": "Svyable"
+  }
+}

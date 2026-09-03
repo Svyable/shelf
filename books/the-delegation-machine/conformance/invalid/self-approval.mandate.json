@@ -1,0 +1,43 @@
+{
+  "schema_version": "delegation-mandate/0.1",
+  "mandate_id": "invalid/self-approval",
+  "principal": {"id": "principal", "kind": "human"},
+  "delegate": {"id": "delegate", "kind": "ai_agent"},
+  "intent": {
+    "statement": "Do a bounded task.",
+    "success_signals": ["Task completed within scope."],
+    "unacceptable_outcomes": ["Authority expands without a new grant."]
+  },
+  "mandate": {
+    "task": "Perform one bounded example task.",
+    "completion_criteria": ["Expected artifact exists."],
+    "stop_conditions": ["Authority boundary reached."],
+    "exclusions": []
+  },
+  "authority": {
+    "grants": [
+      {"resource": "example/resource", "actions": ["read"]}
+    ],
+    "limits": [
+      {"dimension": "writes", "limit": 0, "unit": "actions", "hard_limit": true}
+    ],
+    "subdelegation": {"allowed": false, "maximum_depth": 0, "may_expand_scope": false}
+  },
+  "action": {"reversibility_preference": "prefer_reversible", "approval_required_for": [], "rate_limits": []},
+  "evidence": {
+    "required_receipts": [
+      {"name": "result", "source": "external system", "independent_of_delegate": true}
+    ],
+    "completion_requires_independent_receipt": true
+  },
+  "review": {
+    "reviewers": [{"id": "reviewer", "kind": "human"}],
+    "triggers": ["Any authority exception."],
+    "delegate_may_self_approve": true
+  },
+  "revocation": {
+    "expires": "At task completion.",
+    "revocation_channels": ["End task-scoped credential."],
+    "post_revocation_checks": ["Confirm credential is inactive."]
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "schema_version": "proof-carrying-action/0.1",
+  "action_id": "github/Svyable/desk/pr-103",
+  "mandate_id": "implicit/conversation/delegation-machine-schema-pr-103",
+  "mandate_ref": null,
+  "principal": {
+    "id": "Svyable",
+    "kind": "organization",
+    "display_name": "Svyable"
+  },
+  "delegate": {
+    "id": "desk-authoring-agent",
+    "kind": "ai_agent",
+    "display_name": "Desk authoring agent"
+  },
+  "status": "completed",
+  "action": {
+    "summary": "Added the Delegation Mandate JSON Schema, a validated Desk example, and book-hub links, then squash-merged the scoped PR.",
+    "state_changes": [
+      {
+        "resource": "books/the-delegation-machine/delegation-mandate.schema.json",
+        "operation": "created",
+        "reference": "a9ed89ed0ea196544da36a0e23de08a6f85f5339",
+        "reversible": true
+      },
+      {
+        "resource": "books/the-delegation-machine/examples/desk-book-review.mandate.json",
+        "operation": "created",
+        "reference": "a9ed89ed0ea196544da36a0e23de08a6f85f5339",
+        "reversible": true
+      },
+      {
+        "resource": "books/the-delegation-machine/README.md",
+        "operation": "modified",
+        "reference": "a9ed89ed0ea196544da36a0e23de08a6f85f5339",
+        "reversible": true
+      }
+    ]
+  },
+  "authority_used": {
+    "grants": [
+      {
+        "resource": "Svyable/desk:books/the-delegation-machine/**",
+        "actions": [
+          "create",
+          "modify"
+        ],
+        "basis": "Human instruction to keep cooking The Delegation Machine, constrained by Desk book-scoped repository rules."
+      },
+      {
+        "resource": "Svyable/desk:pull/103",
+        "actions": [
+          "open",
+          "review",
+          "squash_merge"
+        ],
+        "basis": "Human instruction plus repository workflow allowed a clean reviewed book-scoped PR to be merged."
+      }
+    ],
+    "exceptions": []
+  },
+  "evidence": {
+    "receipts": [
+      {
+        "name": "PR metadata and changed-file scope",
+        "source": "GitHub pull request",
+        "reference": "https://github.com/Svyable/desk/pull/103",
+        "independent_of_delegate": true,
+        "observed_at": "2026-08-29T17:55:18Z"
+      },
+      {
+        "name": "Merge commit",
+        "source": "GitHub merge result",
+        "reference": "a9ed89ed0ea196544da36a0e23de08a6f85f5339",
+        "independent_of_delegate": true,
+        "observed_at": "2026-08-29T17:55:18Z"
+      },
+      {
+        "name": "Schema validation",
+        "source": "Local jsonschema Draft 2020-12 validator",
+        "reference": "delegation-mandate/0.1 example validation passed",
+        "independent_of_delegate": false,
+        "observed_at": "2026-08-29T17:54:30Z"
+      }
+    ],
+    "completion_supported_by_independent_evidence": true
+  },
+  "uncertainty": {
+    "known_unknowns": [
+      "No machine-readable Delegation Mandate was issued before PR #103; the mandate_id is a retrospective identifier for the human instruction and repository-policy context.",
+      "Public GitHub Pages refresh was not independently verified as part of PR #103."
+    ],
+    "unverified_claims": []
+  },
+  "reversal": {
+    "reversible": true,
+    "status": "available",
+    "method": "Revert merge commit a9ed89ed0ea196544da36a0e23de08a6f85f5339.",
+    "deadline": null
+  },
+  "next_obligations": [
+    {
+      "description": "Version any future breaking schema change instead of silently redefining delegation-mandate/0.1.",
+      "owner": "future maintainer",
+      "due": null
+    },
+    {
+      "description": "Continue describing the schema as an experimental Bookself synthesis unless it is separately standardized.",
+      "owner": "future maintainer",
+      "due": null
+    }
+  ],
+  "timing": {
+    "started_at": "2026-08-29T17:54:45Z",
+    "completed_at": "2026-08-29T17:55:18Z",
+    "recorded_at": "2026-08-29T17:56:00Z"
+  },
+  "review_state": {
+    "required": true,
+    "triggers_hit": [],
+    "status": "accepted"
+  },
+  "provenance": {
+    "previous_receipt_id": null,
+    "issued_by": "Svyable via human instruction"
+  }
+}

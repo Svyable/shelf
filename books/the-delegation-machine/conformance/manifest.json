@@ -1,0 +1,48 @@
+{
+  "suite_version": "delegation-protocol-conformance/0.1",
+  "description": "Small positive/negative corpus for the experimental Delegation Mandate and Proof-Carrying Action schemas.",
+  "cases": [
+    {
+      "path": "../examples/desk-book-review.mandate.json",
+      "schema": "../delegation-mandate.schema.json",
+      "expect_valid": true,
+      "reason": "Prospective mandate with bounded authority and explicit non-self-approval."
+    },
+    {
+      "path": "../examples/pr-103.schema-companion.receipt.json",
+      "schema": "../proof-carrying-action.schema.json",
+      "expect_valid": true,
+      "reason": "Completed real Desk receipt with independent GitHub evidence."
+    },
+    {
+      "path": "valid/blocked-authority-boundary.receipt.json",
+      "schema": "../proof-carrying-action.schema.json",
+      "expect_valid": true,
+      "reason": "Blocked is a first-class state and does not need to pretend completion."
+    },
+    {
+      "path": "invalid/completed-self-report-only.receipt.json",
+      "schema": "../proof-carrying-action.schema.json",
+      "expect_valid": false,
+      "reason": "Completed action lacks independent evidence."
+    },
+    {
+      "path": "invalid/rollback-not-executed.receipt.json",
+      "schema": "../proof-carrying-action.schema.json",
+      "expect_valid": false,
+      "reason": "Rolled-back status requires reversal.status=executed."
+    },
+    {
+      "path": "invalid/self-approval.mandate.json",
+      "schema": "../delegation-mandate.schema.json",
+      "expect_valid": false,
+      "reason": "Delegate self-approval is forbidden by the mandate schema."
+    },
+    {
+      "path": "invalid/subdelegation-expands-scope.mandate.json",
+      "schema": "../delegation-mandate.schema.json",
+      "expect_valid": false,
+      "reason": "Subdelegation may not expand authority scope."
+    }
+  ]
+}

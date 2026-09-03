@@ -1,0 +1,33 @@
+{
+  "schema_version": "proof-carrying-action/0.1",
+  "action_id": "invalid/rollback-not-executed",
+  "mandate_id": "example/mandate/rollback",
+  "mandate_ref": null,
+  "principal": {"id": "principal", "kind": "human"},
+  "delegate": {"id": "delegate", "kind": "ai_agent"},
+  "status": "rolled_back",
+  "action": {
+    "summary": "Claims rollback even though the reversal is only available, not executed.",
+    "state_changes": [
+      {"resource": "example/resource", "operation": "modified", "reference": "change-1", "reversible": true}
+    ]
+  },
+  "authority_used": {
+    "grants": [
+      {"resource": "example/resource", "actions": ["modify"], "basis": "Example authority grant."}
+    ],
+    "exceptions": []
+  },
+  "evidence": {
+    "receipts": [
+      {"name": "Original change", "source": "external system", "reference": "change-1", "independent_of_delegate": true}
+    ],
+    "completion_supported_by_independent_evidence": false
+  },
+  "uncertainty": {"known_unknowns": [], "unverified_claims": []},
+  "reversal": {"reversible": true, "status": "available", "method": "Revert change-1.", "deadline": null},
+  "next_obligations": [],
+  "timing": {"started_at": null, "completed_at": null, "recorded_at": "2026-08-29T18:10:00Z"},
+  "review_state": {"required": true, "triggers_hit": ["rollback claimed"], "status": "pending"},
+  "provenance": {"previous_receipt_id": null, "issued_by": "conformance fixture"}
+}

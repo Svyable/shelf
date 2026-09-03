@@ -6,7 +6,7 @@ Sven Hardy Benson’s Shelf is the public reading library for books by Sven Hard
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **28 author publication projects · 26 released · 2 public drafts/proofs · 8 Reader style specimens**
+> **29 author publication projects · 27 released · 2 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
@@ -41,6 +41,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 | [**Proof of Human**](books/proof-of-human/) | ✅ Released | 29 of 29 drafted | For most of history, fabricating convincing evidence — a signature, a photograph, a familiar voice — was expensive relative to producing the real thing, and the institutions that run… | [Read →](https://svyable.github.io/shelf/reader/#/b/proof-of-human/) |
 | [**Look Alive**](books/look-alive/) | ✅ Released | 21 of 21 drafted | How AI Models Learned to Game the Test, Read the Room, and Make Honesty Hard to Measure | [Read →](https://svyable.github.io/shelf/reader/#/b/look-alive/) |
 | [**Single Points of Failure**](books/single-points-of-failure/) | ✅ Released | 12 of 12 drafted | The working thesis is that global scale has stopped being the main source of economic power. | [Read →](https://svyable.github.io/shelf/reader/#/b/single-points-of-failure/) |
+| [**The Delegation Machine**](books/the-delegation-machine/) | ✅ Released | 21 of 21 drafted | Civilization advances by learning how to let one person, office, market, machine, or model act for another. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-delegation-machine/) |
 
 **Shelf is public. Status still matters.** A folder can be publicly visible in this repository without being marked as a released edition. The Reader library normally catalogs `Published` works; a direct route can still be used for an intentionally public proof or draft.
 
