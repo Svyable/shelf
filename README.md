@@ -6,7 +6,7 @@ Svyable Shelf is the public reading library for books by Sven Hardy Benson and t
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **15 author publication projects · 13 released · 2 public drafts/proofs · 8 Reader style specimens**
+> **16 author publication projects · 14 released · 2 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
@@ -28,6 +28,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 | [**The Exponentiality**](books/the-exponentiality/) | 🟡 Public draft | Prologue drafted | A public in-progress Bookself volume. It is present on Shelf but is still marked `Drafting`, so it is not treated as a released catalog entry by the Reader. | [Read draft →](https://svyable.github.io/shelf/reader/#/b/the-exponentiality/) |
 | [**Restructuring America**](books/restructuring-america/) | ✅ Released | 20 of 20 drafted | Artificial intelligence can make cognition cheaper without making land, electricity, housing, water, transmission, permitting, skilled field work, or institutional coordination cheap. | [Read →](https://svyable.github.io/shelf/reader/#/b/restructuring-america/) |
 | [**Wild Speculation**](books/wild-speculation/) | ✅ Released | 20 / 20 | Geopolitical danger can be real without making a geopolitical script investable; the durable hedge is resilience, diversification, liquidity, and room to be wrong. | [Read →](https://svyable.github.io/shelf/reader/#/b/wild-speculation/) |
+| [**The Intelligence Dilemma**](books/the-intelligence-dilemma/) | ✅ Released | 20 of 20 drafted | The Intelligence Dilemma asks what schools should preserve when capable AI can help students learn—or help them avoid learning while preserving the appearance that learning occurred. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-intelligence-dilemma/) |
 
 **Shelf is public. Status still matters.** A folder can be publicly visible in this repository without being marked as a released edition. The Reader library normally catalogs `Published` works; a direct route can still be used for an intentionally public proof or draft.
 
