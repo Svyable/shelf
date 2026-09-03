@@ -257,3 +257,63 @@ The useful person can hold both facts at once.
 The frontier is moving.
 
 It is also uneven enough that moving fast requires better brakes.
+
+But brakes are not a layer added after the engine is built.
+
+They are part of the operating design.
+
+That distinction matters as agents become long-running. A short model answer creates one opportunity for error. An agent that reads a mailbox, updates a spreadsheet, opens a ticket, calls another tool, and then acts on the result creates a chain. Each step can be individually plausible while the sequence drifts away from the original objective.
+
+The risk is not only hallucination. It is compounding state.
+
+A wrong assumption can be written into a file that becomes the next step's source of truth. A stale customer status can trigger the wrong workflow. A permission granted for convenience can turn a harmless drafting error into an external action. A model can recover from a mistake in its own reasoning and still leave behind an irreversible side effect.
+
+This changes what competent supervision looks like.
+
+The old picture of human review imagines a person reading the final answer. That works poorly for systems whose important mistakes occur in the path. The reviewer needs to know what the agent saw, which tools it used, what it changed, where confidence fell, and which actions could not be undone cheaply.
+
+In other words, verification becomes temporal.
+
+You are not only asking whether the output is correct. You are asking whether the process remained inside a safe envelope while the world changed around it.
+
+That suggests a practical design principle for almost every agentic workflow: separate observation, proposal, commitment, and confirmation.
+
+Let the system observe broadly. Let it propose cheaply. Make commitment narrow where consequence is high. Then confirm the state that actually resulted.
+
+A purchasing agent can search vendors and prepare an order before money moves. A maintenance agent can identify likely failure modes before a machine is shut down. A customer-service agent can draft a credit before the ledger is changed. An engineering assistant can prepare a calculation before the design is released.
+
+The point is not bureaucracy.
+
+The point is to place friction at the transition from reversible intelligence to irreversible consequence.
+
+Good operators learn to see those transitions.
+
+They know that a draft becomes a record when it is filed. A recommendation becomes a commitment when somebody spends capital. A diagnostic hypothesis becomes an intervention when a breaker opens or a valve closes. An internal classification becomes a customer event when it changes price, access, or service.
+
+AI makes the proposal side of those transitions astonishingly cheap.
+
+That makes boundary design more valuable.
+
+The organizations that learn this will become faster without becoming casual. They will automate the broad interior of a task and preserve deliberate gates around the few moments where mistakes become expensive. They will use logs not as compliance theater but as material for improving the system. They will test rollback before they need it. They will keep a path for a human to say, in effect, the map has stopped matching the territory.
+
+The people who can design those boundaries will look less like prompt engineers and more like operators.
+
+They may come from software, quality, safety, accounting, medicine, aviation, construction, security, manufacturing, or public administration. What they share is a habit of asking what happens after the action.
+
+That habit is durable because frontier expansion increases its value.
+
+When models are weak, humans perform most of the task and naturally encounter its consequences. When models become strong, humans can become separated from the work precisely when the work gets faster. The danger is not that nobody is intelligent enough to notice the failure. It is that the system no longer routes the right evidence to anyone who feels responsible for it.
+
+The frontier is therefore organizational as much as technical.
+
+A company can own the best model available and still build a brittle operation. Another can use an ordinary model inside excellent tests, permissions, records, and escalation and produce more trustworthy outcomes.
+
+The second organization has turned uncertainty into architecture.
+
+That is what frontier literacy finally means.
+
+Not memorizing the tasks a model can do.
+
+Building work so that capability can expand without requiring blind faith.
+
+For a worker, this is also a way to avoid becoming the ceremonial approver at the end of a machine-run process. Stay close to the tests, the exceptions, the permissions, and the post-action evidence. Those are the places where the workflow still reveals what it does not know. If your role is reduced to clicking approve on an output you did not help evaluate, your responsibility can remain while your understanding disappears. Durable authority requires keeping the learning loop attached to the person who owns the consequence.
