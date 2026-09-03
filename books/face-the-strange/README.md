@@ -45,3 +45,4 @@
 - [Research brief](research/README.md)
 - [Source ledger](research/source-ledger.csv)
 - [Falsification notes](research/falsification-notes.md)
+- [Release review — 2026-09-03](research/release-review.md)
