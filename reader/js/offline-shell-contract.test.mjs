@@ -88,8 +88,8 @@ test('removed offline readiness surface is absent from the install shell', () =>
   }
 });
 
-test('offline shell generation advances for the removed readiness surface', () => {
-  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v94['"]/);
+test('offline shell generation advances for native sharing', () => {
+  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v95['"]/);
 });
 
 console.log('offline shell contract tests cover dynamic enhancement parity');
