@@ -3,7 +3,7 @@ importScripts('./js/offline-fetch-policy.js');
 importScripts('./js/offline-storage-budget.js');
 importScripts('./js/offline-shell-install.js');
 
-const CACHE = 'obb-shell-v94';
+const CACHE = 'obb-shell-v95';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -66,6 +66,7 @@ const SHELL = [
   './js/dialog-stack.js',
   './js/pwa-update-model.js',
   './js/pwa-update.js',
+  './js/native-share.js',
   './js/search-navigation.js',
   './js/search-landing.js',
   './js/cover-presentation.js',
@@ -150,6 +151,7 @@ const OPTIONAL_SHELL = new Set([
   './js/content-scroll-regions.js',
   './js/pwa-update-model.js',
   './js/pwa-update.js',
+  './js/native-share.js',
   './js/search-navigation.js',
   './js/search-landing.js',
   './js/reading-trail-model.js',
