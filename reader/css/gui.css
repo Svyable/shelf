@@ -518,3 +518,28 @@ body.gui-overlay-open .binder-view {
   .header-btn,
   .nav-btn { transition: none !important; }
 }
+
+/* Shelf volumes are shown front-on: binding at left, fore-edge pages at right. */
+.volume-spine {
+  order: 1;
+}
+
+.volume-cover {
+  order: 2;
+  position: relative;
+  z-index: 1;
+}
+
+.volume-block {
+  order: 3;
+  align-self: stretch;
+  margin-block: .18rem;
+  margin-left: -1px;
+  border-radius: 0 2px 2px 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      #e8d5a4 0 1px,
+      #c4a265 1px 2px
+    );
+}
