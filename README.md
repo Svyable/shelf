@@ -6,13 +6,14 @@ Svyable Shelf is the public reading library for books by Sven Hardy Benson and t
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **24 author publication projects · 22 released · 2 public drafts/proofs · 8 Reader style specimens**
+> **25 author publication projects · 23 released · 2 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
 
 | Book | State | Chapters | What it is | Read |
 |---|---|---:|---|---|
+| [**Face The Strange**](books/face-the-strange/) | ✅ Released | 25 of 25 drafted | First contact with advanced machine intelligence as a local, uneven human transition: capability, delegation, trust, embodiment, institutions, and the discipline of meeting strange minds without pretending they are either merely software or automatically persons. | [Read →](https://svyable.github.io/shelf/reader/#/b/face-the-strange/) |
 | [**Triumph of the Commons**](books/triumph-of-the-commons/) | ✅ Released | 20 / 20 | AI can turn falling cognitive costs into shared public capability—if institutions solve governance, access, maintenance, energy, rights, dual use, and where the productivity surplus goes. | [Read →](https://svyable.github.io/shelf/reader/#/b/triumph-of-the-commons/) |
 | [**The Cancer Key**](books/the-cancer-key/) | ✅ Released | 28 of 28 | *How Neoantigens Solved Humanity’s Most Feared Ailment* — a trade-nonfiction investigation of the moment cancer immunology learned to turn a tumor's private mutations into addresses for vaccines and T cells—and of the companies, public research systems, factories, algorithms, patents and clinics that now determine who can use the breakthrough. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-cancer-key/) |
 | [**The Agentic Consumer Economy: Digital Capitalism in the 2030s**](books/the-agentic-consumer-economy/) | ✅ Released | 23 of 23 drafted | How software agents acting for consumers could reshape search, pricing, loyalty, payments, advertising, platform power, and household bargaining in the 2030s. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-agentic-consumer-economy/) |
@@ -51,7 +52,7 @@ These eight tiny Bookself Studio publications are real Markdown volumes built to
 | [**A Clear Margin**](books/style-clear-margin/) | `modern-essay` | Porcelain, IBM Plex Sans, wide scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-clear-margin/) |
 | [**Field Notes Quarterly**](books/style-field-notes/) | `editorial` | Linen, humanist sans, compact editorial scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-field-notes/) |
 | [**Poems at the Window**](books/style-poems-at-window/) | `poetry` | Ivory, classic serif, airy open scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-poems-at-window/) |
-| [**After Midnight**](books/style-after-midnight/) | `night-story` | Midnight, Lora, narrow warm paged reading | [Open →](https://svyable.github.io/shelf/reader/#/b/style-after-midnight/) |
+| [**After Midnight**](books/style-after-midnight/) | `night-story` | Midnight, Lora, narrow warm paged reading | [Open →](https://svyable.github.io/shelf/reader/#/b/after-midnight/) |
 | [**Easy Reading**](books/style-easy-reading/) | `accessible` | High contrast, Atkinson Hyperlegible, larger scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-easy-reading/) |
 | [**Study in Green**](books/style-quiet-study/) | `quiet-study` | Sage, Literata, narrow left-aligned study scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-quiet-study/) |
 
