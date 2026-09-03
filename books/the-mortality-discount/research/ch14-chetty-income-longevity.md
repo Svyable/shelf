@@ -1,0 +1,3 @@
+# Chapter 14 research — income and life expectancy
+
+Covers the Chetty et al. 2016 JAMA study (1.4 billion IRS records linked to SSA death records, 2001-2014): the 14.6-year (men) / 10.1-year (women) top-1%-vs-bottom-1% gap, the widening trend (top-5% earners gained 2.34-2.91 years vs bottom-5% gaining 0.32-0.04 years), and the geographic-variation nuance the study's own authors emphasized. Falsification note: weakens if a comparably rigorous, large-scale study in a country with more universal healthcare access finds an equally large income-longevity gap, undermining the chapter's hypothesis that the American healthcare-financing model plausibly contributes to the gap's size.

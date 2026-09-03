@@ -1,0 +1,3 @@
+# Chapter 8 research — retirement age history and Social Security's finances
+
+Covers the Bismarck retirement-age myth correction (age 70 in 1889, lowered to 65 in 1916 — per von Herbay 2014), the 1935 U.S. Social Security Act and the "life expectancy under 65" claim (technically true but misleading once infant mortality is accounted for), the 1983 Greenspan Commission reform, the 2025 Social Security Trustees Report depletion dates, and France's 2023 pension reform (with dueling ministry/union crowd estimates stated explicitly). Falsification note: weakens if a major country enacts a substantial, evidence-driven retirement-age reform well ahead of a comparable crisis point, rather than only under acute fiscal or political pressure as every case examined here required.

@@ -1,0 +1,61 @@
+{
+  "chapter": 1,
+  "title": "The Actuary's Bet",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "soa-historical-background",
+      "type": "professional-body-history",
+      "title": "Historical Background",
+      "publisher": "Society of Actuaries",
+      "url": "https://www.soa.org/about/historical-background/",
+      "supports": ["Halley's 1693 mortality table", "Dodson and level-premium development", "Equitable and Price in actuarial history"],
+      "limits": "Institutional history; use for chronology, not as an independent empirical test of later mortality trends."
+    },
+    {
+      "id": "ifoa-richard-price",
+      "type": "professional-body-history",
+      "title": "IFoA shares in English Heritage commemoration of Richard Price (1723-1791)",
+      "publisher": "Institute and Faculty of Actuaries",
+      "url": "https://actuaries.org.uk/news-and-media-releases/news-articles/2023/feb/23-feb-23-ifoa-shares-in-english-heritage-s-commemoration-of-richard-price-1723-1791/",
+      "supports": ["Equitable founded in 1762", "Price's role in mortality review and valuation", "early actuarial operating practice"],
+      "limits": "Commemorative institutional account; avoid unverified quotations or stronger priority claims than the source makes."
+    },
+    {
+      "id": "ifoa-historical-collections",
+      "type": "professional-body-archive",
+      "title": "Historical collections and archives",
+      "publisher": "Institute and Faculty of Actuaries",
+      "url": "https://actuaries.org.uk/insight/library-services/historical-collections-and-archives/",
+      "supports": ["Equitable as an early scientific life-assurance office", "mortality analysis and actuarial mathematics in early insurance"],
+      "limits": "Archive description rather than a scholarly monograph."
+    },
+    {
+      "id": "soa-2019-individual-life-experience",
+      "type": "experience-study",
+      "title": "2019 Individual Life Insurance Mortality Experience Report",
+      "publisher": "Society of Actuaries Research Institute",
+      "url": "https://www.soa.org/resources/research-reports/2024/ilec-mort-2012-19/",
+      "supports": ["modern comparison of observed mortality with standard tables", "continuous experience review"],
+      "limits": "Insured-life experience is not general-population mortality."
+    },
+    {
+      "id": "soa-mort-database",
+      "type": "professional-database",
+      "title": "Mortality and Other Rate Tables",
+      "publisher": "Society of Actuaries",
+      "url": "https://mort.soa.org/Help.aspx",
+      "supports": ["large inventory of published mortality and rate tables", "heterogeneity of tables by use and population"],
+      "limits": "Database inventory supports the existence and variety of tables, not any single mortality projection."
+    },
+    {
+      "id": "soa-valuation-mortality-resources",
+      "type": "professional-guidance-index",
+      "title": "Valuation/Illustration Reports, Tables, and Tools",
+      "publisher": "Society of Actuaries Research Institute",
+      "url": "https://www.soa.org/research/topics/indiv-val-exp-study-list/",
+      "supports": ["mortality-improvement scales are periodically updated", "valuation practice explicitly models changing mortality"],
+      "limits": "Specific scales have defined regulatory uses and should not be generalized to every pricing or pension purpose."
+    }
+  ]
+}

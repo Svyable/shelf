@@ -1,0 +1,88 @@
+{
+  "chapter": 8,
+  "title": "Sixty-Five Was a Guess",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "von-herbay-2014-bismarck-not-65",
+      "type": "peer-reviewed-article",
+      "title": "Otto Von Bismarck Is Not the Origin of Old Age at 65",
+      "publisher": "The Gerontologist, vol. 54 (2014)",
+      "url": "https://academic.oup.com/gerontologist/article-abstract/54/1/5/561938",
+      "supports": ["Germany's 1889 law set the qualifying age at 70, not 65", "age lowered to 65 only in 1916"],
+      "limits": "Full text may be paywalled; abstract-level claims corroborated by independent secondary sources in the same file."
+    },
+    {
+      "id": "deutschlandmuseum-1889-pension-law",
+      "type": "historical-archive",
+      "title": "The origin of statutory retirement insurance",
+      "publisher": "Deutschlandmuseum",
+      "url": "https://www.deutschlandmuseum.de/en/history/calendar/1889-05-24-the-origin-of-statutory-retirement-insurance/",
+      "supports": ["24 May 1889 Reichstag passage", "26 June 1889 proclamation"],
+      "limits": "Popular-history museum page, used for timeline corroboration alongside the Gerontologist article."
+    },
+    {
+      "id": "politifact-2016-social-security-life-expectancy",
+      "type": "fact-check-journalism",
+      "title": "Gingrich correct: Life expectancy initially fell short of Social Security eligibility age",
+      "publisher": "PolitiFact (Dec 12, 2016)",
+      "url": "https://www.politifact.com/factchecks/2016/dec/12/newt-gingrich/gingrich-correct-life-expectancy-initially-fell-sh/",
+      "supports": ["1935 birth life expectancy below 65, distorted by infant/child mortality"],
+      "limits": "Journalistic fact-check rather than a primary demographic source; used to frame the 'technically true but misleading' nuance."
+    },
+    {
+      "id": "ssa-2025-trustees-report-press-release",
+      "type": "government-primary-source",
+      "title": "Social Security Board of Trustees: Projection for Combined Trust Funds One Year Sooner than Last Year",
+      "publisher": "Social Security Administration (June 18, 2025)",
+      "url": "https://www.ssa.gov/news/en/press/releases/2025-06-18.html",
+      "supports": ["OASI depletion 2033, ~77% benefits payable", "combined funds depletion 2034, ~81% payable"],
+      "limits": "Projections shift year to year with economic/demographic assumptions; treated as this specific report's projection, not an immutable fact."
+    },
+    {
+      "id": "cnbc-2025-ssa-trust-fund-depletion",
+      "type": "financial-journalism",
+      "title": "Social Security retirement trust fund may be depleted in less than a decade",
+      "publisher": "CNBC (June 18, 2025)",
+      "url": "https://www.cnbc.com/2025/06/18/social-security-administration-releases-new-trust-fund-depletion-dates.html",
+      "supports": ["accessible restatement of the 2033 depletion date and ~23% cut framing"],
+      "limits": "Secondary reporting on the primary SSA figures."
+    },
+    {
+      "id": "crfb-2025-trustees-report-analysis",
+      "type": "policy-analysis",
+      "title": "Analysis of the 2025 Social Security Trustees' Report",
+      "publisher": "Committee for a Responsible Federal Budget (June 18, 2025)",
+      "url": "https://www.crfb.org/papers/analysis-2025-social-security-trustees-report",
+      "supports": ["independent corroboration of depletion dates and benefit-cut percentages"],
+      "limits": "CRFB has an institutional deficit-hawk perspective."
+    },
+    {
+      "id": "npr-2023-france-retirement-age",
+      "type": "journalism",
+      "title": "Despite fierce protests, France has raised the retirement age from 62 to 64",
+      "publisher": "NPR (April 15, 2023)",
+      "url": "https://www.npr.org/2023/04/15/1170246219/despite-fierce-protests-france-has-raised-the-retirement-age-from-62-to-64",
+      "supports": ["62-to-64 reform, phased Sept 2023-2030", "Article 49.3 use", "20 March 2023 no-confidence votes"],
+      "limits": "News-wire-level reporting."
+    },
+    {
+      "id": "nbcnews-2023-france-constitutional-council",
+      "type": "journalism",
+      "title": "Victory for Macron as France's constitutional council approves higher pension age",
+      "publisher": "NBC News (April 14, 2023)",
+      "url": "https://www.nbcnews.com/news/world/france-pension-reform-protests-emmanuel-macron-victory-court-rcna79763",
+      "supports": ["14 April 2023 Constitutional Council ruling"],
+      "limits": "Secondary reporting."
+    },
+    {
+      "id": "aljazeera-2023-france-strike-turnout",
+      "type": "journalism",
+      "title": "Massive nationwide strike hits France over pension reform",
+      "publisher": "Al Jazeera (March 7, 2023)",
+      "url": "https://www.aljazeera.com/news/2023/3/7/1-28m-people-protest-macrons-pension-reform-plan-ministry",
+      "supports": ["Interior Ministry ~1.28M turnout figure", "CGT's disputed ~2M estimate"],
+      "limits": "French protest crowd estimates routinely diverge sharply between police/ministry and union counts; the chapter attributes each figure to its source."
+    }
+  ]
+}

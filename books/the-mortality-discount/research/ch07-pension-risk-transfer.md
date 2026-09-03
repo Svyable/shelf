@@ -1,0 +1,3 @@
+# Chapter 7 research — longevity risk markets
+
+Covers the failed 2004 EIB/BNP Paribas longevity bond (announcement, structure, and its 2005 withdrawal per the Blake/Cairns/Dowd 2006 British Actuarial Journal postmortem); the UK bulk annuity market (LCP 2024/2025 data) and US pension risk transfer market (LIMRA 2024/2025 data); and the life settlements market, including the Life Partners Holdings SEC fraud case (with its actual jury verdict of no fraud stated explicitly) and the contested, unresolved Apollo "human life wagering" lawsuit. Falsification note: weakens if the pension risk transfer market's growth reverses sharply, suggesting insurers are pricing in a stable rather than shifting mortality environment for reasons other than the ones this book identifies.

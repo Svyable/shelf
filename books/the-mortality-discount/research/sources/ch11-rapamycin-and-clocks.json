@@ -1,0 +1,88 @@
+{
+  "chapter": 11,
+  "title": "The Rapamycin Underground",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "pearl-2025-rapamycin",
+      "type": "peer-reviewed-randomized-trial",
+      "title": "Influence of rapamycin on safety and healthspan metrics after one year: PEARL trial results",
+      "publisher": "Aging (Albany NY) 17(4):908-936 (2025)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40188830/",
+      "supports": ["one-year randomized human evidence for intermittent low-dose rapamycin", "direct safety and healthspan measurements in adults interested in healthy aging"],
+      "limits": "Does not establish lifespan extension or broad slowing of human aging. Several authors are affiliated with AgelessRx, so commercial conflicts and design limitations must remain visible."
+    },
+    {
+      "id": "hands-2025-off-label-review",
+      "type": "peer-reviewed-review",
+      "title": "What is the clinical evidence to support off-label rapamycin therapy in healthy adults?",
+      "publisher": "Aging (Albany NY) 17(8):2079-2088 (2025)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40778880/",
+      "supports": ["review of low-dose rapamycin and rapalog evidence in healthy human adults", "conclusion that human data have not established rapamycin as a proven therapy that delays aging in healthy older adults"],
+      "limits": "A review rather than a definitive efficacy trial; the evidence base remains small and heterogeneous."
+    },
+    {
+      "id": "rapa-ex-01-2026",
+      "type": "peer-reviewed-randomized-trial",
+      "title": "Exercise and Weekly Sirolimus (Rapamycin) in Older Adults: RAPA-EX-01 Randomised, Double-Blind, Placebo-Controlled Trial",
+      "publisher": "Journal of Cachexia, Sarcopenia and Muscle (2026)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41985884/",
+      "supports": ["40 adults aged 65-85 randomized to 6 mg weekly sirolimus or placebo for 13 weeks alongside exercise", "no improvement in the primary chair-stand outcome", "99 total adverse events in the sirolimus arm versus 63 with placebo; one possibly drug-related pneumonia"],
+      "limits": "Small exploratory study of short-term physical adaptation, not a trial of lifespan or major age-related morbidity. It cannot determine long-term longevity benefit."
+    },
+    {
+      "id": "gonzales-2025-rapamycin-alzheimers",
+      "type": "peer-reviewed-phase-1-trial",
+      "title": "Rapamycin treatment for Alzheimer's disease and related dementias: a pilot phase 1 clinical trial",
+      "publisher": "Communications Medicine 5:189 (2025)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40394335/",
+      "supports": ["eight-week open-label 1 mg/day rapamycin study in ten participants with mild cognitive impairment or early dementia", "rapamycin was not detectable in cerebrospinal fluid after treatment", "several Alzheimer disease and inflammatory biomarkers increased from baseline"],
+      "limits": "Very small, uncontrolled, disease-specific phase 1 study. It is useful for target-engagement uncertainty, not as evidence about healthy aging efficacy."
+    },
+    {
+      "id": "fda-rapamune-label",
+      "type": "regulatory-primary-source",
+      "title": "RAPAMUNE (sirolimus) prescribing information",
+      "publisher": "U.S. Food and Drug Administration",
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2017/021083s059,021110s076lbl.pdf",
+      "supports": ["sirolimus is an FDA-approved drug for transplant-related indications", "approved labeling does not include slowing normal human aging"],
+      "limits": "The linked label is an FDA-hosted historical label and points readers to current FDA labeling; it establishes the regulatory indication boundary, not the current state of off-label prescribing."
+    },
+    {
+      "id": "horvath-2013-epigenetic-clock",
+      "type": "peer-reviewed-paper",
+      "title": "DNA methylation age of human tissues and cell types",
+      "publisher": "Genome Biology 14(10):R115 (2013)",
+      "url": "https://link.springer.com/article/10.1186/gb-2013-14-10-r115",
+      "supports": ["353-CpG-site cross-tissue chronological-age predictor", "first broadly cross-tissue epigenetic clock"],
+      "limits": "Trained to predict chronological age, not health outcomes — a distinction from GrimAge, noted explicitly in the chapter."
+    },
+    {
+      "id": "lu-2019-grimage",
+      "type": "peer-reviewed-paper",
+      "title": "DNA methylation GrimAge strongly predicts lifespan and healthspan",
+      "publisher": "Aging (Albany NY) 11(2):303-327 (2019)",
+      "url": "https://www.aging-us.com/article/101684/text",
+      "supports": ["composite of methylation-based plasma-protein surrogates and smoking-exposure estimate", "strong mortality and disease prediction"],
+      "limits": "Trained on mortality data; predictive performance does not establish that changing the measured CpG pattern causes improved aging outcomes."
+    },
+    {
+      "id": "mendelian-randomization-clocks-critique",
+      "type": "peer-reviewed-methodology",
+      "title": "Methodological literature on epigenetic clocks as causal vs. proxy biomarkers",
+      "publisher": "Nature Medicine / PMC (synthesized methodological sources)",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9049976/",
+      "supports": ["Mendelian-randomization evidence questioning whether clock CpG sites are causal aging drivers", "distinction between predictive biomarkers and intervention targets"],
+      "limits": "The causal interpretation of epigenetic clocks remains an active research area; this source should not be used to claim clocks have no biological value."
+    },
+    {
+      "id": "forbes-2026-biological-age-testing-market",
+      "type": "journalism",
+      "title": "The Biological Age Testing Market, From Research Promise To Clinical Reality",
+      "publisher": "Forbes (Feb 20, 2026)",
+      "url": "https://www.forbes.com/sites/josipamajic/2026/02/20/the-biological-age-testing-market-from-research-promise-to-clinical-reality/",
+      "supports": ["commercial biological-age testing industry landscape"],
+      "limits": "Secondary market overview. Company-specific scientific or clinical claims require direct verification from primary materials."
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# Chapter 15 research — the multi-stage life and socioemotional selectivity
+
+Covers Gratton and Scott's "The 100-Year Life" (2016, Bloomsbury; 1M+ copies, 15 languages, FT Business Book shortlist) and Carstensen's Stanford Center on Longevity "New Map of Life" initiative (launched 2019), plus Carstensen's socioemotional selectivity theory as a well-established psychological framework. Falsification note: weakens if research directly extending socioemotional selectivity theory into financial and family-formation decision-making is published and finds no meaningful effect of perceived time horizon on those specific choices.

@@ -1,0 +1,52 @@
+{
+  "chapter": 13,
+  "title": "The Reprogramming Bet",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "takahashi-yamanaka-2006-ipsc",
+      "type": "peer-reviewed-paper",
+      "title": "Induction of pluripotent stem cells from mouse embryonic and adult fibroblast cultures by defined factors",
+      "publisher": "Cell 126:663-676 (2006)",
+      "url": "https://en.wikipedia.org/wiki/Induced_pluripotent_stem_cell",
+      "supports": ["OSKM factors (Oct3/4, Sox2, Klf4, c-Myc)", "mouse fibroblast reprogramming to pluripotency"],
+      "limits": "Original citation confirmed via secondary/tertiary sources (Cell.com itself blocked for direct fetch in research session); human follow-up came in a separate 2007 paper, dated precisely in the chapter."
+    },
+    {
+      "id": "nobelprize-2012-yamanaka-gurdon",
+      "type": "institutional-primary-source",
+      "title": "2012 Nobel Prize in Physiology or Medicine press release",
+      "publisher": "Nobel Foundation",
+      "url": "https://www.nobelprize.org/prizes/medicine/2012/press-release/",
+      "supports": ["Yamanaka and Gurdon's shared 2012 Nobel Prize"],
+      "limits": "Primary institutional source."
+    },
+    {
+      "id": "ocampo-2016-partial-reprogramming-progeria",
+      "type": "peer-reviewed-paper",
+      "title": "In Vivo Amelioration of Age-Associated Hallmarks by Partial Reprogramming",
+      "publisher": "Cell 167:1719-1733 (Dec 2016)",
+      "url": "https://www.cell.com/fulltext/S0092-8674(16)31664-6",
+      "supports": ["cyclic 2-4 day OSKM induction", "~30% lifespan extension in progeroid mice", "preserved cell identity"],
+      "limits": "Progeria mouse model of accelerated aging, not a model of normal aging — explicitly flagged as a limitation in the chapter."
+    },
+    {
+      "id": "reprogramming-teratoma-safety-literature",
+      "type": "peer-reviewed-safety-literature",
+      "title": "In vivo OSKM reprogramming, teratoma formation, and cyclic dosing mitigation",
+      "publisher": "PMC / Nature Communications (synthesized safety literature)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5452046/",
+      "supports": ["sustained/uncontrolled OSKM expression reliably produces teratomas", "cyclic 2-days-on/5-days-off protocol avoided excessive mortality across 35 cycles in mice"],
+      "limits": "Mouse-model safety data; translational safety remains a central constraint even after first-in-human testing began in 2026."
+    },
+    {
+      "id": "life-biosciences-er100-first-human-2026",
+      "type": "clinical-trial-registry-and-sponsor-update",
+      "title": "ER-100 first-in-human partial epigenetic reprogramming study",
+      "publisher": "ClinicalTrials.gov / Life Biosciences",
+      "url": "https://clinicaltrials.gov/study/NCT07290244",
+      "supports": ["first-in-human phase 1 testing of partial epigenetic reprogramming", "AAV-delivered OCT4/SOX2/KLF4 targeted to retinal ganglion cells", "small safety-led study in glaucoma and NAION", "first participant reportedly dosed June 2026"],
+      "limits": "Trial initiation and sponsor-reported dosing are not evidence of efficacy or long-term safety. The intervention is local to the eye and aimed at optic-nerve disease, not systemic treatment of normal aging; no completed human rejuvenation or lifespan dataset exists."
+    }
+  ]
+}
