@@ -1,8 +1,6 @@
-# Front Matter
+# The Compatibility Dividend
 
-## The Compatibility Dividend
-
-### How Standards Turn Strangers Into Systems
+*How Standards Turn Strangers Into Systems*
 
 Sven Hardy Benson
 
