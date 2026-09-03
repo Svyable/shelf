@@ -7,6 +7,7 @@ import {
   offlineSaveAction,
   offlineSaveResultLabel,
   shouldKeepOfflineNoticeVisible,
+  shouldShowOfflineReadinessNotice,
 } from './offline-readiness-model.js';
 
 const STYLE_HREF = 'css/offline-readiness.css?v=r2';
@@ -155,6 +156,10 @@ function render(state, readiness) {
   const notice = ensureNotice();
   const normalized = normalizeOfflineReadiness(readiness);
   lastReadiness = normalized;
+  if (!shouldShowOfflineReadinessNotice({ state, saveResult })) {
+    hideNotice();
+    return;
+  }
   const explicitLabel = offlineSaveResultLabel({ result: saveResult, persisted: storagePersisted });
   const label = explicitLabel || offlineReadinessLabel({
     supported: state !== 'unsupported',
