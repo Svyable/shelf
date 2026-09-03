@@ -29,6 +29,7 @@ body:
         - the-exponentiality
         - the-long-running-mind
         - ubiquitous
+        - wild-speculation
     validations:
       required: true
   - type: input
