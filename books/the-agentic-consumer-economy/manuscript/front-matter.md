@@ -1,4 +1,4 @@
-# Front Matter
+# The Agentic Consumer Economy: Digital Capitalism in the 2030s
 
 The first customer of the 2030s may not look like a customer at all.
 
