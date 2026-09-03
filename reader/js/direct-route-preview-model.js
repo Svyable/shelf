@@ -19,6 +19,10 @@ export function samePreviewRoute(a, b) {
     && a.offset === b.offset;
 }
 
+export function shouldBridgeRouteTransition({ previous, next, stage = 'library' } = {}) {
+  return stage !== 'read' && !!next && !samePreviewRoute(previous, next);
+}
+
 export function selectPreviewChapter(contents, requestedId) {
   const chapters = Array.isArray(contents) ? contents.filter((item) => item?.id && item?.file) : [];
   if (!chapters.length) return null;
@@ -131,12 +135,24 @@ export function projectPreviewParagraphs(markdown, offset = 0, {
   return Object.freeze(result);
 }
 
-export function shouldShowPreview({ route, canonicalReady = false, stage = 'library' } = {}) {
-  return !!normalizeReadRoute(route) && !canonicalReady && stage !== 'cover' && stage !== 'end';
+export function shouldShowPreview({
+  route,
+  canonicalReady = false,
+  stage = 'library',
+  allowCoverStage = false,
+} = {}) {
+  const coverAllowed = stage !== 'cover' || allowCoverStage;
+  return !!normalizeReadRoute(route) && !canonicalReady && coverAllowed && stage !== 'end';
 }
 
-export function previewCompletionState({ stage, hasPagedContent, hasContinuousContent } = {}) {
-  if (stage === 'cover' || stage === 'end') return 'dismiss';
+export function previewCompletionState({
+  stage,
+  hasPagedContent,
+  hasContinuousContent,
+  keepCoverStage = false,
+} = {}) {
+  if (stage === 'cover') return keepCoverStage ? 'keep' : 'dismiss';
+  if (stage === 'end') return 'dismiss';
   if (stage === 'read' && (hasPagedContent || hasContinuousContent)) return 'dismiss';
   return 'keep';
 }
