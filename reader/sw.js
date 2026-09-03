@@ -247,7 +247,7 @@ async function networkResponse(request) {
 }
 
 function after(ms, value) {
-  return new Promise((resolve) => setTimeout(resolve(value), ms));
+  return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
 
 async function respondWithPolicy(request, network, kind, sameOrigin) {
