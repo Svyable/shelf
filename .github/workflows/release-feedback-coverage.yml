@@ -1,0 +1,29 @@
+name: Release feedback coverage
+
+on:
+  pull_request:
+    paths:
+      - "books/**"
+      - ".github/ISSUE_TEMPLATE/chapter-feedback.yml"
+      - "scripts/check-feedback-catalog.py"
+      - ".github/workflows/release-feedback-coverage.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "books/**"
+      - ".github/ISSUE_TEMPLATE/chapter-feedback.yml"
+      - "scripts/check-feedback-catalog.py"
+      - ".github/workflows/release-feedback-coverage.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-feedback-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Shelf
+        uses: actions/checkout@v4
+      - name: Verify publication feedback coverage
+        run: python3 scripts/check-feedback-catalog.py
