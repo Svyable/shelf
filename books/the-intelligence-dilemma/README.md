@@ -7,6 +7,11 @@
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 20 of 20 drafted |
+| **Format** | Book |
+| **Publisher** | Svyable |
+| **Edition** | First edition |
+| **Language** | English |
+| **Publication date** | 2026-09-03 |
 
 The Intelligence Dilemma asks how schools can use abundant machine intelligence to deepen learning without letting polished output become a substitute for student capability.
 
