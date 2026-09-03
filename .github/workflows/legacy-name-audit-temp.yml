@@ -1,16 +1,46 @@
-name: Temporary legacy-name audit
+name: Temporary Sven Hardy Benson migration
 
 on:
   push:
     branches:
       - cleanup/sven-hardy-benson-branding
 
+permissions:
+  contents: write
+
 jobs:
-  audit:
+  migrate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Enumerate visible legacy-name references
+      - name: Update reader-facing legacy-name references
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          targets = [Path('README.md')]
+          targets += sorted(Path('books').rglob('*.md'))
+
+          for path in targets:
+              if not path.is_file() or '_TEMPLATE' in path.parts:
+                  continue
+              text = path.read_text(encoding='utf-8')
+              updated = text
+              updated = updated.replace('Sven Hardy Benson / @svyable', 'Sven Hardy Benson')
+              updated = updated.replace('@Svyable', 'Sven Hardy Benson')
+              updated = updated.replace('@svyable', 'Sven Hardy Benson')
+              updated = updated.replace('Svyable Desk', 'Sven Hardy Benson’s Desk')
+              updated = updated.replace('Svyable Shelf', 'Sven Hardy Benson’s Shelf')
+              updated = updated.replace(
+                  'Drafted for the `Svyable/desk` collection on August 30, 2026.',
+                  'Drafted for Sven Hardy Benson’s Desk (`Svyable/desk`) on August 30, 2026.',
+              )
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8')
+          PY
+
+      - name: Verify only technical identifiers remain
         shell: bash
         run: |
           python3 - <<'PY'
@@ -25,6 +55,7 @@ jobs:
           legacy = re.compile(r'\bsvyable\b', re.IGNORECASE)
           raw_url = re.compile(r'https?://[^\s)>\]}]+', re.IGNORECASE)
           repo_code = re.compile(r'`Svyable/[A-Za-z0-9._/-]+`', re.IGNORECASE)
+          repo_link = re.compile(r'\[Svyable/[A-Za-z0-9._/-]+\]\([^)]*\)', re.IGNORECASE)
           matches = []
 
           for path in roots:
@@ -32,18 +63,31 @@ jobs:
                   continue
               if legacy.search(path.name):
                   matches.append((path, 0, '<legacy name in filename>'))
-              text = path.read_text(encoding='utf-8')
-              for line_number, line in enumerate(text.splitlines(), start=1):
+              for line_number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), start=1):
                   visible = raw_url.sub('', line)
                   visible = repo_code.sub('', visible)
+                  visible = repo_link.sub('', visible)
                   if legacy.search(visible):
                       matches.append((path, line_number, line.strip()))
 
-          print(f'VISIBLE_MATCH_COUNT={len(matches)}')
-          for path, line_number, line in matches:
-              where = f'{path}:{line_number}' if line_number else str(path)
-              print(f'{where}: {line}')
-
           if matches:
+              print(f'REMAINING_VISIBLE_MATCH_COUNT={len(matches)}')
+              for path, line_number, line in matches:
+                  where = f'{path}:{line_number}' if line_number else str(path)
+                  print(f'{where}: {line}')
               sys.exit(1)
+          print('Shelf legacy-name migration verified.')
           PY
+
+      - name: Commit content migration
+        shell: bash
+        run: |
+          if git diff --quiet -- README.md books; then
+            echo "No content migration changes needed."
+            exit 0
+          fi
+          git config user.name "Sven Benson"
+          git config user.email "129682319+Svyable@users.noreply.github.com"
+          git add README.md books
+          git commit -m "Standardize Shelf books on Sven Hardy Benson"
+          git push origin HEAD:cleanup/sven-hardy-benson-branding
