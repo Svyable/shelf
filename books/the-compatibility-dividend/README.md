@@ -4,7 +4,7 @@
 |---|---|
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
-| **Chapters** | 20 of 20 drafted |
+| **Chapters** | 21 of 21 drafted |
 
 How Standards Turn Strangers Into Systems.
 
@@ -35,6 +35,7 @@ The argument is deliberately two-sided. Standards can enlarge markets, portabili
 - [x] [Ch 18 — The Constitution of the Machine Economy](manuscript/ch18-the-constitution-of-the-machine-economy.md)
 - [x] [Ch 19 — Where to Draw the Seam](manuscript/ch19-where-to-draw-the-seam.md)
 - [x] [Ch 20 — The Compatibility Trap](manuscript/ch20-the-compatibility-trap.md)
+- [x] [Ch 21 — The Right to Exit](manuscript/ch21-the-right-to-exit.md)
 - [x] [Back Matter](manuscript/back-matter.md)
 
 ## Research
