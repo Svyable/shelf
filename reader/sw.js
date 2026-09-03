@@ -3,7 +3,7 @@ importScripts('./js/offline-fetch-policy.js');
 importScripts('./js/offline-storage-budget.js');
 importScripts('./js/offline-shell-install.js');
 
-const CACHE = 'obb-shell-v98';
+const CACHE = 'obb-shell-v99';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -246,6 +246,21 @@ async function networkResponse(request) {
   return response;
 }
 
+function emptyRevisionResponse() {
+  return new Response('[]', {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+    },
+  });
+}
+
+async function deferredRevisionResponse(request) {
+  const cached = await cachedResponse(request, false);
+  return cached || emptyRevisionResponse();
+}
+
 function after(ms, value) {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
@@ -319,14 +334,25 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   const sameOrigin = url.origin === location.origin;
   const external = cacheableExternal(url);
-  if (!sameOrigin && !external) return;
+  const revisionLookup = self.BookselfOfflineFetchPolicy.isRevisionLookup(url.href);
+  if (!sameOrigin && !external && !revisionLookup) return;
+
+  const network = networkResponse(req);
+
+  // Revision provenance is useful enrichment, but it must not block opening a
+  // publication. A cached result is immediate; a cold lookup fills that cache
+  // in the background while app.js falls back to Last-Modified and History URL.
+  if (revisionLookup) {
+    event.waitUntil(network.then(() => {}).catch(() => {}));
+    event.respondWith(deferredRevisionResponse(req));
+    return;
+  }
 
   const kind = self.BookselfOfflineFetchPolicy.classifyRequest(url.href, {
     sameOrigin,
     external,
     shellUrls: SHELL_URLS,
   });
-  const network = networkResponse(req);
 
   // Keep revalidation alive even when a cached response wins immediately or
   // after the publication deadline. The next request then sees the fresh copy.
