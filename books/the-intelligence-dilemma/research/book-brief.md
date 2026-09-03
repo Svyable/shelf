@@ -8,7 +8,7 @@
 
 ## Author
 
-Sven Hardy Benson / @svyable
+Sven Hardy Benson
 
 ## Category
 

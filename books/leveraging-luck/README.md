@@ -4,7 +4,7 @@
 |---|---|
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
-| **Publisher** | Svyable Shelf |
+| **Publisher** | Sven Hardy Benson’s Shelf |
 | **Chapters**  | 10 of 10 drafted |
 
 An Optimistic Guide To Life.

@@ -6,8 +6,8 @@
 | **Status**    | Published |
 | **Chapters**  | 25 of 25 drafted |
 | **Edition**   | First edition · September 2026 |
-| **Drafting Source** | Svyable Desk |
-| **Publication Surface** | Svyable Shelf |
+| **Drafting Source** | Sven Hardy Benson’s Desk |
+| **Publication Surface** | Sven Hardy Benson’s Shelf |
 
 How the Vector Space Is Revolutionizing Discovery.
 

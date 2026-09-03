@@ -64,7 +64,7 @@ These eight tiny Bookself Studio publications are real Markdown volumes built to
 **Desk means work in motion. Shelf means a public snapshot.**
 
 ```text
-                  Svyable Desk                         Sven Hardy Benson’s Shelf
+                  Sven Hardy Benson’s Desk                         Sven Hardy Benson’s Shelf
               ──────────────────                   ─────────────────────────────
 idea → research → manuscript → revision → commit → release snapshot → edition
                        ↑                                  │

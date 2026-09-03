@@ -4,8 +4,8 @@
 |---|---|
 | **Author**    | Sven Hardy Benson |
 | **Status**    | Published |
-| **Drafting Source** | Svyable Desk |
-| **Publication Surface** | Svyable Shelf |
+| **Drafting Source** | Sven Hardy Benson’s Desk |
+| **Publication Surface** | Sven Hardy Benson’s Shelf |
 | **Chapters**  | 20 of 20 drafted |
 
 *Allocating Intelligence* is about the economic and institutional problem that arrives after capable machine intelligence becomes cheap enough to be ordinary. The important question stops being whether a machine can answer and becomes who gets the answer, when, with what authority, under what verification burden, and at whose expense.

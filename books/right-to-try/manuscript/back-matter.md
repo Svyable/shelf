@@ -8,7 +8,7 @@ The manuscript deliberately avoids treating "experimental" as a synonym for "bad
 
 That is why the research trail matters.
 
-The working research files for this book live beside the manuscript in the Svyable Desk. The research brief states the thesis under test and the main empirical questions. The chapter briefs identify what each chapter is trying to establish and include a "What would make this false?" note so that the argument has an explicit route for revision. The source ledger favors primary statutes, regulator guidance, approval records, trial registries and original clinical reports, with secondary legal or academic analysis used where interpretation, history or commercialization patterns require it.
+The working research files for this book live beside the manuscript in the Sven Hardy Benson’s Desk. The research brief states the thesis under test and the main empirical questions. The chapter briefs identify what each chapter is trying to establish and include a "What would make this false?" note so that the argument has an explicit route for revision. The source ledger favors primary statutes, regulator guidance, approval records, trial registries and original clinical reports, with secondary legal or academic analysis used where interpretation, history or commercialization patterns require it.
 
 Several distinctions should remain intact in any later revision.
 

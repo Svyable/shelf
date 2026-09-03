@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| **Authors** | @Svyable |
+| **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 7 of 7 drafted |
 | **Moment** | August 30, 2026 |
