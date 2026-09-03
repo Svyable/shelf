@@ -1,5 +1,7 @@
 (function installOfflineFetchPolicy(scope) {
   const PUBLICATION_PATH = /\/books\/[^/]+\//i;
+  const REVISION_API_ORIGIN = 'https://api.github.com';
+  const REVISION_API_PATH = /^\/repos\/[^/]+\/[^/]+\/commits$/i;
   const DEFAULT_PUBLICATION_DEADLINE_MS = 1200;
 
   function normalizeHref(value, baseHref = 'https://bookself.invalid/reader/') {
@@ -12,6 +14,18 @@
 
   function shellUrlSet(paths, baseHref) {
     return new Set((paths || []).map((path) => normalizeHref(path, baseHref)).filter(Boolean));
+  }
+
+  function isRevisionLookup(url) {
+    try {
+      const parsed = new URL(String(url || ''));
+      return parsed.origin === REVISION_API_ORIGIN
+        && REVISION_API_PATH.test(parsed.pathname)
+        && parsed.searchParams.has('path')
+        && parsed.searchParams.get('per_page') === '1';
+    } catch {
+      return false;
+    }
   }
 
   function classifyRequest(url, {
@@ -48,6 +62,7 @@
   scope.BookselfOfflineFetchPolicy = Object.freeze({
     DEFAULT_PUBLICATION_DEADLINE_MS,
     shellUrlSet,
+    isRevisionLookup,
     classifyRequest,
     responsePlan,
     deadlineMs,
