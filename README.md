@@ -6,7 +6,7 @@ Svyable Shelf is the public reading library for books by Sven Hardy Benson and t
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **23 author publication projects · 21 released · 2 public drafts/proofs · 8 Reader style specimens**
+> **24 author publication projects · 22 released · 2 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
@@ -36,6 +36,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 | [**Wild Speculation**](books/wild-speculation/) | ✅ Released | 20 / 20 | Geopolitical danger can be real without making a geopolitical script investable; the durable hedge is resilience, diversification, liquidity, and room to be wrong. | [Read →](https://svyable.github.io/shelf/reader/#/b/wild-speculation/) |
 | [**The Intelligence Dilemma**](books/the-intelligence-dilemma/) | ✅ Released | 20 of 20 drafted | The Intelligence Dilemma asks how schools can use abundant machine intelligence to deepen learning without letting polished output become a substitute for student capability. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-intelligence-dilemma/) |
 | [**Energy, Value & Intelligence**](books/energy-value-intelligence/) | ✅ Released | 22 of 22 drafted | A narrative nonfiction book about the three ledgers underneath technological civilization: physical capacity, intelligence, and the systems by which people decide what is worth doing. | [Read →](https://svyable.github.io/shelf/reader/#/b/energy-value-intelligence/) |
+| [**Keep Cooking**](books/keep-cooking/) | ✅ Released | 25 of 25 drafted | The manuscript now carries an afterword for the August 30, 2026 threshold: the moment long-horizon, correction-remembering, collaborating agents became plausible enough to change the… | [Read →](https://svyable.github.io/shelf/reader/#/b/keep-cooking/) |
 
 **Shelf is public. Status still matters.** A folder can be publicly visible in this repository without being marked as a released edition. The Reader library normally catalogs `Published` works; a direct route can still be used for an intentionally public proof or draft.
 
