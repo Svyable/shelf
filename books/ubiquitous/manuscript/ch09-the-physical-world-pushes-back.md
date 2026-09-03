@@ -261,3 +261,35 @@ As AI-generated plans, diagnoses, and procedures become more common, that cultur
 The model can suggest.
 
 The system has to pass.
+
+There is one more reason open-world physical work changes more slowly than a capability demo suggests: mobilization is part of the task.
+
+The skilled worker does not exist as an abstract pair of hands waiting beside every failure. They have to be dispatched, carry or source the right tools and parts, understand the site, gain access, coordinate shutdowns, protect occupants or production, and restore the system without creating a second problem. In many service businesses, the economic problem is not simply whether a robot can perform one manipulation. It is whether the entire response system can handle enough different calls to justify the capital and support structure.
+
+That favors general-purpose workers longer than narrow task comparisons imply.
+
+It also creates a powerful role for AI before full physical autonomy arrives.
+
+Better triage can send the right person the first time. Better photo and video analysis can identify likely tools and parts before the truck rolls. Better service history can expose prior modifications. Better routing can reduce dead travel. Better documentation can turn one technician’s observation into the next technician’s starting point. A field organization can become dramatically more productive without removing the field worker from the loop.
+
+The result may look less futuristic than a humanoid robot and matter more economically.
+
+A technician who completes four high-quality calls instead of three because the surrounding information system is better has created a large capacity increase. A utility crew that avoids one unnecessary excavation because records and sensor history were reconciled has saved real money. A maintenance team that identifies a failing bearing before it damages a larger asset has used intelligence to move consequence earlier.
+
+This is the physical-world version of the floor rising.
+
+The machine makes competent preparation abundant.
+
+The worker arrives with a better map.
+
+What remains scarce is the ability to recognize when the map is wrong, revise it from evidence, and leave the system in a condition the next person can verify.
+
+That last obligation matters because physical work accumulates.
+
+Every repair, retrofit, bypass, replacement, and temporary measure becomes part of the next worker’s environment. Good field work therefore has a second output beyond the functioning system: a trustworthy record of what changed and why. AI can make that record much cheaper to produce, but it cannot make a bad intervention harmless by documenting it beautifully.
+
+The physical world keeps the hierarchy honest.
+
+First make it work.
+
+Then make what happened legible enough that the system can keep learning.
