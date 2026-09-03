@@ -12,6 +12,20 @@ assert.equal(shell.has('https://example.test/reader/'), true);
 assert.equal(shell.has('https://example.test/reader/index.html'), true);
 assert.equal(shell.has('https://example.test/reader/js/app.js'), true);
 
+assert.equal(policy.isRevisionLookup(
+  'https://api.github.com/repos/Svyable/shelf/commits?path=books%2Fdemo%2F&per_page=1'
+), true);
+assert.equal(policy.isRevisionLookup(
+  'https://api.github.com/repos/Svyable/shelf/commits?path=books%2Fdemo%2F&per_page=2'
+), false);
+assert.equal(policy.isRevisionLookup(
+  'https://api.github.com/repos/Svyable/shelf/issues?path=books%2Fdemo%2F&per_page=1'
+), false);
+assert.equal(policy.isRevisionLookup(
+  'https://example.test/repos/Svyable/shelf/commits?path=books%2Fdemo%2F&per_page=1'
+), false);
+assert.equal(policy.isRevisionLookup('not a url'), false);
+
 assert.equal(policy.classifyRequest('https://example.test/reader/index.html', {
   sameOrigin: true,
   shellUrls: shell,
