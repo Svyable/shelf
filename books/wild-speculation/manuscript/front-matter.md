@@ -1,5 +1,9 @@
 # Wild Speculation
 
+*Investing on the Brink of World War 3*
+
+Sven Hardy Benson
+
 There is a particular kind of investor who becomes most confident when the world becomes least knowable.
 
 A missile crosses a border. A carrier group changes course. An embassy closes. A pipeline burns. A cable is cut. A minister says the sentence diplomats use when they want to sound calm and make everyone else nervous. Futures open red. Oil jumps. Gold jumps. Defense stocks jump. Someone on television says the word *historic* before breakfast.
