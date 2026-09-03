@@ -6,7 +6,7 @@ Sven Hardy Benson’s Shelf is the public reading library for books by Sven Hard
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
-> **34 author publication projects · 32 released · 2 public drafts/proofs · 8 Reader style specimens**
+> **35 author publication projects · 33 released · 2 public drafts/proofs · 8 Reader style specimens**
 ## The books
 
 Open a book in the Reader for the bound-reading experience, or open its project folder to inspect the released source and history.
@@ -47,6 +47,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 | [**The Never Ending Intelligence**](books/the-never-ending-intelligence/) | ✅ Released | 25 of 25 | The first generation of useful AI agents resembles a function call: give the system context, ask for work, receive an answer, end the process. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-never-ending-intelligence/) |
 | [**The Unbounding**](books/the-unbounding/) | ✅ Released | 19 of 19 drafted | Released Svyable book. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-unbounding/) |
 | [**The Vanishing Bid**](books/the-vanishing-bid/) | ✅ Released | 11 of 11 drafted | Why the World's Most Liquid Markets Keep Disappearing When You Need Them Most. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-vanishing-bid/) |
+| [**The World Beneath the World**](books/the-world-beneath-the-world/) | ✅ Released | 12 of 12 drafted | Most of the forces that organize modern life are easiest to ignore when they are working. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-world-beneath-the-world/) |
 
 **Shelf is public. Status still matters.** A folder can be publicly visible in this repository without being marked as a released edition. The Reader library normally catalogs `Published` works; a direct route can still be used for an intentionally public proof or draft.
 
