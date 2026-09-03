@@ -1,0 +1,33 @@
+{
+  "schema_version": "proof-carrying-action/0.1",
+  "action_id": "invalid/completed-self-report-only",
+  "mandate_id": "implicit/conversation/delegation-machine-schema-pr-103",
+  "mandate_ref": null,
+  "principal": {"id": "Svyable", "kind": "organization", "display_name": "Svyable"},
+  "delegate": {"id": "desk-authoring-agent", "kind": "ai_agent", "display_name": "Desk authoring agent"},
+  "status": "completed",
+  "action": {
+    "summary": "Claims completion using only the delegate's own statement as evidence.",
+    "state_changes": [
+      {"resource": "example/resource", "operation": "modified", "reference": null, "reversible": true}
+    ]
+  },
+  "authority_used": {
+    "grants": [
+      {"resource": "example/resource", "actions": ["modify"], "basis": "Example authority grant."}
+    ],
+    "exceptions": []
+  },
+  "evidence": {
+    "receipts": [
+      {"name": "Delegate completion claim", "source": "delegate narrative", "reference": "I finished it", "independent_of_delegate": false}
+    ],
+    "completion_supported_by_independent_evidence": false
+  },
+  "uncertainty": {"known_unknowns": [], "unverified_claims": []},
+  "reversal": {"reversible": true, "status": "available", "method": "Restore prior state.", "deadline": null},
+  "next_obligations": [],
+  "timing": {"started_at": null, "completed_at": null, "recorded_at": "2026-08-29T18:10:00Z"},
+  "review_state": {"required": true, "triggers_hit": [], "status": "pending"},
+  "provenance": {"previous_receipt_id": null, "issued_by": "conformance fixture"}
+}

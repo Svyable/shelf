@@ -1,0 +1,408 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://svyable.github.io/desk/books/the-delegation-machine/delegation-mandate.schema.json",
+  "title": "Delegation Mandate",
+  "description": "A machine-readable implementation of The Delegation Machine's seven-layer Delegation Stack: Intent, Mandate, Authority, Action, Evidence, Review, and Revocation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "mandate_id",
+    "principal",
+    "delegate",
+    "intent",
+    "mandate",
+    "authority",
+    "action",
+    "evidence",
+    "review",
+    "revocation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "delegation-mandate/0.1"
+    },
+    "mandate_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "principal": {
+      "$ref": "#/$defs/actor"
+    },
+    "delegate": {
+      "$ref": "#/$defs/actor"
+    },
+    "intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "success_signals",
+        "unacceptable_outcomes"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "success_signals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "unacceptable_outcomes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "mandate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task",
+        "completion_criteria",
+        "stop_conditions",
+        "exclusions"
+      ],
+      "properties": {
+        "task": {
+          "type": "string",
+          "minLength": 1
+        },
+        "completion_criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "stop_conditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grants",
+        "limits",
+        "subdelegation"
+      ],
+      "properties": {
+        "grants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/grant"
+          }
+        },
+        "limits": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/limit"
+          }
+        },
+        "subdelegation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "allowed",
+            "maximum_depth",
+            "may_expand_scope"
+          ],
+          "properties": {
+            "allowed": {
+              "type": "boolean"
+            },
+            "maximum_depth": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "may_expand_scope": {
+              "const": false
+            }
+          }
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reversibility_preference",
+        "approval_required_for",
+        "rate_limits"
+      ],
+      "properties": {
+        "reversibility_preference": {
+          "enum": [
+            "prefer_reversible",
+            "reversible_only",
+            "no_preference"
+          ]
+        },
+        "approval_required_for": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "rate_limits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/limit"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_receipts",
+        "completion_requires_independent_receipt"
+      ],
+      "properties": {
+        "required_receipts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/receipt"
+          }
+        },
+        "completion_requires_independent_receipt": {
+          "type": "boolean"
+        },
+        "retain_for": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewers",
+        "triggers",
+        "delegate_may_self_approve"
+      ],
+      "properties": {
+        "reviewers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/actor"
+          }
+        },
+        "triggers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "sampling": {
+          "type": "string",
+          "minLength": 1
+        },
+        "delegate_may_self_approve": {
+          "const": false
+        }
+      }
+    },
+    "revocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expires",
+        "revocation_channels",
+        "post_revocation_checks"
+      ],
+      "properties": {
+        "expires": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revocation_channels": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "post_revocation_checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "parent_mandate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issued_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "issued_by": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "human",
+            "organization",
+            "software",
+            "ai_agent",
+            "service",
+            "other"
+          ]
+        },
+        "display_name": {
+          "type": "string"
+        }
+      }
+    },
+    "grant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resource",
+        "actions"
+      ],
+      "properties": {
+        "resource": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "limit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dimension",
+        "limit",
+        "unit"
+      ],
+      "properties": {
+        "dimension": {
+          "type": "string",
+          "minLength": 1
+        },
+        "limit": {
+          "type": [
+            "number",
+            "integer",
+            "string"
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "period": {
+          "type": "string"
+        },
+        "hard_limit": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "source",
+        "independent_of_delegate"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "independent_of_delegate": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

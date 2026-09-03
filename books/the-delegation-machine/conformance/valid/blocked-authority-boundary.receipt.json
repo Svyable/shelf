@@ -1,0 +1,78 @@
+{
+  "schema_version": "proof-carrying-action/0.1",
+  "action_id": "example/blocked-authority-boundary",
+  "mandate_id": "example/mandate/blocked-authority-boundary",
+  "mandate_ref": null,
+  "principal": {
+    "id": "Svyable",
+    "kind": "organization",
+    "display_name": "Svyable"
+  },
+  "delegate": {
+    "id": "desk-authoring-agent",
+    "kind": "ai_agent",
+    "display_name": "Desk authoring agent"
+  },
+  "status": "blocked",
+  "action": {
+    "summary": "Stopped before changing state because the requested action exceeded the active authority boundary.",
+    "state_changes": []
+  },
+  "authority_used": {
+    "grants": [
+      {
+        "resource": "example/customer-record",
+        "actions": [
+          "read"
+        ],
+        "basis": "Active mandate permits inspection but not mutation."
+      }
+    ],
+    "exceptions": []
+  },
+  "evidence": {
+    "receipts": [
+      {
+        "name": "Authority boundary",
+        "source": "Policy engine",
+        "reference": "deny:customer-record:write",
+        "independent_of_delegate": true,
+        "observed_at": "2026-08-29T18:10:00Z"
+      }
+    ],
+    "completion_supported_by_independent_evidence": false
+  },
+  "uncertainty": {
+    "known_unknowns": [],
+    "unverified_claims": []
+  },
+  "reversal": {
+    "reversible": true,
+    "status": "not_required",
+    "method": null,
+    "deadline": null
+  },
+  "next_obligations": [
+    {
+      "description": "Escalate to the principal if write authority is genuinely required.",
+      "owner": "principal",
+      "due": null
+    }
+  ],
+  "timing": {
+    "started_at": "2026-08-29T18:09:55Z",
+    "completed_at": "2026-08-29T18:10:00Z",
+    "recorded_at": "2026-08-29T18:10:00Z"
+  },
+  "review_state": {
+    "required": false,
+    "triggers_hit": [
+      "authority boundary reached"
+    ],
+    "status": "not_required"
+  },
+  "provenance": {
+    "previous_receipt_id": null,
+    "issued_by": "example"
+  }
+}
