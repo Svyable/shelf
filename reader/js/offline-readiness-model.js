@@ -57,6 +57,10 @@ export function offlineSaveResultLabel({ result = 'idle', persisted = null } = {
   return '';
 }
 
+export function shouldShowOfflineReadinessNotice({ state = '', saveResult = 'idle' } = {}) {
+  return state !== 'online-ready' || saveResult !== 'idle';
+}
+
 export function shouldKeepOfflineNoticeVisible(state) {
   return state === 'online-saving' || state === 'offline-ready' || state === 'offline-partial';
 }
