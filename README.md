@@ -1,8 +1,8 @@
-# Svyable Shelf
+# Sven Hardy Benson’s Shelf
 
 **Released editions. Read like books.**
 
-Svyable Shelf is the public reading library for books by Sven Hardy Benson and the live reference deployment of [Bookself](https://github.com/Svyable/bookself). The working copy moves on a separate private Desk; Shelf holds the public snapshots readers can actually open, cite, share, and return to.
+Sven Hardy Benson’s Shelf is the public reading library for books by Sven Hardy Benson and the live reference deployment of [Bookself](https://github.com/Svyable/bookself). The working copy moves on a separate private Desk; Shelf holds the public snapshots readers can actually open, cite, share, and return to.
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
@@ -63,8 +63,8 @@ These eight tiny Bookself Studio publications are real Markdown volumes built to
 **Desk means work in motion. Shelf means a public snapshot.**
 
 ```text
-                  Svyable Desk                         Svyable Shelf
-              ──────────────────                   ──────────────────
+                  Svyable Desk                         Sven Hardy Benson’s Shelf
+              ──────────────────                   ─────────────────────────────
 idea → research → manuscript → revision → commit → release snapshot → edition
                        ↑                                  │
                   Desk Reader                        Shelf Reader
@@ -82,7 +82,7 @@ That separation is one of Bookself's core ideas: **publication is an intentional
 | `books/` | Public publication snapshots owned by this Shelf |
 | `reader/` | Shared Bookself reading interface |
 | `desk/` | Shared Bookself publishing/readiness interface |
-| `imprint.json` | Svyable Shelf identity and repository links |
+| `imprint.json` | Sven Hardy Benson’s Shelf identity and repository links |
 | `README.md` | Human-facing library catalog and deployment guide |
 
 Shared Reader/Desk improvements originate in [Svyable/bookself](https://github.com/Svyable/bookself). This repository owns its books, identity, and release history.
