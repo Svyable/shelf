@@ -3,7 +3,7 @@ import './reader-keyboard-runtime.js';
 import './one-handed-actions.js';
 import './dialog-focus-runtime.js';
 import './font-settlement.js';
-import { parseBookReadme, parsePortalCatalog } from './catalog.js';
+import { applyPortalCatalogManifest, parseBookReadme, parsePortalCatalog } from './catalog.js';
 import { parseRoute } from './router.js';
 import { createAsyncResourceCache } from './resource-cache.js';
 import { installNavigationPrefetch } from './navigation-prefetch.js';
@@ -65,6 +65,7 @@ queueMicrotask(() => {
 
 const documentCache = createAsyncResourceCache({ limit: 256 });
 const existenceCache = createAsyncResourceCache({ limit: 256 });
+let portalCatalogManifestPromise = null;
 
 function installPaginationReflowGuard(root = document) {
   const wrapper = root.getElementById?.('pagesWrapper');
@@ -190,18 +191,33 @@ export function fetchDocument(relativePath) {
   );
 }
 
+async function loadPortalCatalogManifest() {
+  if (!portalCatalogManifestPromise) {
+    portalCatalogManifestPromise = fetch(fileUrl('catalog.json'), { cache: 'no-cache' })
+      .then(async (res) => (res.ok ? res.text() : null))
+      .catch(() => null);
+  }
+  return portalCatalogManifestPromise;
+}
+
 export async function fetchText(relativePath) {
   const doc = await fetchDocument(relativePath);
-  return doc.text;
+  const clean = String(relativePath).replace(/^\.\//, '').replace(/^\/+/, '');
+  if (clean !== 'README.md') return doc.text;
+  const manifest = await loadPortalCatalogManifest();
+  return manifest === null ? doc.text : applyPortalCatalogManifest(doc.text, manifest);
 }
 
 export function invalidateDocument(relativePath) {
+  const clean = String(relativePath).replace(/^\.\//, '').replace(/^\/+/, '');
+  if (clean === 'README.md' || clean === 'catalog.json') portalCatalogManifestPromise = null;
   return documentCache.invalidate(fileUrl(relativePath));
 }
 
 export function clearDocumentCache() {
   documentCache.clear();
   existenceCache.clear();
+  portalCatalogManifestPromise = null;
 }
 
 export async function fileExists(relativePath) {
