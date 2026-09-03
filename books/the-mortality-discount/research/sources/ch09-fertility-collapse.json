@@ -1,0 +1,97 @@
+{
+  "chapter": 9,
+  "title": "The Shrinking Century",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "korea-2026-2025-birth-statistics",
+      "type": "government-primary-source",
+      "title": "2025 Birth Statistics",
+      "publisher": "Republic of Korea Ministry of Data and Statistics / National Data Office (Aug. 26, 2026)",
+      "url": "https://kostat.go.kr/",
+      "supports": ["2025 total fertility rate 0.80", "2025 births approximately 254,300", "second consecutive annual fertility increase after 0.72 in 2023 and 0.75 in 2024"],
+      "limits": "Use the agency release for the annual total; avoid treating two years of rebound as proof of a durable reversal."
+    },
+    {
+      "id": "korea-2025-marriage-statistics",
+      "type": "government-primary-source",
+      "title": "Population Trends Survey: Marriage statistics",
+      "publisher": "Statistics Korea / Ministry of Data and Statistics",
+      "url": "https://www.kostat.go.kr/",
+      "supports": ["222,412 marriages in 2024", "2024 marriages increased 14.8% year over year", "marriages continued increasing in 2025"],
+      "limits": "Marriage is a leading correlate of births in Korea, not a sufficient causal explanation for fertility change."
+    },
+    {
+      "id": "aei-eberstadt-east-asia-population-collapse",
+      "type": "policy-analysis",
+      "title": "East Asia's Coming Population Collapse",
+      "publisher": "Nicholas Eberstadt, American Enterprise Institute",
+      "url": "https://www.aei.org/articles/east-asias-coming-population-collapse/",
+      "supports": ["3 deaths per birth by 2050 projection", "median age near 60", ">40% senior share"],
+      "limits": "Single demographer's analysis/opinion, not an official statistical release; present as a projection and balance against contrary views."
+    },
+    {
+      "id": "japan-statistics-bureau-2025-census-preliminary",
+      "type": "government-primary-source",
+      "title": "Preliminary Counts of the 2025 Population Census of Japan",
+      "publisher": "Statistics Bureau of Japan, Ministry of Internal Affairs and Communications (released May 29, 2026; bulletin June 25, 2026)",
+      "url": "https://www.stat.go.jp/english/info/news/20260625.html",
+      "supports": ["123.05 million total population as of Oct. 1, 2025", "decline of 3.097 million / 2.5% from 2020", "Tokyo metropolitan area 36.986 million / 30.1% of Japan", "population decreased in 1,558 of 1,719 municipalities"],
+      "limits": "The agency explicitly labels these preliminary counts; manuscript should not call them final census totals."
+    },
+    {
+      "id": "cnn-nagoro-scarecrow-village",
+      "type": "journalism",
+      "title": "Nagoro, Japan's scarecrow village",
+      "publisher": "CNN Travel",
+      "url": "https://www.cnn.com/travel/article/nagoro-japan-scarecrow-village",
+      "supports": ["Tsukimi Ayano's story", "approximately 27 residents", "400+ scarecrows made"],
+      "limits": "Human-interest travel journalism; population figures vary slightly by outlet and should not carry broader demographic claims."
+    },
+    {
+      "id": "china-nbs-2025-population",
+      "type": "government-primary-source",
+      "title": "Statistical Communiqué of the People's Republic of China on the 2025 National Economic and Social Development",
+      "publisher": "National Bureau of Statistics of China (Feb. 28, 2026)",
+      "url": "https://www.stats.gov.cn/english/PressRelease/202602/t20260228_1962661.html",
+      "supports": ["2025 year-end population 1,404.89 million", "7.92 million births", "11.31 million deaths", "natural growth rate -2.41 per thousand", "323.38 million people age 60+ / 23.0%"],
+      "limits": "NBS does not report the chapter's approximately 0.93 total-fertility-rate estimate in this release; attribute that estimate externally or omit it."
+    },
+    {
+      "id": "ourworldindata-china-fertility-decline",
+      "type": "data-journalism",
+      "title": "China's fertility rate has fallen to one, continuing a long decline that began before and continued after the one-child policy",
+      "publisher": "Our World in Data",
+      "url": "https://ourworldindata.org/data-insights/chinas-fertility-rate-has-fallen-to-one-continuing-a-long-decline-that-began-before-and-continued-after-the-one-child-policy",
+      "supports": ["fertility decline predates the 1980 one-child policy", "decline continued after the 2015/2016 and 2021 policy reversals"],
+      "limits": "Useful counterevidence against monocausal one-child-policy explanations; not a primary Chinese statistical release."
+    },
+    {
+      "id": "un-2024-world-population-prospects-summary",
+      "type": "intergovernmental-primary-source",
+      "title": "World Population Prospects 2024: Summary of Results",
+      "publisher": "UN DESA Population Division",
+      "url": "https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/undesa_pd_2024_wpp_2024_advance_unedited_0.pdf",
+      "supports": ["8.2 billion world population in 2024", "peak around 10.3 billion in the mid-2080s", "approximately 10.2 billion in 2100", "80% estimated probability of an in-century peak"],
+      "limits": "Projection, not observation; uncertainty ranges matter and later revisions may move in either direction."
+    },
+    {
+      "id": "ourworldindata-un-2024-revision-history",
+      "type": "data-journalism",
+      "title": "Peak global population and other key findings from the 2024 UN World Population Prospects",
+      "publisher": "Our World in Data",
+      "url": "https://ourworldindata.org/un-population-2024-revision",
+      "supports": ["comparison of recent UN projection rounds", "2024 revision moved the expected peak lower and earlier relative to earlier projections"],
+      "limits": "Use revision history as evidence that forecasts change, not as evidence that future revisions must continue in the same direction."
+    },
+    {
+      "id": "lancet-2020-ihme-population-scenarios",
+      "type": "peer-reviewed-study",
+      "title": "Fertility, mortality, migration, and population scenarios for 195 countries and territories from 2017 to 2100",
+      "publisher": "The Lancet / IHME (July 2020)",
+      "url": "https://www.thelancet.com/article/S0140-6736(20)30677-2/fulltext",
+      "supports": ["independent peak approximately 9.73 billion around 2064", "decline to approximately 8.79 billion by 2100"],
+      "limits": "Scenario-based projection with assumptions that differ materially from UN DESA; the disagreement is evidence of model uncertainty."
+    }
+  ]
+}

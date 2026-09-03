@@ -1,0 +1,17 @@
+# Chapter 13 research — partial cellular reprogramming
+
+Covers Yamanaka's 2006/2007 iPSC discovery and 2012 Nobel Prize; the Izpisúa Belmonte/Salk Institute 2016 Cell paper on cyclic partial reprogramming in a progeria mouse model (~30% lifespan extension); the teratoma/cancer-risk safety literature on in vivo OSKM expression; and Jesse Gelsinger's 1999 gene-therapy death, used as well-established general historical background for the translational-safety analogy.
+
+## September 2026 evidence update — the first-human threshold has been crossed
+
+The manuscript's statement that no partial-reprogramming therapy has entered a human clinical trial is now stale. In 2026, Life Biosciences' ER-100 became the first registered first-in-human study explicitly testing partial epigenetic reprogramming. Clinical-trial and sponsor materials describe an AAV-delivered OSK construct (OCT4, SOX2, KLF4, deliberately omitting c-MYC) targeted locally to retinal ganglion cells in people with open-angle glaucoma or non-arteritic anterior ischemic optic neuropathy. The phase 1 program is small and safety-led: up to 18 adults, dose escalation, sentinel dosing, and extended follow-up. Public reporting indicates the first participant was dosed in June 2026.
+
+This is a real translational milestone, but it does not validate the broad longevity claim made around partial reprogramming. The intervention is local to one eye, aimed at serious optic-nerve disease rather than normal aging, and the study is designed first to establish safety and tolerability. No completed human efficacy dataset establishes systemic rejuvenation, lifespan extension, or safe whole-body reprogramming. The eye is also a deliberately bounded first target: local delivery and objective visual readouts make it a more controllable test bed than systemic exposure.
+
+The chapter should therefore revise—not merely delete—its old boundary. The more accurate September 2026 formulation is that partial reprogramming has finally entered human testing, while published human outcome evidence remains too immature to show that the technique safely reverses aging in people. This actually sharpens the book's repricing thesis: the field has moved one rung up the evidence ladder without leaping the remaining translational gap.
+
+## Falsification / update conditions
+
+The older falsification note—"weakens if a published, peer-reviewed human trial reports an acceptable safety profile with no elevated cancer signal"—should now be split into stages. Trial initiation alone does not falsify the chapter's caution. Evidence that would materially weaken it includes: (1) completed human safety data showing a clinically acceptable adverse-event profile at biologically active exposure; (2) replicated functional benefit not explainable solely by a surrogate clock or biomarker; and, for the book's broader longevity claim, (3) evidence that benefit can extend beyond a locally treated tissue without unacceptable tumor, immune, or loss-of-cell-identity risk. Conversely, dose-limiting toxicity, oncogenic signals, loss of cellular identity, or failure to produce functional benefit would strengthen the chapter's caution.
+
+Source check refreshed September 2, 2026. Preserve the distinction between a registered/initiated phase 1 study, sponsor-reported dosing, and peer-reviewed human results.

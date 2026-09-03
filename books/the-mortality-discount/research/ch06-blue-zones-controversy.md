@@ -1,0 +1,3 @@
+# Chapter 6 research — the Blue Zones controversy
+
+Covers Dan Buettner's Blue Zones brand and its five flagship regions; Saul Newman's bioRxiv preprint on supercentenarian record-keeping and pension fraud (explicitly flagged in the chapter as still an unpublished preprint despite winning the 2024 Ig Nobel Prize in Demography); Buettner's own rebuttal and claimed re-validation; and the Sogen Kato pension-fraud case as independently documented precedent for the fraud mechanism. Falsification note: weakens if Newman's preprint is formally rejected in peer review, or if Buettner's claimed independent re-validation is published through a comparably open, scrutinizable channel that directly and successfully rebuts Newman's statistical findings.

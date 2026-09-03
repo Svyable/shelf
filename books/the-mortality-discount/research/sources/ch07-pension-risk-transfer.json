@@ -1,0 +1,88 @@
+{
+  "chapter": 7,
+  "title": "Half-Life",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "ipe-2004-eib-longevity-bond",
+      "type": "trade-journalism",
+      "title": "EIB to issue 'longevity bond' to match UK liabilities",
+      "publisher": "Investment & Pensions Europe (2004)",
+      "url": "https://www.ipe.com/eib-to-issue-longevity-bond-to-match-uk-liabilities/17336.article",
+      "supports": ["25-year, £540M bond", "BNP Paribas structurer", "PartnerRe reinsurer", "UK male-65 reference index"],
+      "limits": "Announcement-era coverage; does not cover the later withdrawal."
+    },
+    {
+      "id": "blake-cairns-dowd-2006-longevity-bonds",
+      "type": "peer-reviewed-article",
+      "title": "Living with Mortality: Longevity Bonds and Other Mortality-Linked Securities",
+      "publisher": "British Actuarial Journal, vol. 12 (2006)",
+      "url": "https://www.actuaries.org.uk/system/files/documents/pdf/63613baj121153-2282006blake.pdf",
+      "supports": ["bond withdrawn late 2005 for insufficient demand", "basis risk", "capital intensity", "PartnerRe capacity cap"],
+      "limits": "Authors are longevity-market advocates; empirically solid but written by people invested in the field's eventual success."
+    },
+    {
+      "id": "ipe-2024-uk-bpa-record-transactions",
+      "type": "trade-journalism",
+      "title": "Bulk purchase annuity transactions hit record number in 2024",
+      "publisher": "Investment & Pensions Europe, citing LCP",
+      "url": "https://www.ipe.com/news/bulk-purchase-annuity-transactions-hit-record-number-in-2024/10130316.article",
+      "supports": ["£47.8B UK buy-in/buyout volume 2024", "298 transactions vs 227 in 2023"],
+      "limits": "Adviser-specific tally (LCP); other advisers publish somewhat different totals."
+    },
+    {
+      "id": "pensionsage-2025-bpa-record-activity",
+      "type": "trade-journalism",
+      "title": "BPA market on track for 'record breaking' activity in 2025 despite fall in volumes",
+      "publisher": "Pensions Age, citing LCP",
+      "url": "https://www.pensionsage.com/pa/LCP-predicts-record-breaking-Bpa-activtrity-in-2025-despite-fallin-volumes.php",
+      "supports": ["~350 transactions projected for 2025", "H1 2025 £9.7bn lowest half-year since 2021", ">85% of H1 2025 deals under £100m"],
+      "limits": "Mid-year projection, not final-year data."
+    },
+    {
+      "id": "limra-2025-us-prt-2024-record",
+      "type": "industry-data",
+      "title": "U.S. Single-Premium Pension Risk Transfer Sales Leap 14% to $51.8 billion in 2024",
+      "publisher": "LIMRA",
+      "url": "https://www.limra.com/en/newsroom/news-releases/2025/limra-u.s.-single-premium-pension-risk-transfer-sales-leap-14-to-$51.8-billion-in-2024/",
+      "supports": ["$51.8B 2024 US PRT premium", "794 contracts", "14 carriers with $1B+ deals"],
+      "limits": "Industry research arm funded by insurers; treated as the authoritative benchmark per standard industry/press practice, with that affiliation noted."
+    },
+    {
+      "id": "limra-2026-q4-2025-prt-surge",
+      "type": "industry-data",
+      "title": "U.S. Single Premium PRT Product Sales Jump 132% in Q4 2025",
+      "publisher": "LIMRA",
+      "url": "https://www.limra.com/en/newsroom/news-releases/2026/limra-u.s.-single-premium-pension-risk-transfer-product-sales-jump-132-in-the-fourth-quarter-of-2025/",
+      "supports": ["$28B Q4 2025 premium", "$326B cumulative buy-out assets in force"],
+      "limits": "Single-quarter data; PRT figures are historically lumpy."
+    },
+    {
+      "id": "sherwood-2024-life-settlements-feature",
+      "type": "financial-journalism",
+      "title": "Death that literally pays dividends: Inside the world of life-settlement investments",
+      "publisher": "Sherwood News (Nov 22, 2024)",
+      "url": "https://sherwood.news/business/life-senior-settlement-investments-dividends/",
+      "supports": ["LIMCO business model", "policies purchased at 19-29% of face value"],
+      "limits": "Feature built substantially around one firm's own figures and marketing framing."
+    },
+    {
+      "id": "sec-2012-life-partners-fraud-charges",
+      "type": "regulatory-filing",
+      "title": "SEC Charges Life Partners Holdings and Executives with Fraud",
+      "publisher": "U.S. Securities and Exchange Commission (2012)",
+      "url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-22219",
+      "supports": ["allegations of understated life expectancies by at least 8 years", "insider-trading allegations against Pardo and Peden"],
+      "limits": "A federal jury ultimately found no fraud and no insider trading as alleged — stated explicitly in the chapter for fairness."
+    },
+    {
+      "id": "bloomberg-2024-apollo-life-wagering-lawsuit",
+      "type": "financial-journalism",
+      "title": "Apollo Accused in Lawsuit of Illegal Human Life Wagering Scheme",
+      "publisher": "Bloomberg (April 29, 2024)",
+      "url": "https://www.bloomberg.com/news/articles/2024-04-29/apollo-accused-in-lawsuit-of-illegal-human-life-wagering-scheme",
+      "supports": ["~$20B portfolio allegation", "Financial Credit Investment shell structure", "preliminary Delaware ruling favorable to plaintiff"],
+      "limits": "Active, contested litigation; Apollo denies the allegations. Presented as alleged throughout the chapter."
+    }
+  ]
+}

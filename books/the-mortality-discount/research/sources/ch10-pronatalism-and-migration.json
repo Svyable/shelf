@@ -1,0 +1,133 @@
+{
+  "chapter": 10,
+  "title": "Empty Cradles, Crowded Clinics",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "aljazeera-2024-south-korea-fertility-spending",
+      "type": "journalism",
+      "title": "Fears for future as South Korea's fertility rate drops again",
+      "publisher": "Al Jazeera (Feb. 28, 2024)",
+      "url": "https://www.aljazeera.com/news/2024/2/28/fears-for-future-as-south-koreas-fertility-rate-drops-again",
+      "supports": ["cumulative pronatalist spending figures since 2006"],
+      "limits": "Use only as one published tally; chapter keeps a range because cumulative totals differ by source and definition."
+    },
+    {
+      "id": "keia-korea-fertility-policy-analysis",
+      "type": "policy-analysis",
+      "title": "Korean Policies to Reverse the Decline in the Fertility Rate, Part 1",
+      "publisher": "Korea Economic Institute of America",
+      "url": "https://keia.org/analysis/korean-policies-to-reverse-the-decline-in-the-fertility-rate-part-1-balancing-work-and-family/",
+      "supports": ["policy program breakdown", "cumulative spending context"],
+      "limits": "Think-tank analysis; do not infer causal effectiveness from spending totals alone."
+    },
+    {
+      "id": "koreaherald-2024-per-child-benefits",
+      "type": "journalism",
+      "title": "Every baby in 2024 comes with W29.6m cash support",
+      "publisher": "The Korea Herald",
+      "url": "https://www.koreaherald.com/article/3309598",
+      "supports": ["approximately 29.6 million won combined per-child support level in 2024"],
+      "limits": "Single-year benefit snapshot; not a measure of lifetime policy cost or causal fertility effect."
+    },
+    {
+      "id": "aei-2025-hungary-pronatal-limitations",
+      "type": "policy-analysis",
+      "title": "Hungary's Fertility Outcomes Highlight Pro-Natal Policy Limitations",
+      "publisher": "American Enterprise Institute (2025)",
+      "url": "https://www.aei.org/op-eds/hungarys-fertility-outcomes-highlight-pro-natal-policy-limitations/",
+      "supports": ["large family-policy commitment", "TFR rise followed by later decline", "tempo-effect explanation"],
+      "limits": "Policy commentary rather than causal identification; use to frame limitations, not to prove policy failure."
+    },
+    {
+      "id": "ifstudies-hungary-baby-boom-policy",
+      "type": "policy-analysis",
+      "title": "Is Hungary Experiencing a Policy-Induced Baby Boom?",
+      "publisher": "Institute for Family Studies",
+      "url": "https://ifstudies.org/blog/is-hungary-experiencing-a-policy-induced-baby-boom",
+      "supports": ["academic estimates of additional births associated with policy changes"],
+      "limits": "Blog-format synthesis; preserve uncertainty around causality and tempo effects."
+    },
+    {
+      "id": "jcie-japan-germany-migration-comparison",
+      "type": "policy-research",
+      "title": "Migration and Demographic Challenges: New Policy Approaches in Japan and Germany",
+      "publisher": "Japan Center for International Exchange",
+      "url": "https://jcie.org/programs/population-decline-immigration/migration-and-demographic-challenges-new-policy-approaches-in-japan-and-germany/",
+      "supports": ["comparative Japan/Germany aging and migration-policy framing"],
+      "limits": "Use national statistical agencies for current headcounts and election authorities for political results."
+    },
+    {
+      "id": "japan-isa-2025-foreign-residents",
+      "type": "government-statistics",
+      "title": "Foreign residents at end of 2025",
+      "publisher": "Immigration Services Agency of Japan (released March 27, 2026)",
+      "url": "https://www.moj.go.jp/isa/",
+      "supports": ["4,125,395 foreign residents at end-2025", "9.5% year-over-year increase", "first time above four million", "Specified Skilled Worker holders 390,296, up 105,830"],
+      "limits": "Foreign-resident growth demonstrates migration-policy adaptation but does not by itself measure net fiscal effects, integration quality, or whether migration offsets aging at national scale."
+    },
+    {
+      "id": "mpi-japan-immigration-quietly",
+      "type": "policy-research",
+      "title": "As Its Population Ages, Japan Quietly Turns to Immigration",
+      "publisher": "Migration Policy Institute",
+      "url": "https://www.migrationpolicy.org/article/its-population-ages-japan-quietly-turns-immigration",
+      "supports": ["2019 Specified Skilled Worker visa program", "policy shift toward labor migration", "projected worker-shortage context"],
+      "limits": "Use current ISA data for resident counts; worker-shortfall projections vary by model and year."
+    },
+    {
+      "id": "germany-federal-returning-officer-2025-final",
+      "type": "government-primary-source",
+      "title": "2025 Bundestag election: final result",
+      "publisher": "The Federal Returning Officer of Germany (Mar. 14, 2025)",
+      "url": "https://www.bundeswahlleiterin.de/en/info/presse/mitteilungen/bundestagswahl-2025/29_25_endgueltiges-ergebnis.html",
+      "supports": ["AfD won 20.8% of valid second votes in the 2025 Bundestag election", "2021 comparison 10.4%", "82.5% turnout"],
+      "limits": "Election result establishes vote share, not a single causal explanation for why voters supported the party."
+    },
+    {
+      "id": "nippon-2025-upper-house-results",
+      "type": "election-data-journalism",
+      "title": "Ishiba's LDP Coalition Loses Majority in Japan's Upper House Election",
+      "publisher": "Nippon.com (July 2025)",
+      "url": "https://www.nippon.com/en/japan-data/h02485/",
+      "supports": ["Sanseito won 14 contested seats", "party campaigned on a Japanese First platform", "ruling coalition lost its upper-house majority"],
+      "limits": "Election outcome demonstrates a political constraint but does not prove immigration was the dominant determinant of voting behavior."
+    },
+    {
+      "id": "oecd-old-age-dependency-ratio",
+      "type": "intergovernmental-statistics",
+      "title": "Old-age dependency ratio",
+      "publisher": "OECD",
+      "url": "https://www.oecd.org/en/data/indicators/old-age-dependency-ratio.html",
+      "supports": ["historical and projected old-age dependency ratios across OECD economies"],
+      "limits": "Projection, not certainty; migration, labor-force participation, retirement age, and productivity can change fiscal effects."
+    },
+    {
+      "id": "imf-2025-weo-silver-economy",
+      "type": "intergovernmental-primary-source",
+      "title": "The Rise of the Silver Economy: Global Implications of Aging (WEO Chapter 2)",
+      "publisher": "International Monetary Fund (April 2025)",
+      "url": "https://www.imf.org/-/media/files/publications/weo/2025/april/english/ch2.pdf",
+      "supports": ["aging and dependency-ratio pressures on potential output", "mitigating roles for migration, labor participation, and productivity"],
+      "limits": "Macroeconomic assessment, not a deterministic forecast for any single country."
+    },
+    {
+      "id": "nri-2017-silver-human-resource-centers",
+      "type": "policy-research",
+      "title": "Silver Human Resource Center system overview",
+      "publisher": "Nomura Research Institute (2017)",
+      "url": "https://www.nri.com/en/knowledge/report/20170301_2.html",
+      "supports": ["1974 Tokyo founding", "approximately 1,300 centers and 700,000+ members at time of report"],
+      "limits": "Historical snapshot; current participation should be rechecked before using precise present-tense totals."
+    },
+    {
+      "id": "japaneselawtranslation-2020-age-70-employment-law",
+      "type": "government-primary-source",
+      "title": "Act on Stabilization of Employment of Elderly Persons (2020 amendment)",
+      "publisher": "Japanese Law Translation / Ministry of Justice",
+      "url": "https://www.japaneselawtranslation.go.jp/en/laws/view/2621/en",
+      "supports": ["best-efforts duty to secure employment opportunities up to age 70, effective April 2021"],
+      "limits": "Duty of effort, not a binding individual employment guarantee."
+    }
+  ]
+}

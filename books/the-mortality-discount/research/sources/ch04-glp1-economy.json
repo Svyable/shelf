@@ -1,0 +1,79 @@
+{
+  "chapter": 4,
+  "title": "The Ozempic Economy",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "fda-2024-wegovy-cardiovascular-indication",
+      "type": "primary-regulatory",
+      "title": "FDA Approves First Treatment to Reduce Risk of Serious Heart Problems Specifically in Adults with Obesity or Overweight",
+      "publisher": "U.S. Food and Drug Administration (Mar. 8, 2024)",
+      "url": "https://www.fda.gov/news-events/press-announcements/fda-approves-first-treatment-reduce-risk-serious-heart-problems-specifically-adults-obesity-or",
+      "supports": ["Wegovy cardiovascular-risk-reduction indication", "supporting trial enrolled more than 17,600 participants", "major adverse cardiovascular events 6.5% with Wegovy versus 8.0% with placebo"],
+      "limits": "Indication is for adults with established cardiovascular disease and overweight or obesity; do not generalize the cardiovascular outcome to all GLP-1 users."
+    },
+    {
+      "id": "fda-2024-zepbound-osa-indication",
+      "type": "primary-regulatory",
+      "title": "FDA Approves First Medication for Obstructive Sleep Apnea",
+      "publisher": "U.S. Food and Drug Administration (Dec. 20, 2024)",
+      "url": "https://www.fda.gov/news-events/press-announcements/fda-approves-first-medication-obstructive-sleep-apnea",
+      "supports": ["Zepbound approval for moderate-to-severe obstructive sleep apnea in adults with obesity", "first drug treatment option for that population", "two randomized trials totaling 469 adults without type 2 diabetes"],
+      "limits": "Population- and indication-specific approval; does not establish pharmacotherapy as a universal replacement for PAP or other OSA treatment."
+    },
+    {
+      "id": "novo-2025-annual-report-obesity",
+      "type": "primary-company-reporting",
+      "title": "Novo Nordisk Annual Report 2025 — Commercial execution",
+      "publisher": "Novo Nordisk",
+      "url": "https://annualreport.novonordisk.com/2025/strategic-aspirations/commercial-execution.html",
+      "supports": ["2025 obesity-portfolio sales growth of 31% at constant exchange rates", "3.6 million people reached with obesity medicines", "Wegovy available in 52 countries by end of 2025"],
+      "limits": "Issuer-reported commercial figures; primary for Novo Nordisk's own disclosures but interested evidence for competitive interpretation."
+    },
+    {
+      "id": "cnbc-2026-novo-nordisk-decline",
+      "type": "financial-journalism",
+      "title": "Novo Nordisk stock decline as Eli Lilly gains GLP-1 market share",
+      "publisher": "CNBC (Feb. 25, 2026)",
+      "url": "https://www.cnbc.com/2026/02/25/novo-nordisk-stock-nvo-lly-eli-lilly-ozempic-weight-loss-obesity.html",
+      "supports": ["~50% 2025 decline", "~70% decline from mid-2024 peak", "competitive pressure from Eli Lilly", "CagriSema trial disappointment"],
+      "limits": "Point-in-time financial reporting; valuation and market-share figures move with the market and should always be dated."
+    },
+    {
+      "id": "cnbc-2025-lilly-trillion-valuation",
+      "type": "financial-journalism",
+      "title": "Eli Lilly hits $1 trillion market value, a first in health care",
+      "publisher": "CNBC (Nov. 21, 2025)",
+      "url": "https://www.cnbc.com/2025/11/21/eli-lilly-hits-1-trillion-market-value-first-for-health-care-company.html",
+      "supports": ["$1T valuation milestone", "Zepbound/Mounjaro commercial scale"],
+      "limits": "Single-company valuation milestone and point-in-time market reporting."
+    },
+    {
+      "id": "nejm-2023-select-trial",
+      "type": "peer-reviewed-rct",
+      "title": "Semaglutide and Cardiovascular Outcomes in Obesity without Diabetes (SELECT)",
+      "publisher": "New England Journal of Medicine (Nov. 2023)",
+      "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa2307563",
+      "supports": ["20% relative reduction in the primary cardiovascular composite", "large multinational randomized trial", "higher treatment discontinuation with semaglutide"],
+      "limits": "Trial population restricted to people with overweight or obesity and pre-existing cardiovascular disease without diabetes; not generalizable to all GLP-1 users."
+    },
+    {
+      "id": "hsph-2024-bariatric-surgery-decline",
+      "type": "peer-reviewed-study-coverage",
+      "title": "Bariatric surgeries on the decline as use of GLP-1 drugs rises",
+      "publisher": "Harvard T.H. Chan School of Public Health, covering JAMA Surgery (Oct. 2024)",
+      "url": "https://hsph.harvard.edu/news/bariatric-surgeries-on-the-decline-as-use-of-glp-1-drugs-rises/",
+      "supports": ["rapid rise in GLP-1 use", "concurrent decline in bariatric-surgery volume"],
+      "limits": "Correlational; insurance, post-pandemic elective-surgery patterns, and other confounders remain plausible."
+    },
+    {
+      "id": "kff-glp1-medicare-coverage",
+      "type": "policy-research",
+      "title": "What to know about the BALANCE model for GLP-1s in Medicare and Medicaid",
+      "publisher": "KFF",
+      "url": "https://www.kff.org/medicare/what-to-know-about-the-balance-model-for-glp-1s-in-medicare-and-medicaid/",
+      "supports": ["Medicare coverage restrictions", "evolving federal pricing and coverage policy", "institutional uncertainty around obesity-drug benefits"],
+      "limits": "Policy-landscape summary; coverage rules can change and should be rechecked before publication."
+    }
+  ]
+}

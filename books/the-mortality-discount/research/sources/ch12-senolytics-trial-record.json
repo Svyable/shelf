@@ -1,0 +1,61 @@
+{
+  "chapter": 12,
+  "title": "Senescence for Sale",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "unity-biotech-2020-ubx0101-phase2-results",
+      "type": "corporate-press-release",
+      "title": "Unity Biotechnology Announces 12-Week Data for UBX0101 Phase 2",
+      "publisher": "Unity Biotechnology (Aug 2020)",
+      "url": "https://ir.unitybiotechnology.com/news-releases/news-release-details/unity-biotechnology-announces-12-week-data-ubx0101-phase-2",
+      "supports": ["no dose showed statistically significant improvement over placebo at 12 weeks", "company discontinued development of UBX0101 for osteoarthritis"],
+      "limits": "First-party disclosure of a negative trial. Useful for the program outcome, not for broad conclusions about senolytics as a class."
+    },
+    {
+      "id": "mayo-2019-dq-diabetic-kidney-pilot",
+      "type": "peer-reviewed-human-pilot",
+      "title": "Senolytics decrease senescent cells in humans: Preliminary report from a clinical trial of Dasatinib plus Quercetin in individuals with diabetic kidney disease",
+      "publisher": "EBioMedicine 47:446-456 (2019)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31542391/",
+      "supports": ["nine-participant open-label human pilot", "reductions in senescence-associated cell and inflammatory markers after a short D+Q course"],
+      "limits": "No placebo control and too small to establish clinical efficacy or durable health benefit. Best treated as proof of mechanism."
+    },
+    {
+      "id": "justice-2023-ipf-randomized-pilot",
+      "type": "peer-reviewed-randomized-pilot",
+      "title": "Senolytics dasatinib and quercetin in idiopathic pulmonary fibrosis: results of a phase I, single-blind, single-center, randomized, placebo-controlled pilot trial on feasibility and tolerability",
+      "publisher": "EBioMedicine (2023)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36857968/",
+      "supports": ["12 participants randomized to D+Q or placebo", "all participants completed dosing and assessments", "more non-serious adverse events in the D+Q arm; no serious adverse event attributed to treatment"],
+      "limits": "Tiny pilot designed around feasibility and tolerability rather than efficacy. Investigators disclosed senolytic-related patent interests held by Mayo Clinic."
+    },
+    {
+      "id": "farr-2024-bone-phase2",
+      "type": "peer-reviewed-randomized-phase2",
+      "title": "Effects of intermittent senolytic therapy on bone metabolism in postmenopausal women: a phase 2 randomized controlled trial",
+      "publisher": "Nature Medicine (2024)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38956196/",
+      "supports": ["60-participant randomized phase 2 trial", "primary 20-week CTx endpoint did not differ between D+Q and control", "exploratory signals in participants with higher baseline senescent-cell burden"],
+      "limits": "Overall primary endpoint was negative; subgroup findings were exploratory. Several investigators disclosed financial interests in senolytic patents and uses held by Mayo Clinic."
+    },
+    {
+      "id": "millar-2025-cognition-mobility-pilot",
+      "type": "peer-reviewed-human-pilot",
+      "title": "A pilot study of senolytics to improve cognition and mobility in older adults at risk for Alzheimer's disease",
+      "publisher": "EBioMedicine 113:105612 (2025)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40010154/",
+      "supports": ["human senolytic testing in older adults at risk for Alzheimer disease", "exploratory cognition, mobility, safety and biomarker outcomes"],
+      "limits": "Pilot-scale study, insufficient to establish that senolytic treatment prevents or slows Alzheimer disease or broadly improves aging outcomes."
+    },
+    {
+      "id": "schweiger-2025-mental-disorders-protocol",
+      "type": "peer-reviewed-trial-protocol",
+      "title": "Protocol for a pilot clinical trial of the senolytic drug combination Dasatinib Plus Quercetin to mitigate age-related health and cognitive decline in mental disorders",
+      "publisher": "F1000Research 13:1072 (version published 2025)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40443429/",
+      "supports": ["ongoing expansion of D+Q testing into additional aging-associated clinical populations", "trial remains focused on feasibility, safety and exploratory health/cognitive outcomes"],
+      "limits": "Protocol only; it provides no efficacy result and should not be cited as evidence that the treatment works."
+    }
+  ]
+}

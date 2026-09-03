@@ -1,0 +1,25 @@
+{
+  "chapter": 16,
+  "title": "The Career That Doesn't End",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "oecd-2025-employment-outlook-ai-aging",
+      "type": "government-primary-source",
+      "title": "OECD Employment Outlook 2025 (AI and workforce aging)",
+      "publisher": "OECD (2025)",
+      "url": "https://www.oecd.org/en/publications/2025/07/oecd-employment-outlook-2025_5345f034/full-report/component-6.html",
+      "supports": ["AI framed as a tool to help overcome the aging challenge by boosting output per worker"],
+      "limits": "Institutional framing; the chapter immediately complicates it with the Indeed Hiring Lab mismatch finding below."
+    },
+    {
+      "id": "indeed-hiringlab-2026-great-mismatch",
+      "type": "labor-market-analysis",
+      "title": "How a shrinking workforce, AI, and labor reallocation will define the next 15 years",
+      "publisher": "Indeed Hiring Lab (May 2026)",
+      "url": "https://www.hiringlab.org/2026/05/14/how-a-shrinking-workforce-ai-and-labor-reallocation-will-define-the-next-15-years/",
+      "supports": ["labor segments shrinking fastest from aging (elder care, manual trades, healthcare support) are not the segments where current AI tools are effective"],
+      "limits": "Single labor-market research organization's analysis; central to the chapter's structural-mismatch argument."
+    }
+  ]
+}

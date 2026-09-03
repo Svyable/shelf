@@ -1,0 +1,46 @@
+{
+  "chapter": 2,
+  "title": "The Line That Wouldn't Bend",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "cdc-nchs-mortality-2024",
+      "type": "government-final-statistics",
+      "title": "Mortality in the United States, 2024",
+      "publisher": "CDC National Center for Health Statistics",
+      "date": "2026-01",
+      "url": "https://www.cdc.gov/nchs/products/databriefs/db548.htm",
+      "supports": ["2024 U.S. life expectancy at birth 79.0 years", "2024 life expectancy at age 65 19.7 additional years", "cause-specific contributors to the 2023-2024 increase"],
+      "limits": "Period life expectancy is a summary of current age-specific mortality rates, not a literal forecast for a birth cohort."
+    },
+    {
+      "id": "cdc-nchs-2024-release",
+      "type": "government-release",
+      "title": "U.S. Life Expectancy Hits Record High as Drug Overdose Deaths Decline in 2024",
+      "publisher": "CDC National Center for Health Statistics",
+      "date": "2026-01-29",
+      "url": "https://www.cdc.gov/nchs/pressroom/releases/20260129.html",
+      "supports": ["final 2024 life-expectancy release context", "decline in overdose mortality"],
+      "limits": "Press summary; numerical claims should be traced to the underlying final data brief or life tables where possible."
+    },
+    {
+      "id": "cdc-nchs-life-tables-2024",
+      "type": "government-life-table",
+      "title": "United States Life Tables, 2024",
+      "publisher": "CDC National Center for Health Statistics",
+      "date": "2026-08-25",
+      "url": "https://www.cdc.gov/nchs/data/nvsr/nvsr75/nvsr75-05.pdf",
+      "supports": ["definition and construction of period life tables", "age-specific survival and life-expectancy estimates", "demographic subgroup estimates"],
+      "limits": "Descriptive life-table output; does not itself identify causes of long-run mortality improvement."
+    },
+    {
+      "id": "cdc-nvss-mortality-data",
+      "type": "government-data-index",
+      "title": "Mortality Data",
+      "publisher": "CDC National Center for Health Statistics",
+      "url": "https://www.cdc.gov/nchs/nvss/deaths.htm",
+      "supports": ["current final and provisional U.S. mortality data availability", "2024 final mortality headline metrics"],
+      "limits": "Index page; use linked statistical releases for detailed claims."
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "chapter": 6,
+  "title": "The Sardinia Problem",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "newman-2024-biorxiv-supercentenarian-fraud",
+      "type": "preprint",
+      "title": "Supercentenarian and remarkable age records exhibit patterns indicative of clerical errors and pension fraud",
+      "publisher": "bioRxiv (v3, March 14, 2024)",
+      "url": "https://www.biorxiv.org/content/10.1101/704080v3",
+      "supports": ["18% birth-certificate validation rate for exhaustively validated supercentenarians", "0% in the USA", "birthdate clustering on days divisible by five", "69-82% fall in supercentenarian reports after birth-certification introduction"],
+      "limits": "Remains an unpublished preprint as of the most recent version found, despite years of revision and the 2024 Ig Nobel Prize — the chapter states this explicitly and does not describe it as peer-reviewed."
+    },
+    {
+      "id": "ucl-2024-ig-nobel-demography",
+      "type": "institutional-announcement",
+      "title": "UCL demographer's work debunking Blue Zone regions wins Ig Nobel Prize",
+      "publisher": "UCL (Sept 12, 2024)",
+      "url": "https://www.ucl.ac.uk/ioe/news/2024/sep/ucl-demographers-work-debunking-blue-zone-regions-exceptional-lifespans-wins-ig-nobel-prize",
+      "supports": ["first Ig Nobel Prize in Demography", "award citation text"],
+      "limits": "Institutional press release; the Ig Nobel's satirical-but-serious framing is described accurately per the prize's own stated purpose."
+    },
+    {
+      "id": "aljazeera-2024-blue-zones-fake-data",
+      "type": "journalism",
+      "title": "The secret of Blue Zones where people reach 100: 'fake data,' says academic",
+      "publisher": "Al Jazeera (Sept 26, 2024)",
+      "url": "https://www.aljazeera.com/news/2024/9/26/the-secret-of-blue-zones-where-people-reach-100-fake-data-says-academic",
+      "supports": ["mainstream journalism framing of the controversy"],
+      "limits": "Secondary journalism; the chapter cites the preprint itself for the underlying statistics."
+    },
+    {
+      "id": "bluezones-2024-fact-check-response",
+      "type": "corporate-rebuttal",
+      "title": "Fact-check of claims: Blue Zones research validity",
+      "publisher": "Blue Zones LLC",
+      "url": "https://www.bluezones.com/fact-check-of-claims-blue-zones-research-validity/",
+      "supports": ["Buettner's claim of 20 years of demographic verification", "claimed December 2025 independent re-validation review"],
+      "limits": "Self-published rebuttal from the company whose brand is being challenged, not an independent peer-reviewed response to Newman's specific statistical claims — flagged explicitly in the chapter."
+    },
+    {
+      "id": "cnbc-2024-blue-zones-in-question",
+      "type": "journalism",
+      "title": "Blue Zones are in question, but the habits do support a healthy life",
+      "publisher": "CNBC (Nov 18, 2024)",
+      "url": "https://www.cnbc.com/2024/11/18/blue-zones-are-in-question-but-the-habits-do-support-a-healthy-life.html",
+      "supports": ["balanced framing distinguishing the extreme-longevity claim from the general lifestyle-advice claim"],
+      "limits": "Secondary journalism."
+    }
+  ]
+}

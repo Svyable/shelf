@@ -1,0 +1,88 @@
+{
+  "chapter": 3,
+  "title": "Aging Gets a Disease Code",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "lopez-otin-2013-hallmarks",
+      "type": "peer-reviewed-paper",
+      "title": "The Hallmarks of Aging",
+      "publisher": "Cell (vol. 153, 2013)",
+      "url": "https://www.cell.com/cell/fulltext/S0092-8674(13)00645-4",
+      "supports": ["original nine hallmarks of aging", "field-defining taxonomy"],
+      "limits": "Organizational taxonomy, not a demonstrated single causal theory of aging."
+    },
+    {
+      "id": "lopez-otin-2023-hallmarks-expanding",
+      "type": "peer-reviewed-paper",
+      "title": "Hallmarks of Aging: An Expanding Universe",
+      "publisher": "Cell (vol. 186, Jan 2023)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36599349/",
+      "supports": ["expansion from nine to twelve hallmarks", "three-part test for a candidate hallmark"],
+      "limits": "Growth of the list itself is evidence of an unsettled, evolving framework."
+    },
+    {
+      "id": "hoverfly-and-wasp-critique",
+      "type": "peer-reviewed-critique",
+      "title": "The hoverfly and the wasp: A critique of the hallmarks of aging as a paradigm",
+      "publisher": "PMC (PMC7611451)",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7611451/",
+      "supports": ["critique of circularity and rhetorical function of the hallmarks framework"],
+      "limits": "A minority, dissenting methodological view within the field, not a rebuttal of the underlying biology."
+    },
+    {
+      "id": "afar-tame-trial-overview",
+      "type": "institutional-overview",
+      "title": "TAME Trial",
+      "publisher": "American Federation for Aging Research",
+      "url": "https://www.afar.org/tame-trial",
+      "supports": ["TAME trial design", "composite age-related-disease endpoint", "funding status"],
+      "limits": "First-party advocacy-adjacent source for a trial AFAR itself helps fund; cross-checked against independent journalism below."
+    },
+    {
+      "id": "fightaging-2024-tame-funding",
+      "type": "science-journalism",
+      "title": "The TAME Trial for Metformin Remains Only Partially Funded",
+      "publisher": "Fight Aging! (April 2024)",
+      "url": "https://www.fightaging.org/archives/2024/04/the-tame-trial-for-metformin-remains-only-partially-funded/",
+      "supports": ["TAME's incomplete funding as of 2024"],
+      "limits": "Aggregator/commentary site rather than original reporting."
+    },
+    {
+      "id": "npr-2024-tame-metformin",
+      "type": "journalism",
+      "title": "A cheap drug may slow down aging. A study will determine if it works",
+      "publisher": "NPR Shots (April 22, 2024)",
+      "url": "https://www.npr.org/sections/health-shots/2024/04/22/1245872510/a-cheap-drug-may-slow-down-aging-a-study-will-determine-if-it-works",
+      "supports": ["$30-50M TAME funding estimate", "metformin's unpatentable economics as the funding obstacle"],
+      "limits": "One of two conflicting cost estimates found in research; the chapter states both explicitly rather than resolving the discrepancy."
+    },
+    {
+      "id": "agingresearch-barzilai-tame",
+      "type": "institutional-overview",
+      "title": "Dr. Nir Barzilai on the TAME Study",
+      "publisher": "Alliance for Aging Research",
+      "url": "https://www.agingresearch.org/blog/dr-nir-barzilai-on-the-tame-study/",
+      "supports": ["$75M TAME budget figure with $40M private donation and $35M AFAR funding"],
+      "limits": "Advocacy-organization blog; conflicts with the NPR figure, flagged explicitly in the chapter."
+    },
+    {
+      "id": "who-icd11-xt9t",
+      "type": "regulatory-classification",
+      "title": "ICD-11 extension code XT9T (Ageing related)",
+      "publisher": "World Health Organization",
+      "url": "https://icd.who.int/browse11/l-m/en",
+      "supports": ["XT9T as an extension/modifier code, not a standalone diagnosis"],
+      "limits": "Classification browser; interpretation of scope drawn from secondary WHO-process reporting below."
+    },
+    {
+      "id": "lancet-healthy-longevity-old-age-withdrawn",
+      "type": "peer-reviewed-commentary",
+      "title": "How 'old age' was withdrawn as a diagnosis from ICD-11",
+      "publisher": "The Lancet Healthy Longevity (2022)",
+      "url": "https://www.thelancet.com/journals/lanhl/article/PIIS2666-7568(22)00102-7/fulltext",
+      "supports": ["withdrawal of standalone MG2A 'old age' code", "diagnostic-overshadowing concern driving the withdrawal"],
+      "limits": "Commentary/editorial rather than a WHO primary policy document; used to establish the contested, partial nature of the reclassification."
+    }
+  ]
+}

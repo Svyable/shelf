@@ -1,0 +1,34 @@
+{
+  "chapter": 14,
+  "title": "Who Gets to Live Longer",
+  "checked": "2026-09-02",
+  "sources": [
+    {
+      "id": "chetty-2016-jama-income-life-expectancy",
+      "type": "peer-reviewed-paper",
+      "title": "The Association Between Income and Life Expectancy in the United States, 2001-2014",
+      "publisher": "JAMA 315(16):1750-1766 (April 2016)",
+      "url": "https://opportunityinsights.org/paper/lifeexpectancy/",
+      "supports": ["14.6-year (men)/10.1-year (women) top-1%-vs-bottom-1% gap", "1.4B IRS records linked to SSA death records", "geographic variation in low-income life expectancy", "widening gap 2001-2014"],
+      "limits": "Correlational/administrative-data study; authors themselves caution that geographic variation suggests income alone doesn't mechanically determine the gap."
+    },
+    {
+      "id": "harvard-gazette-2016-chetty-coverage",
+      "type": "science-journalism",
+      "title": "For life expectancy, money matters",
+      "publisher": "Harvard Gazette (April 2016)",
+      "url": "https://news.harvard.edu/gazette/story/2016/04/for-life-expectancy-money-matters/",
+      "supports": ["accessible restatement with co-author David Cutler commentary"],
+      "limits": "Secondary press-office source; the chapter cites the JAMA article itself for the underlying numbers."
+    },
+    {
+      "id": "ama-2016-life-expectancy-disparity",
+      "type": "professional-association-journalism",
+      "title": "A growing health disparity: Life expectancy for richest, poorest Americans",
+      "publisher": "American Medical Association (2016)",
+      "url": "https://www.ama-assn.org/public-health/health-equity/growing-health-disparity-life-expectancy-richest-poorest-americans",
+      "supports": ["independent restatement/confirmation of the 14.6/10.1-year gap figures"],
+      "limits": "Secondary source, useful as a cross-check that the figure is reported consistently."
+    }
+  ]
+}
