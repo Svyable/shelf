@@ -41,6 +41,6 @@ jobs:
           git -C shelf config user.name 'Svyable Release Automation'
           git -C shelf config user.email '129682319+Svyable@users.noreply.github.com'
           git -C shelf add README.md .github/ISSUE_TEMPLATE/chapter-feedback.yml books/look-alive .github/workflows/publish-look-alive-refresh-once.yml
-          git -C shelf diff --cached --check -- ':!books/look-alive/RIGHTS.md'
+          git -C shelf diff --cached --check -- ':!books/look-alive/RIGHTS.md' ':!books/look-alive/research/release-review.md'
           git -C shelf commit -m 'Refresh Look Alive release [publication-generated]'
           git -C shelf push origin HEAD:release/look-alive
