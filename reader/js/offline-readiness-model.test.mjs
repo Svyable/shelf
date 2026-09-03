@@ -7,6 +7,7 @@ import {
   offlineSaveAction,
   offlineSaveResultLabel,
   shouldKeepOfflineNoticeVisible,
+  shouldShowOfflineReadinessNotice,
 } from './offline-readiness-model.js';
 
 let assertions = 0;
@@ -51,6 +52,9 @@ check(offlineSaveResultLabel({ result: 'complete', persisted: true }), 'Book kep
 check(offlineSaveResultLabel({ result: 'complete', persisted: false }), 'Book kept offline');
 check(offlineSaveResultLabel({ result: 'partial' }), 'Some files could not be kept offline');
 check(offlineSaveResultLabel({ result: 'failed' }), 'Could not keep this book offline');
+check(shouldShowOfflineReadinessNotice({ state: 'online-ready', saveResult: 'idle' }), false);
+check(shouldShowOfflineReadinessNotice({ state: 'online-ready', saveResult: 'complete' }), true);
+check(shouldShowOfflineReadinessNotice({ state: 'offline-ready', saveResult: 'idle' }), true);
 check(shouldKeepOfflineNoticeVisible('online-saving'), true);
 check(shouldKeepOfflineNoticeVisible('online-ready'), false);
 check(shouldKeepOfflineNoticeVisible('offline-ready'), true);
