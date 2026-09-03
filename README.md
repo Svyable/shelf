@@ -1,8 +1,8 @@
-# Svyable Shelf
+# Sven Hardy Benson’s Shelf
 
 **Released editions. Read like books.**
 
-Svyable Shelf is the public reading library for books by Sven Hardy Benson and the live reference deployment of [Bookself](https://github.com/Svyable/bookself). The working copy moves on a separate private Desk; Shelf holds the public snapshots readers can actually open, cite, share, and return to.
+Sven Hardy Benson’s Shelf is the public reading library for books by Sven Hardy Benson and the live reference deployment of [Bookself](https://github.com/Svyable/bookself). The working copy moves on a separate private Desk; Shelf holds the public snapshots readers can actually open, cite, share, and return to.
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)** · **[✍️ See how Desk works →](https://svyable.github.io/bookself/reader/#/b/making-bookself/)** · **[🛠 Explore Bookself →](https://github.com/Svyable/bookself)**
 
@@ -35,7 +35,7 @@ Open a book in the Reader for the bound-reading experience, or open its project 
 | [**The Exponentiality**](books/the-exponentiality/) | 🟡 Public draft | Prologue drafted | A public in-progress Bookself volume. It is present on Shelf but is still marked `Drafting`, so it is not treated as a released catalog entry by the Reader. | [Read draft →](https://svyable.github.io/shelf/reader/#/b/the-exponentiality/) |
 | [**Restructuring America**](books/restructuring-america/) | ✅ Released | 20 of 20 drafted | Artificial intelligence can make cognition cheaper without making land, electricity, housing, water, transmission, permitting, skilled field work, or institutional coordination cheap. | [Read →](https://svyable.github.io/shelf/reader/#/b/restructuring-america/) |
 | [**Wild Speculation**](books/wild-speculation/) | ✅ Released | 20 / 20 | Geopolitical danger can be real without making a geopolitical script investable; the durable hedge is resilience, diversification, liquidity, and room to be wrong. | [Read →](https://svyable.github.io/shelf/reader/#/b/wild-speculation/) |
-| [**The Intelligence Dilemma**](books/the-intelligence-dilemma/) | ✅ Released | 20 of 20 drafted | The Intelligence Dilemma asks how schools can use abundant machine intelligence to deepen learning without letting polished output become a substitute for student capability. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-intelligence-dilemma/) |
+| [**The Intelligence Dilemma**](books/the-intelligence-dilemma/) | ✅ Released | 20 of 20 | The Intelligence Dilemma asks how schools can use abundant machine intelligence to deepen learning without letting polished output become a substitute for student capability. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-intelligence-dilemma/) |
 | [**Energy, Value & Intelligence**](books/energy-value-intelligence/) | ✅ Released | 22 of 22 drafted | A narrative nonfiction book about the three ledgers underneath technological civilization: physical capacity, intelligence, and the systems by which people decide what is worth doing. | [Read →](https://svyable.github.io/shelf/reader/#/b/energy-value-intelligence/) |
 | [**Keep Cooking**](books/keep-cooking/) | ✅ Released | 25 of 25 drafted | The manuscript now carries an afterword for the August 30, 2026 threshold: the moment long-horizon, correction-remembering, collaborating agents became plausible enough to change the… | [Read →](https://svyable.github.io/shelf/reader/#/b/keep-cooking/) |
 
@@ -63,8 +63,8 @@ These eight tiny Bookself Studio publications are real Markdown volumes built to
 **Desk means work in motion. Shelf means a public snapshot.**
 
 ```text
-                  Svyable Desk                         Svyable Shelf
-              ──────────────────                   ──────────────────
+                  Svyable Desk                         Sven Hardy Benson’s Shelf
+              ──────────────────                   ─────────────────────────────
 idea → research → manuscript → revision → commit → release snapshot → edition
                        ↑                                  │
                   Desk Reader                        Shelf Reader
@@ -82,7 +82,7 @@ That separation is one of Bookself's core ideas: **publication is an intentional
 | `books/` | Public publication snapshots owned by this Shelf |
 | `reader/` | Shared Bookself reading interface |
 | `desk/` | Shared Bookself publishing/readiness interface |
-| `imprint.json` | Svyable Shelf identity and repository links |
+| `imprint.json` | Sven Hardy Benson’s Shelf identity and repository links |
 | `README.md` | Human-facing library catalog and deployment guide |
 
 Shared Reader/Desk improvements originate in [Svyable/bookself](https://github.com/Svyable/bookself). This repository owns its books, identity, and release history.
