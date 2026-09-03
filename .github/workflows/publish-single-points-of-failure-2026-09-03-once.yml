@@ -1,0 +1,63 @@
+name: Publish reviewed Single Points of Failure once
+
+on:
+  push:
+    branches:
+      - release/single-points-of-failure-2026-09-03
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: ${{ !contains(github.event.head_commit.message, '[publication-generated]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Shelf release branch
+        uses: actions/checkout@v4
+        with:
+          ref: release/single-points-of-failure-2026-09-03
+          path: shelf
+          fetch-depth: 0
+
+      - name: Check out frozen Desk source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --quiet --filter=blob:none https://github.com/Svyable/desk.git desk
+          git -C desk checkout --quiet 86f15989ebcc75fa95c564f2d71ae98b554f1afc
+
+      - name: Prepare release with canonical helper
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 desk/scripts/release-book.py single-points-of-failure "$GITHUB_WORKSPACE/shelf"
+
+      - name: Ensure feedback selector contains publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('shelf/.github/ISSUE_TEMPLATE/chapter-feedback.yml')
+          text = path.read_text(encoding='utf-8')
+          slug = 'single-points-of-failure'
+          if f'        - {slug}\n' not in text:
+              marker = '        - silent-cartel\n'
+              if marker not in text:
+                  raise SystemExit('feedback selector insertion marker missing')
+              text = text.replace(marker, marker + f'        - {slug}\n')
+              path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Remove one-shot workflow and commit generated release
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f shelf/.github/workflows/publish-single-points-of-failure-2026-09-03-once.yml
+          git -C shelf config user.name 'Svyable Release Automation'
+          git -C shelf config user.email '129682319+Svyable@users.noreply.github.com'
+          git -C shelf add README.md .github/ISSUE_TEMPLATE/chapter-feedback.yml books/single-points-of-failure .github/workflows/publish-single-points-of-failure-2026-09-03-once.yml
+          git -C shelf diff --cached --check -- ':!books/single-points-of-failure/RIGHTS.md' ':!books/single-points-of-failure/research/release-review-2026-09-03.md'
+          git -C shelf commit -m 'Publish Single Points of Failure [publication-generated]'
+          git -C shelf push origin HEAD:release/single-points-of-failure-2026-09-03
