@@ -40,6 +40,7 @@ const recentCompanions = [
   './js/scroll-chapter-nav.js',
   './js/reading-session-model.js',
   './js/reading-session.js',
+  './css/settings-panel.css',
 ];
 
 const removedOfflineReadinessAssets = [
@@ -88,8 +89,8 @@ test('removed offline readiness surface is absent from the install shell', () =>
   }
 });
 
-test('offline shell generation advances for native sharing', () => {
-  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v95['"]/);
+test('offline shell generation advances for the settings refinement', () => {
+  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v96['"]/);
 });
 
 console.log('offline shell contract tests cover dynamic enhancement parity');

@@ -18,13 +18,23 @@ function systemTheme() {
   }
 }
 
-export function loadPrefs() {
-  const defaults = {
-    theme: systemTheme(),
+export function readingAppearanceDefaults(theme = 'dark') {
+  return {
+    theme: theme === 'light' ? 'light' : 'dark',
     fontSize: 18,
     lineHeight: '1.55',
     fontFamily: 'serif',
     nightLight: false,
+  };
+}
+
+export function resetReadingAppearancePrefs(prefs = {}, theme = systemTheme()) {
+  return { ...prefs, ...readingAppearanceDefaults(theme) };
+}
+
+export function loadPrefs() {
+  const defaults = {
+    ...readingAppearanceDefaults(systemTheme()),
     viewMode: 'spread',
     focus: false,
     lastSlug: null,
