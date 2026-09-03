@@ -7,7 +7,13 @@ const source = fs.readFileSync(new URL('./offline-cache.js', import.meta.url), '
 const context = { URL, Promise, TypeError };
 context.globalThis = context;
 vm.runInNewContext(source, context);
-const { chapterLinks, mediaLinks, isPublicationReadme, createWarmScheduler } = context.BookselfOfflineCache;
+const {
+  chapterLinks,
+  mediaLinks,
+  isPublicationReadme,
+  publicationWarmPlan,
+  createWarmScheduler,
+} = context.BookselfOfflineCache;
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -68,6 +74,33 @@ test('isPublicationReadme accepts deployed book paths only', () => {
   assert.equal(isPublicationReadme('https://reader.test/bookself/books/demo/README.md'), true);
   assert.equal(isPublicationReadme('https://reader.test/books/demo/ch01.md'), false);
   assert.equal(isPublicationReadme('not a url'), false);
+});
+
+test('publication warm plan preserves full warming on unconstrained connections', () => {
+  assert.deepEqual({ ...publicationWarmPlan({}) }, { warmChapters: true, warmMedia: true });
+  assert.deepEqual(
+    { ...publicationWarmPlan({ effectiveType: '4g' }) },
+    { warmChapters: true, warmMedia: true }
+  );
+});
+
+test('publication warm plan drops media on 3g and all speculative warming on constrained links', () => {
+  assert.deepEqual(
+    { ...publicationWarmPlan({ effectiveType: '3g' }) },
+    { warmChapters: true, warmMedia: false }
+  );
+  assert.deepEqual(
+    { ...publicationWarmPlan({ effectiveType: '2g' }) },
+    { warmChapters: false, warmMedia: false }
+  );
+  assert.deepEqual(
+    { ...publicationWarmPlan({ effectiveType: 'slow-2g' }) },
+    { warmChapters: false, warmMedia: false }
+  );
+  assert.deepEqual(
+    { ...publicationWarmPlan({ saveData: true, effectiveType: '4g' }) },
+    { warmChapters: false, warmMedia: false }
+  );
 });
 
 test('warm scheduler caps concurrent work and drains all queued jobs', async () => {
