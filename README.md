@@ -52,7 +52,7 @@ These eight tiny Bookself Studio publications are real Markdown volumes built to
 | [**A Clear Margin**](books/style-clear-margin/) | `modern-essay` | Porcelain, IBM Plex Sans, wide scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-clear-margin/) |
 | [**Field Notes Quarterly**](books/style-field-notes/) | `editorial` | Linen, humanist sans, compact editorial scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-field-notes/) |
 | [**Poems at the Window**](books/style-poems-at-window/) | `poetry` | Ivory, classic serif, airy open scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-poems-at-window/) |
-| [**After Midnight**](books/style-after-midnight/) | `night-story` | Midnight, Lora, narrow warm paged reading | [Open →](https://svyable.github.io/shelf/reader/#/b/after-midnight/) |
+| [**After Midnight**](books/style-after-midnight/) | `night-story` | Midnight, Lora, narrow warm paged reading | [Open →](https://svyable.github.io/shelf/reader/#/b/style-after-midnight/) |
 | [**Easy Reading**](books/style-easy-reading/) | `accessible` | High contrast, Atkinson Hyperlegible, larger scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-easy-reading/) |
 | [**Study in Green**](books/style-quiet-study/) | `quiet-study` | Sage, Literata, narrow left-aligned study scroll | [Open →](https://svyable.github.io/shelf/reader/#/b/style-quiet-study/) |
 
