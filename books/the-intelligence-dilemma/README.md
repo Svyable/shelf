@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| **Authors**   | @svyable |
+| **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 20 of 20 drafted |
 
