@@ -375,3 +375,85 @@ Everything works in isolation.
 Nothing belongs together.
 
 Taste is the discipline that keeps abundance from winning by accumulation.
+
+There is one more reason taste becomes valuable when generation is cheap: decisions differ in reversibility.
+
+A team can test five headlines and discard four by lunch. It cannot test five bridge alignments after construction. A developer can generate twenty interface concepts and throw away nineteen. A manufacturer ordering a custom machine, a city acquiring land, or a founder setting a pricing model that customers organize around faces a different kind of choice.
+
+Taste matters most when the search space is large and the cost of reversing a decision is high.
+
+That is where “generate more options” stops being sufficient advice.
+
+The important question becomes when to keep optionality and when to commit.
+
+AI makes optionality cheaper in early stages. A company can simulate more scenarios, compare more suppliers, explore more layouts, draft more contracts, and build more prototypes before committing. This should improve decisions if the organization understands what information each additional option is expected to produce.
+
+Otherwise exploration becomes procrastination with impressive artifacts.
+
+A model can always generate one more alternative.
+
+At some point, the cost of waiting exceeds the value of another possibility.
+
+Taste includes recognizing that point.
+
+This is especially clear in physical work. A contractor must release long-lead equipment before every detail is perfect. A machinist must choose a setup before the first cut can teach anything. A public agency must sometimes select a design before every stakeholder preference can be reconciled. The decision is made under uncertainty because reality will not provide more information for free.
+
+The experienced person asks what can still be changed later.
+
+Preserve flexibility where uncertainty is high and reversibility is cheap.
+
+Commit where delay is expensive and the evidence is already good enough.
+
+Do not spend irreversible capital to resolve a reversible question.
+
+Do not preserve theoretical flexibility by making the entire system more complex forever.
+
+This is taste expressed as option value.
+
+It is a financial concept living inside design.
+
+A modular architecture may cost more now and preserve future choices. A standardized component may reduce customization and make replacement easier. A building detail may be less visually pure and dramatically more serviceable. A business may reject a lucrative custom contract because accepting it would bend the product around one customer and close more valuable future paths.
+
+There is no universal formula for these choices.
+
+The value depends on what uncertainty remains and how expensive change will become.
+
+AI can help model the branches.
+
+The human still has to decide which branch deserves the irreversible move.
+
+That is why taste and courage are related.
+
+Selection creates responsibility.
+
+If every option remains open, nobody has to own a preference. Once a team chooses, the choice can be wrong in a way the world will reveal.
+
+Cheap generation can tempt people to defer that exposure. Keep brainstorming. Ask another model. Produce another scenario. Run another review. The work feels sophisticated because the possibility set keeps expanding.
+
+Eventually value requires narrowing.
+
+The renaissance worker is not merely curious enough to explore widely.
+
+They are disciplined enough to stop exploring when the remaining uncertainty no longer justifies delay.
+
+This is where taste becomes different from novelty seeking.
+
+Curiosity opens doors.
+
+Taste closes most of them.
+
+The combination is powerful because either trait alone can fail badly. Curiosity without taste creates endless possibilities. Taste without curiosity becomes a fixed preference system defending yesterday’s answer.
+
+Ubiquitous intelligence rewards the person who can alternate between the two modes.
+
+Open the search space aggressively while information is cheap.
+
+Then become severe.
+
+Ask what survives consequence, what remains maintainable, what preserves the right future choices, and what should be refused despite being possible.
+
+That rhythm may be one of the most important creative skills of the next decade.
+
+The machine makes abundance.
+
+Taste decides where abundance stops.
