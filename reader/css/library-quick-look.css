@@ -1,0 +1,133 @@
+/* Shelf quick look — useful metadata without turning the library into a dashboard. */
+
+.volume:not(.publication-web-volume) .volume-cover {
+  position: relative;
+  overflow: hidden;
+}
+
+.volume:not(.publication-web-volume) .volume-quick-look {
+  position: absolute;
+  left: .62rem;
+  right: .62rem;
+  bottom: 2.35rem;
+  z-index: 3;
+  display: grid;
+  gap: .18rem;
+  padding: .58rem .62rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, #090807 82%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, #000 52%, transparent);
+  color: #f7f0e5;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.volume:not(.publication-web-volume):hover .volume-quick-look,
+.volume:not(.publication-web-volume):focus-visible .volume-quick-look,
+.volume:not(.publication-web-volume):focus-within .volume-quick-look {
+  opacity: 1;
+  transform: none;
+}
+
+.volume:not(.publication-web-volume):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+  border-radius: 5px;
+  transform: translateY(-8px) rotate(0);
+  z-index: 3;
+}
+
+.volume:not(.publication-web-volume):focus-visible .volume-open {
+  opacity: 1;
+}
+
+.volume-quick-kicker,
+.volume-quick-facts,
+.volume-quick-tags,
+.volume-quick-progress {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.volume-quick-kicker {
+  color: color-mix(in srgb, #fff 82%, var(--accent));
+  font: 700 .56rem/1.2 "IBM Plex Sans", system-ui, sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.volume-quick-facts,
+.volume-quick-tags {
+  color: color-mix(in srgb, #fff 70%, var(--accent));
+  font: 500 .62rem/1.28 "IBM Plex Sans", system-ui, sans-serif;
+  letter-spacing: .01em;
+}
+
+.volume-quick-tags {
+  color: color-mix(in srgb, #fff 58%, var(--accent));
+}
+
+.volume-quick-progress {
+  margin-top: .08rem;
+  color: var(--accent);
+  font: 650 .63rem/1.28 "IBM Plex Sans", system-ui, sans-serif;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .volume:not(.publication-web-volume) .volume-quick-look {
+    bottom: 2.25rem;
+    padding: .48rem .54rem;
+    opacity: 1;
+    transform: none;
+  }
+
+  .volume:not(.publication-web-volume) .volume-open {
+    opacity: 1;
+  }
+
+  .volume-quick-tags {
+    display: none;
+  }
+}
+
+@media (max-width: 700px), (max-height: 520px) {
+  .volume:not(.publication-web-volume) .volume-quick-look {
+    left: .5rem;
+    right: .5rem;
+    padding: .42rem .48rem;
+  }
+
+  .volume-quick-kicker { font-size: .52rem; }
+  .volume-quick-facts,
+  .volume-quick-progress { font-size: .58rem; }
+  .volume-quick-tags { display: none; }
+}
+
+@media (forced-colors: active) {
+  .volume:not(.publication-web-volume) .volume-quick-look {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .volume-quick-kicker,
+  .volume-quick-facts,
+  .volume-quick-tags,
+  .volume-quick-progress {
+    color: CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .volume:not(.publication-web-volume) .volume-quick-look,
+  .volume:not(.publication-web-volume):focus-visible {
+    transition: none;
+  }
+}
