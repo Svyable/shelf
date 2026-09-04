@@ -43,30 +43,14 @@ jobs:
         run: |
           python3 - <<'PY'
           import json
-          from datetime import datetime, timezone
           from pathlib import Path
 
           catalog_path = Path('catalog.json')
           data = json.loads(catalog_path.read_text(encoding='utf-8'))
-          now = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z')
-          entry = {
-              'slug': 'vibecariously',
-              'title': 'Vibecariously',
-              'subtitle': 'How AI Changed The Way We Imagine',
-              'author': 'Sven Hardy Benson',
-              'status': 'Published',
-              'release_state': 'released',
-              'released_at': now,
-              'published_to_shelf': True,
-              'review_scope': 'Public release snapshot copied from the canonical expanded Desk manuscript.',
-              'review_notes': 'Future manuscript changes return to Desk; this Shelf copy is the released snapshot.',
-              'primary_reader': 'General readers interested in generative AI, creativity, design, culture, memory, identity, and how cheap synthetic possibility changes human imagination.',
-              'validation_notes': 'Publication folder, rights metadata, catalog entry, and feedback coverage synchronized during release.'
-          }
-          books = [b for b in data.get('books', []) if b.get('slug') != 'vibecariously']
-          books.append(entry)
-          data['books'] = sorted(books, key=lambda b: b.get('slug',''))
-          data['catalog_refreshed_at'] = now
+          books = list(data.get('books', []))
+          if 'vibecariously' not in books:
+              books.append('vibecariously')
+          data['books'] = books
           catalog_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
 
           feedback = Path('.github/ISSUE_TEMPLATE/chapter-feedback.yml')
@@ -82,7 +66,8 @@ jobs:
           opts = []
           for line in lines[options_idx+1:end]:
               s = line.strip()
-              if s.startswith('- '): opts.append(s[2:])
+              if s.startswith('- '):
+                  opts.append(s[2:])
           opts = sorted(set(opts + ['vibecariously']))
           new_lines = lines[:options_idx+1] + [(' ' * (indent + 2)) + '- ' + x for x in opts] + lines[end:]
           feedback.write_text('\n'.join(new_lines) + '\n', encoding='utf-8')
