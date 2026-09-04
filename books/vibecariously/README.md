@@ -43,7 +43,7 @@ The book calls one emerging behavior *vibecarious*: experiencing the feel of a p
 
 ## Research
 
-- [Research brief and source trail](research/README.md)
+- [Research brief and working source trail](research/README.md)
 - [Rights and permissions](RIGHTS.md)
 - [Machine-readable rights](rights.json)
 

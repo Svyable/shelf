@@ -56,6 +56,7 @@ body:
         - triumph-of-the-commons
         - ubiquitous
         - useful-noise
+        - vibecariously
         - wild-speculation
     validations:
       required: true
