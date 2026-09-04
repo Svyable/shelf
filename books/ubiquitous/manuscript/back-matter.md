@@ -46,5 +46,79 @@ The future will not divide cleanly into people who use AI and people who do not.
 
 The more important divide will be between people whose role is narrowed by ubiquitous intelligence and people who use ubiquitous intelligence to widen the problems they can own.
 
+## September 2026 Update
+
+One more shift became clearer after the first release of this book.
+
+The harness is no longer only a place where a model answers questions and calls tools behind the scenes. The interface itself is starting to disappear into the conversation.
+
+Anthropic now supports interactive connectors that can render live application surfaces inside a Claude conversation. A connected project board, dashboard, or other tool does not merely return text for the model to summarize. The interface can appear in the conversation and remain actionable there. Its plugin system can also bundle skills, connectors, and sub-agents into a ready-made operating environment for a role or company.
+
+That is a more consequential change than another improvement in model fluency.
+
+It means the old distinction between “knowing the software” and “knowing the work” is weakening faster. When the harness can call the system, retrieve the state, display the relevant controls, and coordinate sub-agents around the task, memorizing where a button lives or how one application expresses a routine workflow becomes less defensible as a career moat.
+
+The interface is becoming callable.
+
+The durable knowledge moves one layer inward.
+
+What should happen?
+
+Which state is authoritative?
+
+Which exception changes the answer?
+
+What should never be automated?
+
+Which permission is appropriate?
+
+What evidence would make you stop?
+
+Who owns the result after the action leaves the conversation?
+
+This is the same argument made throughout the book, but the product surface is catching up to it quickly.
+
+OpenAI’s 2026 economic research on agentic work points in the same direction from another angle. Agents change the unit of knowledge work from a short interaction into a delegated task that can run for minutes or hours, use tools, interact with environments, and iterate toward an outcome. OpenAI reports agent use spreading beyond software engineering into functions such as legal and recruiting inside its own organization.
+
+The important fact is not which company currently has the better agent.
+
+The important fact is that delegated execution is becoming ordinary enough to cross departmental boundaries.
+
+That makes “I know how to operate the application” a weaker form of scarcity. It makes “I know what this department is trying to accomplish, how the neighboring systems constrain it, and how to tell whether the result is acceptable” a stronger one.
+
+The labor evidence still argues against an easy flattening story.
+
+Anthropic’s study of roughly four hundred thousand Claude Code sessions found that workers outside software occupations can achieve coding-task success rates close to software engineers while domain expertise continues to predict better outcomes. Experts are better at steering the system, recovering when it gets into trouble, and giving instructions that let the agent do more useful work.
+
+That is exactly the strange distributional effect this book has been describing.
+
+A barrier falls.
+
+A deeper form of expertise becomes more valuable.
+
+The same caution applies to retraining. Anthropic’s August review of randomized training studies found positive but modest average effects from conventional programs, with stronger results in some employer-linked sector programs and uneven success when those programs were replicated.
+
+Cheap explanation is not enough.
+
+The new apprenticeship has to attach learning to a real labor market, real equipment, real customers, real institutions, or real responsibility. A person can now acquire vocabulary and practice faster than any prior generation. The scarce bridge is still the opportunity to exercise judgment where a result matters.
+
+Policy is moving toward the same problem. The OECD’s July 2026 review of AI labor-market policy found that governments are leaning heavily on existing labor and employment frameworks while more targeted rules remain uneven, especially around transparency, accountability, privacy, and worker voice.
+
+That is another reminder that technical capability and institutional authority move on different clocks.
+
+Nothing in this update changes the book’s durable-skill list.
+
+It makes the selection pressure more visible.
+
+Routine navigation, routine synthesis, routine drafting, routine coding, routine classification, and routine coordination are moving deeper into harnesses.
+
+Diagnosis, verification, system integration, field intervention, customer trust, apprenticeship under consequence, ownership, and judgment across conflicting objectives remain closer to the boundary where the machine meets the world.
+
+The tool layer will keep changing.
+
+The useful career question is still the same:
+
+What becomes easier because intelligence is ubiquitous, and what becomes more valuable because somebody still has to own what happens next?
+
 Sven Hardy Benson
 2026
