@@ -6,7 +6,7 @@ The Cancer Key tests a deliberately strong proposition: neoantigens have solved 
 
 The book has two linked theses.
 
-First, the technical thesis: advances in tumor-normal sequencing, HLA prediction, immune monitoring, mRNA and peptide manufacturing, checkpoint blockade and engineered T cells have turned patient-specific tumor mutations into a clinically actionable therapeutic platform. The August 2026 positive Phase 3 topline result for intismeran autogene plus pembrolizumab in resected high-risk melanoma is the strongest current validation of that platform, but failures in other cancers and unresolved overall-survival, access and manufacturing questions prevent a universal-cure claim. As of the September 1, 2026 reporting cutoff, the Phase 3 result remains a company-reported topline result pending full scientific presentation and regulatory review.
+First, the technical thesis: advances in tumor-normal sequencing, HLA prediction, immune monitoring, mRNA and peptide manufacturing, viral-vector delivery, checkpoint blockade and engineered T cells have turned patient-specific tumor mutations into a clinically actionable therapeutic platform. The August 2026 positive Phase 3 topline result for intismeran autogene plus pembrolizumab in resected high-risk melanoma is the strongest current validation of that platform. The September 2026 peer-reviewed randomized Phase I report of TG4050 in resected HPV-negative head and neck cancer adds a favorable early signal using a different delivery technology, but the trial is small and not confirmatory. Failures in other cancers and unresolved overall-survival, access and manufacturing questions prevent a universal-cure claim. As of the September 4, 2026 reporting cutoff, the melanoma Phase 3 result remains a company-reported topline result pending full scientific presentation and regulatory review.
 
 Second, the institutional thesis: the capability was assembled from public and private systems whose contributions are deeply entangled. Public agencies funded foundational genomics, immunology, clinical networks and open datasets; universities patented and licensed inventions; companies built proprietary algorithms, factories and late-stage trials; patients supplied tissue, risk and outcome data. If the therapy class succeeds, public benefit will depend on more than the existence of a commercial product. Pricing, competition, data return, manufacturing capacity and legitimate experimental access will determine how widely the scientific gain is distributed.
 
@@ -17,15 +17,16 @@ Second, the institutional thesis: the capability was assembled from public and p
 3. Which disease settings have produced convincing clinical benefit rather than immunogenicity alone?
 4. What does the 2026 melanoma Phase 3 result establish, and what remains unproven pending full data, regulatory review and overall-survival follow-up?
 5. What do the pancreatic autogene-cevumeran studies establish mechanistically, and what does BioNTech's 2026 colorectal trial termination show about disease specificity?
-6. How much of personalized vaccine manufacturing can be standardized and automated while the antigen payload changes for every patient?
-7. Which companies control the current bottlenecks: sequencing, target selection, delivery, manufacturing, checkpoint combinations, clinical networks or outcome data?
-8. What public investments were foundational to the platform, including NCI/NHGRI genomics, NIH immunology, NCI intramural cell therapy, Cancer Moonshot infrastructure and open epitope resources?
-9. How do Bayh-Dole rights, university licensing, patents, trade secrets and proprietary datasets shape private capture of publicly rooted science?
-10. Which legal pathways legitimately permit investigational individualized treatment, and how do clinical trials, FDA expanded access, Right to Try and physician-led pathways abroad differ?
-11. What direct-pay personalized cancer-vaccine services are currently marketed, what do they claim, and what level of clinical evidence supports the specific product and disease rather than the general concept?
-12. Which public-return mechanisms would improve access without destroying the investment incentives needed for expensive clinical development?
-13. Which parts of the individualized workflow can become portable infrastructure without creating unsafe variability across assays, algorithms or manufacturing processes?
-14. How should cross-border experimental treatment preserve traceability, adverse-event reporting and longitudinal evidence when the patient, clinic, manufacturer and regulator are in different jurisdictions?
+6. What does the randomized TG4050 Phase I study establish in resected HPV-negative head and neck cancer, and what remains uncertain because of its small sample and early phase?
+7. How much of personalized vaccine manufacturing can be standardized and automated while the antigen payload changes for every patient?
+8. Which companies control the current bottlenecks: sequencing, target selection, delivery, manufacturing, checkpoint combinations, clinical networks or outcome data?
+9. What public investments were foundational to the platform, including NCI/NHGRI genomics, NIH immunology, NCI intramural cell therapy, Cancer Moonshot infrastructure and open epitope resources?
+10. How do Bayh-Dole rights, university licensing, patents, trade secrets and proprietary datasets shape private capture of publicly rooted science?
+11. Which legal pathways legitimately permit investigational individualized treatment, and how do clinical trials, FDA expanded access, Right to Try and physician-led pathways abroad differ?
+12. What direct-pay personalized cancer-vaccine services are currently marketed, what do they claim, and what level of clinical evidence supports the specific product and disease rather than the general concept?
+13. Which public-return mechanisms would improve access without destroying the investment incentives needed for expensive clinical development?
+14. Which parts of the individualized workflow can become portable infrastructure without creating unsafe variability across assays, algorithms or manufacturing processes?
+15. How should cross-border experimental treatment preserve traceability, adverse-event reporting and longitudinal evidence when the patient, clinic, manufacturer and regulator are in different jurisdictions?
 
 ## Falsification and counter-evidence
 
@@ -34,6 +35,7 @@ Every chapter should preserve evidence against the book's strongest framing.
 - Neoantigens may be excellent targets in only a subset of cancers. Low mutation burden, antigen-presentation loss, immune exclusion and rapid progression can make the approach irrelevant.
 - A positive recurrence endpoint does not prove a universal survival advantage, and a topline press release is not a substitute for full peer-reviewed Phase 3 data and regulatory review.
 - The Moderna/Merck result may reflect a particularly favorable melanoma setting and the combination with pembrolizumab rather than a generalizable vaccine effect across tumors.
+- TG4050's favorable zero-versus-three recurrence pattern is based on sixteen evaluable patients per randomized group in a Phase I study whose primary endpoint was safety; later three-year follow-up remains company-reported and could narrow with larger trials.
 - BioNTech's colorectal termination demonstrates that an individualized mRNA vaccine platform can fail despite biologically plausible patient selection.
 - Strong vaccine-induced T-cell responses can exist without proven clinical benefit.
 - Private firms contribute real capital, manufacturing, quality systems and trial risk that public research programs generally do not reproduce at commercial scale.
@@ -54,15 +56,15 @@ Use peer-reviewed reviews and original studies on tumor-specific mutation-derive
 
 ### II. Clinical validation
 
-Prioritize ClinicalTrials.gov records, peer-reviewed trial reports, company primary releases for current topline results and regulator documents. Record trial phase, disease, treatment setting, comparator, endpoint and whether results are interim, topline, peer reviewed or regulatory.
+Prioritize ClinicalTrials.gov records, peer-reviewed trial reports, company primary releases for current topline results and regulator documents. Record trial phase, disease, treatment setting, comparator, endpoint and whether results are interim, topline, peer reviewed or regulatory. The TG4050 Nature Communications paper is peer-reviewed Phase I evidence from a small randomized cohort; the later three-year disease-free follow-up is a company update and must be described separately.
 
 ### III. Manufacturing and computation
 
-Use peer-reviewed platform descriptions where available, including the August 24, 2026 JCO Oncology Advances description of the end-to-end intismeran pathway. Use company technical materials for claimed turnaround and process descriptions when necessary, clearly labeled as company claims. Use FDA materials for manufacturing, potency and individualized-product regulatory challenges.
+Use peer-reviewed platform descriptions where available, including the August 24, 2026 JCO Oncology Advances description of the end-to-end intismeran pathway and the TG4050 paper's description of individualized neoantigen selection and MVA-vector delivery. Use company technical materials for claimed turnaround and process descriptions when necessary, clearly labeled as company claims. Use FDA materials for manufacturing, potency and individualized-product regulatory challenges.
 
 ### IV. Public funding and infrastructure
 
-Use NIH, NCI, NHGRI and government budget sources for appropriations, TCGA scale, Moonshot authorization and federal research architecture. Do not allocate a general NIH budget directly to a particular commercial product without evidence.
+Use NIH, NCI, NHGRI and government budget sources for appropriations, TCGA scale, Moonshot authorization and federal research architecture. Do not allocate a general NIH budget directly to a particular commercial product without evidence. Where a trial publication directly identifies public co-funding, such as TG4050's acknowledgement of Bpifrance alongside Transgene and NEC Bio, attribute that specific funding only to the documented program.
 
 ### V. Intellectual property and public return
 
@@ -78,11 +80,12 @@ Use health-system, regulator and peer-reviewed sources to distinguish scientific
 
 ## Reporting rules
 
-- Reporting cutoff: September 1, 2026.
+- Reporting cutoff: September 4, 2026.
 - No invented quotations, patient stories or trial numbers.
 - Company press releases are acceptable for very recent topline trial status but must be labeled as company-reported until full data are published.
 - The August 19, 2026 INTerpath-001 result remains topline at this cutoff; do not imply peer-reviewed Phase 3 effect size or regulatory approval.
 - The August 28, 2026 BioNTech colorectal termination should be described using the company's stated DSMB findings: a prior futility boundary, a later numerical overall-survival imbalance, recommendation to terminate, and no new safety signal identified by the DSMB.
+- The TG4050 randomized Phase I paper should be described with its small denominator and primary safety purpose; the September three-year follow-up should be identified as a company-reported update rather than a new confirmatory trial.
 - A legal treatment pathway in one jurisdiction must not be described as FDA approval or generalized to other jurisdictions.
 - “Experimental,” “investigational,” “unapproved,” “off-label,” “expanded access” and “Right to Try” are not interchangeable.
 - Do not imply a named clinic is fraudulent without an authoritative regulatory or judicial finding.

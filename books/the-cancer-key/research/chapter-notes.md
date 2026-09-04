@@ -167,3 +167,11 @@
 **Evidence:** synthesis of the full manuscript: positive randomized evidence in melanoma, negative and incomplete evidence in other cancers, manufacturing and access constraints, public/private infrastructure, data concentration, evolutionary escape and regulatory adaptation.
 
 **What would make this false:** broad Phase 3 success across diverse difficult cancers combined with inexpensive, rapid, equitable delivery would make the conclusion too cautious. Failure of the platform to reproduce meaningful benefit beyond a narrow melanoma setting would make the conclusion too optimistic.
+
+## Update — September 4, 2026
+
+**Evidence:** Ottensmeier et al., *Nature Communications*, “A viral-based individualized neoantigen vaccine as adjuvant treatment in resected head and neck squamous cell carcinoma: a randomized Phase I trial”; Transgene/NEC September 2026 three-year TG4050 follow-up. The peer-reviewed paper reports no relapses among 16 evaluable immediate-treatment patients versus three among 16 observation patients at a median follow-up of about 30 months, with safety as the primary endpoint and durable vaccine-induced T-cell responses in treated patients. The later company update reports all 16 immediately treated patients disease-free at three years. The paper identifies Bpifrance, Transgene and NEC Bio as funders.
+
+**What this changes:** it adds a favorable randomized early-stage signal outside melanoma and using an MVA viral-vector platform rather than mRNA, modestly strengthening the claim that individualized neoantigen targeting is a target-class platform rather than a single-product story.
+
+**What would make the update's interpretation false:** a larger randomized trial failing to reproduce a clinically meaningful recurrence benefit; material safety or manufacturing problems at scale; evidence that the apparent difference reflects baseline imbalance or chance; or later follow-up erasing the separation between groups. The September three-year figure is company-reported and should not be treated as confirmatory efficacy evidence.
