@@ -6,9 +6,9 @@ Sven Hardy Benson
 
 This is a book about a breakthrough and the argument that begins after a breakthrough.
 
-The title is deliberately provocative. As of September 1, 2026, cancer has not been “solved,” and no personalized neoantigen vaccine has been approved by the U.S. Food and Drug Administration. Merck and Moderna have reported a positive Phase 3 topline result for the individualized mRNA therapy intismeran autogene in combination with pembrolizumab after surgery for high-risk melanoma, while other individualized vaccine programs have failed or remain early and uncertain. Cancer is many diseases, and the value of neoantigen targeting differs across them.
+The title is deliberately provocative. As of September 4, 2026, cancer has not been “solved,” and no personalized neoantigen vaccine has been approved by the U.S. Food and Drug Administration. Merck and Moderna have reported a positive Phase 3 topline result for the individualized mRNA therapy intismeran autogene in combination with pembrolizumab after surgery for high-risk melanoma, while other individualized vaccine programs have failed or remain early and uncertain. A small randomized Phase I study of Transgene and NEC's viral-vector vaccine TG4050 in resected HPV-negative head and neck cancer has also produced a favorable early signal, but it remains investigational and requires larger confirmatory evidence. Cancer is many diseases, and the value of neoantigen targeting differs across them.
 
-The narrower claim of the book is more defensible and, I think, more interesting. Neoantigens changed one of the oldest problems in cancer immunology by making it possible to identify tumor-specific molecular targets created by the cancer's own mutations. Sequencing, computation, RNA and peptide manufacturing, immune checkpoint drugs, and engineered T cells have begun turning those private mutations into therapeutic instructions.
+The narrower claim of the book is more defensible and, I think, more interesting. Neoantigens changed one of the oldest problems in cancer immunology by making it possible to identify tumor-specific molecular targets created by the cancer's own mutations. Sequencing, computation, RNA and peptide manufacturing, immune checkpoint drugs, viral vectors, and engineered T cells have begun turning those private mutations into therapeutic instructions.
 
 The scientific story is inseparable from an institutional one. Public agencies funded cancer genomics, immunology, clinical networks and basic molecular science. Universities patented parts of the resulting knowledge. Biotechnology companies raised private capital, built manufacturing systems and ran expensive trials. Pharmaceutical companies supplied companion therapies and global development. Patients supplied tissue, genomes, risk and outcomes. The finished capability is neither simply public nor simply private.
 
@@ -20,4 +20,4 @@ Later chapters widen the same question from one treatment to a system: whose HLA
 
 This is reporting and analysis, not medical advice. It does not recommend any unapproved therapy, clinic, drug, vaccine or access route. A patient considering investigational cancer treatment should work with qualified oncology clinicians and the relevant regulatory or trial framework. The existence of a plausible neoantigen, a personalized product or an immune response is not by itself evidence of clinical benefit.
 
-Reporting cutoff for this edition: September 1, 2026.
+Reporting cutoff for this edition: September 4, 2026.

@@ -7,7 +7,7 @@
 | **Drafting Source** | Sven Hardy Benson’s Desk |
 | **Publication Surface** | Sven Hardy Benson’s Shelf |
 | **Chapters** | 28 of 28 |
-| **Reporting Cutoff** | September 1, 2026 |
+| **Reporting Cutoff** | September 4, 2026 |
 
 *How Neoantigens Solved Humanity’s Most Feared Ailment*
 
@@ -16,6 +16,8 @@ A trade-nonfiction investigation of the moment cancer immunology learned to turn
 The title is a provocation rather than a medical claim. The manuscript begins with the August 2026 positive Phase 3 topline result for Merck and Moderna's individualized neoantigen therapy in resected melanoma and places it beside BioNTech's termination of a colorectal neoantigen-vaccine trial nine days later. The central argument is that neoantigens may have solved a fundamental targeting problem without solving cancer as a whole.
 
 The second argument concerns ownership and access. Cancer genomics, immunology, RNA science and clinical infrastructure were built through intertwined public and private investment. The book asks what public return should mean when publicly supported science becomes a proprietary therapeutic platform; how HLA diversity, sequencing access and manufacturing capacity determine who can use it; and what happens as modular technology enables direct-pay frontier clinics and cross-border individualized treatment before broad regulatory approval.
+
+This update extends the reporting window through September 4, 2026 and adds a dated note on TG4050, Transgene and NEC's individualized viral-vector neoantigen vaccine in resected HPV-negative head and neck cancer. The early randomized signal broadens the platform story beyond melanoma and mRNA without changing the book's caution about small trials, disease specificity or regulatory status.
 
 ## Contents
 
@@ -48,10 +50,12 @@ The second argument concerns ownership and access. Cancer genomics, immunology, 
 - [x] [Ch 26 — The Combination Bill](manuscript/ch26-the-combination-bill.md)
 - [x] [Ch 27 — The Global Key](manuscript/ch27-the-global-key.md)
 - [x] [Ch 28 — What Counts as Solved](manuscript/ch28-what-counts-as-solved.md)
+- [x] [Update — September 4, 2026](manuscript/update-2026-09-04.md)
 - [x] [Back Matter](manuscript/back-matter.md)
 
 ## Research
 
 - [Research brief](research/README.md)
 - [Chapter evidence and falsification notes](research/chapter-notes.md)
-- [Source ledger](research/source-ledger.md)
+- [Source ledger — September 1 release candidate](research/source-ledger.md)
+- [Source update — September 4, 2026](research/source-update-2026-09-04.md)
