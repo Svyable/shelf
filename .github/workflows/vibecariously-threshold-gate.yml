@@ -1,0 +1,54 @@
+name: Verify Vibecariously thresholds
+
+on:
+  push:
+    branches:
+      - release/vibecariously
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/vibecariously
+      - name: Count manuscript words
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          root = Path('books/vibecariously/manuscript')
+          chapters = sorted(root.glob('ch*.md'))
+          counts = []
+          for path in chapters:
+              text = path.read_text(encoding='utf-8')
+              count = len(re.findall(r"\b[\w’'-]+\b", text))
+              counts.append((path.name, count))
+              print(f'{path.name}: {count:,}')
+          total = sum(n for _, n in counts)
+          print(f'chapter_count={len(counts)}')
+          print(f'total_words={total:,}')
+          short = [(name, n) for name, n in counts if n < 3000]
+          if short:
+              raise SystemExit(f'chapters below 3,000 words: {short}')
+          if len(counts) < 18:
+              raise SystemExit(f'need at least 18 chapters, got {len(counts)}')
+          if total < 65000:
+              raise SystemExit(f'need at least 65,000 words, got {total}')
+          PY
+      - name: Recheck Shelf feedback contract
+        run: python3 scripts/check-feedback-catalog.py
+      - name: Remove temporary gate
+        shell: bash
+        run: |
+          rm .github/workflows/vibecariously-threshold-gate.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Record Vibecariously release gate'
+          git push origin HEAD:release/vibecariously
