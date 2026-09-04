@@ -1,5 +1,6 @@
 import { fetchText, fetchDocument, firstExisting } from './base.js';
 import {
+  catalogEntryVisible,
   parsePortalCatalog,
   parseBookReadme,
   parseFrontMatterMeta,
@@ -115,7 +116,7 @@ async function loadCatalog() {
           (name) => `books/${slug}/media/${name}`
         )
       );
-      if (meta.published) entries.push(meta);
+      if (catalogEntryVisible(meta, window.__IMPRINT?.role)) entries.push(meta);
     } catch (err) {
       console.warn('Skip catalog slug', slug, err);
     }
