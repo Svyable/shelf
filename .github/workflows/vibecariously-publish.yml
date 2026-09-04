@@ -1,0 +1,100 @@
+name: Publish Vibecariously snapshot
+
+on:
+  push:
+    branches:
+      - release/vibecariously
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/vibecariously
+          fetch-depth: 0
+      - name: Copy canonical Desk snapshot
+        shell: bash
+        run: |
+          rm -rf /tmp/desk
+          git clone --depth 1 https://github.com/Svyable/desk.git /tmp/desk
+          rm -rf books/vibecariously
+          cp -a /tmp/desk/books/vibecariously books/vibecariously
+      - name: Mark public snapshot published
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('books/vibecariously/README.md')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace('| **Status** | Drafting — full structural draft; expansion and citation pass in progress |', '| **Status** | Published |')
+          text = text.replace('| **Chapters** | 21 of 21 drafted |', '| **Chapters** | 21 of 21 drafted |\n| **Edition** | First release · September 2026 |')
+          marker = '## Working note\n\n'
+          if marker in text:
+              text = text.split(marker, 1)[0].rstrip() + '\n\n## Publication note\n\nThis is the public Shelf snapshot of the manuscript released from the canonical Desk source in September 2026. Future manuscript revisions belong in Desk and do not silently rewrite this released edition.\n'
+          p.write_text(text, encoding='utf-8')
+          PY
+      - name: Update Shelf catalog and feedback
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          catalog_path = Path('catalog.json')
+          data = json.loads(catalog_path.read_text(encoding='utf-8'))
+          now = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z')
+          entry = {
+              'slug': 'vibecariously',
+              'title': 'Vibecariously',
+              'subtitle': 'How AI Changed The Way We Imagine',
+              'author': 'Sven Hardy Benson',
+              'status': 'Published',
+              'release_state': 'released',
+              'released_at': now,
+              'published_to_shelf': True,
+              'review_scope': 'Public release snapshot copied from the canonical expanded Desk manuscript.',
+              'review_notes': 'Future manuscript changes return to Desk; this Shelf copy is the released snapshot.',
+              'primary_reader': 'General readers interested in generative AI, creativity, design, culture, memory, identity, and how cheap synthetic possibility changes human imagination.',
+              'validation_notes': 'Publication folder, rights metadata, catalog entry, and feedback coverage synchronized during release.'
+          }
+          books = [b for b in data.get('books', []) if b.get('slug') != 'vibecariously']
+          books.append(entry)
+          data['books'] = sorted(books, key=lambda b: b.get('slug',''))
+          data['catalog_refreshed_at'] = now
+          catalog_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          feedback = Path('.github/ISSUE_TEMPLATE/chapter-feedback.yml')
+          lines = feedback.read_text(encoding='utf-8').splitlines()
+          book_idx = next(i for i,l in enumerate(lines) if l.strip() == 'id: book')
+          options_idx = next(i for i in range(book_idx+1, len(lines)) if lines[i].strip() == 'options:')
+          indent = len(lines[options_idx]) - len(lines[options_idx].lstrip())
+          end = options_idx + 1
+          while end < len(lines):
+              if lines[end].strip() and len(lines[end]) - len(lines[end].lstrip()) <= indent:
+                  break
+              end += 1
+          opts = []
+          for line in lines[options_idx+1:end]:
+              s = line.strip()
+              if s.startswith('- '): opts.append(s[2:])
+          opts = sorted(set(opts + ['vibecariously']))
+          new_lines = lines[:options_idx+1] + [(' ' * (indent + 2)) + '- ' + x for x in opts] + lines[end:]
+          feedback.write_text('\n'.join(new_lines) + '\n', encoding='utf-8')
+          PY
+      - name: Validate live Shelf contract
+        run: python3 scripts/check-feedback-catalog.py
+      - name: Commit release snapshot
+        shell: bash
+        run: |
+          rm .github/workflows/vibecariously-publish.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Publish Vibecariously'
+          git push origin HEAD:release/vibecariously
