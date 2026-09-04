@@ -365,3 +365,87 @@ The nearest neighbor is useful.
 The best analogy may be farther away.
 
 It preserves the relation that matters while changing enough of the surface to reveal the structure underneath.
+
+There is one more discipline worth adding: search for the analogy that fails in the opposite direction.
+
+A single comparison can be persuasive because it makes the present legible. A counter-analogy can reveal whether that legibility is doing real work or merely telling a satisfying story.
+
+Suppose a company believes a new technology resembles the early cloud market: falling infrastructure costs, rapid developer adoption, a few scaled providers and a long tail of applications. That analogy suggests one set of strategic expectations.
+
+A useful system should not stop after finding more cloud-like precedents.
+
+It might deliberately search for industries with similar cost declines that did not produce the same concentration. Or markets with similar developer enthusiasm that stalled because deployment depended on scarce physical complements. Or technologies that looked general-purpose but remained valuable only inside narrow workflows.
+
+The counter-analogy does not refute the first comparison automatically.
+
+It changes the burden of proof.
+
+Now the strategist has to identify which mechanism distinguishes the cases.
+
+That is the part that matters.
+
+Analogy becomes strongest when it moves from resemblance to mechanism.
+
+If the proposed comparison says two systems both have positive feedback, ask what produces the feedback in each. If it says both face a bottleneck, ask whether the bottleneck is physical capacity, coordination, regulation, capital, trust or information. If it says both markets have switching costs, ask who pays them and what makes them persist.
+
+The mechanism is where transfer either earns itself or breaks.
+
+This suggests a useful asymmetry between questions and answers.
+
+Analogies are often safer for transferring questions than for transferring conclusions.
+
+A railway analogy may prompt us to ask about overbuilding, financing and complementary infrastructure without telling us that the present will end in a railway-style bust. A biological analogy may prompt us to look for feedback and adaptation without granting that an institution literally behaves like an organism. A military analogy may make coordination or logistics visible without making conflict the correct model of the situation.
+
+The analogy can improve the inquiry even when its predicted ending is wrong.
+
+That is a much higher standard than rhetorical resemblance and a much lower bar than treating history as destiny.
+
+Machine systems should be especially good at supporting this middle ground because they can retrieve several source domains quickly enough to make comparison cheap.
+
+One candidate exposes scale effects.
+
+Another exposes regulation.
+
+Another exposes coordination failure.
+
+Another is structurally similar but ends differently.
+
+Another looks close until one decisive constraint appears.
+
+The user does not need a tournament bracket or a grand framework. She needs enough competing cases that one attractive metaphor cannot monopolize the problem.
+
+This becomes important as agents begin making plans.
+
+A planning agent that retrieves one similar prior task can inherit the prior task's assumptions. A stronger agent can retrieve successful and failed precedents, then look for the facts that separate them. It can ask not merely, “What worked last time?” but “Which feature of last time made the solution work?”
+
+That question resists cargo-culting.
+
+It also creates a better memory system. The stored case becomes more useful when it records boundary conditions rather than only the final procedure.
+
+Worked because the database was append-only.
+
+Failed when the dependency graph contained a cycle.
+
+Valid only under the old regulatory threshold.
+
+Useful for high-volume low-variance demand, not for rare custom orders.
+
+The richer the boundary conditions, the less likely a future retrieval is to turn superficial closeness into imitation.
+
+This is another place where source provenance matters.
+
+An analogy generated from a model's latent knowledge can be a useful probe, but an analogy grounded in retrievable cases can be challenged. The user can inspect whether the source really contains the mechanism being claimed. She can notice missing context. She can find the exception the model compressed away.
+
+External evidence gives analogy resistance.
+
+Without resistance, generative fluency can make almost anything sound structurally similar to anything else.
+
+That is not discovery.
+
+It is verbal elasticity.
+
+The analogical machine becomes valuable when it helps a person move farther through the space of possible explanations while making it harder to confuse a clever bridge with a proven road.
+
+The best analogy does not tell you what to believe.
+
+It tells you what to inspect next, and where the comparison is most likely to break.

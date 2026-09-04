@@ -5,9 +5,9 @@
 | **Author**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 25 of 25 drafted |
-| **Edition**   | First edition · September 2026 |
-| **Drafting Source** | Sven Hardy Benson’s Desk |
-| **Publication Surface** | Sven Hardy Benson’s Shelf |
+| **Edition**   | Second edition |
+| **Publication** | September 4, 2026 |
+| **Public Reader** | [Read the published Shelf edition →](https://svyable.github.io/shelf/reader/#/b/adjacency/) |
 
 How the Vector Space Is Revolutionizing Discovery.
 
@@ -45,8 +45,9 @@ How the Vector Space Is Revolutionizing Discovery.
 
 - [Research brief and chapter evidence map](research/README.md)
 - [Source ledger](research/source-ledger.csv)
-- [Release review — 2026-09-02](research/release-review-2026-09-02.md)
+- [Second-edition release review — 2026-09-04](research/release-review-2026-09-04.md)
+- [First-edition release review — 2026-09-02](research/release-review-2026-09-02.md)
 
-This Shelf copy is the released first edition frozen from Desk commit `227f443b8896af9d64ec1325cda568c8ab37abf1`. Future revisions continue on Desk and do not silently rewrite this snapshot. The September 2026 release review cleared this edition while preserving its evidence boundaries and counterclaims.
+The first public edition was intentionally snapshotted to [Sven Hardy Benson’s Shelf](https://github.com/Svyable/shelf/tree/main/books/adjacency) on September 2, 2026. The second edition replaces that public snapshot on September 4, 2026 after a full-manuscript expansion pass, most substantially across Chapters 16–25. Desk remains the working source for future revisions; later Desk edits do not silently rewrite the released Shelf edition.
 
-- [Open the published Shelf Reader](https://svyable.github.io/shelf/reader/#/b/adjacency/)
+- [Open the working Desk preview](https://svyable.github.io/desk/reader/#/b/adjacency/)

@@ -341,3 +341,121 @@ Institutions fail surprisingly often because knowledge existed but did not becom
 The vector space can close part of that gap.
 
 The remaining gap is judgment.
+
+There is another tax hiding behind organizational amnesia: knowledge that is searchable but no longer governed.
+
+A semantic system can make an obsolete document newly powerful because it is easier to find than the current one. It can make a provisional meeting note more influential because the note happens to describe the user's problem in vivid language. It can combine fragments from several eras into an answer no employee would have endorsed at any one time.
+
+The organization has solved retrieval and created a canon problem.
+
+Every institution needs some way to distinguish what has been said from what is currently relied upon.
+
+That distinction already exists in mature operational systems. A source-code repository has branches and released versions. A contract has amendments. A policy has effective dates. A database has systems of record. A financial process has approved ledgers rather than every spreadsheet ever emailed about the numbers.
+
+Knowledge systems need comparable discipline.
+
+The answer does not have to be one sacred wiki page. Organizations are too complex for that. But important claims should have visible status, ownership and time.
+
+What is current?
+
+Who owns it?
+
+What did it replace?
+
+What evidence supports it?
+
+When should it be reviewed again?
+
+Which sources are historical context rather than present instruction?
+
+These questions let semantic retrieval remain broad without making every retrieved sentence equally authoritative.
+
+They also make contradiction useful.
+
+If the system retrieves two policies that disagree, the correct response is not always to choose the semantically closer one. The contradiction may be the most important fact in the result set. One document may have superseded the other. Two business units may genuinely operate under different rules. The institution may have failed to resolve a conflict.
+
+A good internal assistant should sometimes answer, “I found two governing-looking sources that conflict.”
+
+That can feel less magical than a single polished answer.
+
+It is more intelligent.
+
+The searchable organization should increase the visibility of unresolved institutional state rather than smoothing it away.
+
+This has implications for how answers are packaged.
+
+An internal agent that says “Company policy is X” should be held to a higher standard than one that says “I found several discussions related to X.” The first is making an authority claim. It should be able to point to the current source, its effective date and the relevant scope. The second is describing a neighborhood.
+
+The distinction mirrors the graph-vector handoff from the previous chapter.
+
+Similarity can find the candidate source.
+
+Institutional metadata establishes whether the source governs.
+
+That is also why permission checks belong before sensitive content reaches the model, not merely before the final answer is displayed. A global semantic index that retrieves confidential passages into context and then asks the model not to mention them has already crossed the wrong boundary.
+
+The neighborhood itself should be permission-aware.
+
+A worker asking an ordinary operational question should search the corpus she is authorized to use. A manager with a legitimate need may have a different searchable space. A legal team may have privileged material unavailable elsewhere. The system can preserve semantic usefulness inside each boundary without pretending that one organization requires one universal index visible to everyone.
+
+Access changes geometry.
+
+Two employees can ask the same question and legitimately receive different neighborhoods because their authorized worlds differ.
+
+That is not a defect in relevance.
+
+It is part of the institution's structure.
+
+This matters when agents act across systems. A long-running agent may accumulate context from one task and carry it into another. It can retrieve a private document correctly and later use a memory of that document in a context where the user no longer has the same authorization.
+
+Organizational memory therefore needs permission provenance as well as semantic provenance.
+
+What was the source allowed to inform?
+
+Does the authorization still exist?
+
+Can a derived memory outlive the source permission?
+
+Those questions are difficult because retrieval makes knowledge portable inside the machine.
+
+The safest answer is not to give up on memory. It is to treat access state as part of what is remembered.
+
+The same discipline helps with deletion and retention. Companies are often required or expected to stop retaining certain records. A semantic system should not preserve a distilled memory forever after the underlying record was deleted according to policy. Otherwise forgetting at the document layer becomes remembering at the vector layer.
+
+The institution needs to know when its map contains ghosts.
+
+These problems sound like compliance until they become product quality.
+
+An assistant that cites stale policy loses trust. An agent that retrieves unauthorized context becomes unsafe. A search system that cannot distinguish current doctrine from historical debate creates extra work for experts who must check everything it says.
+
+The promise of semantic search is to reduce coordination cost.
+
+If every answer requires a second search to discover whether the first source was current and allowed, the institution has merely moved the burden.
+
+The more useful goal is a searchable organization whose answers carry enough institutional structure that people can act with less reconstruction.
+
+That requires maintenance.
+
+Someone has to retire obsolete material.
+
+Someone has to mark the canonical source.
+
+Someone has to resolve duplicated ownership.
+
+Someone has to record that an exception was local rather than universal.
+
+Someone has to notice when a policy changed but the old neighborhood still dominates retrieval.
+
+Semantic infrastructure makes this maintenance more valuable because it multiplies the reach of well-governed knowledge.
+
+It also makes neglected knowledge debt more visible.
+
+That may be one of its greatest organizational contributions.
+
+The system asks the institution a simple question over and over:
+
+You saved all of this. Which parts do you actually stand behind now?
+
+A searchable organization can answer more questions.
+
+A mature searchable organization also knows which answers have earned the right to travel.
