@@ -1,6 +1,6 @@
 # Source Notes — Nothing Counts Yet
 
-These notes are a research map for revision. The manuscript is an original synthesis and should not treat any single literature as proof of the entire thesis.
+These notes are a research map for revision and publication review. The manuscript is an original synthesis and should not treat any single literature as proof of the entire thesis.
 
 ## 1. Deliberate practice and expertise
 
@@ -89,9 +89,47 @@ During drafting on 2026-09-03, web searches were run for the exact title **“No
 
 No book using the exact title for this thesis surfaced in those searches. The phrase itself does occur generically—for example in sports/preseason and practice contexts—which is unsurprising and part of its intuitive appeal. Absolute novelty cannot be established by a web search; the defensible claim is that the current search did not surface an existing book organized around this synthesis.
 
+## 13. Automation, out-of-the-loop performance, and skill degradation
+
+**Linda Onnasch, Christopher D. Wickens, Huiyang Li, Dietrich Manzey — “Human Performance Consequences of Stages and Levels of Automation: An Integrated Meta-Analysis,” Human Factors (2014).**
+
+Useful for Chapter 23. Automation can improve routine performance while changing workload, situation awareness, and human performance when intervention becomes necessary. The chapter should therefore avoid claiming that automation automatically causes deskilling; the stronger claim is that task allocation changes what humans repeatedly practice, which can create capability risk if the remaining human role still requires skills no longer exercised in ordinary work.
+
+DOI: 10.1177/0018720813501549
+
+**“Autopilot, Mind Wandering, and the Out of the Loop Performance Problem” (Frontiers in Neuroscience, 2017).**
+
+Review of the out-of-the-loop problem in highly automated systems, including vigilance decrement, reduced comprehension, and difficulty taking back control when automation behaves unexpectedly. This is a direct research analogue for Chapter 23’s argument that institutions cannot rely on rare emergency handoffs to preserve a skill that routine work no longer rehearses.
+
+PMID: 29051723 · DOI: 10.3389/fnins.2017.00541
+
+## 14. Speaking up, error reporting, and the secret curriculum
+
+**“Individual Characteristics That Promote or Prevent Psychological Safety and Error Reporting in Healthcare: A Systematic Review” (2023).**
+
+A systematic review of 28 studies found that fear/self-preservation, perceptions of leadership and organization, confidence, experience, and knowledge all shape decisions to speak up or report errors. Useful for Chapter 24 because it supports a bounded version of the chapter’s claim: people learn the real rules of an institution partly by observing what happens when someone reveals uncertainty, reports a problem, or challenges authority.
+
+PMID: 37091553
+
+**Wawersik & Palaganas — “Organizational Factors That Promote Error Reporting in Healthcare: A Scoping Review” (2022).**
+
+Relevant to the institutional side of Chapter 24. The chapter should not reduce speaking up to individual bravery; organizational design, leadership behavior, response to reports, and psychological safety affect whether concerns surface.
+
+DOI: 10.1097/JHM-D-21-00166
+
+## 15. Data retention, forgetting, and developmental records
+
+**U.S. Department of Education, Student Privacy Policy Office — “Data Retention and Data Destruction” guidance (2025).**
+
+Useful as a concrete adjacent example for Chapter 22: mature data governance distinguishes between information that must be retained and information that should be deleted when its purpose has ended. The manuscript should not generalize this into a universal legal rule. Its claim is architectural: systems should make retention periods, data purpose, and transitions from developmental to evaluative use explicit rather than treating indefinite persistence as the default.
+
+## 16. Expertise, status, and becoming a beginner again
+
+Chapter 21 is primarily a conceptual chapter about the social cost of visible learning after status has accumulated. Its strongest defensible form does not require a universal empirical claim that experts always resist learning. It argues instead that institutions should notice and reduce avoidable status penalties attached to asking basic questions, entering novice roles, and updating publicly. This section should stay connected to psychological-safety and identity literature without pretending that a single study proves the chapter’s full account.
+
 ## Revision standard
 
-The book should not claim that practice, rehearsal, simulation, apprenticeship, play, pilots, or learning from error are new discoveries. They are not.
+The book should not claim that practice, rehearsal, simulation, apprenticeship, play, pilots, learning from error, psychological safety, data minimization, or automation-related skill risks are new discoveries. They are not.
 
 The originality claim is the **category and synthesis**:
 
