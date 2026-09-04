@@ -44,6 +44,7 @@ The Intelligence Dilemma asks how schools can use abundant machine intelligence 
 
 - [Book brief](research/book-brief.md)
 - [Source notes](research/source-notes.md)
+- [Release review — 2026-09-04](research/release-review-2026-09-04.md)
 - [Ch 2 research trail](research/ch02-the-end-of-the-blank-page.md)
 - [Ch 3 research trail](research/ch03-what-a-grade-means-now.md)
 - [Ch 4 research trail](research/ch04-the-confidence-gap.md)
