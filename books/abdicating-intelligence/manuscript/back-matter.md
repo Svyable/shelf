@@ -1,0 +1,15 @@
+# Back Matter
+
+*Abdicating Intelligence* is a work of narrative nonfiction about cognitive offloading, automation, learning, distributed cognition, professional formation, institutional memory, machine consensus, question formation, accountability, cognitive sovereignty, and AI governance.
+
+The book's argument depends on distinctions that are easy to flatten in public debate. Offloading is not inherently deskilling. External memory can increase capability. AI assistance can improve novice performance and, in some settings, contribute to learning. Automation can also change situation awareness, practice, verification behavior, and the distribution of expertise. Multiple machine judgments can increase reliability while still sharing common failure modes. AI can help children learn while also changing which developmental work remains active. Machine-generated questions can expand inquiry while still inheriting the priorities and blind spots of existing knowledge systems. Dependence on external models can increase collective capability without requiring a society or institution to surrender its ability to switch, adapt, verify, or represent its own language and law. The book therefore treats these as empirical and institutional questions rather than evidence for a predetermined anti- or pro-AI conclusion.
+
+Concrete claims are anchored to the research ledger in `../research/source-ledger.csv`. Chapter-by-chapter research jobs, counterevidence, and falsification notes live in `../research/chapter-briefs.md`. Those files accompany this edition so readers can inspect the research trail and the claims the argument is deliberately not making.
+
+Several recurring terms are used in a specific sense. *Cognitive offloading* follows the cognitive-science literature on using external action or storage to reduce cognitive demand. *Cognitive debt* is the book's metaphor for a future capability obligation created when present assistance removes practice, knowledge, provenance, succession, or recovery capacity that will still be needed later. *Reserve mind* names the retained human or institutional capacity to challenge, recover, or operate at reduced scope when a dominant cognitive system is unavailable or wrong. *Cognitive sovereignty* names agency under interdependence: the practical ability of a person, institution, community, or state to remain capable of switching systems, preserving knowledge, representing local language or law, and changing direction without requiring technological autarky. None of these terms implies that every lost manual skill or every locally unavailable technology should be preserved.
+
+The phrase *right to a human reason* in Chapter 20 is a normative design principle in this book, not a claim that present law universally recognizes a legal right under that exact name.
+
+No quotation attributed to a real person has been invented for narrative effect. Where the text paraphrases historical, philosophical, scientific, or policy material, readers should consult the source ledger for the underlying work.
+
+© 2026 Sven Hardy Benson. All Rights Reserved.
