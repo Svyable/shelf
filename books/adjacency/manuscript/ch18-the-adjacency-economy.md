@@ -363,3 +363,107 @@ In an age of abundance, a high-quality map of relation may deserve similar atten
 The adjacency economy will reward whoever can consistently make the right next possibility easier to reach.
 
 The fight will be over whose definition of “right” governs the map.
+
+The next economic question is whether that definition can be contested.
+
+A discovery system becomes especially powerful when it controls several layers at once: the representation of the buyer, the index of possible suppliers, the ranking rule, the interface and the transaction. At that point the intermediary is not simply helping a market clear. It is defining the market the user is allowed to see.
+
+The difference is easy to miss because the experience can still feel effortless.
+
+Ask an agent to find someone to repair a roof. It may know the house, the budget, the user's tolerance for scheduling delays and the fact that the insurance deductible makes one kind of repair uneconomic. That context can produce a far better shortlist than a generic directory.
+
+But where did the contractors come from?
+
+Did the agent search an open market, a paid partner network or the provider's own marketplace? Were some suppliers excluded because their data was difficult to ingest? Did one provider pay for preferred placement? Was the ranking optimized for the user's total cost, the probability of a completed transaction or the platform's commission?
+
+The intelligence of the recommendation does not answer those questions.
+
+In fact, a better recommendation can make them less visible because the result feels so well fitted to the user's need.
+
+This is where discovery rent can emerge. Lower search costs create savings: less time comparing, fewer bad matches, lower uncertainty, more competition among suppliers. The intermediary that makes those savings possible can capture part of them through subscription fees, commissions, advertising, transaction charges or preferential access.
+
+There is nothing inherently improper about that. Matching is valuable work.
+
+The economic question is whether the intermediary remains contestable once users and suppliers depend on its map.
+
+If a consumer can easily ask a second agent for an independent search, discovery remains more competitive. If suppliers can expose offers through open machine-readable interfaces, the candidate pool can remain broad. If a user's preferences and constraints can move between services, switching costs fall. If commercial influence over ranking is legible, the person can distinguish assistance from promotion.
+
+If none of those conditions hold, a personalized agent can become a remarkably effective gatekeeper precisely because it is so useful.
+
+The personal model itself may become a source of lock-in.
+
+Years of corrections, preferences, rejected recommendations and observed constraints can produce a map that feels uniquely fitted to one person. Leaving the service then means more than moving files. It may mean abandoning accumulated knowledge about how the world should be searched on that person's behalf.
+
+Portability in the agent era may therefore need to include more than raw data.
+
+A user may want to carry durable preferences, explicit constraints, purchase history, exclusions and perhaps a history of corrected recommendations into another discovery system. The exact technical form can vary. The important economic point is that the ability to leave depends on whether the user's side of the map can travel.
+
+Suppliers face a parallel problem.
+
+A small business benefits from semantic discovery only if the system can represent it faithfully enough to place it near the right demand. If access depends on proprietary integrations or opaque ranking signals, the technology can recreate the old problem under a more sophisticated vocabulary: nominally anyone can participate, but only insiders know how to become visible.
+
+This makes auditability commercially important.
+
+A supplier may want to know whether it is absent because its offer is genuinely a poor match, because its metadata is incomplete or because the platform's ranking objective favors something else. A buyer may want to know why one option entered the shortlist and another did not. A regulator or enterprise customer may care whether a supposedly neutral discovery tool systematically routes demand toward affiliated services.
+
+None of this requires publishing an embedding model's weights or exposing every ranking secret.
+
+It requires enough legibility to distinguish relevance from commercial preference and technical omission.
+
+The agent interface could make some of this ordinary.
+
+Show me the best match without sponsored placement.
+
+Compare this shortlist against another marketplace.
+
+Tell me which constraints excluded the other candidates.
+
+Search providers outside your partner network.
+
+Keep my preferences but change the ranking objective from convenience to total cost.
+
+These requests treat the discovery policy itself as something the user can query.
+
+That is a meaningful shift.
+
+Today's platforms mostly expose results. Agentic systems could expose some of the reasoning about how the candidate set was constructed, because conversation makes such questions natural.
+
+The same capability can strengthen or weaken market power.
+
+An agent that refuses to reveal anything about its discovery process can become an opaque broker. An agent that helps the user inspect and alter the search policy can become a tool for buyer power.
+
+This may create a new dimension of product competition.
+
+One service can promise convenience.
+
+Another can promise independence from advertising.
+
+Another can promise open-market comparison.
+
+Another can specialize in a domain where expert curation matters more than breadth.
+
+Another can let the user operate the map locally and choose among multiple models.
+
+Trust in the discovery objective becomes part of the product.
+
+That is particularly important because the system will often act before the user sees the market. In a traditional search interface, a person can scan several results and notice patterns. A personal agent may return one synthesized recommendation or simply complete the transaction. The better the automation, the less visible the discarded candidate set becomes.
+
+Convenience compresses the market into an answer.
+
+Whoever constructs that answer has power over the alternatives that disappear.
+
+This is the economic counterpart to the agent-safety problem from the previous chapter. There, the concern was whether the right tool or precedent entered consideration before action. Here, the concern is whether the right supplier, product, worker, paper or service entered consideration before exchange.
+
+In both cases the candidate set is upstream of everything the user eventually sees.
+
+That is why the economics of adjacency will not be settled by embedding quality alone.
+
+The consequential institutions will form around access to candidate pools, portability of user context, disclosure of commercial influence, the right to compare maps and the ability of new suppliers to become legible without purchasing permission from a dominant intermediary.
+
+Abundance makes the shortlist valuable.
+
+Control the shortlist, and you can shape the market without owning most of what the market sells.
+
+The promise of adjacency is that more good matches become possible.
+
+Its political economy will be decided by whether those possibilities remain open enough for users and suppliers to challenge the map.

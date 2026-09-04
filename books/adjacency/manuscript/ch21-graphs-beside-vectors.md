@@ -319,3 +319,111 @@ That is what real discovery requires.
 The vector revolution is not the end of the graph.
 
 It is the moment the graph gets a new neighbor.
+
+The handoff between these representations deserves more attention than it usually receives.
+
+A vector result often begins as a suspicion.
+
+This document may describe the same entity.
+
+This supplier may depend on the same route.
+
+This research group may be working on a related mechanism.
+
+This employee may possess a relevant skill.
+
+The temptation is to turn that suspicion immediately into an edge.
+
+Once the edge exists, however, the system may treat it differently. It can be traversed, counted, inherited by downstream systems and displayed as an explicit fact. An inferred resemblance has changed status.
+
+That transition should be deliberate.
+
+A graph built partly by language models may therefore need several levels of relation rather than one undifferentiated edge set. Some connections come from authoritative records. Some come from signed documents. Some were extracted from text with high confidence. Some are proposed by a model and await confirmation. Some are merely useful hypotheses for search.
+
+The visible shape can be the same while the epistemic status is completely different.
+
+A line between two nodes is not enough.
+
+The line needs a history.
+
+Who or what asserted it?
+
+What source supports it?
+
+When was it last checked?
+
+Is it current or historical?
+
+Is it a fact, an inference or a candidate relation?
+
+Can an agent act on it, or only investigate it?
+
+These questions make graph provenance operational rather than decorative.
+
+They also prevent a subtle form of laundering. A weak inference can enter a graph, become visually explicit, and later be retrieved as if the graph itself were the source of truth. After several hops, nobody remembers that the original edge came from one ambiguous sentence.
+
+The structure can make uncertainty look crisp.
+
+Vectors have the opposite aesthetic problem. Their uncertainty is obvious to engineers and nearly invisible to users. A result appears because it was near, but the interface may not reveal whether the nearness came from text, behavior, image, citations or some mixture.
+
+Good systems should preserve the uncertainty of one layer and the authority of another rather than letting either representation borrow credibility it has not earned.
+
+This is particularly important for agents.
+
+Suppose an agent is asked to identify everyone who must approve a contract change. Semantic retrieval can locate documents that discuss approval, historical examples and perhaps an outdated process guide. A graph or workflow system can identify the current authorized approvers. The agent may use the fuzzy layer to understand the problem and the explicit layer to decide whom to route to.
+
+Now reverse the question.
+
+“Who else might need to know about this change even though they are not formal approvers?”
+
+The graph alone may be too narrow. Semantic similarity across project descriptions, prior incidents and organizational memory can surface affected teams that no formal workflow names.
+
+The same task changes representation when the verb changes from must to might.
+
+That distinction is easy for humans to hear and important for machines to preserve.
+
+The handoff can also run recursively.
+
+A graph path identifies a cluster of connected entities. The system uses those entities to seed semantic retrieval. The retrieved documents suggest a previously missing relationship. A human or rule validates it. The graph changes. The new graph then constrains the next search.
+
+Discovery becomes an alternating process between inference and commitment.
+
+This is more powerful than a one-way pipeline because each representation can expose the other's blind spots.
+
+The graph can tell the vector system that two semantically close records refer to legally distinct entities. The vector system can tell the graph that two apparently unrelated nodes share a body of language worth investigating. Structured time can tell both that a relation was true last year and false now. Permission systems can prevent an otherwise relevant path from becoming available to the wrong user.
+
+The result is not a universal knowledge layer.
+
+It is a negotiated boundary among different kinds of truth.
+
+That boundary matters in public systems too.
+
+A civic information assistant may retrieve several documents that discuss the same program, then use an explicit authority graph to distinguish a current regulation from a commentary about it. A medical system may retrieve related evidence while using structured drug, allergy and interaction data for hard constraints. A financial agent may search broadly for comparable transactions while relying on exact account ownership and settlement state before acting.
+
+The stronger the agent, the more important this separation becomes because the final answer may hide the representational journey.
+
+The user sees one recommendation.
+
+Behind it may sit a semantic candidate set, a graph path, a database query, a policy gate and a source document.
+
+The architecture should keep those layers recoverable.
+
+This is not only for explanation after something goes wrong. It improves the reasoning before action. A model can ask a different question of each layer because each layer carries a different promise.
+
+What might be related?
+
+What is explicitly connected?
+
+What is true in the system of record right now?
+
+What evidence supports the connection?
+
+What am I authorized to do with it?
+
+Those are not redundant queries.
+
+They are how a discovery system avoids turning resemblance into fact and fact into permission.
+
+The future map is likely to be layered for the same reason cities have streets, parcel records, utility maps, zoning maps and transit maps. No single representation answers every question about the same territory.
+
+The sophistication lies in moving among them without forgetting which map supplied which claim.

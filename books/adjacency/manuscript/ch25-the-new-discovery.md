@@ -429,3 +429,149 @@ There may be something near enough to help.
 That small permission changes the beginning of discovery.
 
 You no longer have to know the destination to take the first step.
+
+The second step is learning what to do with the neighborhood once it arrives.
+
+That will become a literacy of its own.
+
+People learned how to search the web. They learned that quotation marks could narrow a phrase, that source quality mattered, that the first result was not automatically the best result, that a query could be reformulated, that some questions required leaving the search page and reading the underlying source.
+
+Relational systems demand an expanded version of that literacy.
+
+Ask what kind of similarity produced the result.
+
+Ask what was excluded before ranking began.
+
+Ask whether the source is current and authoritative or merely nearby.
+
+Ask the system to show a different neighborhood when the first one feels too neat.
+
+Ask for the counterexample, the distant analogue, the explicit graph path, the primary record.
+
+Ask which part of a personalized answer came from memory and whether the memory can be corrected.
+
+Ask what changed when a model or index changed.
+
+The most capable user of vector-native systems will not be the person who accepts the most fluent answer.
+
+It will be the person who knows how to interrogate the map.
+
+This does not mean everyone needs to understand high-dimensional geometry. Most drivers do not understand geodesy. They do understand that a route planner can be wrong, that a road can close, that a map may optimize for speed rather than scenery and that sometimes the local person knows a route the software does not.
+
+Discovery literacy can be similarly practical.
+
+What is this system optimizing?
+
+How certain is the relation?
+
+Can I see another route?
+
+What would change the answer?
+
+What source lies underneath it?
+
+When the system is acting rather than merely answering, one more question becomes essential:
+
+What authority turned this candidate into an action?
+
+That is where the themes of the book converge.
+
+Candidate generation becomes cheap.
+
+The decision boundary becomes valuable.
+
+The vector system can retrieve ten plausible tools. Policy decides which one the agent may call. It can retrieve a hundred similar compounds. Experiment decides which candidate has physical merit. It can retrieve an unusual worker whose experience does not match the job title. Evidence and judgment decide whether the person can do the work. It can retrieve a compelling analogy. Mechanism decides whether the transfer survives. It can retrieve a memory. Time, provenance and permission decide whether the memory belongs in the present.
+
+The better the map becomes, the more consequential the downstream discipline becomes.
+
+This is not an argument for slowing discovery until every uncertainty disappears. That would surrender the benefit.
+
+The advantage comes from allowing broad consideration while preserving narrow standards for commitment.
+
+Search farther than you can act.
+
+Imagine more than you can claim.
+
+Retrieve more than you can trust.
+
+Then earn the transition from possibility to decision.
+
+That pattern can support both curiosity and safety because it does not demand that the candidate generator become an oracle.
+
+It lets the map be a map.
+
+There is humility in that design.
+
+A map is useful precisely because it is smaller than the territory. It loses detail so that relation becomes visible. We do not condemn it for failing to contain every tree, conversation, molecule or motive. We ask whether it preserves the features needed for the journey.
+
+Vector representations deserve the same mature expectation.
+
+They will be astonishingly useful and systematically incomplete.
+
+They will open doors and create blind spots.
+
+They will reveal relations nobody explicitly encoded and sometimes invent proximity where the decisive distinction was compressed away.
+
+They will make experts faster and novices more capable of beginning. They will also make it easier to produce plausible candidate sets whose authority exceeds the evidence behind them.
+
+The social question is whether our institutions learn to use abundance without mistaking it for certainty.
+
+The personal question is whether we learn to let the machine expand our neighborhood without allowing its model of us to become the boundary of our curiosity.
+
+The scientific question is whether cheaper hypothesis and literature search can increase the rate at which good questions reach expensive reality.
+
+The economic question is who controls the shortlist between abundant supply and scarce attention.
+
+The organizational question is whether memory becomes genuinely reusable or merely more searchable.
+
+The creative question is whether distance helps us escape habit without turning novelty into a score.
+
+Different chapters of the same transformation.
+
+They all begin with manufactured adjacency.
+
+That phrase is worth holding onto because it prevents the magic trick.
+
+The neighborhood was not waiting in nature with fixed coordinates.
+
+We made a representation, chose an objective, compressed a corpus and created a way to move through it.
+
+Then the representation showed us something we had not thought to ask for.
+
+That is the paradoxical beauty of the technology.
+
+We construct the map, and the map can still surprise us.
+
+The surprise is useful when it sends us back into the world.
+
+Back to the paper.
+
+Back to the experiment.
+
+Back to the patient.
+
+Back to the code.
+
+Back to the student.
+
+Back to the colleague.
+
+Back to the object someone actually made.
+
+Back to the source that says what happened.
+
+Discovery is completed there, not in the coordinate.
+
+The vector space changes the path because it gives us more places from which to begin and more directions we can notice along the way.
+
+The destination remains stubbornly real.
+
+That is why adjacency is revolutionary without needing to be mystical.
+
+It makes relation navigable.
+
+It makes the unknown a little easier to approach from the wrong words, the wrong category, the wrong discipline or no name at all.
+
+And it leaves us with the responsibility every useful map eventually creates:
+
+once more of the world is within reach, decide where to go.

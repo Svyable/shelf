@@ -377,3 +377,71 @@ Agents are acquiring a computational version of that skill.
 The vector space gives them neighborhoods.
 
 The next frontier is learning how not to become prisoners of the nearest one.
+
+That problem becomes sharper the moment a route through the map can change something outside the map.
+
+Search can be wrong cheaply. A bad result costs a few seconds. A draft can be discarded. A test can fail in a sandbox and teach the system something useful. But agents increasingly move from these reversible acts toward decisions that are harder to unwind: sending a message, changing a production system, approving a refund, placing an order, modifying a record another system will trust.
+
+Autonomy is therefore partly a problem of reversibility.
+
+A coding agent can be allowed to search broadly and edit freely on a branch while being denied the ability to merge. A purchasing agent can compare vendors without being able to submit the order. A finance agent can prepare a payment while a separate rule governs whether money actually moves. The same intelligence can have a wide investigative radius and a narrow committing radius.
+
+That separation matters because uncertainty is not evenly distributed across the workflow. The agent may be highly confident that a tool is relevant and only moderately confident that the user's request authorizes its most consequential function. It may understand the technical fix while lacking the institutional authority to deploy it. It may retrieve a convincing precedent while missing the one fact that makes the present case different.
+
+Good systems should let uncertainty change behavior before it becomes damage.
+
+When confidence is low, the agent can inspect more sources, retrieve an alternative tool, run another test, narrow the scope or ask for confirmation. When the action is cheap to reverse, the system can experiment. When the action is expensive to reverse, the threshold should rise.
+
+The important point is not to invent a universal numerical score for danger. It is to preserve the distinction between exploring a possibility and committing the world to it.
+
+Human institutions already encode this distinction in mundane ways. Draft and send are different buttons. Prepare and approve are different roles. Stage and production are different environments. Quote and purchase are different events. A semantic interface should not erase those separations merely because natural language makes them feel continuous.
+
+The more conversational the agent becomes, the easier it is to overlook this.
+
+“Handle it” sounds like one instruction. In software it may unfold into a dozen different authorities.
+
+The map can identify the route. It should not silently manufacture permission to take every exit.
+
+This also changes what an audit trail needs to contain.
+
+Traditional software logs often tell us which function was called, by whom and when. An agent may require a richer account. Which documents entered context? Which memories were retrieved? Which tools were considered but not selected? Which policy gate allowed the final action? Which model or index version shaped the candidate set?
+
+Without that history, a bad outcome can be nearly impossible to diagnose. The final action may look unreasonable while the local reasoning was sensible given a distorted neighborhood. Or the retrieval may have been excellent and the failure may have occurred later, when the model chose the wrong action among good candidates.
+
+This is not bureaucratic decoration. It is how the system learns the right lesson from failure.
+
+If a purchasing agent sends an order to the wrong supplier, replacing the language model may do nothing if the supplier record was retrieved from stale metadata. If a coding agent edits the wrong module, retraining the embedding may do nothing if the repository description incorrectly identified ownership. If an assistant exposes a private memory, the issue may be access control rather than semantic similarity.
+
+A useful postmortem has to follow the path through the map.
+
+There is another reason to preserve that path. Agents will increasingly learn from their own histories. Today's action trace can become tomorrow's procedural memory. If the stored trace records only what happened and not why it was permitted, a temporary exception can harden into a retrieved norm.
+
+The system handled a customer this way once.
+
+The system used this production shortcut once.
+
+The system approved this unusual vendor once.
+
+A future agent retrieves the trace because it looks close and repeats it without the surrounding exception.
+
+Machine precedent can accumulate faster than institutional understanding.
+
+Procedural memory therefore needs provenance about authority as much as provenance about success. A useful trace says not only that a path worked, but under what conditions it was valid.
+
+This is the difference between memory and policy.
+
+The two can sit beside each other in the agent's context. They should not be confused.
+
+As agents become more capable, this may be the central discipline of their architecture: let semantic systems make possibility abundant while keeping commitment legible.
+
+The agent should be able to search farther than it can act.
+
+It should be able to imagine more than it can authorize.
+
+It should be able to retrieve precedent without inheriting authority from precedent.
+
+And when it does act, we should be able to reconstruct the neighborhood that made the action look reasonable at the time.
+
+The vector space gives an agent reach.
+
+Judgment begins with deciding where that reach must stop.

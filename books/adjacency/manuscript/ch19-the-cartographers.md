@@ -349,3 +349,91 @@ The question is whether the people who depend on them retain the ability to unde
 A civilization does not need perfect maps.
 
 It needs maps that can be corrected.
+
+Correction, however, is not only the ability to produce a better map tomorrow.
+
+Sometimes an institution needs to recover yesterday's geography.
+
+Imagine that a company replaces the embedding model behind an internal compliance search. Average retrieval improves. Queries feel more natural. Yet a small class of old policy exceptions no longer appears near the phrases employees actually use. Nobody notices immediately because the new system is better almost everywhere else.
+
+Three months later an audit asks what an employee could reasonably have found on the day a decision was made.
+
+The current index cannot answer.
+
+The source documents still exist. The model still exists in a model registry. But the exact combination of chunks, vectors, filters, reranking rules and corpus state that produced the old neighborhood has vanished.
+
+The map has history, and the institution did not keep it.
+
+Consequential discovery systems therefore need something closer to release engineering than casual model swapping. A new representation should be tested beside the old one before it silently becomes the only geography. Important queries should be compared. Large changes in candidate sets should be inspected. The old map should remain recoverable long enough to understand regressions and, where the stakes justify it, to roll back.
+
+This is not nostalgia for inferior models.
+
+It is the recognition that improvement is not scalar.
+
+A new embedding can be better on average and worse for a minority language. Better for conceptual search and worse for exact technical variants. Better for common products and worse for rare parts. Better for the center of a discipline and less sensitive to its frontier.
+
+A benchmark average can rise while a particular road disappears.
+
+Versioned geography makes that trade visible.
+
+The comparison itself can become a form of governance. Which neighborhoods changed most? Which sources became hubs? Which previously distant objects became close? Which groups of queries lost recall? Which results disappeared only because the representation moved, rather than because the source changed?
+
+Those questions are more revealing than asking whether model B has a higher global retrieval score than model A.
+
+They examine redistribution inside the map.
+
+That word matters because discovery is an allocation system. A changed neighborhood redistributes attention. A policy document that moves from rank three to rank thirty has not been deleted, but its practical visibility may have collapsed. A supplier that no longer enters an agent's shortlist remains nominally available while losing access to demand. A scientist whose work moves outside a dominant research neighborhood may still be indexed while becoming harder to encounter.
+
+Map changes create winners and losers even when nobody intended to make a distributive decision.
+
+This is another reason to resist the idea of one canonical semantic space.
+
+Different tasks deserve different maps.
+
+A medical search system may want one representation for finding conceptually related literature and another retrieval path for current clinical guidance. A company may want broad semantic exploration when employees are brainstorming and conservative authority-weighted retrieval when an agent is executing policy. A scientist may want novelty when forming hypotheses and methodological closeness when reproducing an experiment.
+
+Trying to force all of those purposes into one geometry does not create neutrality.
+
+It hides the choices inside one model.
+
+Plural maps can make the choices more explicit.
+
+They also create a useful form of disagreement.
+
+If two independently trained representations return nearly the same neighborhood, confidence in the candidate set may increase. If they disagree sharply, the disagreement itself is information. The query may be ambiguous. The corpus may contain several legitimate senses. One model may be overfitting to surface language. Another may be importing a behavioral signal that does not belong in the task.
+
+A mature system can treat map disagreement the way a scientist treats disagreement among instruments: not automatically as error, but as a reason to inspect what each instrument measures.
+
+This is especially important when people are represented inside the map.
+
+A worker, patient, student or customer should not become one permanently fixed vector whose nearest neighbors quietly determine opportunity. Different contexts make different attributes relevant. The similarity useful for recommending a course is not automatically the similarity appropriate for hiring. The representation useful for finding medical information is not automatically appropriate for insurance pricing.
+
+Reuse feels efficient.
+
+Governance sometimes requires refusing reuse.
+
+A map trained for one purpose can become dangerous precisely because it is convenient enough to be carried into another.
+
+The cartographer's responsibility therefore extends beyond accuracy.
+
+It includes scope.
+
+What is this map for?
+
+Where should it not be used?
+
+What evidence would justify changing that answer?
+
+Who can challenge a placement that produces a consequential exclusion?
+
+These questions are easier to answer when the system preserves source records, model versions, evaluation history and an explicit boundary between discovery and decision.
+
+They are almost impossible to answer when the vector layer is treated as invisible plumbing.
+
+Invisible infrastructure is comfortable until it fails.
+
+Then everyone wants the old map, the survey notes and the name of the person who moved the road.
+
+A correctable map is good.
+
+A governable map is one whose changes can also be seen, compared and, when necessary, undone.
