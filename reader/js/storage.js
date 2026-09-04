@@ -18,9 +18,19 @@ function systemTheme() {
   }
 }
 
+export function normalizeReaderTheme(theme) {
+  const value = String(theme || '').trim().toLowerCase();
+  if (value === 'light' || value === 'sepia') return 'light';
+  return 'dark';
+}
+
+export function nextReaderTheme(theme) {
+  return normalizeReaderTheme(theme) === 'dark' ? 'light' : 'dark';
+}
+
 export function readingAppearanceDefaults(theme = 'dark') {
   return {
-    theme: theme === 'light' ? 'light' : 'dark',
+    theme: normalizeReaderTheme(theme),
     fontSize: 18,
     lineHeight: '1.55',
     fontFamily: 'serif',
@@ -29,7 +39,15 @@ export function readingAppearanceDefaults(theme = 'dark') {
 }
 
 export function resetReadingAppearancePrefs(prefs = {}, theme = systemTheme()) {
-  return { ...prefs, ...readingAppearanceDefaults(theme) };
+  const defaults = readingAppearanceDefaults(theme);
+  return {
+    ...prefs,
+    theme: normalizeReaderTheme(prefs.theme ?? theme),
+    fontSize: defaults.fontSize,
+    lineHeight: defaults.lineHeight,
+    fontFamily: defaults.fontFamily,
+    nightLight: defaults.nightLight,
+  };
 }
 
 export function loadPrefs() {
@@ -41,7 +59,12 @@ export function loadPrefs() {
     seenHint: false,
   };
   try {
-    return { ...defaults, ...JSON.parse(localStorage.getItem(prefsKey()) || '{}') };
+    const stored = JSON.parse(localStorage.getItem(prefsKey()) || '{}');
+    return {
+      ...defaults,
+      ...stored,
+      theme: normalizeReaderTheme(stored.theme ?? defaults.theme),
+    };
   } catch {
     return defaults;
   }
