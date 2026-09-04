@@ -23,6 +23,11 @@ export function parsePortalCatalog(markdown) {
   return slugs;
 }
 
+export function catalogEntryVisible(meta, role = 'instance') {
+  const normalizedRole = String(role || 'instance').trim().toLowerCase();
+  return !!meta?.published || normalizedRole === 'desk';
+}
+
 export function parsePortalCatalogManifest(value) {
   let manifest = value;
   if (typeof value === 'string') {
