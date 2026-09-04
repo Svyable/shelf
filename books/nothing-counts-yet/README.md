@@ -6,10 +6,10 @@
 |---|---|
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
-| **Chapters**  | 20 of 20 drafted |
+| **Chapters**  | 25 of 25 drafted |
 | **Format** | Book |
 | **Publisher** | Svyable |
-| **Edition** | First draft edition |
+| **Edition** | Expanded trade edition |
 | **Language** | English |
 | **Draft date** | 2026-09-03 |
 
@@ -40,6 +40,11 @@ The book argues that modern life is becoming unusually good at recording, rankin
 - [x] [Ch 18 — Institutions That Can Pilot](manuscript/ch18-institutions-that-can-pilot.md)
 - [x] [Ch 19 — A Culture of Second Attempts](manuscript/ch19-a-culture-of-second-attempts.md)
 - [x] [Ch 20 — When It Counts](manuscript/ch20-when-it-counts.md)
+- [x] [Ch 21 — The Cost of Being Seen Learning](manuscript/ch21-the-cost-of-being-seen-learning.md)
+- [x] [Ch 22 — The Forgetting Machine](manuscript/ch22-the-forgetting-machine.md)
+- [x] [Ch 23 — The Last Human Repetition](manuscript/ch23-the-last-human-repetition.md)
+- [x] [Ch 24 — The Secret Curriculum](manuscript/ch24-the-secret-curriculum.md)
+- [x] [Ch 25 — The Architecture of Courage](manuscript/ch25-the-architecture-of-courage.md)
 - [x] [Back Matter](manuscript/back-matter.md)
 
 ## Research
@@ -47,3 +52,4 @@ The book argues that modern life is becoming unusually good at recording, rankin
 - [Book brief](research/book-brief.md)
 - [Source notes](research/source-notes.md)
 - [Release review](research/release-review.md)
+- [Publication checklist](research/publication-checklist.md)
