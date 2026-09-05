@@ -1,8 +1,10 @@
 # The Long-Running Mind
 
-## How intelligence changed when the model stopped answering and started continuing
+*How intelligence changed when the model stopped answering and started continuing*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 August 30, 2026
 

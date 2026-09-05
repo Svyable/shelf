@@ -2,7 +2,9 @@
 
 *Investing on the Brink of World War 3*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 There is a particular kind of investor who becomes most confident when the world becomes least knowable.
 

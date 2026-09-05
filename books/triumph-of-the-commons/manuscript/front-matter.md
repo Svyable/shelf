@@ -1,8 +1,10 @@
 # Triumph of the Commons
 
-**When AI Begins Contributing at Scale to the Global Well-Being of the World—and Altruism Accelerates Like Never Before**
+*When AI Begins Contributing at Scale to the Global Well-Being of the World—and Altruism Accelerates Like Never Before*
 
 **Sven Hardy Benson**
+
+---
 
 ## Preface: The Day Help Became Abundant
 

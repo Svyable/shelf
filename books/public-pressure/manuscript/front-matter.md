@@ -2,7 +2,9 @@
 
 *AI, Anger, and the Revolt Against Institutions That Decide for Us*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 Working draft — August 2026
 

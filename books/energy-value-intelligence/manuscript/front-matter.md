@@ -1,6 +1,10 @@
-# Energy, Value & Intelligence - the triumvirate shaping the future
+# Energy, Value & Intelligence
 
-Sven Hardy Benson
+*The Triumvirate Shaping the Future*
+
+**Sven Hardy Benson**
+
+---
 
 A civilization can have power and still be stupid. It can be clever and still be poor. It can become rich while destroying the conditions that made the richness possible.
 

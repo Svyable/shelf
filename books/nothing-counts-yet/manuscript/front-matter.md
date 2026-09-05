@@ -6,6 +6,8 @@
 
 © 2026 Sven Hardy Benson. All Rights Reserved.
 
+---
+
 There is a moment in almost every serious human activity when the world agrees not to count what happens next.
 
 The orchestra stops and starts again.

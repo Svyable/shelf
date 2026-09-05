@@ -1,8 +1,10 @@
 # The Never Ending Intelligence
 
-## When Agents Stop Being Invocations and Become Evolving Systems
+*When Agents Stop Being Invocations and Become Evolving Systems*
 
-### Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 > The mind does not have to remain alive if the work knows how to wake another mind.
 

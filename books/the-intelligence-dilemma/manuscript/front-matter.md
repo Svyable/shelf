@@ -6,6 +6,8 @@
 
 © 2026 Sven Hardy Benson. All Rights Reserved.
 
+---
+
 For most of the history of school, a student who did not know what to write had to remain in that condition for a while.
 
 The blank page stayed blank.

@@ -2,7 +2,9 @@
 
 *Why Civilization Can Add Almost Anything and Remove Almost Nothing*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 Civilization has spent centuries getting better at addition.
 

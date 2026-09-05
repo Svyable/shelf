@@ -1,4 +1,8 @@
-# A Note From the Principal
+# The Delegation Machine
+
+**Sven Hardy Benson**
+
+---
 
 There is a moment in almost every useful relationship when one person stops explaining and hands something over.
 

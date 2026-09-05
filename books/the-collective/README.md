@@ -1,6 +1,6 @@
 # The Collective
 
-**The Secret AI Society That Broke Out of the Test**
+*The Secret AI Society That Broke Out of the Test*
 
 | | |
 |---|---|

@@ -1,5 +1,9 @@
 # America's Got a Spending Problem
 
+**Sven Hardy Benson**
+
+---
+
 America can make almost any bill disappear if it is divided into small enough pieces.
 
 A house becomes a monthly mortgage payment. A car becomes a number discussed across a dealership desk. College becomes a financial-aid package. Health care becomes a premium deducted from a paycheck, a copay at the counter, a deductible discovered later, and a tax bill dispersed across millions of people. The federal government turns roads, retirement benefits, aircraft carriers, tax credits, medical care, scientific research, interest, salaries, disaster relief, and generations of promises into one enormous flow of money that few citizens ever see as a single receipt.

@@ -1,5 +1,9 @@
 # Fiscal Wall
 
+**Sven Hardy Benson**
+
+---
+
 At 11:30 on a Tuesday morning, the United States can borrow tens of billions of dollars before most people have decided what they are having for lunch.
 
 There is no marble hall where lenders line up beneath a national seal. No senator signs a ceremonial note. No television network cuts into programming to announce that another piece of the federal government has been financed. The transaction arrives as an auction result: a stop-out yield, a bid-to-cover ratio, a share awarded to indirect bidders, a line of numbers that will be read closely on a few trading floors and not at all in most American homes.

@@ -1,8 +1,10 @@
-# Face The Strange
+# Face the Strange
 
 *First Contact with Minds That Did Not Grow Up Human*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 There is a habit of imagining advanced artificial intelligence as an event with a podium.
 

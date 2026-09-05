@@ -1,8 +1,10 @@
 # Artificial Identity
 
-## The Other You Machines Are Building
+*The Other You Machines Are Building*
 
-### Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 Draft — September 2026
 

@@ -1,4 +1,4 @@
-# Right To Try
+# Right to Try
 
 | | |
 |---|---|

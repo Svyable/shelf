@@ -1,6 +1,6 @@
-# Face The Strange
+# Face the Strange
 
-**First Contact with Minds That Did Not Grow Up Human.**
+*First Contact with Minds That Did Not Grow Up Human*
 
 | | |
 |---|---|

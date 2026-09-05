@@ -1,8 +1,10 @@
 # Gatekeepers
 
-## Who Gets to Say Yes in a World Built Out of Gates
+*Who Gets to Say Yes in a World Built Out of Gates*
 
 **Sven Hardy Benson**
+
+---
 
 > Every civilization has doors. Power begins with deciding who gets the key.
 

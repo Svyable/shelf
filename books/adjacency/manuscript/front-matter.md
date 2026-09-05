@@ -4,6 +4,8 @@
 
 **Sven Hardy Benson**
 
+---
+
 We used to think of discovery as a search problem.
 
 You had a question. Somewhere there was an answer. The difficult part was describing the answer well enough to retrieve it.

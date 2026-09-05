@@ -1,6 +1,6 @@
 # Useful Noise
 
-**How the Messy Quantum World Could Change Energy, Materials, and the Machines We Build Next**
+*How the Messy Quantum World Could Change Energy, Materials, and the Machines We Build Next*
 
 | | |
 |---|---|

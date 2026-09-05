@@ -1,6 +1,6 @@
 # The Weather We Build
 
-## How Manufactured Microclimates Became the Hidden Infrastructure of Civilization
+*How Manufactured Microclimates Became the Hidden Infrastructure of Civilization*
 
 | | |
 |---|---|

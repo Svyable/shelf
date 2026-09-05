@@ -1,8 +1,10 @@
 # Restructuring America
 
-## Public Works for the Age of Artificial Intelligence
+*Public Works for the Age of Artificial Intelligence*
 
 **Sven Hardy Benson**
+
+---
 
 Copyright © 2026 Sven Hardy Benson
 

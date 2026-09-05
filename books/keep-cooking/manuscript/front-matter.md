@@ -2,7 +2,9 @@
 
 *Who Wins When AI Never Stops Thinking*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 There is a new kind of extravagance in computing.
 

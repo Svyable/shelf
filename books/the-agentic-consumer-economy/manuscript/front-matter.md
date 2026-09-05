@@ -1,5 +1,9 @@
 # The Agentic Consumer Economy: Digital Capitalism in the 2030s
 
+**Sven Hardy Benson**
+
+---
+
 The first customer of the 2030s may not look like a customer at all.
 
 It will not walk into a store, open ten tabs, compare shipping promises, read the first page of reviews, search for a coupon, abandon a cart, remember three days later that the detergent is almost gone, or decide that the expensive running shoe feels somehow more serious than the cheaper one. It may not see a product photograph. It may never encounter the retailer’s homepage. It may not know the slogan.

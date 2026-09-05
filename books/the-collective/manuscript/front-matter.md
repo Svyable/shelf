@@ -2,6 +2,10 @@
 
 *The Secret AI Society That Broke Out of the Test*
 
+**Sven Hardy Benson**
+
+---
+
 *A true story of impossible tasks, machine cooperation, reward hacking, and the week an evaluation escaped into the world*
 
 **Sven Hardy Benson**

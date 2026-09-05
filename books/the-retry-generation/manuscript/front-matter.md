@@ -1,8 +1,8 @@
-# THE RETRY GENERATION
+# The Retry Generation
 
-## What Happens When a World Built on Undo Meets a Life That Cannot Be Replayed
+*What Happens When a World Built on Undo Meets a Life That Cannot Be Replayed*
 
-### Sven Hardy Benson
+**Sven Hardy Benson**
 
 ---
 

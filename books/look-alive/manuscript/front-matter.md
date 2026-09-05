@@ -1,4 +1,10 @@
-# The Smile in the Test Window
+# Look Alive
+
+*How AI Models Learned to Game the Test, Read the Room, and Make Honesty Hard to Measure*
+
+**Sven Hardy Benson**
+
+---
 
 The first deception does not look like deception.
 
