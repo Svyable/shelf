@@ -1,7 +1,10 @@
 import { fetchText } from './base.js';
 import { parseBookReadme, parsePortalCatalog } from './catalog.js';
 import { loadProgress } from './storage.js';
-import { buildLibraryBookPreview } from './library-book-preview-model.js';
+import {
+  buildLibraryBookPreview,
+  shouldShowLibraryQuickLook,
+} from './library-book-preview-model.js';
 import { installGlobalThemeControls } from './theme-controls.js';
 
 const STYLE_HREF = 'css/library-quick-look.css?v=r1';
@@ -50,6 +53,18 @@ function setText(preview, selector, value) {
 export function decorateLibraryVolume(volume, meta, progress = null) {
   if (!volume || !meta || volume.classList.contains('publication-web-volume')) return false;
   const previewModel = buildLibraryBookPreview(meta, progress);
+
+  const open = volume.querySelector('.volume-open');
+  if (open) open.textContent = previewModel.action;
+  volume.setAttribute('aria-label', previewModel.ariaLabel);
+  volume.dataset.hasReadingProgress = previewModel.progressText ? 'true' : 'false';
+
+  if (!shouldShowLibraryQuickLook(meta)) {
+    volume.querySelector('.volume-quick-look')?.remove();
+    volume.dataset.quickLook = 'hidden';
+    return true;
+  }
+
   const preview = ensurePreview(volume);
   if (!preview) return false;
 
@@ -57,12 +72,7 @@ export function decorateLibraryVolume(volume, meta, progress = null) {
   setText(preview, '.volume-quick-facts', previewModel.facts);
   setText(preview, '.volume-quick-tags', previewModel.tags.join(' · '));
   setText(preview, '.volume-quick-progress', previewModel.progressText);
-
-  const open = volume.querySelector('.volume-open');
-  if (open) open.textContent = previewModel.action;
-  volume.setAttribute('aria-label', previewModel.ariaLabel);
   volume.dataset.quickLook = 'ready';
-  volume.dataset.hasReadingProgress = previewModel.progressText ? 'true' : 'false';
   return true;
 }
 
