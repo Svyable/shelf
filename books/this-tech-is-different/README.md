@@ -52,7 +52,7 @@ The book treats “Fourth Industrial Revolution” as a hypothesis to test, not 
 
 ## Publication state
 
-This is the deliberate September 2026 first-edition Shelf snapshot, frozen from Desk commit `ffac2891fa24d4bb8fb3d3e098f27964d500c107`. Desk remains the canonical working edition for future revisions; later Desk changes do not silently rewrite this released edition.
+This is the deliberate September 2026 first-edition Shelf snapshot, frozen from Desk commit `7dd47369223398b38a030d41aae6cc21a0b380c5`. Desk remains the canonical working edition for future revisions; later Desk changes do not silently rewrite this released edition.
 
 ## Rights
 
