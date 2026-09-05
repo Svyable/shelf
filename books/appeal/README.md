@@ -7,6 +7,8 @@
 | **Author** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | Front matter, prologue, epilogue, back matter; 26 of 26 chapters drafted |
+| **Publisher** | Sven Hardy Benson’s Shelf |
+| **Edition** | First Shelf edition, 2026 |
 | **Language** | English |
 | **Rights** | All Rights Reserved |
 | **AI use** | Reserved; see rights file |
@@ -56,4 +58,6 @@ The central thesis is that as software and artificial intelligence make first de
 
 ## Publication state
 
-The manuscript is structurally complete and has been expanded beyond the original 20-chapter architecture with a final six-chapter design-and-governance act. Publication readiness is tracked in the research review and repository integrity checks. Desk remains the working edition; the published snapshot is released to Shelf.
+First Shelf edition prepared from frozen Desk source `f47197b19b7bfa8c7fdd1dbd8289db01eaaf1529`.
+
+Desk remains the working edition; this Shelf copy is the intentional published snapshot.
