@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "policy": "bookself-arr-v1",
+  "work": { "title": "The Risk Pool: How Insurance Quietly Decides What Can Be Built, Bought, Borrowed, and Rebuilt", "author": "Sven Hardy Benson" },
+  "copyright": { "owner": "Sven Hardy Benson", "year": 2026, "notice": "© 2026 Sven Hardy Benson. All Rights Reserved." },
+  "license": { "id": "ARR", "label": "All Rights Reserved", "file": "RIGHTS.md" },
+  "permissions": { "publicReading": true, "conventionalSearch": true, "reproduction": false, "distribution": false, "derivatives": false, "commercialUse": false, "aiTraining": false, "aiGenerativeUse": false, "aiRetrievalGrounding": false, "aiIndexing": false, "syntheticNarration": false, "syntheticTranslation": false },
+  "registration": { "jurisdiction": "US", "status": "not-recorded-in-bookself", "number": null, "effectiveDate": null }
+}
