@@ -5,6 +5,7 @@ import {
   progressChapter,
   publicationAction,
   publicationLabel,
+  shouldShowLibraryQuickLook,
 } from './library-book-preview-model.js';
 
 const book = {
@@ -22,7 +23,13 @@ const book = {
   ],
 };
 
-test('new books expose compact discovery metadata without inventing progress', () => {
+test('ordinary book covers do not get the metadata quick-look pill', () => {
+  assert.equal(shouldShowLibraryQuickLook(book), false);
+  assert.equal(shouldShowLibraryQuickLook({ ...book, format: '' }), false);
+  assert.equal(shouldShowLibraryQuickLook({ ...book, format: 'paper' }), true);
+});
+
+test('new books retain metadata for semantics without inventing progress', () => {
   const preview = buildLibraryBookPreview(book);
   assert.equal(preview.action, 'Open');
   assert.equal(preview.kicker, 'Field Notes · Book');

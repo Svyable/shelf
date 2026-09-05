@@ -18,6 +18,11 @@ function contentCountLabel(meta = {}) {
   return `${count} ${plural}`;
 }
 
+export function shouldShowLibraryQuickLook(meta = {}) {
+  const format = text(meta.format).toLowerCase();
+  return Boolean(format && format !== 'book');
+}
+
 export function progressChapter(meta = {}, progress = null) {
   if (!progress?.chapter || !Array.isArray(meta.contents)) return null;
   return meta.contents.find((chapter) => chapter?.id === progress.chapter) || null;
