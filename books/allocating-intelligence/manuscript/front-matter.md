@@ -4,6 +4,8 @@
 
 **Sven Hardy Benson**
 
+---
+
 Copyright © 2026 Sven Hardy Benson
 
 All Rights Reserved.

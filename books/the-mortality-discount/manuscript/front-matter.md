@@ -1,6 +1,6 @@
 # The Mortality Discount
 
-## What Happens When the Actuaries Are Wrong About Everything at Once
+*What Happens When the Actuaries Are Wrong About Everything at Once*
 
 **Sven Hardy Benson**
 

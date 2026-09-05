@@ -1,8 +1,12 @@
 # Silent Cartel
 
-## How Pricing Algorithms Learned to Collude Without Talking, and What It Means for the Price of Everything
+*How Pricing Algorithms Learned to Collude Without Talking, and What It Means for the Price of Everything*
+
+**Sven Hardy Benson**
 
 © 2026 Sven Hardy Benson. All rights reserved.
+
+---
 
 ## Dedication
 

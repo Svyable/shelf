@@ -1,6 +1,6 @@
 # The Never Ending Intelligence
 
-## When Agents Stop Being Invocations and Become Evolving Systems
+*When Agents Stop Being Invocations and Become Evolving Systems*
 
 | | |
 |---|---|

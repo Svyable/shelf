@@ -1,6 +1,10 @@
-# THE WEATHER WE BUILD
+# The Weather We Build
 
 *How Manufactured Microclimates Became the Hidden Infrastructure of Civilization*
+
+**Sven Hardy Benson**
+
+---
 
 *A book about cleanrooms, cold chains, dry rooms, greenhouses, operating theaters, data centers, spacecraft—and the shrinking band of conditions inside which modern life works*
 

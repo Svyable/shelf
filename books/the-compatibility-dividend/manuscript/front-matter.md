@@ -2,7 +2,9 @@
 
 *How Standards Turn Strangers Into Systems*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 There is a peculiar class of invention that becomes less visible as it succeeds.
 

@@ -1,4 +1,10 @@
-# A Machine That Likes Noise
+# Useful Noise
+
+*How the Messy Quantum World Could Change Energy, Materials, and the Machines We Build Next*
+
+**Sven Hardy Benson**
+
+---
 
 There is a room in modern physics that most people never see. It is colder than deep space, quieter than a library before opening, and expensive in a way that makes ordinary laboratory equipment look almost domestic. Metal cylinders hang inside metal cylinders. Cables descend in careful loops. Pumps remove gas. Shields block electromagnetic interference. Engineers worry about vibrations from footsteps, trucks, elevators, compressors, and the building itself. The machine at the center is not weak. It may be one of the most sophisticated devices human beings have ever built. But it is vulnerable to the world.
 

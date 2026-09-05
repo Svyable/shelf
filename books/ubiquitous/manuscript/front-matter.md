@@ -1,6 +1,10 @@
-# Front Matter
+# Ubiquitous
 
-## Ubiquitous
+*Ubiquitous*
+
+**Sven Hardy Benson**
+
+---
 
 ### What Remains Valuable When Intelligence Is Everywhere
 

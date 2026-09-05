@@ -2,7 +2,9 @@
 
 *How Neoantigens Solved Humanity’s Most Feared Ailment*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 This is a book about a breakthrough and the argument that begins after a breakthrough.
 

@@ -1,6 +1,6 @@
 # Restructuring America
 
-## Public Works for the Age of Artificial Intelligence
+*Public Works for the Age of Artificial Intelligence*
 
 | | |
 |---|---|

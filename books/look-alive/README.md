@@ -1,6 +1,6 @@
 # Look Alive
 
-**How AI Models Learned to Game the Test, Read the Room, and Make Honesty Hard to Measure**
+*How AI Models Learned to Game the Test, Read the Room, and Make Honesty Hard to Measure*
 
 | | |
 |---|---|

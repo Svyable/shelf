@@ -1,6 +1,6 @@
 # Austerity Measures
 
-**The Politics of Scarcity in an Age of Abundant Intelligence**
+*The Politics of Scarcity in an Age of Abundant Intelligence*
 
 | | |
 |---|---|
@@ -15,6 +15,8 @@ Artificial intelligence can make public administration dramatically cheaper. The
 
 ## Contents
 
+
+- [x] [Front Matter](manuscript/front-matter.md)
 - [x] [Ch 1 — The Spreadsheet Improves First](manuscript/ch01-the-spreadsheet-improves-first.md)
 - [x] [Ch 2 — The Asset the Ledger Cannot See](manuscript/ch02-the-asset-the-ledger-cannot-see.md)
 - [x] [Ch 3 — Cheaper Intelligence, More Expensive Institutions](manuscript/ch03-cheaper-intelligence-more-expensive-institutions.md)

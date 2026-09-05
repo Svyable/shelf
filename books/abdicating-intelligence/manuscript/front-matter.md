@@ -2,7 +2,9 @@
 
 *What Happens When Humanity Hands Over Its Ability to Think to Machines*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 There is an easy version of the argument about artificial intelligence.
 

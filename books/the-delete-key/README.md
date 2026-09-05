@@ -1,6 +1,6 @@
 # The Delete Key
 
-**Why Civilization Can Add Almost Anything and Remove Almost Nothing**
+*Why Civilization Can Add Almost Anything and Remove Almost Nothing*
 
 | | |
 |---|---|

@@ -1,6 +1,6 @@
 # Intelligence State
 
-## Power, Prosperity, and the AI Future of the Americas
+*Power, Prosperity, and the AI Future of the Americas*
 
 | | |
 |---|---|

@@ -1,6 +1,6 @@
 # Gatekeepers
 
-**Who Gets to Say Yes in a World Built Out of Gates**
+*Who Gets to Say Yes in a World Built Out of Gates*
 
 | | |
 |---|---|

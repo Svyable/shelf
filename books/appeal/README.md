@@ -1,6 +1,6 @@
-# APPEAL
+# Appeal
 
-## How Civilization Corrects Its Decisions
+*How Civilization Corrects Its Decisions*
 
 | | |
 |---|---|

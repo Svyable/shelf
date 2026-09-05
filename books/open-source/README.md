@@ -1,6 +1,6 @@
 # Open Source
 
-**Nvidia, China, and the Race to Own Free Intelligence.**
+*Nvidia, China, and the Race to Own Free Intelligence*
 
 | | |
 |---|---|

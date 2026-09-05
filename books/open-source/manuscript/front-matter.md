@@ -2,7 +2,9 @@
 
 *Nvidia, China, and the Race to Own Free Intelligence*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 August 2026
 

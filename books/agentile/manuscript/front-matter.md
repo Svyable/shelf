@@ -2,7 +2,9 @@
 
 *The Birth of a New Force in the Economy*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 There are moments when an old category stops being large enough for what has entered it.
 

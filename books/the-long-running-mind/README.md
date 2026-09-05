@@ -1,6 +1,6 @@
 # The Long-Running Mind
 
-**How intelligence changed when the model stopped answering and started continuing**
+*How intelligence changed when the model stopped answering and started continuing*
 
 | | |
 |---|---|

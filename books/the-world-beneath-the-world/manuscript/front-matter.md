@@ -1,4 +1,10 @@
-# Learning to Notice
+# The World Beneath the World
+
+*A Sensory Guide to the Invisible Systems That Run Your Life*
+
+**Sven Hardy Benson**
+
+---
 
 Most of the systems that make modern life possible become easier to ignore as they improve.
 

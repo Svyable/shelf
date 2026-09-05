@@ -265,21 +265,75 @@ export function parseBookReadme(markdown, slug) {
   };
 }
 
+function frontMatterInlineText(line) {
+  return String(line || '')
+    .replace(/^\*\*(.+)\*\*$/, '$1')
+    .replace(/^__(.+)__$/, '$1')
+    .replace(/^\*(.+)\*$/, '$1')
+    .replace(/^_(.+)_$/, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .trim();
+}
+
+function looksLikeFrontMatterSectionHeading(value) {
+  return new Set([
+    'about the author',
+    'acknowledgments',
+    'acknowledgements',
+    'author note',
+    "author's note",
+    'contents',
+    'dedication',
+    'foreword',
+    'introduction',
+    'note to the reader',
+    'preface',
+    'prologue',
+  ]).has(String(value || '').trim().toLowerCase());
+}
+
+function looksLikeByline(line, copyrightTail) {
+  const plain = frontMatterInlineText(line).replace(/^by\s+/i, '').replace(/[.,]+$/, '').trim();
+  if (!plain) return false;
+  if (/^by\s+/i.test(frontMatterInlineText(line))) return true;
+  const tail = String(copyrightTail || '').replace(/[.,]+$/, '').trim().toLowerCase();
+  return !!tail && tail.startsWith(plain.toLowerCase());
+}
+
 export function parseFrontMatterMeta(markdown) {
   const titleMatch = markdown.match(/^#\s+(.+)$/m);
-  const lines = markdown.split(/\n/).map((l) => l.trim()).filter(Boolean);
+  const title = titleMatch ? titleMatch[1].trim() : '';
+  const copy = markdown.match(/©\s*(\d{4})([^\n]*)/);
+  const year = copy ? copy[1] : '';
+  const copyrightTail = copy ? copy[2].trim() : '';
+  const lines = markdown.split(/\n/).map((line) => line.trim()).filter(Boolean);
+  const titleIndex = lines.findIndex((line) => /^#\s+/.test(line));
   let subtitle = '';
-  let year = '';
-  const copy = markdown.match(/©\s*(\d{4})/);
-  if (copy) year = copy[1];
-  for (const line of lines.slice(1)) {
-    if (line.startsWith('#') || line.startsWith('©') || line.startsWith('|')) continue;
-    subtitle = line.replace(/\.$/, '');
+
+  for (const line of lines.slice(Math.max(0, titleIndex + 1))) {
+    if (/^(?:---|___|\*\*\*)$/.test(line) || line.startsWith('©') || line.startsWith('|')) break;
+    if (/^\*\*.+\*\*$/.test(line) || /^__.+__$/.test(line) || looksLikeByline(line, copyrightTail)) break;
+
+    const legacyHeading = line.match(/^##\s+(.+)$/);
+    if (legacyHeading) {
+      if (!looksLikeFrontMatterSectionHeading(legacyHeading[1])) subtitle = legacyHeading[1].trim();
+      break;
+    }
+    if (line.startsWith('#')) break;
+
+    const italic = line.match(/^\*([^*].*?)\*$/) || line.match(/^_([^_].*?)_$/);
+    if (italic) {
+      subtitle = italic[1].trim();
+      break;
+    }
+
+    subtitle = frontMatterInlineText(line);
     break;
   }
+
   return {
-    title: titleMatch ? titleMatch[1].trim() : '',
-    subtitle,
+    title,
+    subtitle: subtitle.replace(/\.$/, ''),
     year,
   };
 }

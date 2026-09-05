@@ -1,8 +1,12 @@
 # Single Points of Failure
 
-How a Handful of Machines, Mines, and Ships Run the Global Economy
+*How a Handful of Machines, Mines, and Ships Run the Global Economy*
+
+**Sven Hardy Benson**
 
 © 2026 Sven Hardy Benson. All rights reserved.
+
+---
 
 ## Dedication
 

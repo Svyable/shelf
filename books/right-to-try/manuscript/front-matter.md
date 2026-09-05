@@ -1,8 +1,10 @@
-# Right To Try
+# Right to Try
 
-**Personalized Medicine at the Border of Permission**
+*Personalized Medicine at the Border of Permission*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 A medicine can be real before it is approved.
 
