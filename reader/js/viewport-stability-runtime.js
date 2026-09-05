@@ -8,6 +8,10 @@ import {
   textEntryTarget,
 } from './viewport-stability.js';
 
+import('./global-reader-controls.js').catch((error) => {
+  console.warn('Global Reader controls could not be loaded', error);
+});
+
 function snapshot(vv = globalThis.visualViewport) {
   if (!vv) return null;
   return {
