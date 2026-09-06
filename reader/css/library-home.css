@@ -1,0 +1,528 @@
+/* Reading-library home hierarchy
+   ------------------------------
+   A calm app-shell layer for the library stage: resume first, discovery second,
+   physical books always dominant. It intentionally changes presentation only. */
+
+:root {
+  --library-home-surface: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+  --library-home-soft: color-mix(in srgb, var(--bg-secondary) 72%, transparent);
+  --library-home-line: color-mix(in srgb, var(--border) 74%, transparent);
+  --library-home-shadow: 0 16px 44px color-mix(in srgb, var(--shadow) 38%, transparent);
+}
+
+/* The home header keeps app-level controls while hiding book-only tools. */
+body[data-stage="library"] .app-header {
+  min-height: 3.35rem;
+  padding-block: .35rem;
+  border-bottom-color: color-mix(in srgb, var(--border) 40%, transparent);
+  background: color-mix(in srgb, var(--header-bg) 82%, transparent);
+  box-shadow: 0 7px 22px color-mix(in srgb, var(--shadow) 12%, transparent);
+}
+
+body[data-stage="library"] .app-header .header-right {
+  display: flex;
+  align-items: center;
+  gap: .08rem;
+}
+
+body[data-stage="library"] #bookmarkBtn,
+body[data-stage="library"] #searchBtn,
+body[data-stage="library"] #tocBtn,
+body[data-stage="library"] .reading-time {
+  display: none;
+}
+
+body[data-stage="library"] #themeModeBtn,
+body[data-stage="library"] #settingsBtn {
+  display: inline-flex;
+}
+
+body[data-stage="library"] .logo {
+  width: 2.55rem;
+  height: 2.55rem;
+  min-width: 2.55rem;
+  min-height: 2.55rem;
+  border-radius: 999px;
+}
+
+body[data-stage="library"] .library-view {
+  padding-top: clamp(1.35rem, 3vw, 2.45rem);
+}
+
+/* Home copy becomes a quiet masthead instead of competing with the collection. */
+body[data-stage="library"] .library-hero {
+  max-width: 74rem;
+  padding-bottom: clamp(.65rem, 1.5vw, 1.15rem);
+}
+
+body[data-stage="library"] .library-kicker {
+  margin-bottom: .55rem;
+  font-size: .7rem;
+  letter-spacing: .15em;
+}
+
+body[data-stage="library"] .library-hero h1 {
+  margin-bottom: .55rem;
+  font-size: clamp(2.15rem, 4.5vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: .018em;
+}
+
+body[data-stage="library"] .library-lede {
+  max-width: 46rem;
+  margin-bottom: .7rem;
+  color: color-mix(in srgb, var(--text-secondary) 90%, var(--text-primary));
+  font-size: clamp(.94rem, 1.4vw, 1.02rem);
+  line-height: 1.48;
+}
+
+body[data-stage="library"] .library-actions {
+  gap: .45rem 1rem;
+  margin-bottom: .4rem;
+}
+
+body[data-stage="library"] .write-link {
+  border-bottom: 0;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: .76rem;
+  letter-spacing: .01em;
+  text-decoration: none;
+}
+
+body[data-stage="library"] .write-link:hover,
+body[data-stage="library"] .write-link:focus-visible {
+  color: var(--accent);
+}
+
+body[data-stage="library"] .write-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Resume is the primary home action, analogous to a reading-app current loan. */
+body[data-stage="library"] .continue-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .8rem;
+  width: min(42rem, 100%);
+  margin: .4rem 0 1rem;
+  padding: .85rem 1rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, var(--library-home-line));
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 0 50%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 38%),
+    var(--library-home-surface);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--shadow) 24%, transparent);
+  isolation: isolate;
+}
+
+body[data-stage="library"] .continue-card[hidden] {
+  display: none !important;
+}
+
+body[data-stage="library"] .continue-card::before {
+  content: "";
+  width: 2.2rem;
+  height: 2.65rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 62%, var(--border));
+  border-radius: 3px 8px 8px 3px;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, #000 24%, transparent), transparent 22%),
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 38%, var(--bg-elevated)), var(--bg-secondary));
+  box-shadow:
+    inset 3px 0 0 color-mix(in srgb, #000 18%, transparent),
+    4px 7px 12px color-mix(in srgb, var(--shadow) 34%, transparent);
+}
+
+body[data-stage="library"] .continue-kicker {
+  grid-column: 2;
+  margin: 0 0 -.32rem;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: .66rem;
+  font-weight: 650;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+body[data-stage="library"] #continueCardLink {
+  grid-column: 2 / 4;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.22rem);
+  font-weight: 560;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+body[data-stage="library"] #continueCardLink::after {
+  content: "Resume  ›";
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: .75rem;
+  font-weight: 650;
+  letter-spacing: .02em;
+}
+
+body[data-stage="library"] #continueCardLink:hover::after {
+  transform: translateX(2px);
+}
+
+body[data-stage="library"] #continueCardLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+  border-radius: 4px;
+}
+
+/* Discovery controls read as one compact shelf toolbar. */
+body[data-stage="library"] .library-bar {
+  position: sticky;
+  top: .65rem;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) auto;
+  gap: .65rem;
+  width: min(58rem, 100%);
+  margin: .7rem 0 .65rem;
+  padding: .48rem .55rem;
+  border: 1px solid var(--library-home-line);
+  border-radius: 14px;
+  background: var(--library-home-surface);
+  box-shadow: 0 8px 26px color-mix(in srgb, var(--shadow) 22%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(.92);
+  backdrop-filter: blur(18px) saturate(.92);
+}
+
+body[data-stage="library"] .library-bar input {
+  min-width: 0;
+  min-height: 2.55rem;
+  padding: .48rem .75rem;
+  border: 0;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg-secondary) 52%, transparent);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: .94rem;
+}
+
+body[data-stage="library"] .library-bar input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+body[data-stage="library"] .library-bar input:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 76%, transparent);
+  outline-offset: 1px;
+  border: 0;
+}
+
+body[data-stage="library"] .library-bar .setting-pills {
+  display: flex;
+  align-items: stretch;
+  gap: .2rem;
+  padding: .18rem;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--bg-secondary) 54%, transparent);
+}
+
+body[data-stage="library"] .library-bar .pill {
+  min-height: 2.15rem;
+  padding: .38rem .7rem;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: .74rem;
+  font-weight: 650;
+  letter-spacing: .01em;
+  text-transform: none;
+}
+
+body[data-stage="library"] .library-bar .pill:hover,
+body[data-stage="library"] .library-bar .pill:focus-visible {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--bg-elevated) 66%, transparent);
+}
+
+body[data-stage="library"] .library-bar .pill.active {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+  box-shadow: 0 2px 7px color-mix(in srgb, var(--shadow) 24%, transparent);
+}
+
+body[data-stage="library"] .library-bar .pill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+body[data-stage="library"] .pub-filters {
+  display: flex;
+  width: min(58rem, 100%);
+  gap: .38rem;
+  margin: .2rem 0 1.15rem;
+  padding: .15rem 0 .25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+body[data-stage="library"] .pub-filters[hidden] {
+  display: none !important;
+}
+
+body[data-stage="library"] .pub-filters::-webkit-scrollbar {
+  display: none;
+}
+
+body[data-stage="library"] .pub-filters button {
+  flex: 0 0 auto;
+  min-height: 2.15rem;
+  padding: .38rem .72rem;
+  border: 1px solid var(--library-home-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: .72rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+body[data-stage="library"] .pub-filters button:hover,
+body[data-stage="library"] .pub-filters button:focus-visible {
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--accent) 44%, var(--border));
+}
+
+body[data-stage="library"] .pub-filters button.active {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 62%, var(--border));
+  background: color-mix(in srgb, var(--accent-glow) 54%, transparent);
+}
+
+body[data-stage="library"] .pub-filters button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Search results behave like destinations rather than raw text hits. */
+body[data-stage="library"] #libraryHits {
+  width: min(58rem, 100%);
+  max-width: none;
+  margin: -.2rem 0 1.1rem;
+  padding: .35rem;
+  border: 1px solid var(--library-home-line);
+  border-radius: 13px;
+  background: var(--library-home-surface);
+  box-shadow: var(--library-home-shadow);
+}
+
+body[data-stage="library"] #libraryHits[hidden] {
+  display: none !important;
+}
+
+body[data-stage="library"] #libraryHits li {
+  list-style: none;
+}
+
+body[data-stage="library"] #libraryHits a {
+  display: grid;
+  gap: .16rem;
+  padding: .7rem .75rem;
+  border-bottom: 1px solid var(--library-home-line);
+  border-radius: 9px;
+}
+
+body[data-stage="library"] #libraryHits li:last-child a {
+  border-bottom: 0;
+}
+
+body[data-stage="library"] #libraryHits a:hover,
+body[data-stage="library"] #libraryHits a:focus-visible {
+  background: color-mix(in srgb, var(--accent-glow) 42%, transparent);
+  outline: none;
+}
+
+body[data-stage="library"] #libraryHits strong {
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: .98rem;
+  font-weight: 560;
+}
+
+body[data-stage="library"] #libraryHits em {
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: .84rem;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+/* Series become browsable collection sections, while the furniture stays warm. */
+body[data-stage="library"] .stack {
+  margin: clamp(1.25rem, 2.6vw, 2rem) 0 2rem;
+}
+
+body[data-stage="library"] .stack-title {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 0 0 .7rem;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 560;
+  letter-spacing: .01em;
+  text-transform: none;
+}
+
+body[data-stage="library"] .stack-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--library-home-line), transparent);
+}
+
+body[data-stage="library"] .stack .shelf,
+body[data-stage="library"] #shelf {
+  scroll-margin-top: 5rem;
+}
+
+body[data-stage="library"] .empty-shelf,
+body[data-stage="library"] .shelf-error {
+  width: min(42rem, 100%);
+  padding: .9rem 1rem;
+  border: 1px solid var(--library-home-line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg-secondary) 45%, transparent);
+}
+
+/* Phones keep the app-home hierarchy while giving the books the width. */
+@media (max-width: 700px) {
+  body[data-stage="library"] .library-view {
+    padding-top: 1rem;
+  }
+
+  body[data-stage="library"] .library-kicker {
+    display: none;
+  }
+
+  body[data-stage="library"] .library-hero h1 {
+    font-size: clamp(2rem, 12vw, 2.75rem);
+  }
+
+  body[data-stage="library"] .library-lede {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  body[data-stage="library"] .library-actions {
+    margin-top: .15rem;
+  }
+
+  body[data-stage="library"] .continue-card {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: .68rem .75rem;
+    margin-top: .3rem;
+    padding: .75rem .8rem;
+  }
+
+  body[data-stage="library"] .continue-card::before {
+    grid-row: 1 / 3;
+    width: 1.85rem;
+    height: 2.3rem;
+  }
+
+  body[data-stage="library"] .continue-kicker,
+  body[data-stage="library"] #continueCardLink {
+    grid-column: 2;
+  }
+
+  body[data-stage="library"] #continueCardLink::after {
+    content: "›";
+    font-size: 1.1rem;
+  }
+
+  body[data-stage="library"] .library-bar {
+    top: .45rem;
+    grid-template-columns: 1fr;
+    gap: .38rem;
+    padding: .42rem;
+    border-radius: 13px;
+  }
+
+  body[data-stage="library"] .library-bar .setting-pills {
+    justify-self: stretch;
+  }
+
+  body[data-stage="library"] .library-bar .pill {
+    flex: 1;
+  }
+
+  body[data-stage="library"] .pub-filters {
+    margin-bottom: .8rem;
+  }
+
+  body[data-stage="library"] .stack-title {
+    font-size: 1.08rem;
+  }
+}
+
+@media (max-width: 420px) {
+  body[data-stage="library"] .library-actions {
+    display: none;
+  }
+
+  body[data-stage="library"] .library-lede {
+    margin-bottom: .35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-stage="library"] #continueCardLink::after {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  body[data-stage="library"] .app-header,
+  body[data-stage="library"] .continue-card,
+  body[data-stage="library"] .library-bar,
+  body[data-stage="library"] #libraryHits,
+  body[data-stage="library"] .empty-shelf,
+  body[data-stage="library"] .shelf-error {
+    background: Canvas;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  body[data-stage="library"] .library-bar input,
+  body[data-stage="library"] .library-bar .setting-pills,
+  body[data-stage="library"] .library-bar .pill.active,
+  body[data-stage="library"] .pub-filters button.active {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  body[data-stage="library"] .continue-card::before {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+}
