@@ -33,5 +33,13 @@ test('global controls have one canonical presentation contract across Reader sta
   check(() => assert.doesNotMatch(GLOBAL_READER_CONTROLS_CSS, /\.page-inner\s*\{/));
   check(() => assert.doesNotMatch(GLOBAL_READER_CONTROLS_CSS, /\.pages-wrapper\s*\{/));
 
-  assert.equal(assertions, 14);
+  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /--reader-control-size:\s*2\.55rem;/));
+  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /--reader-panel-shadow:/));
+  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /\.cover-dock \{[\s\S]*backdrop-filter: blur\(18px\)/));
+  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /\.nav-btn \{[\s\S]*min-width: 2\.7rem;[\s\S]*min-height: 2\.7rem;/));
+  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /\.header-btn\[aria-expanded="true"\]/));
+  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /@media \(max-width: 700px\)[\s\S]*--reader-control-size:\s*2\.75rem;/));
+  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /@media \(prefers-reduced-motion: reduce\)/));
+
+  assert.equal(assertions, 21);
 });
