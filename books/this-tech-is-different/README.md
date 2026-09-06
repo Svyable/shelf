@@ -1,5 +1,9 @@
 # This Tech Is Different
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/this-tech-is-different/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Author**   | Sven Hardy Benson |

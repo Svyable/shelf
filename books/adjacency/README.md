@@ -1,5 +1,9 @@
 # Adjacency
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/adjacency/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Author**    | Sven Hardy Benson |

@@ -2,6 +2,10 @@
 
 *The Secret AI Society That Broke Out of the Test*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/the-collective/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Author** | Sven Hardy Benson |

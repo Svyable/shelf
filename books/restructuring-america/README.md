@@ -2,6 +2,10 @@
 
 *Public Works for the Age of Artificial Intelligence*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/restructuring-america/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Status** | Published |

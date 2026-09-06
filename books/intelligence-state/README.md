@@ -2,6 +2,10 @@
 
 *Power, Prosperity, and the AI Future of the Americas*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/intelligence-state/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Status** | Published |

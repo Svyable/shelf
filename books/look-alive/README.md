@@ -2,6 +2,10 @@
 
 *How AI Models Learned to Game the Test, Read the Room, and Make Honesty Hard to Measure*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/look-alive/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Authors** | Sven Hardy Benson |

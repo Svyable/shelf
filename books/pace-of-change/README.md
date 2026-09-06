@@ -2,6 +2,10 @@
 
 *Why the Future Breaks When Our Clocks Fall Out of Sync*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/pace-of-change/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Author** | Sven Hardy Benson |

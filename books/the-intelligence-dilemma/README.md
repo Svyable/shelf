@@ -2,6 +2,10 @@
 
 *What AI Gives the Classroom—and What It Can Quietly Take Away*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/the-intelligence-dilemma/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Authors**   | Sven Hardy Benson |
