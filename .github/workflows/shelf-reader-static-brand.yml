@@ -25,15 +25,18 @@ jobs:
           index = Path('reader/index.html')
           text = index.read_text(encoding='utf-8')
 
-          old = '''  <meta name="apple-mobile-web-app-title" content="Reader">
-          <meta name="format-detection" content="telephone=no">
-          <title>Bookself Reader</title>
-          <meta name="description" content="Read Bookself publications from a working Desk or released Shelf.">
-          '''
-          new = '''  <meta name="apple-mobile-web-app-title" content="Sven’s Shelf">
-          <meta name="format-detection" content="telephone=no">
-          <title>Sven Hardy Benson’s Shelf — Reader</title>
-          <meta name="description" content="Books by Sven Hardy Benson on intelligence, institutions, markets, medicine, and changing systems.">
+          def replace_once(old, new, label):
+              global text
+              if text.count(old) != 1:
+                  raise SystemExit(f'{label}: expected one anchor, found {text.count(old)}')
+              text = text.replace(old, new, 1)
+
+          replace_once('<meta name="apple-mobile-web-app-title" content="Reader">', '<meta name="apple-mobile-web-app-title" content="Sven’s Shelf">', 'apple title')
+          replace_once('<title>Bookself Reader</title>', '<title>Sven Hardy Benson’s Shelf — Reader</title>', 'document title')
+          old_description = '<meta name="description" content="Read Bookself publications from a working Desk or released Shelf.">'
+          new_description = '<meta name="description" content="Books by Sven Hardy Benson on intelligence, institutions, markets, medicine, and changing systems.">'
+          replace_once(old_description, new_description, 'description')
+          social = '''
           <link rel="canonical" href="https://svyable.github.io/shelf/reader/">
           <meta property="og:type" content="website">
           <meta property="og:site_name" content="Sven Hardy Benson’s Shelf">
@@ -42,51 +45,32 @@ jobs:
           <meta property="og:url" content="https://svyable.github.io/shelf/reader/">
           <meta name="twitter:card" content="summary">
           <meta name="twitter:title" content="Sven Hardy Benson’s Shelf — Reader">
-          <meta name="twitter:description" content="Released editions by Sven Hardy Benson, built for sustained reading.">
-          '''
-          if old not in text:
-              raise SystemExit('static head anchor not found')
-          text = text.replace(old, new, 1)
+          <meta name="twitter:description" content="Released editions by Sven Hardy Benson, built for sustained reading.">'''
+          if 'rel="canonical"' in text:
+              raise SystemExit('canonical metadata already exists')
+          text = text.replace(new_description, new_description + social, 1)
 
-          old = '<button class="logo" id="logoBtn" type="button" title="Bookself" aria-label="Bookself">'
-          new = '<button class="logo" id="logoBtn" type="button" title="Sven Hardy Benson’s Shelf" aria-label="Sven Hardy Benson’s Shelf">'
-          if old not in text:
-              raise SystemExit('logo anchor not found')
-          text = text.replace(old, new, 1)
+          replace_once('title="Bookself" aria-label="Bookself"', 'title="Sven Hardy Benson’s Shelf" aria-label="Sven Hardy Benson’s Shelf"', 'logo label')
+          replace_once('Written in Markdown · Read like a book', 'Books by Sven Hardy Benson · Read like books', 'hero kicker')
+          replace_once('<h1>Bookself</h1>', '<h1>Sven Hardy Benson’s Shelf</h1>', 'hero title')
+          replace_once('Publications live as plain Markdown. The Reader can open a working Desk proof or a deliberately released Shelf edition.', 'Released editions built for sustained reading. Search the library, keep your place, take notes, cite passages, and return whenever you like.', 'hero lede')
+          replace_once('<a class="write-link" id="writeLink" href="../desk/">Open the Publishing Desk</a>', '<a class="write-link" id="writeLink" href="https://svyable.github.io/desk/">Working drafts</a>', 'working drafts link')
 
-          old = '''          <p class="library-kicker">Written in Markdown · Read like a book</p>
-                    <h1>Bookself</h1>
-                    <p class="library-lede">Publications live as plain Markdown. The Reader can open a working Desk proof or a deliberately released Shelf edition.</p>
-                    <p class="library-actions">
-                      <a class="write-link" id="writeLink" href="../desk/">Open the Publishing Desk</a>
-                      <a class="write-link" id="forkLink" hidden href="https://svyable.github.io/shelf/reader/">See a live Shelf</a>
-                    </p>
-          '''
-          new = '''          <p class="library-kicker">Books by Sven Hardy Benson · Read like books</p>
-                    <h1>Sven Hardy Benson’s Shelf</h1>
-                    <p class="library-lede">Released editions built for sustained reading. Search the library, keep your place, take notes, cite passages, and return whenever you like.</p>
-                    <p class="library-actions">
-                      <a class="write-link" id="writeLink" href="https://svyable.github.io/desk/">Working drafts</a>
-                      <a class="write-link" id="forkLink" hidden href="https://svyable.github.io/shelf/reader/">See a live Shelf</a>
-                    </p>
-                    <p class="library-trust">Your position, bookmarks, notes, and presentation preferences stay in this browser.</p>
-          '''
-          if old not in text:
-              raise SystemExit('library hero anchor not found')
-          index.write_text(text.replace(old, new, 1), encoding='utf-8')
+          trust = '          <p class="library-trust">Your position, bookmarks, notes, and presentation preferences stay in this browser.</p>\n'
+          bar = '          <div class="library-bar">'
+          if bar not in text:
+              raise SystemExit('library bar anchor not found')
+          text = text.replace(bar, trust + bar, 1)
+          index.write_text(text, encoding='utf-8')
 
           css = Path('reader/css/shelf-gui.css')
           text = css.read_text(encoding='utf-8')
-          old = '''body[data-stage="library"] .library-actions {
-            gap: .7rem;
-            margin-bottom: clamp(1.8rem, 3vw, 2.6rem);
-          }
-          '''
-          new = '''body[data-stage="library"] .library-actions {
-            gap: .7rem;
-            margin-bottom: .85rem;
-          }
-
+          old = 'body[data-stage="library"] .library-actions {\n  gap: .7rem;\n  margin-bottom: clamp(1.8rem, 3vw, 2.6rem);\n}\n'
+          new = 'body[data-stage="library"] .library-actions {\n  gap: .7rem;\n  margin-bottom: .85rem;\n}\n'
+          if old not in text:
+              raise SystemExit('library actions CSS anchor not found')
+          text = text.replace(old, new, 1)
+          trust_css = '''
           body[data-stage="library"] .library-trust {
             max-width: 52rem;
             margin: 0 0 clamp(1.8rem, 3vw, 2.6rem);
@@ -95,10 +79,13 @@ jobs:
             font-size: .82rem;
             line-height: 1.5;
           }
+
           '''
-          if old not in text:
-              raise SystemExit('library actions CSS anchor not found')
-          css.write_text(text.replace(old, new, 1), encoding='utf-8')
+          marker = 'body[data-stage="library"] .write-link {'
+          if marker not in text:
+              raise SystemExit('write-link CSS anchor not found')
+          text = text.replace(marker, trust_css + marker, 1)
+          css.write_text(text, encoding='utf-8')
           PY
 
       - name: Validate static Shelf identity
