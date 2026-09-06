@@ -1,6 +1,6 @@
 # Solar Century
 
-## How the Sun Rewired the World's Energy Infrastructure
+*How the Sun Rewired the World's Energy Infrastructure*
 
 | | |
 |---|---|
