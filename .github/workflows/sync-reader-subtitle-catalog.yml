@@ -1,0 +1,45 @@
+name: Sync subtitle-aware Reader catalog
+
+on:
+  push:
+    branches:
+      - sync-reader-subtitle-catalog
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: sync-reader-subtitle-catalog
+
+      - name: Sync merged Bookself Reader files
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/Svyable/bookself/main/reader/js/catalog.js -o reader/js/catalog.js
+          curl -fsSL https://raw.githubusercontent.com/Svyable/bookself/main/reader/js/app.js -o reader/js/app.js
+          curl -fsSL https://raw.githubusercontent.com/Svyable/bookself/main/reader/css/style.css -o reader/css/style.css
+          curl -fsSL https://raw.githubusercontent.com/Svyable/bookself/main/reader/js/catalog-subtitle.test.mjs -o reader/js/.catalog-subtitle-sync.test.mjs
+
+      - name: Validate subtitle-aware Shelf Reader
+        run: |
+          node --check reader/js/catalog.js
+          node --check reader/js/app.js
+          node --test reader/js/.catalog-subtitle-sync.test.mjs
+          rm reader/js/.catalog-subtitle-sync.test.mjs
+          git diff --check
+          test "$(git diff --name-only | wc -l)" -eq 3
+          git diff --name-only | grep -qx 'reader/css/style.css'
+          git diff --name-only | grep -qx 'reader/js/app.js'
+          git diff --name-only | grep -qx 'reader/js/catalog.js'
+
+      - name: Commit shared Reader sync
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reader/css/style.css reader/js/app.js reader/js/catalog.js
+          git commit -m "Sync subtitle-aware Reader catalog"
+          git push origin HEAD:sync-reader-subtitle-catalog
