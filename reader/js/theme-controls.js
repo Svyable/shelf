@@ -9,6 +9,7 @@ const THEME_COLORS = Object.freeze({
   dark: '#0c0b0a',
   light: '#f4efe6',
 });
+const APP_ICON_HREF = 'app-icon.svg';
 
 function themeIcon(theme) {
   if (theme === 'dark') {
@@ -30,9 +31,34 @@ export function themeButtonState(theme) {
   });
 }
 
+function ensureMeta(root, name, content) {
+  let meta = root.querySelector?.(`meta[name="${name}"]`);
+  if (!meta && root.head?.appendChild && root.createElement) {
+    meta = root.createElement('meta');
+    meta.setAttribute('name', name);
+    root.head.appendChild(meta);
+  }
+  if (meta && content) meta.setAttribute('content', content);
+  return meta;
+}
+
+function ensureAppIcon(root) {
+  let icon = root.querySelector?.('link[data-bookself-app-icon]');
+  if (!icon && root.head?.appendChild && root.createElement) {
+    icon = root.createElement('link');
+    icon.rel = 'icon';
+    icon.type = 'image/svg+xml';
+    icon.href = APP_ICON_HREF;
+    icon.dataset.bookselfAppIcon = 'true';
+    root.head.appendChild(icon);
+  }
+  return icon;
+}
+
 function updateThemeMeta(root, theme) {
-  const meta = root.querySelector?.('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', THEME_COLORS[theme]);
+  ensureMeta(root, 'theme-color', THEME_COLORS[theme]);
+  ensureMeta(root, 'color-scheme', 'dark light');
+  if (root.documentElement?.style) root.documentElement.style.colorScheme = theme;
 }
 
 export function applyReaderTheme(theme, root = document) {
@@ -82,6 +108,8 @@ export function installGlobalThemeControls(root = document) {
   const header = root.getElementById?.('readerChrome');
   const settings = root.getElementById?.('settingsBtn');
   if (!header || !settings) return false;
+
+  ensureAppIcon(root);
 
   let button = root.getElementById?.('themeModeBtn');
   if (!button) {
