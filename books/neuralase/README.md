@@ -4,6 +4,12 @@
 |---|---|
 | **Author** | Sven Hardy Benson |
 | **Status** | Published |
+| **Format** | Book |
+| **Publisher** | Svyable |
+| **Edition** | First edition |
+| **Language** | English |
+| **Draft date** | 2026-09-04 |
+| **Candidate date** | 2026-09-06 |
 | **Drafting Source** | Sven Hardy Benson’s Desk |
 | **Publication Surface** | Sven Hardy Benson’s Shelf |
 | **Chapters** | 18 of 18 drafted |
@@ -60,6 +66,7 @@ The central claim is that the frontier of reasoning is moving from a simple ques
 - [Chapter-source map](research/chapter-source-map.md)
 - [Falsification notes](research/falsification-notes.md)
 - [Editorial review](research/editorial-review.md)
+- [Publication checklist](research/publication-checklist.md)
 
 ## Editorial principles
 
