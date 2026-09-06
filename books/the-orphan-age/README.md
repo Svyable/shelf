@@ -7,6 +7,7 @@
 | **Author** | Sven Hardy Benson |
 | **Status** | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |
+| **Frozen Desk Source** | `36e08345ba046b1659b158952237ca93bb418b5d` |
 | **Publication Surface** | Sven Hardy Benson’s Shelf |
 | **Chapters** | 20 of 20 drafted |
 | **Method** | Narrative nonfiction + cross-domain case studies + primary-source research + falsification notes |
