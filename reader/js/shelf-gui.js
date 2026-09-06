@@ -126,7 +126,7 @@ function syncLibraryUi() {
 
 function installLibraryKeyboard() {
   document.addEventListener('keydown', (event) => {
-    if (!libraryStage() || event.defaultPrevented || (event.metaKey && event.key.toLowerCase() !== 'k')) return;
+    if (!libraryStage() || event.defaultPrevented || event.metaKey && event.key.toLowerCase() !== 'k') return;
 
     const input = $('librarySearch');
     if (!input) return;
