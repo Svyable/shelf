@@ -25,6 +25,63 @@ The [Shelf Reader](https://svyable.github.io/shelf/reader/) is the primary way t
 
 Your reading position, bookmarks, notes, and presentation preferences stay in your browser. You do not need an account to read or keep your place on that device.
 
+## The books
+
+These are the deliberately released editions on Sven Hardy Benson’s Shelf. Public proofs are intentionally excluded until their status becomes `Published`.
+
+| Book | Status | Read |
+|---|---|---|
+| [**Abdicating Intelligence**](books/abdicating-intelligence/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/abdicating-intelligence/) |
+| [**Adjacency**](books/adjacency/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/adjacency/) |
+| [**Allocating Intelligence**](books/allocating-intelligence/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/allocating-intelligence/) |
+| [**America's Got a Spending Problem**](books/americas-got-a-spending-problem/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/americas-got-a-spending-problem/) |
+| [**Appeal**](books/appeal/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/appeal/) |
+| [**Artificial Identity**](books/artificial-identity/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/artificial-identity/) |
+| [**Austerity Measures**](books/austerity-measures/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/austerity-measures/) |
+| [**Commit**](books/commit/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/commit/) |
+| [**Energy, Value & Intelligence**](books/energy-value-intelligence/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/energy-value-intelligence/) |
+| [**Face The Strange**](books/face-the-strange/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/face-the-strange/) |
+| [**Fiscal Wall**](books/fiscal-wall/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/fiscal-wall/) |
+| [**Gatekeepers**](books/gatekeepers/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/gatekeepers/) |
+| [**Intelligence State**](books/intelligence-state/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/intelligence-state/) |
+| [**Keep Cooking**](books/keep-cooking/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/keep-cooking/) |
+| [**Leveraging Luck**](books/leveraging-luck/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/leveraging-luck/) |
+| [**Look Alive**](books/look-alive/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/look-alive/) |
+| [**Nothing Counts Yet**](books/nothing-counts-yet/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/nothing-counts-yet/) |
+| [**Open Source**](books/open-source/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/open-source/) |
+| [**Pace of Change**](books/pace-of-change/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/pace-of-change/) |
+| [**Proof of Human**](books/proof-of-human/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/proof-of-human/) |
+| [**Public Pressure**](books/public-pressure/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/public-pressure/) |
+| [**Restructuring America**](books/restructuring-america/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/restructuring-america/) |
+| [**Right To Try**](books/right-to-try/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/right-to-try/) |
+| [**Robust**](books/robust/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/robust/) |
+| [**Silent Cartel**](books/silent-cartel/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/silent-cartel/) |
+| [**Single Points of Failure**](books/single-points-of-failure/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/single-points-of-failure/) |
+| [**Solar Century**](books/solar-century/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/solar-century/) |
+| [**The Agentic Consumer Economy**](books/the-agentic-consumer-economy/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-agentic-consumer-economy/) |
+| [**The Cancer Key**](books/the-cancer-key/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-cancer-key/) |
+| [**The Collective**](books/the-collective/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-collective/) |
+| [**The Compatibility Dividend**](books/the-compatibility-dividend/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-compatibility-dividend/) |
+| [**The Delegation Machine**](books/the-delegation-machine/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-delegation-machine/) |
+| [**The Delete Key**](books/the-delete-key/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-delete-key/) |
+| [**The Intelligence Dilemma**](books/the-intelligence-dilemma/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-intelligence-dilemma/) |
+| [**Built to Be Alone**](books/the-loneliness-dividend/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-loneliness-dividend/) |
+| [**The Long-Running Mind**](books/the-long-running-mind/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-long-running-mind/) |
+| [**The Mortality Discount**](books/the-mortality-discount/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-mortality-discount/) |
+| [**The Never Ending Intelligence**](books/the-never-ending-intelligence/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-never-ending-intelligence/) |
+| [**The Orphan Age**](books/the-orphan-age/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-orphan-age/) |
+| [**The Retry Generation**](books/the-retry-generation/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-retry-generation/) |
+| [**The Risk Pool**](books/the-risk-pool/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-risk-pool/) |
+| [**The Unbounding**](books/the-unbounding/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-unbounding/) |
+| [**The Vanishing Bid**](books/the-vanishing-bid/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-vanishing-bid/) |
+| [**The Weather We Build**](books/the-weather-we-build/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-weather-we-build/) |
+| [**The World Beneath the World**](books/the-world-beneath-the-world/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-world-beneath-the-world/) |
+| [**This Tech Is Different**](books/this-tech-is-different/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/this-tech-is-different/) |
+| [**Triumph of the Commons**](books/triumph-of-the-commons/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/triumph-of-the-commons/) |
+| [**Ubiquitous**](books/ubiquitous/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/ubiquitous/) |
+| [**Useful Noise**](books/useful-noise/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/useful-noise/) |
+| [**Wild Speculation**](books/wild-speculation/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/wild-speculation/) |
+
 ## What Shelf means
 
 **Shelf is a publication boundary, not a live working folder.** A released edition is copied from Sven Hardy Benson’s working Desk as an intentional snapshot. Later work on the next edition does not silently rewrite the public copy.
