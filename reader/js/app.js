@@ -669,6 +669,7 @@ function volumeEl(book) {
       <span class="volume-cover"${coverStyle}>
         ${progress || last ? '<span class="reading-ribbon">Reading</span>' : ''}
         <span class="volume-title">${escapeHtml(book.title)}</span>
+        ${book.subtitle ? `<span class="volume-subtitle">${escapeHtml(book.subtitle)}</span>` : ''}
         <span class="volume-author">${escapeHtml((book.authors || '').replace(/@/g, ''))}</span>
         ${book.publisher ? `<span class="volume-imprint">${escapeHtml(book.publisher)}</span>` : ''}
         <span class="volume-open">Open</span>

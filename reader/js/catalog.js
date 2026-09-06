@@ -162,6 +162,19 @@ function plainInlineText(value) {
     .trim();
 }
 
+function readmeSubtitle(markdown, titleMatch) {
+  if (!titleMatch) return '';
+  const tail = String(markdown || '').slice(titleMatch.index + titleMatch[0].length);
+  for (const raw of tail.split(/\n/)) {
+    const line = raw.trim();
+    if (!line) continue;
+    if (line.startsWith('|') || /^##\s+/.test(line)) return '';
+    const italic = line.match(/^\*([^*].*?)\*$/) || line.match(/^_([^_].*?)_$/);
+    return italic ? italic[1].trim() : '';
+  }
+  return '';
+}
+
 function normalizedIsbn(value) {
   const compact = String(value || '').replace(/[^0-9Xx]/g, '').toUpperCase();
 
@@ -203,6 +216,7 @@ function identifierLinks(isbn, doi, explicitLinks) {
 export function parseBookReadme(markdown, slug) {
   const titleMatch = markdown.match(/^#\s+(.+)$/m);
   const title = titleMatch ? titleMatch[1].trim() : slug;
+  const subtitle = readmeSubtitle(markdown, titleMatch);
   const status = cell(markdown, 'Status');
   const authorsRaw = cell(markdown, 'Authors');
   const authors = plainInlineText(authorsRaw);
@@ -230,6 +244,7 @@ export function parseBookReadme(markdown, slug) {
   return {
     slug,
     title,
+    subtitle,
     status,
     authors,
     authorsRaw,
