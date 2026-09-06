@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sven Hardy Benson’s Books — Released editions</title>
+  <meta name="description" content="Browse the released book catalog on Sven Hardy Benson’s Shelf.">
+  <style>
+    :root { color-scheme: light dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { max-width: 68rem; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 1.25rem 5rem; line-height: 1.5; }
+    h1 { font-size: clamp(2.6rem, 7vw, 5rem); line-height: 1; margin: .25rem 0 1rem; }
+    .meta { opacity: .7; }
+    nav { display: flex; flex-wrap: wrap; gap: .8rem; margin: 1.25rem 0 2.5rem; }
+    nav a { text-decoration: none; border-bottom: 1px solid currentColor; }
+    ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: .8rem 1.2rem; }
+    li { border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent); padding: .8rem 0 1rem; }
+    strong { display: block; }
+    .status { font-size: .86rem; opacity: .68; display: block; margin: .15rem 0 .35rem; }
+    .links { display: flex; gap: .75rem; font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <p class="meta">Sven Hardy Benson / Shelf / books</p>
+  <h1>Released books</h1>
+  <p>Every edition deliberately cataloged on Sven Hardy Benson’s Shelf. Public proofs that are not in the release catalog stay out of this list.</p>
+  <nav><a href="../">Shelf</a><a href="../reader/">Reader</a><a href="https://svyable.github.io/desk/books/">Working books</a></nav>
+  <p id="count" class="meta">Loading…</p>
+  <ul id="list"></ul>
+
+  <script>
+    function plain(value) { return value.replace(/\*\*/g, '').replace(/<[^>]+>/g, '').trim(); }
+    function parse(markdown) {
+      const start = markdown.indexOf('## The books');
+      if (start < 0) return [];
+      const tail = markdown.slice(start + '## The books'.length);
+      const next = tail.search(/^##\s+/m);
+      const section = next >= 0 ? tail.slice(0, next) : tail;
+      const rows = [];
+      for (const line of section.split('\n')) {
+        if (!line.startsWith('|')) continue;
+        const cells = line.split('|').slice(1, -1).map((cell) => cell.trim());
+        const match = cells[0]?.match(/\[(.*?)\]\(books\/([^/]+)\/\)/);
+        if (!match) continue;
+        rows.push({ title: plain(match[1]), slug: match[2], status: plain(cells[1] || '') });
+      }
+      return rows;
+    }
+    fetch('../README.md', { cache: 'no-cache' })
+      .then((response) => { if (!response.ok) throw new Error(`README ${response.status}`); return response.text(); })
+      .then((markdown) => {
+        const books = parse(markdown);
+        document.getElementById('count').textContent = `${books.length} released editions`;
+        const list = document.getElementById('list');
+        for (const book of books) {
+          const li = document.createElement('li');
+          const title = document.createElement('strong');
+          title.textContent = book.title;
+          const status = document.createElement('span');
+          status.className = 'status';
+          status.textContent = book.status || 'Released';
+          const links = document.createElement('span');
+          links.className = 'links';
+          const read = document.createElement('a');
+          read.href = `../reader/#/b/${book.slug}/`;
+          read.textContent = 'Read';
+          const source = document.createElement('a');
+          source.href = `https://github.com/Svyable/shelf/tree/main/books/${book.slug}`;
+          source.textContent = 'Edition files';
+          links.append(read, source);
+          li.append(title, status, links);
+          list.appendChild(li);
+        }
+      })
+      .catch((error) => { document.getElementById('count').textContent = `Could not load catalog: ${error.message}`; });
+  </script>
+</body>
+</html>

@@ -1,12 +1,160 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Sven Hardy Benson’s Shelf</title>
-  <meta http-equiv="refresh" content="0; url=reader/">
-  <link rel="canonical" href="reader/">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sven Hardy Benson’s Shelf — Released books</title>
+  <meta name="description" content="Released editions by Sven Hardy Benson: a public catalog of deliberately published book snapshots.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sven Hardy Benson’s Shelf">
+  <meta property="og:title" content="Sven Hardy Benson’s Shelf — Released books">
+  <meta property="og:description" content="The released book catalog by Sven Hardy Benson.">
+  <meta property="og:url" content="https://svyable.github.io/shelf/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Sven Hardy Benson’s Shelf">
+  <meta name="twitter:description" content="Released editions by Sven Hardy Benson.">
+  <link rel="canonical" href="https://svyable.github.io/shelf/">
+  <link rel="describedby" href="llms.txt">
+  <style>
+    :root { color-scheme: light dark; font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif; }
+    * { box-sizing: border-box; }
+    body { max-width: 72rem; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 1.25rem 5rem; line-height: 1.55; }
+    header { margin-bottom: 3rem; }
+    .eyebrow { opacity: .7; letter-spacing: .08em; text-transform: uppercase; font-size: .78rem; }
+    h1 { margin: 0; font-size: clamp(2.8rem, 8vw, 6rem); line-height: .95; }
+    .lede { max-width: 48rem; font-size: 1.18rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.5rem 0; }
+    .actions a { border: 1px solid currentColor; border-radius: 999px; padding: .55rem .9rem; text-decoration: none; }
+    .meta { opacity: .72; }
+    .books { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: .9rem 1.2rem; }
+    .book { border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent); padding: .9rem 0 1.1rem; }
+    .book strong { display: block; font-size: 1.08rem; }
+    .status { display: block; margin-top: .15rem; font-size: .88rem; opacity: .72; }
+    .book-links { display: flex; gap: .8rem; font-size: .92rem; margin-top: .35rem; }
+    .error { border: 1px solid currentColor; padding: 1rem; max-width: 44rem; }
+    footer { margin-top: 3.5rem; padding-top: 1.25rem; border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+  </style>
 </head>
 <body>
-  <p><a href="reader/">Open Sven Hardy Benson’s Shelf</a></p>
+  <header>
+    <p class="eyebrow">Sven Hardy Benson / Shelf</p>
+    <h1>Released editions.</h1>
+    <p class="lede">Sven Hardy Benson’s Shelf contains the editions deliberately released for readers. Working drafts and next editions stay on Desk until a later release replaces the public snapshot.</p>
+    <nav class="actions" aria-label="Primary">
+      <a href="reader/"><strong>Read the Shelf</strong></a>
+      <a href="books/">Browse released books</a>
+      <a href="https://svyable.github.io/desk/">Working drafts</a>
+      <a href="README.md#the-books">Catalog source</a>
+    </nav>
+    <p id="catalog-meta" class="meta">Loading the released catalog…</p>
+  </header>
+
+  <main>
+    <h2>The books</h2>
+    <ul id="books" class="books" aria-live="polite"></ul>
+    <noscript><p class="error">JavaScript is off. The released catalog is available in <a href="README.md#the-books">README.md</a>.</p></noscript>
+  </main>
+
+  <footer>
+    <p><strong>Shelf is release state.</strong> This page follows the root `## The books` catalog, so unlisted public proofs do not appear as released editions.</p>
+    <p class="meta"><a href="https://github.com/Svyable/shelf/tree/main/books">Released project files</a> · <a href="llms.txt">Agent-readable map</a> · <a href="https://github.com/Svyable/bookself">Bookself structure</a></p>
+  </footer>
+
+  <script>
+    function plain(value) {
+      return value.replace(/\*\*/g, '').replace(/<[^>]+>/g, '').trim();
+    }
+
+    function parseCatalog(markdown) {
+      const marker = '## The books';
+      const start = markdown.indexOf(marker);
+      if (start < 0) throw new Error('README catalog section is missing');
+      const tail = markdown.slice(start + marker.length);
+      const next = tail.search(/^##\s+/m);
+      const section = next >= 0 ? tail.slice(0, next) : tail;
+      const books = [];
+
+      for (const line of section.split('\n')) {
+        if (!line.startsWith('|')) continue;
+        const cells = line.split('|').slice(1, -1).map((cell) => cell.trim());
+        if (cells.length < 2) continue;
+        const match = cells[0].match(/\[(.*?)\]\(books\/([^/]+)\/\)/);
+        if (!match) continue;
+        books.push({
+          title: plain(match[1]),
+          slug: match[2],
+          status: plain(cells[1]),
+        });
+      }
+      return books;
+    }
+
+    function addStructuredData(books) {
+      const data = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'Sven Hardy Benson’s Shelf',
+        url: 'https://svyable.github.io/shelf/',
+        description: 'Released editions by Sven Hardy Benson.',
+        hasPart: books.map((book) => ({
+          '@type': 'Book',
+          name: book.title,
+          url: `https://svyable.github.io/shelf/reader/#/b/${book.slug}/`,
+        })),
+      };
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(data);
+      document.head.appendChild(script);
+    }
+
+    async function loadCatalog() {
+      const list = document.getElementById('books');
+      const meta = document.getElementById('catalog-meta');
+      try {
+        const response = await fetch('README.md', { cache: 'no-cache' });
+        if (!response.ok) throw new Error(`README returned ${response.status}`);
+        const books = parseCatalog(await response.text());
+        if (!books.length) throw new Error('README catalog contains no released books');
+
+        const fragment = document.createDocumentFragment();
+        for (const book of books) {
+          const item = document.createElement('li');
+          item.className = 'book';
+
+          const title = document.createElement('strong');
+          const readTitle = document.createElement('a');
+          readTitle.href = `reader/#/b/${book.slug}/`;
+          readTitle.textContent = book.title;
+          title.appendChild(readTitle);
+
+          const status = document.createElement('span');
+          status.className = 'status';
+          status.textContent = book.status || 'Released';
+
+          const links = document.createElement('div');
+          links.className = 'book-links';
+          const read = document.createElement('a');
+          read.href = `reader/#/b/${book.slug}/`;
+          read.textContent = 'Read';
+          const files = document.createElement('a');
+          files.href = `https://github.com/Svyable/shelf/tree/main/books/${book.slug}`;
+          files.textContent = 'Edition files';
+          links.append(read, files);
+
+          item.append(title, status, links);
+          fragment.appendChild(item);
+        }
+        list.replaceChildren(fragment);
+        meta.textContent = `${books.length} released editions · cataloged from README.md`;
+        addStructuredData(books);
+      } catch (error) {
+        list.innerHTML = `<li class="error">Could not load the released catalog: ${error.message}. Open <a href="README.md#the-books">README.md</a> instead.</li>`;
+        meta.textContent = 'Catalog unavailable';
+      }
+    }
+
+    loadCatalog();
+  </script>
 </body>
 </html>
