@@ -6,10 +6,19 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Reader">
+  <meta name="apple-mobile-web-app-title" content="Sven’s Shelf">
   <meta name="format-detection" content="telephone=no">
-  <title>Bookself Reader</title>
-  <meta name="description" content="Read Bookself publications from a working Desk or released Shelf.">
+  <title>Sven Hardy Benson’s Shelf — Reader</title>
+  <meta name="description" content="Books by Sven Hardy Benson on intelligence, institutions, markets, medicine, and changing systems.">
+  <link rel="canonical" href="https://svyable.github.io/shelf/reader/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sven Hardy Benson’s Shelf">
+  <meta property="og:title" content="Sven Hardy Benson’s Shelf — Reader">
+  <meta property="og:description" content="Released editions by Sven Hardy Benson, built for sustained reading.">
+  <meta property="og:url" content="https://svyable.github.io/shelf/reader/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Sven Hardy Benson’s Shelf — Reader">
+  <meta name="twitter:description" content="Released editions by Sven Hardy Benson, built for sustained reading.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
@@ -33,7 +42,7 @@
   <div class="app">
     <header class="app-header" id="readerChrome">
       <div class="header-left">
-        <button class="logo" id="logoBtn" type="button" title="Bookself" aria-label="Bookself">
+        <button class="logo" id="logoBtn" type="button" title="Sven Hardy Benson’s Shelf" aria-label="Sven Hardy Benson’s Shelf">
           <span class="logo-mark">⌘</span>
         </button>
         <span class="draft-badge" id="draftBadge" hidden>Draft</span>
@@ -63,13 +72,14 @@
     <main class="stage">
       <section class="library-view" id="libraryView">
         <div class="library-hero">
-          <p class="library-kicker">Written in Markdown · Read like a book</p>
-          <h1>Bookself</h1>
-          <p class="library-lede">Publications live as plain Markdown. The Reader can open a working Desk proof or a deliberately released Shelf edition.</p>
+          <p class="library-kicker">Books by Sven Hardy Benson · Read like books</p>
+          <h1>Sven Hardy Benson’s Shelf</h1>
+          <p class="library-lede">Released editions built for sustained reading. Search the library, keep your place, take notes, cite passages, and return whenever you like.</p>
           <p class="library-actions">
-            <a class="write-link" id="writeLink" href="../desk/">Open the Publishing Desk</a>
+            <a class="write-link" id="writeLink" href="https://svyable.github.io/desk/">Working drafts</a>
             <a class="write-link" id="forkLink" hidden href="https://svyable.github.io/shelf/reader/">See a live Shelf</a>
           </p>
+          <p class="library-trust">Your position, bookmarks, notes, and presentation preferences stay in this browser.</p>
           <div class="library-bar">
             <input type="search" id="librarySearch" placeholder="Search the library" autocomplete="off">
             <div class="setting-pills">
