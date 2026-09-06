@@ -1,0 +1,280 @@
+/* Reader app-shell refinement
+   ---------------------------
+   Discoverability and transient-surface polish layered over the canonical
+   control and library systems. This file does not own Reader geometry. */
+
+:root {
+  --app-shell-island: color-mix(in srgb, var(--bg-elevated) 70%, transparent);
+  --app-shell-island-line: color-mix(in srgb, var(--border) 58%, var(--text-primary) 8%);
+  --app-shell-tooltip: color-mix(in srgb, var(--bg-elevated) 96%, #000 4%);
+  --app-shell-tooltip-line: color-mix(in srgb, var(--border) 58%, var(--text-primary) 14%);
+  --app-shell-transient: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  --app-shell-transient-shadow: 0 14px 38px color-mix(in srgb, var(--shadow) 42%, transparent);
+}
+
+/* Reading chrome already owns sizing and layout. These pseudo-surfaces only
+   group its three meanings: home/status, current context, and actions. */
+body[data-stage="cover"] .header-left,
+body[data-stage="cover"] .header-right,
+body[data-stage="cover"] .reader-context,
+body[data-stage="read"] .header-left,
+body[data-stage="read"] .header-right,
+body[data-stage="read"] .reader-context,
+body[data-stage="end"] .header-left,
+body[data-stage="end"] .header-right,
+body[data-stage="end"] .reader-context {
+  position: relative;
+}
+
+body[data-stage="cover"] .header-left::before,
+body[data-stage="cover"] .header-right::before,
+body[data-stage="read"] .header-left::before,
+body[data-stage="read"] .header-right::before,
+body[data-stage="end"] .header-left::before,
+body[data-stage="end"] .header-right::before {
+  content: "";
+  position: absolute;
+  inset: -.08rem -.12rem;
+  z-index: -1;
+  border-radius: 999px;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--text-primary) 5%, transparent), transparent 70%),
+    var(--app-shell-island);
+  box-shadow:
+    inset 0 0 0 1px var(--app-shell-island-line),
+    0 7px 20px color-mix(in srgb, var(--shadow) 16%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.04);
+  backdrop-filter: blur(16px) saturate(1.04);
+}
+
+body[data-stage="cover"] .reader-context::before,
+body[data-stage="read"] .reader-context::before,
+body[data-stage="end"] .reader-context::before {
+  content: "";
+  position: absolute;
+  inset: -.28rem -.82rem;
+  z-index: -1;
+  border-radius: 999px;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--app-shell-island) 84%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--app-shell-island-line) 74%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.02);
+  backdrop-filter: blur(14px) saturate(1.02);
+}
+
+.reader-context-title {
+  color: color-mix(in srgb, var(--text-primary) 94%, var(--accent));
+  text-shadow: 0 1px 0 color-mix(in srgb, var(--bg-primary) 24%, transparent);
+}
+
+.reader-context-chapter {
+  color: color-mix(in srgb, var(--text-muted) 82%, var(--text-secondary));
+}
+
+/* Icon-only controls become self-explanatory on pointer devices. The runtime
+   mirrors the current aria-label/title into data-reader-label, including late
+   controls such as the Light/Dark toggle. */
+@media (hover: hover) and (pointer: fine) {
+  .app-header [data-reader-label],
+  .page-nav [data-reader-label] {
+    position: relative;
+    overflow: visible;
+  }
+
+  .app-header [data-reader-label]::after,
+  .page-nav [data-reader-label]::after {
+    content: attr(data-reader-label);
+    position: absolute;
+    z-index: 140;
+    left: 50%;
+    top: calc(100% + .5rem);
+    max-width: min(18rem, 70vw);
+    padding: .36rem .54rem;
+    overflow: hidden;
+    border: 1px solid var(--app-shell-tooltip-line);
+    border-radius: 8px;
+    background: var(--app-shell-tooltip);
+    box-shadow: var(--app-shell-transient-shadow);
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    font-size: .7rem;
+    font-weight: 650;
+    letter-spacing: .01em;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -3px) scale(.98);
+    transform-origin: top center;
+    transition: opacity 120ms ease, transform 120ms ease;
+  }
+
+  .app-header [data-reader-label]:hover::after,
+  .app-header [data-reader-label]:focus-visible::after,
+  .page-nav [data-reader-label]:hover::after,
+  .page-nav [data-reader-label]:focus-visible::after {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+
+  .page-nav [data-reader-label]::after {
+    top: auto;
+    bottom: calc(100% + .5rem);
+    transform-origin: bottom center;
+  }
+}
+
+/* Selection actions, feedback, hints and seek feedback are brief app surfaces;
+   giving them one material removes the last “browser utility” feeling. */
+.sel-pop,
+.toast,
+.read-hint,
+.progress-seek-label {
+  border-color: transparent;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--text-primary) 5%, transparent), transparent 72%),
+    var(--app-shell-transient);
+  box-shadow:
+    inset 0 0 0 1px var(--app-shell-tooltip-line),
+    var(--app-shell-transient-shadow);
+  -webkit-backdrop-filter: blur(18px) saturate(1.04);
+  backdrop-filter: blur(18px) saturate(1.04);
+}
+
+.sel-pop button {
+  transition: color 120ms ease, background 120ms ease, transform 90ms ease;
+}
+
+.sel-pop button:hover,
+.sel-pop button:focus-visible {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent-glow) 62%, transparent);
+  outline: none;
+}
+
+.sel-pop button:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 58%, transparent);
+}
+
+.sel-pop button:active {
+  transform: scale(.96);
+}
+
+.toast {
+  color: color-mix(in srgb, var(--text-primary) 94%, var(--accent));
+}
+
+.read-hint {
+  color: color-mix(in srgb, var(--text-secondary) 92%, var(--text-primary));
+}
+
+.progress-seek-label {
+  color: color-mix(in srgb, var(--text-secondary) 90%, var(--text-primary));
+}
+
+/* Stronger separation is useful when the platform asks for more contrast, but
+   the aesthetic remains the same rather than switching to a different UI. */
+@media (prefers-contrast: more) {
+  :root {
+    --app-shell-island-line: color-mix(in srgb, var(--text-primary) 34%, var(--border));
+    --app-shell-tooltip-line: color-mix(in srgb, var(--text-primary) 48%, var(--border));
+  }
+
+  .sel-pop,
+  .toast,
+  .read-hint,
+  .progress-seek-label {
+    box-shadow:
+      inset 0 0 0 2px var(--app-shell-tooltip-line),
+      var(--app-shell-transient-shadow);
+  }
+}
+
+/* Blur is refinement, not a requirement. Respect platforms/users that ask for
+   reduced transparency without losing grouping or discoverability. */
+@media (prefers-reduced-transparency: reduce) {
+  body[data-stage="cover"] .header-left::before,
+  body[data-stage="cover"] .header-right::before,
+  body[data-stage="cover"] .reader-context::before,
+  body[data-stage="read"] .header-left::before,
+  body[data-stage="read"] .header-right::before,
+  body[data-stage="read"] .reader-context::before,
+  body[data-stage="end"] .header-left::before,
+  body[data-stage="end"] .header-right::before,
+  body[data-stage="end"] .reader-context::before,
+  .sel-pop,
+  .toast,
+  .read-hint,
+  .progress-seek-label {
+    background: var(--bg-elevated);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* On phones the canonical control layer already provides grouping and spacing;
+   removing decorative header islands keeps that compact composition clean. */
+@media (max-width: 700px), (pointer: coarse) {
+  body[data-stage="cover"] .header-left::before,
+  body[data-stage="cover"] .header-right::before,
+  body[data-stage="cover"] .reader-context::before,
+  body[data-stage="read"] .header-left::before,
+  body[data-stage="read"] .header-right::before,
+  body[data-stage="read"] .reader-context::before,
+  body[data-stage="end"] .header-left::before,
+  body[data-stage="end"] .header-right::before,
+  body[data-stage="end"] .reader-context::before {
+    opacity: 0;
+  }
+
+  .sel-pop,
+  .toast,
+  .read-hint,
+  .progress-seek-label {
+    background: color-mix(in srgb, var(--bg-elevated) 96%, transparent);
+  }
+}
+
+@media (forced-colors: active) {
+  body[data-stage="cover"] .header-left::before,
+  body[data-stage="cover"] .header-right::before,
+  body[data-stage="cover"] .reader-context::before,
+  body[data-stage="read"] .header-left::before,
+  body[data-stage="read"] .header-right::before,
+  body[data-stage="read"] .reader-context::before,
+  body[data-stage="end"] .header-left::before,
+  body[data-stage="end"] .header-right::before,
+  body[data-stage="end"] .reader-context::before {
+    opacity: 0;
+  }
+
+  .app-header [data-reader-label]::after,
+  .page-nav [data-reader-label]::after,
+  .sel-pop,
+  .toast,
+  .read-hint,
+  .progress-seek-label {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .sel-pop button:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-header [data-reader-label]::after,
+  .page-nav [data-reader-label]::after,
+  .sel-pop button {
+    transition: none;
+  }
+}
