@@ -5,6 +5,8 @@ import { GLOBAL_READER_CONTROLS_CSS } from './global-reader-controls.js';
 
 const viewportRuntime = fs.readFileSync(new URL('./viewport-stability-runtime.js', import.meta.url), 'utf8');
 const quickLook = fs.readFileSync(new URL('./library-quick-look.js', import.meta.url), 'utf8');
+const libraryCss = fs.readFileSync(new URL('../css/library-home.css', import.meta.url), 'utf8');
+const settingsCss = fs.readFileSync(new URL('../css/settings-panel.css', import.meta.url), 'utf8');
 const index = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
 let assertions = 0;
@@ -13,12 +15,13 @@ function check(run) {
   assertions += 1;
 }
 
-test('global controls stay visible and semantically separate across Reader stages', () => {
-  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /body\[data-stage="library"\] \.app-header \.header-right \{[\s\S]*display: flex !important;/));
-  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /body\[data-stage="library"\] #bookmarkBtn,[\s\S]*#searchBtn,[\s\S]*#tocBtn,[\s\S]*\.reading-time \{[\s\S]*display: none !important;/));
-  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /body\[data-stage="library"\] #themeModeBtn,[\s\S]*#settingsBtn \{[\s\S]*display: inline-flex !important;/));
-  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /body\[data-stage="library"\] #settingsBtn svg,[\s\S]*body\[data-stage="cover"\] #settingsBtn svg,[\s\S]*body\[data-stage="read"\] #settingsBtn svg,[\s\S]*body\[data-stage="end"\] #settingsBtn svg \{[\s\S]*display: block !important;/));
-  check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /#settingsBtn::before \{[\s\S]*content: none !important;/));
+test('global controls have one canonical presentation contract across Reader stages', () => {
+  check(() => assert.match(libraryCss, /body\[data-stage="library"\] \.app-header \.header-right \{[\s\S]*display: flex;/));
+  check(() => assert.match(libraryCss, /body\[data-stage="library"\] #bookmarkBtn,[\s\S]*#searchBtn,[\s\S]*#tocBtn,[\s\S]*\.reading-time \{[\s\S]*display: none;/));
+  check(() => assert.match(libraryCss, /body\[data-stage="library"\] #themeModeBtn,[\s\S]*#settingsBtn \{[\s\S]*display: inline-flex;/));
+  check(() => assert.doesNotMatch(settingsCss, /#settingsBtn::before/));
+  check(() => assert.doesNotMatch(settingsCss, /content:\s*["']Aa["']/));
+  check(() => assert.doesNotMatch(GLOBAL_READER_CONTROLS_CSS, /data-stage|#settingsBtn::before|display:\s*(?:flex|inline-flex|none)\s*!important/));
   check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /@media \(pointer: coarse\)[\s\S]*min-width: 44px;[\s\S]*min-height: 44px;/));
   check(() => assert.match(GLOBAL_READER_CONTROLS_CSS, /@media \(forced-colors: active\)/));
 
@@ -30,5 +33,5 @@ test('global controls stay visible and semantically separate across Reader stage
   check(() => assert.doesNotMatch(GLOBAL_READER_CONTROLS_CSS, /\.page-inner\s*\{/));
   check(() => assert.doesNotMatch(GLOBAL_READER_CONTROLS_CSS, /\.pages-wrapper\s*\{/));
 
-  assert.equal(assertions, 13);
+  assert.equal(assertions, 14);
 });
