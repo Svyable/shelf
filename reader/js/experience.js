@@ -2,6 +2,7 @@ import { fetchText } from './base.js';
 import { parseBookReadme } from './catalog.js';
 import { blocksFromMarkdown } from './markdown.js';
 import { parseRoute, readHash } from './router.js';
+import { isTitlePageChapter } from './title-page.js';
 import { loadNotes, addNote, applyNotes } from './notes.js';
 
 const FONTS = ['book', 'literary', 'warm', 'classic', 'modern', 'clear', 'humanist', 'system'];
@@ -617,6 +618,7 @@ async function buildScrollBook(slug) {
       for (const chapter of book.chapters) {
         const section = document.createElement('section');
         section.className = 'scroll-chapter';
+        section.classList.toggle('title-page-chapter', isTitlePageChapter(chapter, book));
         section.dataset.chapter = chapter.id;
         section.setAttribute('aria-label', chapter.title);
 

@@ -8,6 +8,7 @@ import {
 } from './catalog.js';
 import { blocksFromMarkdown, headingOffsets } from './markdown.js';
 import { paginateBlocks, pageIndexForOffset } from './paginate.js';
+import { isTitlePageChapter } from './title-page.js';
 import {
   loadPrefs,
   savePrefs,
@@ -218,9 +219,11 @@ async function rebuildPages({ cooperative = true, commitUi = true } = {}) {
   if (!cooperative) {
     const pages = [];
     for (const ch of book.chapters) {
+      box.classList.toggle('title-page-chapter', isTitlePageChapter(ch, book));
       const blocks = blocksFromMarkdown(ch.markdown, book.slug);
       pages.push(...paginateBlocks(ch.id, blocks, box));
     }
+    box.classList.remove('title-page-chapter');
     if (run !== paginationEpoch || app.book !== book) return false;
     app.pages = pages;
     return true;
@@ -235,9 +238,11 @@ async function rebuildPages({ cooperative = true, commitUi = true } = {}) {
     }
 
     const result = await paginationScheduler.run(book.chapters, (ch) => {
+      box.classList.toggle('title-page-chapter', isTitlePageChapter(ch, book));
       const blocks = blocksFromMarkdown(ch.markdown, book.slug);
       return paginateBlocks(ch.id, blocks, box);
     });
+    box.classList.remove('title-page-chapter');
     if (
       result.status !== 'complete'
       || run !== paginationEpoch
@@ -307,7 +312,12 @@ function isChapterOpen(html) {
 function fillPage(el, page, num, side, two) {
   const inner = el.querySelector('.page-inner');
   inner.innerHTML = page ? page.html : '';
-  inner.classList.toggle('chapter-open', !!(page && isChapterOpen(page.html)));
+  const chapterOpen = !!(page && isChapterOpen(page.html));
+  const chapterMeta = page ? app.book?.chapters.find((chapter) => chapter.id === page.chapter) : null;
+  const titlePage = !!(chapterMeta && isTitlePageChapter(chapterMeta, app.book));
+  inner.classList.toggle('chapter-open', chapterOpen);
+  inner.classList.toggle('title-page-chapter', titlePage);
+  el.classList.toggle('title-page-leaf', titlePage && chapterOpen);
   if (page && app.slug) applyNotes(inner, loadNotes(app.slug), page.chapter);
   el.querySelector('.page-num').textContent = page ? String(num) : '';
   const run = el.querySelector('.page-running');

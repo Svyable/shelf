@@ -1,0 +1,125 @@
+/* Canonical book title pages
+   --------------------------
+   Structural styling for the opening title block. This stylesheet is
+   loaded before pagination so the measurement surface and visible page
+   use the same typography. Manuscript Markdown remains untouched. */
+
+.page-surface.title-page-leaf .page-running,
+.page-surface.title-page-leaf .page-num {
+  opacity: 0;
+}
+
+.page-inner.title-page-chapter.chapter-open > h1:first-child,
+.scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1:first-child) > h1:first-child {
+  max-width: 15ch;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(2.15rem, 3.05em, 3.9rem);
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  line-height: 1.02;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.page-inner.title-page-chapter.chapter-open > h1:first-child {
+  margin-top: clamp(1.35rem, 7vh, 4.4rem);
+}
+
+.scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1:first-child) > h1:first-child {
+  margin-top: clamp(3rem, 11vh, 7rem);
+}
+
+.page-inner.title-page-chapter.chapter-open > h1:first-child + p:has(> em:only-child),
+.scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1:first-child) + .scroll-block:has(> p > em:only-child) > p {
+  max-width: 34ch;
+  margin: 1.2em auto 0;
+  color: var(--text-secondary);
+  font-family: var(--font-accent);
+  font-size: 1.13em;
+  line-height: 1.36;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.page-inner.title-page-chapter.chapter-open > h1:first-child + p:has(> em:only-child) > em,
+.scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1:first-child) + .scroll-block:has(> p > em:only-child) > p > em {
+  font-style: italic;
+}
+
+.page-inner.title-page-chapter.chapter-open > h1:first-child + p:has(> strong:only-child),
+.page-inner.title-page-chapter.chapter-open > h1:first-child + p:has(> em:only-child) + p:has(> strong:only-child),
+.scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1:first-child) + .scroll-block:has(> p > strong:only-child) > p,
+.scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1:first-child) + .scroll-block:has(> p > em:only-child) + .scroll-block:has(> p > strong:only-child) > p {
+  margin: 1.9em auto 0;
+  color: color-mix(in srgb, var(--accent) 78%, var(--text-primary));
+  font-family: var(--font-ui);
+  font-size: 0.82em;
+  letter-spacing: 0.2em;
+  line-height: 1.35;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.page-inner.title-page-chapter.chapter-open > h1:first-child + p:has(> strong:only-child) > strong,
+.page-inner.title-page-chapter.chapter-open > h1:first-child + p:has(> em:only-child) + p:has(> strong:only-child) > strong,
+.scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1:first-child) + .scroll-block:has(> p > strong:only-child) > p > strong,
+.scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1:first-child) + .scroll-block:has(> p > em:only-child) + .scroll-block:has(> p > strong:only-child) > p > strong {
+  font-weight: 600;
+}
+
+/* The generic chapter drop cap must never turn a subtitle/byline into a decorative initial. */
+.page-inner.title-page-chapter.chapter-open > p:first-of-type::first-letter,
+html[data-book-interior="true"] .page-inner.title-page-chapter.chapter-open > p:first-of-type::first-letter,
+.scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1) + .scroll-block:has(> p) > p::first-letter,
+html[data-book-interior="true"] .scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1) + .scroll-block:has(> p) > p::first-letter {
+  float: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-shadow: none;
+}
+
+.page-inner.title-page-chapter.chapter-open > hr:first-of-type {
+  width: 4.2rem;
+  margin: 2.35em auto 0;
+  border-top-color: color-mix(in srgb, var(--accent) 42%, transparent);
+}
+
+/* Title pages use their own quiet rule instead of the ordinary chapter ornament. */
+html[data-book-interior="true"] .page-inner.title-page-chapter.chapter-open > h1:first-child::before,
+html[data-book-interior="true"] .page-inner.title-page-chapter.chapter-open > h1:first-child::after,
+html[data-book-interior="true"] .scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1) > h1::before,
+html[data-book-interior="true"] .scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1) > h1::after {
+  display: none;
+  content: none;
+}
+
+@media (max-width: 700px) {
+  .page-inner.title-page-chapter.chapter-open > h1:first-child,
+  .scroll-chapter.title-page-chapter > .scroll-block:first-child:has(> h1:first-child) > h1:first-child {
+    max-width: 18ch;
+    font-size: clamp(1.9rem, 2.65em, 3rem);
+  }
+
+  .page-inner.title-page-chapter.chapter-open > h1:first-child {
+    margin-top: 0.8rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .page-inner.title-page-chapter.chapter-open > h1:first-child + p:has(> strong:only-child),
+  .page-inner.title-page-chapter.chapter-open > h1:first-child + p:has(> em:only-child) + p:has(> strong:only-child) {
+    color: CanvasText;
+  }
+}
+
+@media print {
+  .page-surface.title-page-leaf .page-running,
+  .page-surface.title-page-leaf .page-num {
+    visibility: hidden;
+  }
+}
