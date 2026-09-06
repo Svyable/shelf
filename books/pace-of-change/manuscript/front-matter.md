@@ -2,7 +2,9 @@
 
 *Why the Future Breaks When Our Clocks Fall Out of Sync*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
+
+---
 
 There is a sentence people reach for whenever the world feels difficult to follow: the pace of change is accelerating.
 

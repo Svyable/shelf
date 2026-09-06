@@ -2,9 +2,11 @@
 
 *How Civilization Builds for People It Will Never Meet*
 
-Sven Hardy Benson
+**Sven Hardy Benson**
 
 © 2026 Sven Hardy Benson. All Rights Reserved.
+
+---
 
 There is a peculiar kind of customer who cannot attend the design meeting.
 

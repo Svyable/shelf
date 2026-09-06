@@ -1,5 +1,9 @@
 # The Risk Pool: How Insurance Quietly Decides What Can Be Built, Bought, Borrowed, and Rebuilt
 
+**Sven Hardy Benson**
+
+---
+
 There is a peculiar way modern economies announce that something has become too dangerous.
 
 They do not always prohibit it.

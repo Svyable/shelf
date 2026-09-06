@@ -1,6 +1,6 @@
 # Pace of Change
 
-**Why the Future Breaks When Our Clocks Fall Out of Sync.**
+*Why the Future Breaks When Our Clocks Fall Out of Sync*
 
 | | |
 |---|---|
