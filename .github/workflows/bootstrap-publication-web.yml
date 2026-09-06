@@ -1,0 +1,34 @@
+name: Temporary publication web bootstrap
+
+on:
+  push:
+    branches:
+      - feat/publication-web-presence-v3
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/publication-web-presence-v3
+      - name: Generate released publication pages
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/Svyable/bookself/2d1d2d8cde89ff695d4e6fcba0f354955fd4bf5a/scripts/generate-publication-pages.py -o /tmp/generate-publication-pages.py
+          python3 /tmp/generate-publication-pages.py --root .
+          python3 /tmp/generate-publication-pages.py --root . --check
+      - name: Commit generated web surface
+        run: |
+          git add publication sitemap.xml
+          if git diff --cached --quiet; then
+            echo "Generated publication web surface is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Generate canonical released publication pages"
+          git push origin HEAD:feat/publication-web-presence-v3
