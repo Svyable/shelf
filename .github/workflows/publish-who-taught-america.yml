@@ -1,0 +1,169 @@
+name: Publish Who Taught America
+
+on:
+  push:
+    branches:
+      - release/who-taught-america-first-edition-2026-09-06
+    paths:
+      - .github/workflows/publish-who-taught-america.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Shelf release branch
+        uses: actions/checkout@v4
+        with:
+          ref: release/who-taught-america-first-edition-2026-09-06
+          fetch-depth: 0
+
+      - name: Check out frozen Desk source
+        uses: actions/checkout@v4
+        with:
+          repository: Svyable/desk
+          ref: 1ea139b81bb4822f438c98942676d8b334a38a99
+          path: desk-source
+          persist-credentials: false
+
+      - name: Prepare byte-faithful Shelf release
+        run: |
+          set -euo pipefail
+          python3 desk-source/scripts/release-book.py who-taught-america "$GITHUB_WORKSPACE"
+
+      - name: Synchronize feedback catalog
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('.github/ISSUE_TEMPLATE/chapter-feedback.yml')
+          slug = 'who-taught-america'
+          lines = path.read_text(encoding='utf-8').splitlines()
+          book_i = next(i for i, line in enumerate(lines) if line.strip() == 'id: book')
+          opt_i = next(i for i in range(book_i + 1, len(lines)) if lines[i].strip() == 'options:')
+          indent = len(lines[opt_i]) - len(lines[opt_i].lstrip())
+          start = opt_i + 1
+          end = start
+          slugs = []
+          while end < len(lines):
+              line = lines[end]
+              if not line.strip():
+                  end += 1
+                  continue
+              cur = len(line) - len(line.lstrip())
+              if cur <= indent:
+                  break
+              m = re.fullmatch(r'\s*-\s+([a-z0-9][a-z0-9-]*)\s*', line)
+              if not m:
+                  raise SystemExit(f'unexpected feedback option: {line}')
+              slugs.append(m.group(1))
+              end += 1
+          slugs = sorted(set(slugs) | {slug})
+          option_indent = ' ' * (indent + 2)
+          replacement = [f'{option_indent}- {item}' for item in slugs]
+          path.write_text('\n'.join(lines[:start] + replacement + lines[end:]) + '\n', encoding='utf-8')
+          PY
+
+      - name: Generate publication surfaces
+        run: |
+          set -euo pipefail
+          python3 desk-source/scripts/generate-publication-pages.py --root "$GITHUB_WORKSPACE"
+
+      - name: Verify frozen-source parity and Shelf gates
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+
+          desk = Path('desk-source/books/who-taught-america')
+          shelf = Path('books/who-taught-america')
+
+          def manifest(root, exclude_readme=False):
+              out = {}
+              for p in sorted(x for x in root.rglob('*') if x.is_file()):
+                  rel = p.relative_to(root).as_posix()
+                  if rel == '.DS_Store' or (exclude_readme and rel == 'README.md'):
+                      continue
+                  out[rel] = sha256(p.read_bytes()).hexdigest()
+              return out
+
+          src = manifest(desk, exclude_readme=True)
+          dst = manifest(shelf, exclude_readme=True)
+          if src != dst:
+              missing = sorted(set(src) - set(dst))
+              extra = sorted(set(dst) - set(src))
+              changed = sorted(k for k in set(src) & set(dst) if src[k] != dst[k])
+              raise SystemExit(f'parity failed: missing={missing} extra={extra} changed={changed}')
+
+          source_readme = (desk / 'README.md').read_text(encoding='utf-8')
+          shelf_readme = (shelf / 'README.md').read_text(encoding='utf-8')
+          expected = source_readme.replace('| **Status**    | Complete draft · publication review |', '| **Status**    | Published |')
+          if shelf_readme != expected:
+              raise SystemExit('Shelf README differs from the sole expected Published transformation')
+
+          print(f'parity: {len(src)} non-README files byte-identical to frozen Desk source')
+          PY
+          python3 scripts/check-feedback-catalog.py
+          python3 desk-source/scripts/generate-publication-pages.py --root "$GITHUB_WORKSPACE" --check
+          grep -Fq 'who-taught-america' catalog.json
+          grep -Fq 'who-taught-america' README.md
+          grep -Fq 'who-taught-america' sitemap.xml
+          grep -Fq 'Who Taught America?' publication/who-taught-america/index.html
+          grep -Fq '#/b/who-taught-america/' publication/who-taught-america/index.html
+
+      - name: Remove release machinery and commit candidate
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/publish-who-taught-america.yml
+          rm -rf desk-source
+
+          mapfile -t changed < <(git status --short | sed -E 's/^.. //')
+          printf 'Changed paths:\n%s\n' "${changed[*]}"
+
+          python3 - <<'PY'
+          import subprocess
+          allowed_exact = {
+              'README.md',
+              'catalog.json',
+              '.github/ISSUE_TEMPLATE/chapter-feedback.yml',
+              'publication/index.html',
+              'sitemap.xml',
+              '.github/workflows/publish-who-taught-america.yml',
+          }
+          allowed_prefixes = (
+              'books/who-taught-america/',
+              'publication/who-taught-america/',
+          )
+          out = subprocess.check_output(['git', 'status', '--porcelain'], text=True)
+          paths = []
+          for line in out.splitlines():
+              path = line[3:]
+              if ' -> ' in path:
+                  path = path.split(' -> ', 1)[1]
+              paths.append(path)
+          bad = [p for p in paths if p not in allowed_exact and not p.startswith(allowed_prefixes)]
+          if bad:
+              raise SystemExit(f'unexpected release paths: {bad}')
+          required = {
+              'README.md', 'catalog.json', '.github/ISSUE_TEMPLATE/chapter-feedback.yml',
+              'publication/index.html', 'sitemap.xml'
+          }
+          missing = sorted(required - set(paths))
+          if missing:
+              raise SystemExit(f'expected release-owned changes missing: {missing}')
+          if not any(p.startswith('books/who-taught-america/') for p in paths):
+              raise SystemExit('book snapshot missing from release diff')
+          if not any(p.startswith('publication/who-taught-america/') for p in paths):
+              raise SystemExit('publication page missing from release diff')
+          PY
+
+          git config user.name 'Sven Benson'
+          git config user.email '129682319+Svyable@users.noreply.github.com'
+          git add README.md catalog.json .github/ISSUE_TEMPLATE/chapter-feedback.yml books/who-taught-america publication sitemap.xml
+          git add -u .github/workflows/publish-who-taught-america.yml
+          git commit -m 'Publish Who Taught America first edition'
+          git push origin HEAD:release/who-taught-america-first-edition-2026-09-06
