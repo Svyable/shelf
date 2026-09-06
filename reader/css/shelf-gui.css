@@ -114,7 +114,17 @@ body[data-stage="library"] .library-lede {
 
 body[data-stage="library"] .library-actions {
   gap: .7rem;
-  margin-bottom: clamp(1.8rem, 3vw, 2.6rem);
+  margin-bottom: .85rem;
+}
+
+
+body[data-stage="library"] .library-trust {
+  max-width: 52rem;
+  margin: 0 0 clamp(1.8rem, 3vw, 2.6rem);
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: .82rem;
+  line-height: 1.5;
 }
 
 body[data-stage="library"] .write-link {
