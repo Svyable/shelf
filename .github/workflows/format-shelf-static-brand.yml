@@ -1,0 +1,43 @@
+name: Format Shelf static branding
+
+on:
+  push:
+    branches:
+      - shelf-reader-static-brand
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: shelf-reader-static-brand
+      - name: Normalize formatting
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          index = Path('reader/index.html')
+          text = index.read_text(encoding='utf-8')
+          text = re.sub(r'^(<link rel="canonical"|<meta property="og:|<meta name="twitter:)', r'  \1', text, flags=re.M)
+          index.write_text(text, encoding='utf-8')
+
+          css = Path('reader/css/shelf-gui.css')
+          text = css.read_text(encoding='utf-8').replace('}\n\n\nbody[data-stage="library"] .library-trust', '}\n\nbody[data-stage="library"] .library-trust', 1)
+          css.write_text(text, encoding='utf-8')
+          PY
+          git diff --check
+          grep -q '^  <link rel="canonical"' reader/index.html
+          grep -q '^  <meta property="og:site_name"' reader/index.html
+      - name: Commit formatting
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reader/index.html reader/css/shelf-gui.css
+          git commit -m "Polish Shelf static shell formatting"
+          git push origin HEAD:shelf-reader-static-brand
