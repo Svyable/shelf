@@ -1,0 +1,42 @@
+name: Sync publication reader links
+
+on:
+  push:
+    paths:
+      - "books/**/README.md"
+      - "catalog.json"
+      - "imprint.json"
+      - "scripts/sync-reader-links.py"
+      - ".github/workflows/sync-reader-links.yml"
+  schedule:
+    - cron: "23 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reader-readme-links-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Normalize publication README reader links
+        run: python3 scripts/sync-reader-links.py
+      - name: Commit normalized links
+        shell: bash
+        run: |
+          if git diff --quiet -- books; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add books/*/README.md
+          git commit -m "docs: sync publication reader links"
+          git push
