@@ -1,0 +1,58 @@
+name: Mirror public title subtitles
+
+on:
+  push:
+    branches:
+      - mirror-public-title-subtitles
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: mirror-public-title-subtitles
+
+      - name: Split two released titles without changing prose
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_exact(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'expected title stack not found: {path}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          replacements = [
+            ('books/the-agentic-consumer-economy/README.md', '# The Agentic Consumer Economy: Digital Capitalism in the 2030s\n\n| | |', '# The Agentic Consumer Economy\n\n*Digital Capitalism in the 2030s*\n\n| | |'),
+            ('books/the-agentic-consumer-economy/manuscript/front-matter.md', '# The Agentic Consumer Economy: Digital Capitalism in the 2030s\n\n**Sven Hardy Benson**', '# The Agentic Consumer Economy\n\n*Digital Capitalism in the 2030s*\n\n**Sven Hardy Benson**'),
+            ('books/the-risk-pool/README.md', '# The Risk Pool: How Insurance Quietly Decides What Can Be Built, Bought, Borrowed, and Rebuilt\n\n| | |', '# The Risk Pool\n\n*How Insurance Quietly Decides What Can Be Built, Bought, Borrowed, and Rebuilt*\n\n| | |'),
+            ('books/the-risk-pool/manuscript/front-matter.md', '# The Risk Pool: How Insurance Quietly Decides What Can Be Built, Bought, Borrowed, and Rebuilt\n\n**Sven Hardy Benson**', '# The Risk Pool\n\n*How Insurance Quietly Decides What Can Be Built, Bought, Borrowed, and Rebuilt*\n\n**Sven Hardy Benson**'),
+          ]
+          for args in replacements:
+              replace_exact(*args)
+          PY
+
+      - name: Validate public title contract
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/Svyable/desk/main/scripts/align-title-pages.py -o /tmp/align-title-pages.py
+          python3 /tmp/align-title-pages.py --check
+          git diff --check
+          test "$(git diff --name-only | wc -l)" -eq 4
+          ! git diff --name-only | grep -Eq '(^|/)(RIGHTS\.md|rights\.json)$'
+          echo 'Root README references:'
+          grep -nE 'Agentic Consumer Economy|Risk Pool' README.md || true
+
+      - name: Commit public title stacks
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add books/the-agentic-consumer-economy books/the-risk-pool
+          git commit -m "Separate subtitles on two released books"
+          git push origin HEAD:mirror-public-title-subtitles
