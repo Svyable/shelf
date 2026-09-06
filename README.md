@@ -81,6 +81,7 @@ These are the deliberately released editions on Sven Hardy Benson’s Shelf. Pub
 | [**Ubiquitous**](books/ubiquitous/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/ubiquitous/) |
 | [**Useful Noise**](books/useful-noise/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/useful-noise/) |
 | [**Wild Speculation**](books/wild-speculation/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/wild-speculation/) |
+| [**Neuralase**](books/neuralase/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/neuralase/) |
 
 ## What Shelf means
 
