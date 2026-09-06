@@ -1,0 +1,75 @@
+# Sven Hardy Benson’s Shelf
+
+> Deliberately released editions by Sven Hardy Benson, plus a small number of explicitly labeled public proofs.
+
+This file is the low-noise machine-readable map of Sven Hardy Benson’s Shelf. A book is a released edition only when its book README says `Published` and it appears in the root `README.md` table under `## The books`.
+
+## Primary entry points
+
+- [Shelf home](https://svyable.github.io/shelf/) — public Shelf front door.
+- [Shelf Reader](https://svyable.github.io/shelf/reader/) — human-facing Reader for released editions.
+- [Repository overview](https://svyable.github.io/shelf/README.md) — publication model and human released-book catalog.
+- [Agent guidance](https://svyable.github.io/shelf/AGENTS.md) — repository rules for agents modifying Shelf content.
+- [Sitemap](https://svyable.github.io/shelf/sitemap.xml) — canonical public discovery URLs.
+- [Working Desk](https://svyable.github.io/desk/reader/) — current working drafts and next editions.
+
+## Released editions
+
+- [Abdicating Intelligence](https://svyable.github.io/shelf/books/abdicating-intelligence/README.md)
+- [Adjacency](https://svyable.github.io/shelf/books/adjacency/README.md)
+- [Allocating Intelligence](https://svyable.github.io/shelf/books/allocating-intelligence/README.md)
+- [America's Got a Spending Problem](https://svyable.github.io/shelf/books/americas-got-a-spending-problem/README.md)
+- [Appeal](https://svyable.github.io/shelf/books/appeal/README.md)
+- [Artificial Identity](https://svyable.github.io/shelf/books/artificial-identity/README.md)
+- [Austerity Measures](https://svyable.github.io/shelf/books/austerity-measures/README.md)
+- [Commit](https://svyable.github.io/shelf/books/commit/README.md)
+- [Energy, Value & Intelligence](https://svyable.github.io/shelf/books/energy-value-intelligence/README.md)
+- [Face The Strange](https://svyable.github.io/shelf/books/face-the-strange/README.md)
+- [Fiscal Wall](https://svyable.github.io/shelf/books/fiscal-wall/README.md)
+- [Gatekeepers](https://svyable.github.io/shelf/books/gatekeepers/README.md)
+- [Intelligence State](https://svyable.github.io/shelf/books/intelligence-state/README.md)
+- [Keep Cooking](https://svyable.github.io/shelf/books/keep-cooking/README.md)
+- [Leveraging Luck](https://svyable.github.io/shelf/books/leveraging-luck/README.md)
+- [Look Alive](https://svyable.github.io/shelf/books/look-alive/README.md)
+- [Nothing Counts Yet](https://svyable.github.io/shelf/books/nothing-counts-yet/README.md)
+- [Open Source](https://svyable.github.io/shelf/books/open-source/README.md)
+- [Pace of Change](https://svyable.github.io/shelf/books/pace-of-change/README.md)
+- [Proof of Human](https://svyable.github.io/shelf/books/proof-of-human/README.md)
+- [Public Pressure](https://svyable.github.io/shelf/books/public-pressure/README.md)
+- [Restructuring America](https://svyable.github.io/shelf/books/restructuring-america/README.md)
+- [Right To Try](https://svyable.github.io/shelf/books/right-to-try/README.md)
+- [Robust](https://svyable.github.io/shelf/books/robust/README.md)
+- [Silent Cartel](https://svyable.github.io/shelf/books/silent-cartel/README.md)
+- [Single Points of Failure](https://svyable.github.io/shelf/books/single-points-of-failure/README.md)
+- [Solar Century](https://svyable.github.io/shelf/books/solar-century/README.md)
+- [The Agentic Consumer Economy](https://svyable.github.io/shelf/books/the-agentic-consumer-economy/README.md)
+- [The Cancer Key](https://svyable.github.io/shelf/books/the-cancer-key/README.md)
+- [The Collective](https://svyable.github.io/shelf/books/the-collective/README.md)
+- [The Compatibility Dividend](https://svyable.github.io/shelf/books/the-compatibility-dividend/README.md)
+- [The Delegation Machine](https://svyable.github.io/shelf/books/the-delegation-machine/README.md)
+- [The Delete Key](https://svyable.github.io/shelf/books/the-delete-key/README.md)
+- [The Intelligence Dilemma](https://svyable.github.io/shelf/books/the-intelligence-dilemma/README.md)
+- [Built to Be Alone](https://svyable.github.io/shelf/books/the-loneliness-dividend/README.md)
+- [The Long-Running Mind](https://svyable.github.io/shelf/books/the-long-running-mind/README.md)
+- [The Mortality Discount](https://svyable.github.io/shelf/books/the-mortality-discount/README.md)
+- [The Never Ending Intelligence](https://svyable.github.io/shelf/books/the-never-ending-intelligence/README.md)
+- [The Orphan Age](https://svyable.github.io/shelf/books/the-orphan-age/README.md)
+- [The Retry Generation](https://svyable.github.io/shelf/books/the-retry-generation/README.md)
+- [The Risk Pool](https://svyable.github.io/shelf/books/the-risk-pool/README.md)
+- [The Unbounding](https://svyable.github.io/shelf/books/the-unbounding/README.md)
+- [The Vanishing Bid](https://svyable.github.io/shelf/books/the-vanishing-bid/README.md)
+- [The Weather We Build](https://svyable.github.io/shelf/books/the-weather-we-build/README.md)
+- [The World Beneath the World](https://svyable.github.io/shelf/books/the-world-beneath-the-world/README.md)
+- [This Tech Is Different](https://svyable.github.io/shelf/books/this-tech-is-different/README.md)
+- [Triumph of the Commons](https://svyable.github.io/shelf/books/triumph-of-the-commons/README.md)
+- [Ubiquitous](https://svyable.github.io/shelf/books/ubiquitous/README.md)
+- [Useful Noise](https://svyable.github.io/shelf/books/useful-noise/README.md)
+- [Wild Speculation](https://svyable.github.io/shelf/books/wild-speculation/README.md)
+
+## Public proofs — not released editions
+
+These are intentionally public but remain `Drafting`; they are not part of the released-book catalog.
+
+- [Agentile](https://svyable.github.io/shelf/books/agentile/README.md) — Public proof.
+- [The Exponentiality](https://svyable.github.io/shelf/books/the-exponentiality/README.md) — Public draft.
+- [The Hundred-Year Handoff](https://svyable.github.io/shelf/books/the-hundred-year-handoff/README.md) — Public proof.
