@@ -1,0 +1,46 @@
+name: Audit current public title pages
+
+on:
+  push:
+    branches:
+      - current-public-title-audit
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: current-public-title-audit
+      - name: Load canonical Desk normalizer
+        run: curl -fsSL https://raw.githubusercontent.com/Svyable/desk/main/scripts/align-title-pages.py -o scripts/.align-title-pages.py
+      - name: Normalize only existing public snapshots
+        run: python3 scripts/.align-title-pages.py --write
+      - name: Verify public title-page contract
+        run: |
+          python3 scripts/.align-title-pages.py --check
+          git diff --check
+          if git diff --name-only | grep -Eq '(^|/)(RIGHTS\.md|rights\.json)$'; then
+            echo 'Rights files must not change.' >&2
+            exit 1
+          fi
+          if git diff --name-only | grep -Eq '^catalog\.json$'; then
+            echo 'Catalog membership must not change.' >&2
+            exit 1
+          fi
+          rm scripts/.align-title-pages.py
+      - name: Commit current public alignment
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add books
+          if git diff --cached --quiet; then
+            echo 'All current public title pages were already canonical.'
+            exit 0
+          fi
+          git commit -m "Align newly public book title pages"
+          git push origin HEAD:current-public-title-audit
