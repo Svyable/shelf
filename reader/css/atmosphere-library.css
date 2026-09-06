@@ -1,6 +1,8 @@
 /* Expanded Reading Atmosphere library.
    Loaded by atmosphere.js so the original palette contract stays portable. */
 
+@import url('./library-home.css?v=r1');
+
 [data-theme="porcelain"] {
   --bg-primary: #f1f1ee;
   --bg-secondary: #f7f7f4;
