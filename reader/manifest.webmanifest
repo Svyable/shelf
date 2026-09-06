@@ -1,9 +1,21 @@
 {
   "name": "Bookself Reader",
   "short_name": "Reader",
+  "id": "./",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#0c0b0a",
   "theme_color": "#0c0b0a",
+  "icons": [
+    {
+      "src": "app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["books", "education", "productivity"],
   "description": "A Git-native bookshelf for reading Bookself publications."
 }
