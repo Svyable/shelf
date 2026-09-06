@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">The Delegation Machine — Sven Hardy Benson</title>
+  <desc id="desc">Publication cover card for The Delegation Machine on Sven Hardy Benson’s Shelf.</desc>
+  <style>
+    .title { font: 700 58px Georgia, "Times New Roman", serif; fill: #eee5f1; }
+    .subtitle { font: italic 27px Georgia, "Times New Roman", serif; fill: #eee5f1; opacity: .78; }
+    .author { font: 600 22px system-ui, sans-serif; fill: #eee5f1; letter-spacing: 2px; }
+    .shelf { font: 600 16px system-ui, sans-serif; fill: #eee5f1; opacity: .64; letter-spacing: 2px; }
+  </style>
+  <rect width="1200" height="630" fill="#17131b"/>
+  <circle cx="1090" cy="80" r="230" fill="#795c84" opacity=".16"/>
+  <circle cx="1020" cy="610" r="310" fill="#795c84" opacity=".1"/>
+  <rect x="90" y="70" width="375" height="490" rx="10" fill="#eee5f1" opacity=".97"/>
+  <rect x="90" y="70" width="22" height="490" fill="#795c84"/>
+  <line x1="134" y1="116" x2="414" y2="116" stroke="#17131b" opacity=".32"/>
+  <text x="134" y="170" font-family="Georgia, serif" font-size="31" font-weight="700" fill="#17131b">The Delegation Machine</text>
+  <text x="134" y="515" font-family="system-ui, sans-serif" font-size="17" font-weight="600" fill="#17131b">Sven Hardy Benson</text>
+  <text x="575" y="112" class="shelf">Sven Hardy Benson’s Shelf</text>
+    <text x="575" y="190" class="title">The Delegation Machine</text>
+
+  <text x="575" y="535" class="author">Sven Hardy Benson</text>
+</svg>
