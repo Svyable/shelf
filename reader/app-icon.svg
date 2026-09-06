@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Bookself Reader</title>
+  <desc id="desc">Three books standing on a shelf.</desc>
+  <rect width="512" height="512" rx="112" fill="#0c0b0a"/>
+  <path d="M92 394h328" fill="none" stroke="#c89a52" stroke-width="20" stroke-linecap="round"/>
+  <rect x="116" y="132" width="72" height="238" rx="12" fill="#f4efe6"/>
+  <rect x="128" y="152" width="8" height="196" rx="4" fill="#c89a52" opacity=".88"/>
+  <rect x="214" y="158" width="72" height="212" rx="12" fill="#c89a52"/>
+  <rect x="226" y="178" width="8" height="168" rx="4" fill="#0c0b0a" opacity=".42"/>
+  <g transform="rotate(-7 353 248)">
+    <rect x="318" y="116" width="74" height="254" rx="12" fill="#f4efe6"/>
+    <rect x="330" y="138" width="8" height="208" rx="4" fill="#c89a52" opacity=".88"/>
+  </g>
+</svg>
