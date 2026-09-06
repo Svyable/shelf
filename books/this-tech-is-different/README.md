@@ -4,6 +4,7 @@
 |---|---|
 | **Author**   | Sven Hardy Benson |
 | **Status**    | Published |
+| **Edition**   | First edition · updated September 6, 2026 |
 | **Drafting Source** | Sven Hardy Benson’s Desk |
 | **Publication Surface** | Sven Hardy Benson’s Shelf |
 | **Chapters**  | 22 of 22 drafted |
@@ -49,10 +50,11 @@ The book treats “Fourth Industrial Revolution” as a hypothesis to test, not 
 - [Research brief and chapter architecture](research/README.md)
 - [Machine-readable source ledger](research/source-ledger.csv)
 - [Release review — 2026-09-04](research/release-review-2026-09-04.md)
+- [Release review — 2026-09-06](research/release-review-2026-09-06.md)
 
 ## Publication state
 
-This is the deliberate September 2026 first-edition Shelf snapshot, frozen from Desk commit `7dd47369223398b38a030d41aae6cc21a0b380c5`. Desk remains the canonical working edition for future revisions; later Desk changes do not silently rewrite this released edition.
+This is the September 6, 2026 updated public snapshot of the first edition, frozen from reviewed Desk commit `4a7767ffd1a2dfac151f3b45621328c7b8e9c18c`. The earlier September snapshot was frozen from Desk commit `7dd47369223398b38a030d41aae6cc21a0b380c5`; this update incorporates the post-release robustness revisions to Chapters 15–21 and the expanded military-AI evidence trail. Desk remains the canonical working edition for future revisions; later Desk changes do not silently rewrite this released edition.
 
 ## Rights
 
