@@ -1,4 +1,6 @@
-# The Agentic Consumer Economy: Digital Capitalism in the 2030s
+# The Agentic Consumer Economy
+
+*Digital Capitalism in the 2030s*
 
 **Sven Hardy Benson**
 

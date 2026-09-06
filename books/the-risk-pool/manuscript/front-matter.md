@@ -1,4 +1,6 @@
-# The Risk Pool: How Insurance Quietly Decides What Can Be Built, Bought, Borrowed, and Rebuilt
+# The Risk Pool
+
+*How Insurance Quietly Decides What Can Be Built, Bought, Borrowed, and Rebuilt*
 
 **Sven Hardy Benson**
 
