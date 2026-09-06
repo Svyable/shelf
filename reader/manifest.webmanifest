@@ -1,6 +1,6 @@
 {
-  "name": "Bookself Reader",
-  "short_name": "Reader",
+  "name": "Sven Hardy Benson’s Shelf",
+  "short_name": "Shelf",
   "id": "./",
   "start_url": "./",
   "scope": "./",
@@ -17,5 +17,5 @@
     }
   ],
   "categories": ["books", "education", "productivity"],
-  "description": "A Git-native bookshelf for reading Bookself publications."
+  "description": "Books by Sven Hardy Benson on intelligence, institutions, markets, medicine, and changing systems."
 }
