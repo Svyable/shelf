@@ -2,6 +2,10 @@
 
 *What Happens When Humanity Hands Over Its Ability to Think to Machines*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/abdicating-intelligence/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Authors** | Sven Hardy Benson |

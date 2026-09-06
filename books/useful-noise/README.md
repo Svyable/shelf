@@ -2,6 +2,10 @@
 
 *How the Messy Quantum World Could Change Energy, Materials, and the Machines We Build Next*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/useful-noise/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Authors** | Sven Hardy Benson |

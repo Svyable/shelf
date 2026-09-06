@@ -2,6 +2,10 @@
 
 *When AI Begins Contributing at Scale to the Global Well-Being of the World—and Altruism Accelerates Like Never Before*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/triumph-of-the-commons/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Author** | Sven Hardy Benson |

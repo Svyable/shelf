@@ -2,6 +2,10 @@
 
 *The Hidden Infrastructure of Practice, Private Failure, and Human Capability*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/nothing-counts-yet/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Authors**   | Sven Hardy Benson |

@@ -2,6 +2,10 @@
 
 *What Happens When a World Built on Undo Meets a Life That Cannot Be Replayed*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/the-retry-generation/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Author** | Sven Hardy Benson |

@@ -2,6 +2,10 @@
 
 *The Politics of Scarcity in an Age of Abundant Intelligence*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/austerity-measures/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Author** | Sven Hardy Benson |

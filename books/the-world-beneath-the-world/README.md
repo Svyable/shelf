@@ -2,6 +2,10 @@
 
 *A Sensory Guide to the Invisible Systems That Run Your Life*
 
+<!-- bookself-reader-links:start -->
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/the-world-beneath-the-world/)
+<!-- bookself-reader-links:end -->
+
 | | |
 |---|---|
 | **Author** | Sven Hardy Benson |
