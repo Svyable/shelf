@@ -117,7 +117,6 @@ body[data-stage="library"] .library-actions {
   margin-bottom: .85rem;
 }
 
-
 body[data-stage="library"] .library-trust {
   max-width: 52rem;
   margin: 0 0 clamp(1.8rem, 3vw, 2.6rem);
