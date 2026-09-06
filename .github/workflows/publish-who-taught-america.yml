@@ -67,17 +67,13 @@ jobs:
           path.write_text('\n'.join(lines[:start] + replacement + lines[end:]) + '\n', encoding='utf-8')
           PY
 
-      - name: Generate publication surfaces
-        run: |
-          set -euo pipefail
-          python3 desk-source/scripts/generate-publication-pages.py --root "$GITHUB_WORKSPACE"
-
       - name: Verify frozen-source parity and Shelf gates
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
           from hashlib import sha256
+          import json
 
           desk = Path('desk-source/books/who-taught-america')
           shelf = Path('books/who-taught-america')
@@ -105,15 +101,17 @@ jobs:
           if shelf_readme != expected:
               raise SystemExit('Shelf README differs from the sole expected Published transformation')
 
+          catalog = json.loads(Path('catalog.json').read_text(encoding='utf-8'))
+          slugs = catalog.get('books', [])
+          if slugs.count('who-taught-america') != 1:
+              raise SystemExit('catalog must contain who-taught-america exactly once')
+          if not Path('README.md').read_text(encoding='utf-8').count('reader/#/b/who-taught-america/') == 1:
+              raise SystemExit('Shelf README must contain the WTA Reader route exactly once')
+
           print(f'parity: {len(src)} non-README files byte-identical to frozen Desk source')
+          print(f'catalog: {len(slugs)} released publication slugs; WTA exactly once')
           PY
           python3 scripts/check-feedback-catalog.py
-          python3 desk-source/scripts/generate-publication-pages.py --root "$GITHUB_WORKSPACE" --check
-          grep -Fq 'who-taught-america' catalog.json
-          grep -Fq 'who-taught-america' README.md
-          grep -Fq 'who-taught-america' sitemap.xml
-          grep -Fq 'Who Taught America?' publication/who-taught-america/index.html
-          grep -Fq '#/b/who-taught-america/' publication/who-taught-america/index.html
 
       - name: Remove release machinery and commit candidate
         run: |
@@ -121,23 +119,14 @@ jobs:
           rm -f .github/workflows/publish-who-taught-america.yml
           rm -rf desk-source
 
-          mapfile -t changed < <(git status --short | sed -E 's/^.. //')
-          printf 'Changed paths:\n%s\n' "${changed[*]}"
-
           python3 - <<'PY'
           import subprocess
           allowed_exact = {
               'README.md',
               'catalog.json',
               '.github/ISSUE_TEMPLATE/chapter-feedback.yml',
-              'publication/index.html',
-              'sitemap.xml',
               '.github/workflows/publish-who-taught-america.yml',
           }
-          allowed_prefixes = (
-              'books/who-taught-america/',
-              'publication/who-taught-america/',
-          )
           out = subprocess.check_output(['git', 'status', '--porcelain'], text=True)
           paths = []
           for line in out.splitlines():
@@ -145,25 +134,21 @@ jobs:
               if ' -> ' in path:
                   path = path.split(' -> ', 1)[1]
               paths.append(path)
-          bad = [p for p in paths if p not in allowed_exact and not p.startswith(allowed_prefixes)]
+          bad = [p for p in paths if p not in allowed_exact and not p.startswith('books/who-taught-america/') and p != 'books/who-taught-america/']
           if bad:
               raise SystemExit(f'unexpected release paths: {bad}')
-          required = {
-              'README.md', 'catalog.json', '.github/ISSUE_TEMPLATE/chapter-feedback.yml',
-              'publication/index.html', 'sitemap.xml'
-          }
+          required = {'README.md', 'catalog.json', '.github/ISSUE_TEMPLATE/chapter-feedback.yml', '.github/workflows/publish-who-taught-america.yml'}
           missing = sorted(required - set(paths))
           if missing:
               raise SystemExit(f'expected release-owned changes missing: {missing}')
-          if not any(p.startswith('books/who-taught-america/') for p in paths):
+          if not any(p.startswith('books/who-taught-america') for p in paths):
               raise SystemExit('book snapshot missing from release diff')
-          if not any(p.startswith('publication/who-taught-america/') for p in paths):
-              raise SystemExit('publication page missing from release diff')
+          print('changed-path allowlist: clean')
           PY
 
           git config user.name 'Sven Benson'
           git config user.email '129682319+Svyable@users.noreply.github.com'
-          git add README.md catalog.json .github/ISSUE_TEMPLATE/chapter-feedback.yml books/who-taught-america publication sitemap.xml
+          git add README.md catalog.json .github/ISSUE_TEMPLATE/chapter-feedback.yml books/who-taught-america
           git add -u .github/workflows/publish-who-taught-america.yml
-          git commit -m 'Publish Who Taught America first edition'
+          git commit -m 'Publish Who Taught America — first edition'
           git push origin HEAD:release/who-taught-america-first-edition-2026-09-06
