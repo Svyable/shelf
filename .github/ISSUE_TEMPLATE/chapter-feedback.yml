@@ -68,6 +68,7 @@ body:
         - triumph-of-the-commons
         - ubiquitous
         - useful-noise
+        - who-taught-america
         - wild-speculation
     validations:
       required: true
