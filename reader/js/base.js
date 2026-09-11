@@ -3,11 +3,10 @@ import './reader-keyboard-runtime.js';
 import './one-handed-actions.js';
 import './dialog-focus-runtime.js';
 import './font-settlement.js';
-import { applyPortalCatalogManifest, parseBookReadme, parsePortalCatalog } from './catalog.js';
+import { applyPortalCatalogManifest, parseBookReadme } from './catalog.js';
 import { parseRoute } from './router.js';
 import { createAsyncResourceCache } from './resource-cache.js';
 import { installNavigationPrefetch } from './navigation-prefetch.js';
-import { createStartupCatalogPrimer, catalogCoverCandidates } from './startup-catalog-primer.js';
 import { createStartupPublicationPrimer, startupAcquisitionPlan } from './startup-publication-primer.js';
 import {
   reportChapterAcquisitionFailure,
@@ -255,15 +254,6 @@ export async function firstExisting(relativePaths) {
 
 const startupPlan = startupAcquisitionPlan(navigator.connection || {});
 
-const startupCatalogPrimer = createStartupCatalogPrimer({
-  loadPortal: () => fetchText('README.md'),
-  parsePortal: parsePortalCatalog,
-  loadHub: (slug) => fetchText(`books/${slug}/README.md`),
-  parseHub: parseBookReadme,
-  loadCover: (slug) => firstExisting(catalogCoverCandidates(slug)),
-  concurrency: Math.max(1, startupPlan.catalogConcurrency),
-});
-
 const startupPrimer = createStartupPublicationPrimer({
   loadReadme: (slug) => fetchText(`books/${slug}/README.md`),
   parseReadme: parseBookReadme,
@@ -271,13 +261,6 @@ const startupPrimer = createStartupPublicationPrimer({
   concurrency: startupPlan.publicationConcurrency,
   warmRemainder: startupPlan.warmPublicationRemainder,
 });
-
-function primeInitialCatalog() {
-  if (!startupPlan.primeCatalog) return;
-  startupCatalogPrimer.prime().catch(() => {
-    // Catalog priming is opportunistic. The canonical loader retries and owns errors.
-  });
-}
 
 function primePublication(route) {
   if (!route?.slug) return Promise.resolve({ status: 'skipped', loaded: 0 });
@@ -297,10 +280,9 @@ function primeInitialPublication() {
   primePublication(route);
 }
 
-// Give intentional route work first opportunity to acquire its requested chapter;
-// speculative catalog warming follows only when the connection budget permits it.
+// Only an intentional publication route is warmed at startup. The canonical
+// library loader owns catalog acquisition when the user actually needs it.
 primeInitialPublication();
-primeInitialCatalog();
 
 if (typeof document !== 'undefined') {
   installPaginationReflowGuard(document);
