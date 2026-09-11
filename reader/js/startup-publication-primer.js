@@ -40,7 +40,7 @@ export function startupAcquisitionPlan(connection = {}) {
   }
   return Object.freeze({
     primeCatalog: true,
-    catalogConcurrency: 4,
+    catalogConcurrency: 8,
     warmPublicationRemainder: true,
     publicationConcurrency: 2,
   });
