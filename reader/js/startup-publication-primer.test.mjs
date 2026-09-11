@@ -34,7 +34,7 @@ eq(publicationPrefetchDepth('hover'), 'target');
 eq(publicationPrefetchDepth('focus'), 'target');
 
 eq(startupAcquisitionPlan({}), {
-  primeCatalog: true, catalogConcurrency: 8, warmPublicationRemainder: true, publicationConcurrency: 2,
+  primeCatalog: true, catalogConcurrency: 8, warmPublicationRemainder: true, publicationConcurrency: 4,
 });
 eq(startupAcquisitionPlan({ effectiveType: '4g' }), startupAcquisitionPlan({}));
 eq(startupAcquisitionPlan({ effectiveType: '3g' }), {
