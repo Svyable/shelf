@@ -116,7 +116,13 @@ There is nothing wrong with that. Many excellent businesses are inseparable from
 
 The one-person corporation also complicates labor statistics and our cultural picture of entrepreneurship.
 
-A company with one employee may generate work equivalent to what once required twenty people, purchase services from model providers and specialized contractors, and sell globally. Headcount ceases to be a good proxy for organizational scale.
+The one-person firm is not new. In 2023, the Census Bureau counted 30,427,808 U.S. nonemployer establishments—businesses with no paid employees—against 8,361,342 employer establishments. Those nonemployers reported nearly $1.8 trillion in receipts.
+
+The category is less glamorous than the phrase one-person corporation. Most nonemployers are self-employed individuals, and the data include side businesses and gig work. More important, nonemployers were already the larger share of U.S. businesses every year from 1997 through 2023. Agents did not create this form.
+
+That history makes the prediction harder and more useful. The novelty would not be a business without payroll. It would be how much functional complexity, revenue, and institutional continuity a business without payroll can sustain. If agents matter here, the evidence should eventually appear in those outcomes rather than in company counts alone.
+
+Headcount ceases to be a good proxy for organizational scale.
 
 This matters for competition policy, banking, insurance, and local economic development. Cities often celebrate company growth partly because growing companies hire residents. A new generation of high-revenue micro-firms may create wealth without creating proportional payrolls.
 
