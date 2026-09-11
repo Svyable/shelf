@@ -119,8 +119,9 @@ test('removed offline readiness surface is absent from the install shell', () =>
   }
 });
 
-test('offline shell generation advances for canonical global controls', () => {
-  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v103['"]/);
+test('offline shell generation advances and activates coherently', () => {
+  assert.match(swSource, /const\s+CACHE\s*=\s*['"]obb-shell-v104['"]/);
+  assert.match(swSource, /installShell\([\s\S]*?\.then\(\(\)\s*=>\s*self\.skipWaiting\(\)\)/);
 });
 
 console.log('offline shell contract tests cover dynamic enhancement parity');
