@@ -13,7 +13,7 @@
   "forkLabel": "",
   "homeLabel": "Shelf",
   "storagePrefix": "svs",
-  "readerStyles": ["reader/css/interface-v2.css", "reader/css/interface-v3.css"],
+  "readerStyles": ["reader/css/interface-v2.css", "reader/css/interface-v3.css?v=r4"],
   "steps": [],
   "github": {
     "owner": "Svyable",
