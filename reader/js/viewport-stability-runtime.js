@@ -158,7 +158,7 @@ function installContentsDrawerPolish({
     button.setAttribute('aria-expanded', String(active));
     if (!active || otherModalOpen()) return;
 
-    drawer.setAttribute('aria-modal', 'false');
+    if (drawer.getAttribute('aria-modal') !== 'false') drawer.setAttribute('aria-modal', 'false');
     const releaseBackground = () => {
       if (!drawer.classList.contains('active') || otherModalOpen()) return;
       const app = document.querySelector('.app');
@@ -172,9 +172,18 @@ function installContentsDrawerPolish({
   };
 
   const drawerObserver = new MutationObserver(syncDrawer);
-  drawerObserver.observe(drawer, { attributes: true, attributeFilter: ['class', 'aria-modal'] });
+  drawerObserver.observe(drawer, { attributes: true, attributeFilter: ['class'] });
   const bodyObserver = new MutationObserver(syncDrawer);
   bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  for (const id of ['progressPanel', 'settingsPanel', 'searchOverlay', 'noteDialog', 'helpOverlay']) {
+    const overlay = document.getElementById(id);
+    if (overlay) {
+      new MutationObserver(syncDrawer).observe(overlay, {
+        attributes: true,
+        attributeFilter: ['class'],
+      });
+    }
+  }
   if ('ResizeObserver' in window) new ResizeObserver(syncTop).observe(header);
   window.addEventListener('orientationchange', syncTop, { passive: true });
   window.visualViewport?.addEventListener('resize', syncTop, { passive: true });
