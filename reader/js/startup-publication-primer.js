@@ -42,7 +42,7 @@ export function startupAcquisitionPlan(connection = {}) {
     primeCatalog: true,
     catalogConcurrency: 8,
     warmPublicationRemainder: true,
-    publicationConcurrency: 2,
+    publicationConcurrency: 4,
   });
 }
 
