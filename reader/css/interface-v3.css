@@ -225,6 +225,18 @@ body:not([data-stage="read"]) .reading-time {
   .reading-time { display: none; }
 }
 
+/* Fast cached navigation should feel instant rather than flashing a blocking
+   "Opening" screen. The loader only fades in when work lasts long enough to
+   warrant feedback; it still blocks repeat activation from the first frame. */
+.loader:not([hidden]) {
+  opacity: 0;
+  animation: readerLoaderReveal 140ms ease 180ms forwards;
+}
+
+@keyframes readerLoaderReveal {
+  to { opacity: 1; }
+}
+
 .empty-shelf,
 .shelf-error {
   max-width: 42rem;
@@ -324,4 +336,5 @@ html[data-bookself-role="desk"] .draft-badge {
 
 @media (prefers-reduced-motion: reduce) {
   .continue-card::after { transform: translateY(-50%); }
+  .loader:not([hidden]) { animation: none; opacity: 1; }
 }
