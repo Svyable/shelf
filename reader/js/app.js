@@ -1,26 +1,23 @@
-// Shelf keeps its library lightweight: render released books from the public
-// README first, then load the full Bookself Reader only when a publication is
-// opened. This avoids blocking the Shelf on dozens of per-book metadata fetches.
+// Shelf owns the public library and its release state. The heavy Reader core is
+// local to this repository and is loaded only when a publication is opened.
+// Bookself remains the upstream framework source, never a production runtime.
 
-const canonicalAppUrl = 'https://svyable.github.io/bookself/reader/js/app.js?v=20260911-shelf-3';
+const readerCoreUrl = new URL('./app-core.js?v=20260911-local-1', import.meta.url).href;
 const readmeUrl = new URL('../../README.md', import.meta.url);
 const catalogUrl = new URL('../../catalog.json', import.meta.url);
-const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v2';
+const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v3';
 
-let canonicalAppPromise = null;
-let canonicalLoaded = false;
+let readerCorePromise = null;
+let readerCoreLoaded = false;
 let fastEntries = [];
 let recentRanks = new Map();
 let sortMode = 'title';
 
-function $(id) {
-  return document.getElementById(id);
-}
+const $ = (id) => document.getElementById(id);
 
 function bookRouteRequested() {
-  const hashBook = /^#\/b\/[a-z0-9][a-z0-9-]*(?:\/|$)/i.test(location.hash || '');
-  const queryBook = new URLSearchParams(location.search).has('b');
-  return hashBook || queryBook;
+  return /^#\/b\/[a-z0-9][a-z0-9-]*(?:\/|$)/i.test(location.hash || '')
+    || new URLSearchParams(location.search).has('b');
 }
 
 function libraryRouteRequested() {
@@ -43,7 +40,7 @@ function clothColor(slug) {
 
 function releasedSection(markdown) {
   const match = /^##\s+The books\s*$/im.exec(markdown || '');
-  if (!match) return markdown || '';
+  if (!match) return '';
   const tail = String(markdown).slice(match.index + match[0].length);
   const next = /^##\s+/m.exec(tail);
   return next ? tail.slice(0, next.index) : tail;
@@ -56,11 +53,8 @@ function cleanTitle(label, slug) {
     .replace(/\s+/g, ' ')
     .trim();
   if (title) return title;
-  return String(slug || '')
-    .split('-')
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
+  return String(slug || '').split('-').filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
 }
 
 function parseReleasedBooks(markdown) {
@@ -79,18 +73,13 @@ function parseReleasedBooks(markdown) {
 }
 
 function saveFastCatalog(entries) {
-  try {
-    localStorage.setItem(fastCatalogCacheKey, JSON.stringify(entries));
-  } catch {
-    // Storage is only an acceleration layer.
-  }
+  try { localStorage.setItem(fastCatalogCacheKey, JSON.stringify(entries)); } catch {}
 }
 
 function readFastCatalog() {
   try {
     const parsed = JSON.parse(localStorage.getItem(fastCatalogCacheKey) || '[]');
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((entry) => entry && entry.slug && entry.title);
+    return Array.isArray(parsed) ? parsed.filter((entry) => entry?.slug && entry?.title) : [];
   } catch {
     return [];
   }
@@ -119,15 +108,38 @@ function showFastLibraryStage() {
   $('readerChrome')?.classList.remove('is-reading');
   if ($('proofRibbon')) $('proofRibbon').hidden = true;
   if ($('loader')) $('loader').hidden = true;
+  if ($('homeFromEnd')) $('homeFromEnd').textContent = 'Shelf';
+  if ($('shelfError')) $('shelfError').hidden = true;
   document.documentElement.lang = 'en';
+  document.documentElement.dataset.bookselfRole = 'shelf';
   document.title = 'Sven Hardy Benson’s Shelf — Reader';
+}
+
+function ensureReaderCore() {
+  if (readerCorePromise) return readerCorePromise;
+  readerCorePromise = import(readerCoreUrl)
+    .then(() => {
+      readerCoreLoaded = true;
+      return true;
+    })
+    .catch((error) => {
+      readerCorePromise = null;
+      console.error('Shelf Reader core failed', error);
+      if ($('loader')) $('loader').hidden = true;
+      const message = $('shelfError');
+      if (message) {
+        message.hidden = false;
+        message.textContent = 'The book reader could not be loaded. Reload this page to try again.';
+      }
+      throw error;
+    });
+  return readerCorePromise;
 }
 
 function volumeElement(entry) {
   const a = document.createElement('a');
   a.className = 'volume';
   a.href = `#/b/${entry.slug}/`;
-  a.dataset.fastShelfVolume = entry.slug;
   a.style.setProperty('--cloth', clothColor(entry.slug));
   a.style.setProperty('--block', '7px');
   a.innerHTML = `
@@ -140,7 +152,7 @@ function volumeElement(entry) {
     </span>`;
   const warm = () => {
     if ($('loader')) $('loader').hidden = false;
-    ensureCanonicalApp();
+    ensureReaderCore();
   };
   a.addEventListener('pointerdown', warm, { once: true, passive: true });
   a.addEventListener('click', warm, { once: true });
@@ -151,21 +163,16 @@ function renderFastShelf() {
   if (!libraryRouteRequested()) return;
   showFastLibraryStage();
   const shelf = $('shelf');
-  const stacks = $('stacks');
   const empty = $('emptyShelf');
   if (!shelf || !empty) return;
-
   const query = String($('librarySearch')?.value || '').trim().toLowerCase();
   const entries = sortedEntries(fastEntries).filter((entry) => (
     !query || entry.title.toLowerCase().includes(query) || entry.slug.includes(query)
   ));
-
-  stacks?.replaceChildren();
+  $('stacks')?.replaceChildren();
   shelf.replaceChildren(...entries.map(volumeElement));
   empty.hidden = entries.length > 0;
-  empty.textContent = fastEntries.length
-    ? 'No matching publications.'
-    : 'Loading publications…';
+  empty.textContent = fastEntries.length ? 'No matching publications.' : 'Loading publications…';
 }
 
 function bindFastLibraryControls() {
@@ -179,9 +186,7 @@ function bindFastLibraryControls() {
     button.dataset.fastShelfBound = 'true';
     button.addEventListener('click', () => {
       sortMode = button.dataset.sort === 'recent' ? 'recent' : 'title';
-      document.querySelectorAll('[data-sort]').forEach((peer) => {
-        peer.classList.toggle('active', peer === button);
-      });
+      document.querySelectorAll('[data-sort]').forEach((peer) => peer.classList.toggle('active', peer === button));
       renderFastShelf();
     });
   });
@@ -195,13 +200,10 @@ async function loadRecentRanks() {
     if (!Array.isArray(manifest?.books)) return;
     recentRanks = new Map(manifest.books.map((slug, index) => [String(slug), index]));
     if (sortMode === 'recent') renderFastShelf();
-  } catch {
-    // Recent ordering is optional; alphabetical browsing still works.
-  }
+  } catch {}
 }
 
 async function refreshFastCatalog() {
-  const empty = $('emptyShelf');
   try {
     const response = await fetch(readmeUrl, { cache: 'no-cache' });
     if (!response.ok) throw new Error(`Catalog request failed (${response.status})`);
@@ -212,51 +214,26 @@ async function refreshFastCatalog() {
     renderFastShelf();
   } catch (error) {
     console.error('Shelf fast catalog failed', error);
-    if (!fastEntries.length && empty) {
-      empty.hidden = false;
-      empty.textContent = 'The Shelf catalog could not be loaded. Reload to try again.';
+    if (!fastEntries.length && $('emptyShelf')) {
+      $('emptyShelf').hidden = false;
+      $('emptyShelf').textContent = 'The Shelf catalog could not be loaded. Reload to try again.';
     }
   }
 }
 
 function scheduleShelfWorker() {
   if (!('serviceWorker' in navigator)) return;
-  const register = () => {
-    navigator.serviceWorker
-      .register(new URL('../sw.js', import.meta.url), { updateViaCache: 'none' })
-      .then((registration) => registration.update().catch(() => {}))
-      .catch((error) => console.warn('Shelf service worker could not be updated', error));
-  };
+  const register = () => navigator.serviceWorker
+    .register(new URL('../sw.js', import.meta.url), { updateViaCache: 'none' })
+    .then((registration) => registration.update().catch(() => {}))
+    .catch((error) => console.warn('Shelf service worker could not be updated', error));
   if ('requestIdleCallback' in window) window.requestIdleCallback(register, { timeout: 1500 });
   else window.setTimeout(register, 250);
 }
 
-function ensureCanonicalApp() {
-  if (canonicalAppPromise) return canonicalAppPromise;
-  canonicalAppPromise = import(canonicalAppUrl)
-    .then(() => {
-      canonicalLoaded = true;
-      return true;
-    })
-    .catch((error) => {
-      canonicalAppPromise = null;
-      console.error('Shelf Reader bootstrap failed', error);
-      if ($('loader')) $('loader').hidden = true;
-      const message = $('shelfError');
-      if (message) {
-        message.hidden = false;
-        message.textContent = 'The book reader could not be loaded. Reload this page to try again.';
-      }
-      throw error;
-    });
-  return canonicalAppPromise;
-}
-
 function fastLibraryRouteGuard(event) {
   if (!libraryRouteRequested()) return;
-  // Once the full Reader has been loaded for a book, keep library navigation on
-  // the lightweight Shelf instead of starting a 50+ publication metadata scan.
-  if (canonicalLoaded) event.stopImmediatePropagation();
+  if (readerCoreLoaded) event.stopImmediatePropagation();
   renderFastShelf();
 }
 
@@ -266,9 +243,10 @@ window.addEventListener('popstate', fastLibraryRouteGuard, true);
 bindFastLibraryControls();
 scheduleShelfWorker();
 loadRecentRanks();
+if ($('homeFromEnd')) $('homeFromEnd').textContent = 'Shelf';
 
 if (bookRouteRequested()) {
-  ensureCanonicalApp();
+  ensureReaderCore();
 } else {
   const cached = readFastCatalog();
   if (cached.length) {
