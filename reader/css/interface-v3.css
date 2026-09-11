@@ -164,11 +164,65 @@ html[data-bookself-role="desk"] .library-hero::before { content: "DESK · WORK I
 
 .volume {
   width: min(13.5rem, 100%);
+  border-radius: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.volume:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 7px;
+}
+
+.volume:focus-visible .volume-cover {
+  box-shadow: 8px 12px 24px var(--shadow), 0 0 0 1px var(--accent);
 }
 
 /* The whole book cover is already the affordance; a separate Open pill is redundant. */
 .volume-open {
   display: none;
+}
+
+/* Keep the Reader toolbar contextual: controls with no meaning outside a book
+   should not compete with library navigation, and reading time belongs to Read. */
+body[data-stage="library"] #bookmarkBtn,
+body[data-stage="library"] #tocBtn,
+body[data-stage="cover"] #bookmarkBtn,
+body:not([data-stage="read"]) .reading-time {
+  display: none;
+}
+
+/* Touch tablets do not have hover tooltips. Give the primary Reader actions
+   visible names while leaving phone chrome compact. */
+@media (pointer: coarse) and (min-width: 701px) {
+  .app-header .header-right {
+    gap: .08rem;
+  }
+
+  #bookmarkBtn,
+  #searchBtn,
+  #tocBtn,
+  #settingsBtn {
+    width: auto;
+    min-width: 44px;
+    gap: .34rem;
+    padding-inline: .64rem;
+  }
+
+  #bookmarkBtn::after,
+  #searchBtn::after,
+  #tocBtn::after,
+  #settingsBtn::after {
+    font: 600 .68rem/1 var(--font-ui);
+    letter-spacing: .01em;
+    white-space: nowrap;
+  }
+
+  #bookmarkBtn::after { content: "Bookmark"; }
+  #searchBtn::after { content: "Search"; }
+  #tocBtn::after { content: "Contents"; }
+  #settingsBtn::after { content: "Reading"; }
+
+  .reading-time { display: none; }
 }
 
 .empty-shelf,
