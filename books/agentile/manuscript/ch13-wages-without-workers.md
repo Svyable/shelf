@@ -46,7 +46,7 @@ That is why early empirical work on AI and employment should be read with patien
 
 Each answers a different question.
 
-The International Labour Organization's work on generative-AI exposure has emphasized that transformation is more likely than complete redundancy for many occupations. Anthropic's labor-market research has similarly tried to distinguish theoretical capability from observed use and, in early data, has not found a simple economy-wide unemployment shock concentrated exactly where exposure measures would predict, while noting possible weakness in hiring for some younger workers in exposed professions.
+The International Labour Organization's work on generative-AI exposure has emphasized that transformation is more likely than complete redundancy for many occupations. Recent nationally representative work on actual use has likewise shown a gap between theoretical exposure and adoption. Many workers are touching generative systems. Far fewer occupations have reorganized all their work around them.
 
 Those are snapshots during a moving technological transition.
 
@@ -74,11 +74,43 @@ This is where aggregate optimism can conceal local pain.
 
 An economy can gain output while a cohort loses its first rung.
 
+The apprenticeship problem deserves more attention because routine work performs two economic functions at once.
+
+It produces today's output.
+
+It produces tomorrow's worker.
+
+A junior accountant reconciles ordinary accounts because ordinary accounts need reconciling. The same work teaches the junior what normal looks like. A young lawyer drafts routine language because someone needs a draft. The same work teaches which clauses carry hidden consequences. A new engineer fixes unglamorous bugs because bugs need fixing. The same work builds a mental map of the system that will later support architecture decisions.
+
+From the perspective of a quarterly cost calculation, the novice can look inefficient. The experienced worker is faster. The agent may be faster still. But the inefficiency is partly tuition paid inside production.
+
+Firms have always underinvested in some kinds of training because a trained worker can leave. Agents intensify the temptation. Why pay a junior to spend three hours on work a machine can finish in fifteen minutes?
+
+The answer cannot simply be tradition.
+
+The answer has to be a new apprenticeship design.
+
+One possibility is deliberate decomposition. Let the agent perform the mechanical portion, then require the junior to inspect the result, explain the judgment calls, reproduce part of the work unaided, and handle progressively harder exceptions. The junior produces less raw output than a fully automated workflow would. The organization is buying future competence.
+
+Another possibility is simulation. Cheap agents can create endless practice cases, adversarial examples, mock negotiations, synthetic customers, broken systems, and unusual fact patterns. A profession can manufacture experience faster than reality naturally supplies it.
+
+This would be a genuine improvement over old apprenticeship in some fields. Traditional training often depends on luck. One trainee sees three unusual cases in a year. Another sees none. An agent can generate both the ordinary distribution and the tails.
+
+But simulation is not responsibility.
+
+The trainee who knows the answer in a sandbox has not yet learned what it feels like when a real customer is angry, a real patient is frightened, a real system is failing, or a real client will pay for the mistake. Professional judgment is partly knowledge under consequence.
+
+So the problem is not how to preserve every junior task.
+
+It is how to preserve the production of judgment after the cheapest practice tasks become machine work.
+
+That is a different question, and a better one.
+
 The second mistake is to assume automation always lowers wages for the people who remain.
 
 If agents complement scarce expertise, the opposite can happen.
 
-A radiologist who can safely review more cases, an engineer who can direct more implementation, an accountant who can supervise more clients, or a salesperson who can manage more revenue may become more valuable because the machine multiplies the reach of a scarce judgment.
+A radiologist who can safely review more cases, an engineer who can direct more implementation, an accountant who can supervise more clients, or a salesperson who can manage more revenue may become more valuable because the machine multiplies the reach of scarce judgment.
 
 The wage effect depends on whether the worker is a substitute for the agent or a complement to it and on how scarce the complementary skill remains.
 
@@ -86,7 +118,7 @@ This can increase inequality within occupations.
 
 If routine execution becomes cheap while exceptional judgment commands more leverage, the middle of a profession can hollow. A small number of highly trusted people supervise large volumes of machine work while fewer humans perform the standardized tasks that once filled the pyramid.
 
-Or the technology can compress differences by giving less experienced workers access to procedures and knowledge that help them reach competent performance. Customer-support research has found large productivity gains for less experienced workers using generative assistance, a reminder that a technology can reduce skill gaps on some tasks even as it increases returns to expertise on others.
+Or the technology can compress differences by giving less experienced workers access to procedures and knowledge that help them reach competent performance. Customer-support experiments have shown that assistance can benefit less experienced workers especially strongly on bounded tasks. A technology can reduce skill gaps on one dimension while increasing returns to expertise on another.
 
 Both patterns can coexist inside one job.
 
@@ -95,6 +127,50 @@ The junior writes a better first draft with an agent.
 The senior becomes more productive because she can direct ten drafts at once and knows which one is wrong.
 
 The distribution of value then depends on organizational design and bargaining.
+
+This is where the phrase labor market becomes slightly misleading.
+
+A market suggests buyers and sellers meeting over a price.
+
+Employment is also a contest over outside options.
+
+A worker bargains partly from the value of leaving. An employer bargains partly from the value of replacing the worker. Technology changes both sides.
+
+If an agent can perform enough of a role that a vacancy is no longer urgent, the employer's outside option improves. The company can wait longer. It can redistribute the remainder. It can hire one experienced person instead of two juniors. It can rent machine capacity while recruiting.
+
+The worker may gain an outside option too.
+
+A designer with agents can freelance. A lawyer can operate a smaller practice. An analyst can start a tiny advisory firm. A software engineer can build and support a product that once required a team. Cheap delegated action can make self-employment and entrepreneurship more viable.
+
+The same technology can therefore weaken a worker's bargaining position inside one firm and strengthen that worker's ability to become a firm.
+
+Which effect dominates will vary.
+
+The important variable is not merely productivity.
+
+It is optionality.
+
+Can the worker take the agentile capability elsewhere?
+
+Can the firm use the same capability without the worker?
+
+Can the worker carry customers, reputation, credentials, data, and capital into a new organization?
+
+Can the firm substitute a platform for the institutional knowledge the worker holds?
+
+Wages are shaped by this contest as much as by the number of tokens a model can process.
+
+That is why access matters.
+
+If sophisticated agent systems are cheap and portable, individual workers can acquire leverage once reserved for institutions. If the best systems require privileged enterprise data, expensive integrations, and infrastructure only large firms possess, agentic productivity may stay attached to the employer.
+
+The person becomes more productive at work without becoming more powerful in the market.
+
+That distinction is easy to miss in demonstrations.
+
+The demo asks what one person can do with the tool.
+
+The labor market asks who controls the tool, the data, the customer relationship, and the right to deploy the result.
 
 There is a third mistake: treating wages as the only household effect.
 
@@ -120,7 +196,45 @@ But the geography and ownership of the income changed.
 
 A local professional salary circulates differently from a payment to a global compute supplier. A town that loses fifty office jobs may not care that the national economy gained efficiency if none of the new income arrives locally.
 
-This is why the geography of agentile production will matter politically.
+This is where the agentile economy can become spatially strange.
+
+A Main Street accounting office employs twelve people. Those people buy lunch, pay rent, hire plumbers, coach children's teams, donate locally, and carry professional status in the town. Now imagine the office grows revenue while shrinking to five people because much of the preparation work is performed by remote agent infrastructure.
+
+The customers may receive faster service. The surviving employees may earn more. The owner may earn more. National productivity may improve.
+
+The town can still lose seven paychecks.
+
+The missing payroll has not disappeared from the economy. It has been rerouted through suppliers whose employees, owners, power plants, and data centers may be hundreds or thousands of miles away.
+
+This does not make the technology bad.
+
+It makes geography part of distribution.
+
+The industrial revolution moved workers toward factories. The internet moved some work toward cities rich in software and finance while letting other work escape geography. Agentic production can move income without moving the customer or the firm.
+
+A business can remain physically local while its cognitive supply chain becomes global.
+
+That means regional statistics can diverge from company statistics.
+
+A firm can become more productive while the place around it becomes poorer.
+
+A region can lose entry-level office work without experiencing a dramatic factory closure that makes the transition visible.
+
+The change arrives as a series of absences.
+
+A vacancy not posted.
+
+A retirement not replaced.
+
+An internship program cut from twenty seats to eight.
+
+A support center that never gets built.
+
+A second office that is no longer needed.
+
+History often remembers the plant that closed because a gate was locked and a photograph could be taken.
+
+The agentile labor market may announce itself through buildings nobody decides to construct.
 
 The fourth mistake is to imagine that every unit of machine work substitutes for a unit of human work.
 
@@ -142,6 +256,26 @@ Some markets are naturally bounded. A household needs only so many tax returns p
 
 Agents will affect each differently.
 
+The rebound can create jobs that are difficult to name in advance because they become economical only after the cost falls.
+
+Consider software.
+
+A small manufacturer may never have hired a team to build custom internal tools. If agent-assisted development makes those tools cheap, the company may suddenly want dozens of them. Somebody still has to decide which workflows matter, connect the software to the plant, maintain the systems, secure the data, train employees, and decide when the tool is wrong.
+
+The reduction in coding labor per feature can increase demand for people who understand the business well enough to specify features.
+
+Or consider education.
+
+A school may never have employed enough tutors to give each child a customized practice plan every evening. If an agent can provide much of that service cheaply, demand for tutoring-like activity expands dramatically. Human teachers may then spend less time generating worksheets and more time diagnosing why a particular child is stuck.
+
+The technology can reduce labor in the old service while creating a larger hybrid service around it.
+
+This is why employment forecasts based only on current job descriptions are fragile.
+
+The future economy contains activities that are not worth doing at today's prices.
+
+Cheap agency reveals them.
+
 The fifth mistake is to ignore quality.
 
 A company can replace work with a cheaper agent and call it productivity even if customers receive worse service. A worker can use AI to produce more code that later requires more maintenance. A school can generate more feedback that students stop reading. A health system can process more messages while clinicians spend more time fixing errors.
@@ -159,6 +293,28 @@ It is borrowing from the future.
 The reverse is possible too. An agent can make quality better by checking every case, enforcing consistent procedure, translating clearly, and giving employees more time for exceptions. Counting only labor hours saved can understate the benefit.
 
 The economy will need better measures than “percent automated.”
+
+It will also need better wage stories than “the worker became more productive.”
+
+Productivity is not a payment instruction.
+
+A worker can create more value and receive none of the increment if the employer has strong bargaining power. A company can save money and lose the saving to competition. A consumer can receive the entire gain through lower prices. A platform can capture the gain through fees. A scarce supplier can absorb it through higher input prices.
+
+The surplus moves through a chain.
+
+This is where institutions matter.
+
+Profit sharing, gain sharing, broad-based equity, bonuses linked to measurable productivity improvements, collective bargaining, portable retirement savings, and other arrangements are all ways of writing claims on surplus. None is a universal solution. Some expose workers to too much firm-specific risk. Some weaken incentives. Some are administratively clumsy. Some work well only in certain kinds of company.
+
+The point is not to choose one contract for the whole economy.
+
+The point is to notice that contracts determine who benefits from productivity.
+
+Technology creates the surplus.
+
+Institutions assign claims.
+
+A society can therefore experience strong technological progress with weak wage growth for some groups without contradiction. The machine did its part. The bargaining system did another.
 
 The sixth mistake is to assume the labor market adjusts through a single firm.
 
@@ -186,6 +342,38 @@ The agentile labor market may announce itself through missing jobs rather than v
 
 That makes history harder to photograph.
 
+There is another flow worth watching: ownership.
+
+A worker who uses an agent is not necessarily an owner of agentile capital.
+
+Paying twenty dollars a month for software gives access to a service. It is closer to renting a machine than owning the factory that makes the machine. If the service becomes indispensable, the worker may gain productive leverage while also becoming dependent on a supplier.
+
+The distinction matters because ownership creates a different claim on growth.
+
+If the agent platform becomes ten times more profitable, the subscriber does not automatically receive ten times more wealth. The owners of the platform do.
+
+A household can benefit as a consumer and still miss the capital gain.
+
+This is not unique to agents. People rent cloud storage, subscribe to software, buy electricity, and use financial networks they do not own. But as agentic systems take over a larger share of valuable cognitive production, the gap between access and ownership becomes more important.
+
+The household balance sheet becomes part of the labor story.
+
+A worker with retirement assets, diversified equity, a business, or other capital claims participates differently in an automation boom from a worker whose only meaningful asset is future labor income.
+
+Two people can earn the same wage and have very different exposure to the upside.
+
+That is why debates about the labor share can feel abstract while household wealth feels immediate.
+
+The relevant question is not only whether capital earns more.
+
+It is who owns the capital that earns more.
+
+This leads directly into the next chapter.
+
+If the agentile force behaves partly like labor but arrives through assets, services, compute, models, data centers, and networks, then the ownership structure beneath it is not background detail.
+
+It is part of the distribution mechanism.
+
 There is also a conceptual challenge around work performed directly for individuals.
 
 If a household agent spends ten hours comparing services, organizing records, and resolving administrative problems, it has produced something that resembles unpaid household labor transformed into machine service. No worker was displaced because no worker was hired before. Yet the household has gained productive capacity.
@@ -198,7 +386,21 @@ It can also genuinely make people better off by returning time.
 
 The distinction between market production and welfare matters. A parent who spends less time fighting an insurance claim and more time with a child has gained something GDP measures poorly.
 
-The birth of synthetic labor should therefore widen our question beyond jobs.
+And the returned time has a distribution too.
+
+A wealthy household may use agents to amplify already valuable professional work.
+
+A lower-income household may use them to navigate forms, compare bills, write appeals, study for a credential, or avoid paying for advice it could not afford.
+
+The same capability can therefore increase market income for one household and reduce administrative burden for another.
+
+Both are economic gains.
+
+Only one may appear clearly in wages.
+
+This is another reason the employment question is too small.
+
+The birth of synthetic labor should widen our question beyond jobs.
 
 What kinds of human time become available?
 
@@ -214,6 +416,10 @@ Which services become cheap enough to reach people who never had them?
 
 Which communities lose payroll before new activity arrives?
 
+Which workers gain outside options and which become more dependent on a platform?
+
+Which households own the capital stack as well as rent from it?
+
 These questions do not fit on one unemployment chart.
 
 The phrase “wages without workers” points to the oddness at the center of the transition. An agent can perform activity that would once have justified a wage, but the payment goes elsewhere: to a model provider, a cloud, an owner, an energy producer, a software vendor, or the margin of the firm using it.
@@ -222,6 +428,24 @@ The work still has an economic value.
 
 The worker is no longer the necessary vessel through which that value enters production.
 
+That does not mean labor becomes irrelevant.
+
+It means labor is no longer the only scalable carrier of certain kinds of judgment and execution.
+
+The bargaining problem changes accordingly.
+
+Workers bargain over wages.
+
+Firms bargain with vendors.
+
+Households bargain through prices and switching.
+
+Owners receive residual claims.
+
+Governments write tax and benefit rules around all of them.
+
+As agentic production grows, these channels begin to compete over the same new surplus.
+
 This is not the end of wages.
 
-It is the beginning of a bargaining problem over a new source of output.
+It is the beginning of a wider argument about who gets paid when useful work no longer requires a worker to be present.
