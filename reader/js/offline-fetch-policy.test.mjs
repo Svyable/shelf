@@ -53,7 +53,7 @@ assert.equal(policy.classifyRequest('https://other.test/books/demo/ch01.md', {
   sameOrigin: false,
 }), 'other');
 
-assert.equal(policy.responsePlan('shell', true), 'cache-then-network');
+assert.equal(policy.responsePlan('shell', true), 'network-first');
 assert.equal(policy.responsePlan('shell', false), 'network-first');
 assert.equal(policy.responsePlan('external', true), 'cache-then-network');
 assert.equal(policy.responsePlan('external', false), 'network-first');

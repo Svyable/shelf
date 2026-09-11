@@ -89,6 +89,14 @@ assert.equal(book.rightsFile, '[RIGHTS.md](RIGHTS.md)');
 assert.deepEqual(book.authorLinks, []);
 assert.deepEqual(book.externalLinks, []);
 
+const singularAuthor = parseBookReadme(
+  `# Shelf Book\n\n| **Author** | Sven Hardy Benson |\n| **Status** | Published |\n`,
+  'shelf-book'
+);
+assert.equal(singularAuthor.authors, 'Sven Hardy Benson');
+assert.equal(singularAuthor.authorsRaw, 'Sven Hardy Benson');
+assert.equal(singularAuthor.published, true);
+
 const pub = parseBookReadme(
   `# T\n\n| **Status** | Published |\n| **Publisher** | House |\n| **Edition** | Second |\n| **ISBN** | 978-1 |\n`,
   't'

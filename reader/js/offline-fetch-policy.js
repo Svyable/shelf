@@ -47,7 +47,12 @@
   }
 
   function responsePlan(kind, hasCached = false) {
-    if ((kind === 'shell' || kind === 'external') && hasCached) return 'cache-then-network';
+    // Reader shell files must prefer the network when online. Cache-first shell
+    // delivery can mix generations of ES modules and leave the library stuck on
+    // a stale static shell even though the catalog and published books are fine.
+    // network-first still falls back to the precache when the request fails.
+    if (kind === 'shell') return 'network-first';
+    if (kind === 'external' && hasCached) return 'cache-then-network';
     if (kind === 'publication' && hasCached) return 'network-with-cache-deadline';
     return 'network-first';
   }
