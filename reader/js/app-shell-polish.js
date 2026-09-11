@@ -23,8 +23,42 @@ export function controlLabel(element) {
   ).trim();
 }
 
+function cleanHomeLabel(value) {
+  return String(value || '').replace(/^Back to\s+/i, '').trim();
+}
+
+export function syncHomeControl(document = globalThis.document) {
+  const logo = document?.getElementById?.('logoBtn');
+  if (!logo) return '';
+  const imprint = document?.defaultView?.__IMPRINT || globalThis.window?.__IMPRINT;
+  const home = cleanHomeLabel(
+    imprint?.homeLabel
+    || imprint?.shortName
+    || logo.dataset.readerHome
+    || controlLabel(logo)
+    || 'Library'
+  );
+  logo.dataset.readerHome = home;
+  const stage = document.body?.dataset.stage || 'library';
+  const label = stage === 'library' ? home : `Back to ${home}`;
+  if (logo.getAttribute('aria-label') !== label) logo.setAttribute('aria-label', label);
+  if (logo.getAttribute('title') !== label) logo.setAttribute('title', label);
+  return label;
+}
+
+export function syncBookmarkControl(document = globalThis.document) {
+  const bookmark = document?.getElementById?.('bookmarkBtn');
+  if (!bookmark) return false;
+  const pressed = bookmark.classList.contains('active');
+  const value = String(pressed);
+  if (bookmark.getAttribute('aria-pressed') !== value) bookmark.setAttribute('aria-pressed', value);
+  return pressed;
+}
+
 export function decorateAppShell(document = globalThis.document) {
   if (!document?.documentElement) return { decorated: 0 };
+  syncHomeControl(document);
+  syncBookmarkControl(document);
   let decorated = 0;
   for (const selector of LABELED_CONTROLS) {
     const element = document.querySelector(selector);
@@ -54,8 +88,14 @@ export function watchAppShellControls(document = globalThis.document) {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['aria-label', 'title'],
+    attributeFilter: ['aria-label', 'aria-pressed', 'title', 'class'],
   }));
+  if (document.body) {
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['data-stage'],
+    });
+  }
   controlObserver = observer;
   return observer;
 }
