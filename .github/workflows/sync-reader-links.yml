@@ -8,8 +8,6 @@ on:
       - "imprint.json"
       - "scripts/sync-reader-links.py"
       - ".github/workflows/sync-reader-links.yml"
-  schedule:
-    - cron: "23 8 * * *"
   workflow_dispatch:
 
 permissions:
@@ -21,7 +19,7 @@ concurrency:
 
 jobs:
   sync:
-    if: github.actor != 'github-actions[bot]' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
