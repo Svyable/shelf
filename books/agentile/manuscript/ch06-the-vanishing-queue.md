@@ -185,3 +185,95 @@ Agents can make this discrimination economical. They can gather the evidence tha
 The best queue is not always no queue.
 
 It is a queue whose delay corresponds to the cost of being wrong.
+
+That principle changes how an agentile organization should measure waiting.
+
+Average response time is too crude.
+
+A one-minute delay in acknowledging a customer message may be waste. A one-day delay before wiring fifty million dollars may be prudence. A six-week wait for a routine license may be institutional failure. A six-week public-comment period may be part of legitimacy.
+
+The queue needs a reason code.
+
+Waiting for capacity.
+
+Waiting for evidence.
+
+Waiting for another party.
+
+Waiting for a legal requirement.
+
+Waiting for deliberate reflection.
+
+Waiting because nobody owns the problem.
+
+These are economically different forms of latency.
+
+Once agents can observe workflows continuously, organizations will be able to distinguish them more clearly. That is an opportunity and a trap.
+
+The opportunity is to remove dead waiting: cases that sit untouched, approvals that wait for a meeting, information that has not been gathered, reminders that no one remembered to send. The trap is to turn every remaining pause into a metric violation.
+
+A system that punishes all delay will teach people to decide before they understand.
+
+This is especially dangerous when the agent can make the premature decision look complete. The file is organized. The prose is polished. The supporting evidence is summarized. The recommendation has confidence scores. The appearance of readiness arrives before the institution has actually earned confidence.
+
+One of management's future tasks will be defending useful delay from automated impatience.
+
+There is an analogy to manufacturing. A factory does not improve by forcing every machine to run at full speed all the time. Buffers, maintenance windows, quality checks, and slack can make the whole system more reliable. The same will be true of cognitive production. Some idle capacity is resilience. Some second looks are quality control. Some unanswered questions should remain unanswered until the evidence improves.
+
+Cheap agents make continuous motion possible.
+
+They do not make continuous motion wise.
+
+The distinction becomes even sharper when agents create tasks for other agents. A research agent discovers fifty plausible follow-up questions. A coding agent opens fifteen improvement tickets. A compliance agent identifies two hundred possible policy deviations. A sales agent generates a personalized sequence for every dormant lead.
+
+Each subsystem is locally productive.
+
+Together they can manufacture an organization-sized denial-of-service attack against their own colleagues.
+
+This is the internal version of spam.
+
+The solution is not simply better prioritization after the work has been generated. It is admission control before the work exists.
+
+Should this task be created?
+
+What is the expected value?
+
+What scarce downstream resource will it consume?
+
+Does another task dominate it?
+
+What happens if we do nothing?
+
+Human organizations ask these questions inconsistently because asking them costs time. Agents can make the discipline cheaper too.
+
+A good agentile workflow therefore has two intelligences.
+
+One intelligence knows how to act.
+
+The other knows when not to create an action at all.
+
+That second intelligence may become more valuable as the first becomes abundant.
+
+The old prestige hierarchy favored production. The person who wrote the report, closed the case, built the feature, or completed the analysis had done visible work. In an agentile organization, refusing low-value work can create more value than completing it cheaply.
+
+This is a cultural change as much as a technical one.
+
+If management rewards agents and employees for activity volume, the system will generate activity. If it rewards solved problems, prevented errors, customer outcomes, and preserved optionality, the queue will look different.
+
+The economy of waiting becomes an economy of admission.
+
+Who is allowed to create work for whom?
+
+Which requests deserve scarce attention?
+
+What proof earns priority?
+
+Which delays are defects and which are protections?
+
+Those are not minor operating questions.
+
+They determine whether cheap agency produces abundance or congestion.
+
+The queue is not dying.
+
+It is becoming designed.
