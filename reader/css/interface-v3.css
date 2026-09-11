@@ -166,16 +166,9 @@ html[data-bookself-role="desk"] .library-hero::before { content: "DESK · WORK I
   width: min(13.5rem, 100%);
 }
 
+/* The whole book cover is already the affordance; a separate Open pill is redundant. */
 .volume-open {
-  min-width: 4.2rem;
-  padding: .32rem .55rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--bg-primary) 54%, transparent);
-  color: var(--text-primary);
-  text-align: center;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  display: none;
 }
 
 .empty-shelf,
