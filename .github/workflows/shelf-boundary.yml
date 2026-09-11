@@ -1,0 +1,38 @@
+name: Shelf ownership boundary
+
+on:
+  pull_request:
+    paths:
+      - "books/**"
+      - "catalog.json"
+      - "README.md"
+      - "imprint.json"
+      - "reader/**"
+      - "scripts/sync-ui.sh"
+      - "scripts/check-shelf-boundary.py"
+      - ".github/workflows/shelf-boundary.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "books/**"
+      - "catalog.json"
+      - "README.md"
+      - "imprint.json"
+      - "reader/**"
+      - "scripts/sync-ui.sh"
+      - "scripts/check-shelf-boundary.py"
+      - ".github/workflows/shelf-boundary.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Shelf
+        uses: actions/checkout@v4
+      - name: Verify Shelf publication and Reader ownership boundary
+        run: python3 scripts/check-shelf-boundary.py
