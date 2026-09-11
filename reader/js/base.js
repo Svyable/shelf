@@ -235,19 +235,20 @@ export async function fileExists(relativePath) {
 async function existingUrl(relativePath) {
   const url = fileUrl(relativePath);
   return existenceCache.load(url, async () => {
-    const res = await fetch(url, { method: 'GET', cache: 'no-cache' });
-    return res.ok ? url : null;
+    const head = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+    if (head.ok) return url;
+    if (head.status !== 405 && head.status !== 501) return null;
+    const get = await fetch(url, { method: 'GET', cache: 'no-cache' });
+    return get.ok ? url : null;
   });
 }
 
 export async function firstExisting(relativePaths) {
-  for (const path of relativePaths) {
-    try {
-      const url = await existingUrl(path);
-      if (url) return url;
-    } catch {
-      // Transient probe failures stay retryable and do not block later candidates.
-    }
+  const paths = Array.isArray(relativePaths) ? relativePaths.filter(Boolean) : [];
+  if (!paths.length) return null;
+  const settled = await Promise.allSettled(paths.map((path) => existingUrl(path)));
+  for (const row of settled) {
+    if (row.status === 'fulfilled' && row.value) return row.value;
   }
   return null;
 }
