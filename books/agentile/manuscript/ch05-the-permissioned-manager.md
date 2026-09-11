@@ -146,13 +146,23 @@ The model may be capable of excellent judgment and still be given no power to ex
 
 Capability and authority are separate variables.
 
-This separation is easy to miss because software has trained us to equate intelligence with usefulness.
+The separation sounds obvious when stated plainly. It becomes slippery in practice because capability is exciting and authority is boring.
+
+A demonstration shows the agent completing a task.
+
+A production system has to decide whether the agent should be allowed to complete the task at 2:13 a.m. for an unfamiliar customer using stale data after a supplier changed its terms.
+
+The demonstration asks, can it?
+
+Management asks, under what circumstances may it?
+
+Those are different questions.
 
 A spreadsheet does not need authority. It calculates.
 
 A search engine does not need permission to alter the source it returns.
 
-A chatbot can remain safely advisory because the user performs the consequential act.
+A chatbot can remain advisory because the user performs the consequential act.
 
 An agent closes the loop.
 
@@ -188,9 +198,7 @@ Managerial responsibility asks who was supposed to prevent the mistake.
 
 Agentile organizations need all four.
 
-That is why current standards work around agents is converging on identity, authorization, auditing, and control rather than treating autonomy as a purely model-quality problem.
-
-The basic lesson is old.
+Current standards work around agents is converging on identity, authorization, auditing, and control because autonomy is not only a model-quality problem. It is a question of attributable authority.
 
 Authority without attribution is hard to govern.
 
@@ -247,6 +255,96 @@ It is what makes scalable delegation believable.
 Without it, every failure becomes archaeology.
 
 With it, the organization can learn.
+
+There is a second property that deserves to sit beside identity: reversibility.
+
+Organizations already treat reversible and irreversible decisions differently, even when they do not use those words.
+
+Changing the order of agenda items is reversible.
+
+Sending a draft to an internal colleague is mostly reversible.
+
+Publishing a statement is harder to reverse because copies spread.
+
+Transferring money can sometimes be reversed, but not reliably.
+
+Deleting data may be reversible if backups exist.
+
+Signing a contract may bind the company for years.
+
+Administering medicine, firing an employee, shipping a dangerous component, filing a tax return, or making a public accusation can create consequences that no undo button restores.
+
+An agentile firm should care not only about what an agent can do, but about the reversibility of the consequence.
+
+This creates a useful management heuristic.
+
+Low-consequence, highly reversible actions can tolerate more autonomy.
+
+High-consequence, weakly reversible actions deserve tighter gates.
+
+The heuristic is not a law. A million individually reversible actions can create a large aggregate risk. A tiny irreversible act can be harmless. But reversibility gives managers a better vocabulary than “AI risk” because it attaches control to the work.
+
+Imagine three agents.
+
+The first rearranges an internal project plan.
+
+The second sends personalized discount offers to ten thousand customers.
+
+The third moves cash between bank accounts.
+
+All three may use the same underlying model.
+
+Their permission architecture should not be the same.
+
+The difference lies in blast radius.
+
+Blast radius is the size of the world an action can change before a person notices.
+
+A human employee naturally limits some blast radius because humans are slow. One person can send only so many emails, review only so many accounts, approve only so many refunds, and make only so many mistakes in an hour.
+
+Agents remove part of that natural throttle.
+
+The error does not have to become more intelligent to become more expensive.
+
+It only has to repeat faster.
+
+A wrong judgment made once is a mistake.
+
+A wrong judgment encoded into a workflow is a policy.
+
+That is why rate limits, spending caps, batch sizes, sample review, staged rollouts, and circuit breakers belong in the management conversation. They are not merely security controls. They are ways of limiting delegated consequence while the organization learns whether the system deserves more trust.
+
+This also explains why permissions should often expand through experience rather than arrive fully formed.
+
+A new employee rarely receives every sensitive credential on the first morning. Trust accumulates. The person demonstrates judgment, learns the institution, and earns broader authority.
+
+Agent systems can follow the same pattern.
+
+Start read-only.
+
+Then draft-only.
+
+Then act on reversible internal tasks.
+
+Then act externally within narrow thresholds.
+
+Then widen the thresholds as evidence accumulates.
+
+The progression sounds conservative.
+
+It can be faster than blanket human approval because trust is attached to measured behavior rather than to a permanent category called “human.”
+
+The interesting unit becomes not human versus machine.
+
+It becomes a principal with a history of reliable action under a defined mandate.
+
+That history can support a new kind of organizational credit limit.
+
+Not money borrowed.
+
+Consequence borrowed.
+
+The agent is allowed to create a bounded amount of change before another layer of authority must participate.
 
 This is where the economics get interesting.
 
@@ -394,6 +492,82 @@ Review must change the system.
 
 The loop is managerial, not merely technical.
 
+The organization also accumulates something like permission debt.
+
+Technical debt appears when a system works today by making tomorrow harder. Permission debt appears when authority is granted for a temporary reason and never cleaned up.
+
+A pilot receives a broad credential because the team is small.
+
+The pilot becomes a product.
+
+The product gains customers.
+
+The agent gains more tools.
+
+A second team copies the workflow.
+
+Months later nobody can explain why one service account can read the customer database, modify billing, send email, and create new credentials.
+
+Nothing is broken.
+
+That is what makes the debt dangerous.
+
+The permission graph grows faster than the organization's understanding of it.
+
+Human firms already suffer from this problem. Employees change roles while old access remains. Contractors finish projects but credentials linger. Shared accounts blur attribution. Emergency exceptions become permanent.
+
+Agents can accelerate the accumulation because software delegation is cheap to copy.
+
+The same successful agent gets cloned into another workflow with yesterday's authority envelope attached.
+
+A useful operating discipline is therefore subtraction.
+
+What can this agent stop being allowed to do?
+
+Which permission was used last month?
+
+Which tool is only present because the first prototype needed it?
+
+Which credential could become task-specific instead of permanent?
+
+Which approval can be narrowed from “everything in finance” to “approved vendors under this threshold”?
+
+The mature agentile firm will not only provision authority.
+
+It will continuously retire authority.
+
+That is the difference between a permission graph and a permission landfill.
+
+Separation of duties becomes more important for the same reason.
+
+Organizations learned long ago not to let one person create a vendor, approve the invoice, and issue the payment without oversight. The rule is not an insult to the employee. It is an architecture that limits fraud and mistake.
+
+Agents do not remove the logic.
+
+They can accidentally defeat it.
+
+A single orchestration system may create the vendor, draft the approval, and call the payment tool because all three steps are technically convenient.
+
+From the model's perspective, the workflow is coherent.
+
+From the institution's perspective, three independent controls have collapsed into one software principal.
+
+This is a subtle form of centralization.
+
+The org chart may show several departments.
+
+The permission graph may show one agent with the ability to move through all of them.
+
+That is why the graph deserves to be treated as a management artifact in its own right.
+
+It shows where action can originate, where it can propagate, where it must stop, and where independent judgment still exists.
+
+The organization chart shows reporting relationships.
+
+The permission graph shows consequence relationships.
+
+In a heavily agentic firm, the second may explain operational power better than the first.
+
 This also changes who can manage.
 
 Historically, management often required proximity to the work because the manager needed to observe, coordinate, and interpret what employees were doing. Digital systems weakened that requirement. Agents may weaken it further by making operational state easier to summarize and routine coordination cheaper.
@@ -536,6 +710,8 @@ Enough escalation to admit uncertainty.
 
 Enough revocation to stop the system when conditions change.
 
+Enough reversibility that ordinary errors do not become institutional events.
+
 These sound like software features.
 
 They are becoming features of the firm.
@@ -546,10 +722,14 @@ The permission graph shows where action can originate.
 
 In an agentile economy, the second map may become more important.
 
-The manager’s question changes with it.
+The manager's question changes with it.
 
 Not: How many people report to me?
 
 Who, and what, can act on my behalf?
+
+How far can the action travel?
+
+How quickly can I stop it?
 
 And under what terms?
