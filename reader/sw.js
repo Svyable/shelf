@@ -3,7 +3,7 @@ importScripts('./js/offline-fetch-policy.js');
 importScripts('./js/offline-storage-budget.js');
 importScripts('./js/offline-shell-install.js');
 
-const CACHE = 'obb-shell-v103';
+const CACHE = 'obb-shell-v104';
 const KATEX_CDN = 'https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js';
 const SHELL = [
   './',
@@ -213,12 +213,17 @@ const warmBudget = self.BookselfOfflineStorageBudget.createBudgetMonitor({
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => self.BookselfOfflineShellInstall.installShell(
-      cache,
-      SHELL,
-      CORE_SHELL,
-      { concurrency: 4 }
-    ))
+    caches.open(CACHE)
+      .then((cache) => self.BookselfOfflineShellInstall.installShell(
+        cache,
+        SHELL,
+        CORE_SHELL,
+        { concurrency: 4 }
+      ))
+      // A Reader shell update is a coherence fix, not a background enhancement.
+      // Activate it immediately so a stale controller cannot keep serving a
+      // mixed generation of modules after the fresh shell has installed.
+      .then(() => self.skipWaiting())
   );
 });
 
