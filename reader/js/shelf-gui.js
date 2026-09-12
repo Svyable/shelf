@@ -9,6 +9,11 @@ function libraryStage() {
   return document.body.dataset.stage === 'library';
 }
 
+function searchShortcutLabel() {
+  const platform = String(navigator.platform || navigator.userAgent || '').toLowerCase();
+  return platform.includes('mac') ? '⌘K' : 'Ctrl K';
+}
+
 function installSearchControl() {
   const bar = document.querySelector('.library-bar');
   const input = $('librarySearch');
@@ -16,8 +21,10 @@ function installSearchControl() {
 
   bar.setAttribute('role', 'search');
   bar.setAttribute('aria-label', 'Shelf controls');
-  input.setAttribute('aria-label', 'Search the shelf');
+  input.setAttribute('aria-label', 'Search titles and passages');
+  input.setAttribute('aria-controls', 'libraryHits stacks shelf');
   input.setAttribute('enterkeyhint', 'search');
+  input.placeholder = 'Search titles and passages';
 
   const control = document.createElement('div');
   control.className = 'library-search-control';
@@ -33,7 +40,8 @@ function installSearchControl() {
 
   const key = document.createElement('kbd');
   key.className = 'library-search-key';
-  key.textContent = '/';
+  key.textContent = searchShortcutLabel();
+  key.title = 'Focus search';
   key.setAttribute('aria-hidden', 'true');
 
   input.replaceWith(control);
@@ -43,6 +51,12 @@ function installSearchControl() {
   if (sort) {
     sort.setAttribute('role', 'group');
     sort.setAttribute('aria-label', 'Sort publications');
+  }
+
+  const hits = $('libraryHits');
+  if (hits) {
+    hits.setAttribute('aria-label', 'Library search results');
+    hits.setAttribute('aria-live', 'polite');
   }
 }
 
@@ -97,6 +111,24 @@ function syncVolumes() {
   return volumes.length;
 }
 
+function plural(count, one, many = `${one}s`) {
+  return count === 1 ? `1 ${one}` : `${count} ${many}`;
+}
+
+function searchResultCount(hits) {
+  if (!hits || hits.hidden) return 0;
+  return [...hits.querySelectorAll('li')].filter((item) => item.querySelector('a')).length;
+}
+
+function searchMessage(hits) {
+  if (!hits || hits.hidden) return '';
+  return [...hits.querySelectorAll('li')]
+    .filter((item) => !item.querySelector('a'))
+    .map((item) => item.textContent.trim())
+    .filter(Boolean)
+    .join(' ');
+}
+
 function syncStatus() {
   const status = $('shelfStatus');
   const search = $('librarySearch');
@@ -106,16 +138,42 @@ function syncStatus() {
   document.body.classList.toggle('shelf-searching', Boolean(query));
 
   const hits = $('libraryHits');
-  const hitCount = hits && !hits.hidden ? hits.querySelectorAll('li').length : 0;
+  const hitCount = searchResultCount(hits);
+  const message = searchMessage(hits);
   const volumeCount = syncVolumes();
 
-  if (query) {
-    status.textContent = hitCount === 1
-      ? `1 result for “${query}”`
-      : `${hitCount} results for “${query}”`;
-  } else {
-    status.textContent = volumeCount === 1 ? '1 publication' : `${volumeCount} publications`;
+  if (!query) {
+    status.textContent = `${plural(volumeCount, 'publication')} · ${searchShortcutLabel()} to search`;
+    return;
   }
+
+  if (query.length < 2) {
+    status.textContent = `${plural(volumeCount, 'title match')} · type 2+ characters to search passages`;
+    return;
+  }
+
+  if (hitCount > 0) {
+    status.textContent = `${plural(hitCount, 'result')} for “${query}”`;
+    return;
+  }
+
+  if (hits?.dataset.searchState === 'loading' || /^Searching titles and passages/i.test(message)) {
+    const titleLead = volumeCount ? `${plural(volumeCount, 'title match')} · ` : '';
+    status.textContent = `${titleLead}searching passages…`;
+    return;
+  }
+
+  if (hits?.dataset.searchState === 'error' || /could not be loaded/i.test(message)) {
+    status.textContent = `${plural(volumeCount, 'title match')} · passage search unavailable`;
+    return;
+  }
+
+  if (message) {
+    status.textContent = `No title or passage results for “${query}”`;
+    return;
+  }
+
+  status.textContent = `Searching titles and passages for “${query}”…`;
 }
 
 function syncLibraryUi() {
@@ -163,7 +221,7 @@ function installObservers() {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['class', 'hidden'],
+    attributeFilter: ['class', 'hidden', 'data-search-state'],
   });
 
   $('librarySearch')?.addEventListener('input', () => {
