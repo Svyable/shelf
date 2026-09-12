@@ -84,7 +84,7 @@ These are the deliberately released editions on Sven Hardy Benson’s Shelf. Pub
 | [**Neuralase**](books/neuralase/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/neuralase/) |
 | [**Who Taught America?**](books/who-taught-america/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/who-taught-america/) |
 | [**Renegade Code**](books/renegade-code/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/renegade-code/) |
-| [**Deceptatron: Propaganda in the 2030s**](books/deceptatron/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/deceptatron/) |
+| [**Deceptatron**](books/deceptatron/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/deceptatron/) |
 
 ## What Shelf means
 

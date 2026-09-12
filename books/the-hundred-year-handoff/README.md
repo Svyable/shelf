@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| **Author** | Sven Hardy Benson |
+| **Authors** | Sven Hardy Benson |
 | **Status** | Drafting |
 | **Chapters** | 7 of 21 drafted |
 | **Drafting Source** | Sven Hardy Benson’s Desk |

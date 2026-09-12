@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Author** | Sven Hardy Benson |
+| **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 25 of 25 |
 | **Length** | >90K-word conservative text-size proxy; Desk 65K+ full-book standard cleared |

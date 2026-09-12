@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Author** | Sven Hardy Benson |
+| **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 8 of 8 + prologue + epilogue + back matter |
 | **Draft date** | September 3, 2026 |

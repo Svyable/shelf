@@ -1,12 +1,14 @@
 # Artificial Identity
 
+*The Other You Machines Are Building*
+
 <!-- bookself-reader-links:start -->
 **Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/artificial-identity/)
 <!-- bookself-reader-links:end -->
 
 | | |
 |---|---|
-| **Author**    | Sven Hardy Benson |
+| **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 4 of 24 drafted |
 

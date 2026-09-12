@@ -1,12 +1,14 @@
 # Neuralase
 
+*Transformer Loops and the Intelligence of the Second Pass*
+
 <!-- bookself-reader-links:start -->
 **Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/neuralase/)
 <!-- bookself-reader-links:end -->
 
 | | |
 |---|---|
-| **Author** | Sven Hardy Benson |
+| **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Format** | Book |
 | **Publisher** | Svyable |

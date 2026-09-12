@@ -1,5 +1,7 @@
 # Public Pressure
 
+*AI, Anger, and the Revolt Against Institutions That Decide for Us*
+
 <!-- bookself-reader-links:start -->
 **Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/public-pressure/)
 <!-- bookself-reader-links:end -->

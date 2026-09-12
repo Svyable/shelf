@@ -1,5 +1,7 @@
 # Commit
 
+*How Git Became the Memory of Software—and What Comes Next*
+
 <!-- bookself-reader-links:start -->
 **Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/commit/)
 <!-- bookself-reader-links:end -->
