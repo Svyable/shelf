@@ -8,9 +8,8 @@ on:
       - "README.md"
       - "imprint.json"
       - "reader/**"
-      - "scripts/sync-ui.sh"
-      - "scripts/check-shelf-boundary.py"
-      - ".github/workflows/shelf-boundary.yml"
+      - "scripts/**"
+      - ".github/workflows/**"
   push:
     branches:
       - main
@@ -20,9 +19,8 @@ on:
       - "README.md"
       - "imprint.json"
       - "reader/**"
-      - "scripts/sync-ui.sh"
-      - "scripts/check-shelf-boundary.py"
-      - ".github/workflows/shelf-boundary.yml"
+      - "scripts/**"
+      - ".github/workflows/**"
   workflow_dispatch:
 
 permissions:
@@ -34,5 +32,16 @@ jobs:
     steps:
       - name: Check out Shelf
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Verify Shelf publication and Reader ownership boundary
         run: python3 scripts/check-shelf-boundary.py
+      - name: Verify release provenance for pull request changes
+        if: github.event_name == 'pull_request'
+        run: python3 scripts/check-release-provenance.py --changed-from "${{ github.event.pull_request.base.sha }}"
+      - name: Verify release provenance for pushed changes
+        if: github.event_name == 'push'
+        run: python3 scripts/check-release-provenance.py --changed-from "${{ github.event.before }}"
+      - name: Verify existing release provenance
+        if: github.event_name == 'workflow_dispatch'
+        run: python3 scripts/check-release-provenance.py
