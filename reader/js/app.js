@@ -1,6 +1,8 @@
 // Shelf owns the public library and its release state. The heavy Reader core is
 // local to this repository and is loaded only when a publication is opened.
-// Bookself remains the upstream framework source, never a production runtime.
+// Library search reuses the shared catalog/search modules without booting the
+// full reading surface. Bookself remains the upstream framework source, never a
+// production runtime.
 
 const readerCoreUrl = new URL('./app-core.js?v=20260912-cover-1', import.meta.url).href;
 const readmeUrl = new URL('../../README.md', import.meta.url);
@@ -9,10 +11,13 @@ const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v5';
 
 let readerCorePromise = null;
 let readerCoreLoaded = false;
+let librarySearchModulesPromise = null;
+let librarySearchEpoch = 0;
 let fastEntries = [];
 let recentRanks = new Map();
 let recentRanksPromise = null;
 let sortMode = 'title';
+const searchBookCache = new Map();
 
 const $ = (id) => document.getElementById(id);
 
@@ -137,6 +142,125 @@ function ensureReaderCore() {
   return readerCorePromise;
 }
 
+function ensureLibrarySearchModules() {
+  if (librarySearchModulesPromise) return librarySearchModulesPromise;
+  librarySearchModulesPromise = Promise.all([
+    import('./catalog.js'),
+    import('./search.js'),
+    import('./router.js'),
+  ]).then(([catalog, search, router]) => ({
+    parseBookReadme: catalog.parseBookReadme,
+    searchLibrary: search.searchLibrary,
+    coverHash: router.coverHash,
+    readHash: router.readHash,
+  }));
+  return librarySearchModulesPromise;
+}
+
+async function loadSearchBook(entry, parseBookReadme) {
+  if (searchBookCache.has(entry.slug)) return searchBookCache.get(entry.slug);
+  const pending = (async () => {
+    const response = await fetch(new URL(`../../books/${entry.slug}/README.md`, import.meta.url));
+    if (!response.ok) throw new Error(`Search metadata failed (${response.status})`);
+    const meta = parseBookReadme(await response.text(), entry.slug);
+    const chapters = await Promise.all((meta.contents || []).map(async (chapter) => {
+      try {
+        const chapterResponse = await fetch(new URL(`../../books/${entry.slug}/${chapter.file}`, import.meta.url));
+        if (!chapterResponse.ok) throw new Error(`Chapter request failed (${chapterResponse.status})`);
+        return { ...chapter, markdown: await chapterResponse.text(), missing: false };
+      } catch {
+        return { ...chapter, markdown: '', missing: true };
+      }
+    }));
+    return { ...meta, chapters };
+  })();
+  searchBookCache.set(entry.slug, pending);
+  try {
+    return await pending;
+  } catch (error) {
+    searchBookCache.delete(entry.slug);
+    throw error;
+  }
+}
+
+async function loadSearchBooks(entries, parseBookReadme) {
+  const books = new Array(entries.length);
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(5, entries.length) }, async () => {
+    while (next < entries.length) {
+      const index = next++;
+      try {
+        books[index] = await loadSearchBook(entries[index], parseBookReadme);
+      } catch (error) {
+        console.warn('Skip search publication', entries[index].slug, error);
+      }
+    }
+  }));
+  return books.filter(Boolean);
+}
+
+function renderLibrarySearchHits(hits, modules) {
+  const box = $('libraryHits');
+  if (!box) return;
+  box.innerHTML = '';
+  box.dataset.searchState = hits.length ? 'ready' : 'empty';
+  box.hidden = false;
+  if (!hits.length) {
+    const li = document.createElement('li');
+    li.className = 'search-empty';
+    li.textContent = 'No titles or passages.';
+    box.appendChild(li);
+    return;
+  }
+  for (const hit of hits) {
+    const li = document.createElement('li');
+    li.dataset.searchKind = hit.chapter ? 'passage' : 'title';
+    const a = document.createElement('a');
+    const slug = hit.book.slug;
+    a.href = hit.chapter
+      ? modules.readHash(slug, hit.chapter, hit.offset || 0)
+      : modules.coverHash(slug);
+    const detail = hit.chapter
+      ? [hit.title, hit.snippet].filter(Boolean).join(' — ')
+      : (hit.snippet || hit.title);
+    a.innerHTML = `<strong>${escapeHtml(hit.book.title)}</strong><em>${escapeHtml(detail)}</em>`;
+    const warm = () => ensureReaderCore().catch(() => {});
+    a.addEventListener('pointerdown', warm, { once: true, passive: true });
+    a.addEventListener('click', warm, { once: true });
+    li.appendChild(a);
+    box.appendChild(li);
+  }
+}
+
+async function runFastLibrarySearch(value) {
+  const box = $('libraryHits');
+  if (!box || readerCoreLoaded) return;
+  const query = String(value || '').trim();
+  const epoch = ++librarySearchEpoch;
+  if (query.length < 2) {
+    box.hidden = true;
+    box.innerHTML = '';
+    delete box.dataset.searchState;
+    return;
+  }
+
+  box.hidden = false;
+  box.dataset.searchState = 'loading';
+  box.innerHTML = '<li class="search-empty">Searching titles and passages…</li>';
+
+  try {
+    const modules = await ensureLibrarySearchModules();
+    const books = await loadSearchBooks(fastEntries.slice(), modules.parseBookReadme);
+    if (epoch !== librarySearchEpoch || String($('librarySearch')?.value || '').trim() !== query) return;
+    renderLibrarySearchHits(modules.searchLibrary(books, query), modules);
+  } catch (error) {
+    if (epoch !== librarySearchEpoch) return;
+    console.error('Shelf library search failed', error);
+    box.dataset.searchState = 'error';
+    box.innerHTML = '<li class="search-empty">Passage search could not be loaded. Title filtering still works.</li>';
+  }
+}
+
 function volumeElement(entry) {
   const a = document.createElement('a');
   a.className = 'volume';
@@ -173,7 +297,9 @@ function renderFastShelf() {
   $('stacks')?.replaceChildren();
   shelf.replaceChildren(...entries.map(volumeElement));
   empty.hidden = entries.length > 0;
-  empty.textContent = fastEntries.length ? 'No matching publications.' : 'Loading publications…';
+  empty.textContent = query
+    ? 'No title matches. Passage matches appear above.'
+    : (fastEntries.length ? 'No matching publications.' : 'Loading publications…');
 }
 
 async function ensureRecentRanks() {
@@ -200,7 +326,13 @@ function bindFastLibraryControls() {
   const search = $('librarySearch');
   if (search && !search.dataset.fastShelfBound) {
     search.dataset.fastShelfBound = 'true';
-    search.addEventListener('input', renderFastShelf);
+    const prepare = () => ensureLibrarySearchModules().catch(() => {});
+    search.addEventListener('pointerdown', prepare, { once: true, passive: true });
+    search.addEventListener('focus', prepare, { once: true });
+    search.addEventListener('input', () => {
+      renderFastShelf();
+      if (!readerCoreLoaded) runFastLibrarySearch(search.value);
+    });
   }
   document.querySelectorAll('[data-sort]').forEach((button) => {
     if (button.dataset.fastShelfBound) return;
@@ -223,6 +355,8 @@ async function refreshFastCatalog() {
     fastEntries = entries;
     saveFastCatalog(entries);
     renderFastShelf();
+    const activeQuery = String($('librarySearch')?.value || '').trim();
+    if (!readerCoreLoaded && activeQuery.length >= 2) runFastLibrarySearch(activeQuery);
   } catch (error) {
     console.error('Shelf fast catalog failed', error);
     if (!fastEntries.length && $('emptyShelf')) {
