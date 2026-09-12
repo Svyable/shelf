@@ -1,4 +1,4 @@
-const CACHE = 'sven-shelf-reader-v108';
+const CACHE = 'sven-shelf-reader-v109';
 const READER_PREFIX = new URL('./', self.location.href).pathname;
 const REPO_PREFIX = READER_PREFIX.replace(/reader\/?$/, '');
 const CORE = [
@@ -43,8 +43,8 @@ async function put(request, response) {
 
 async function cached(request, { ignoreSearch = false } = {}) {
   const cache = await caches.open(CACHE);
-  return cache.match(request, { ignoreSearch })
-    || caches.match(request, { ignoreSearch });
+  const hit = await cache.match(request, { ignoreSearch });
+  return hit || caches.match(request, { ignoreSearch });
 }
 
 async function networkAndCache(request) {
