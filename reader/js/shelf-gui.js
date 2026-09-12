@@ -1,3 +1,5 @@
+import './shelf-library-sort.js';
+
 /* Progressive enhancement for the Shelf/library surface.
    Core reading, routing, and catalog behavior remains owned by app.js. */
 
