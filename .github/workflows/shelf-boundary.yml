@@ -1,5 +1,7 @@
 name: Shelf ownership boundary
 
+# `desk/**` is watched deliberately: a public Shelf must never regain the
+# authoring application that older whole-tree Bookself syncs used to copy here.
 on:
   pull_request:
     paths:
