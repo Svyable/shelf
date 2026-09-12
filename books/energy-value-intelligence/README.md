@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Author**    | Sven Hardy Benson |
+| **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 22 of 22 drafted |
 

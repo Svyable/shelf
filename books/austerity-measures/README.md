@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Author** | Sven Hardy Benson |
+| **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Form** | Short book / narrative nonfiction |
 | **Chapters** | 12 / 12 |

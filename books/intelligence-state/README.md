@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | **Status** | Published |
-| **Author** | Sven Hardy Benson |
+| **Authors** | Sven Hardy Benson |
 | **Publication Surface** | Shelf |
 | **Edition** | First edition · September 2026 |
 | **Chapters** | 17 of 17 + prologue + conclusion |

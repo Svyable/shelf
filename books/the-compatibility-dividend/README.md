@@ -1,5 +1,7 @@
 # The Compatibility Dividend
 
+*How Standards Turn Strangers Into Systems*
+
 <!-- bookself-reader-links:start -->
 **Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/the-compatibility-dividend/)
 <!-- bookself-reader-links:end -->

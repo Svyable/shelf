@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Author**   | Sven Hardy Benson |
+| **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Edition**   | First edition · updated September 6, 2026 |
 | **Drafting Source** | Sven Hardy Benson’s Desk |

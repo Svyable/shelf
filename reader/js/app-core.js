@@ -147,14 +147,14 @@ async function loadBook(slug) {
       }
     })
   );
-  const front = chapters.find((c) => c.id === 'front-matter');
+  const front = chapters.find((c) => /^(?:\d+-)?front-matter$/.test(c.id));
   if (front) fm = { ...fm, ...parseFrontMatterMeta(front.markdown) };
   const cover = await firstExisting(
     ['cover.png', 'cover.jpg', 'cover.webp', 'cover.jpeg'].map(
       (name) => `books/${slug}/media/${name}`
     )
   );
-  const book = { ...meta, title: fm.title || meta.title, subtitle: fm.subtitle, year: fm.year, cover, chapters };
+  const book = { ...meta, title: meta.title || fm.title, subtitle: meta.subtitle || fm.subtitle, year: fm.year, cover, chapters };
   book.revision = await fetchRevision(slug);
   app.books.set(slug, book);
   return book;

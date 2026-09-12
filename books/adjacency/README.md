@@ -1,12 +1,14 @@
 # Adjacency
 
+*How the Vector Space Is Revolutionizing Discovery*
+
 <!-- bookself-reader-links:start -->
 **Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/adjacency/)
 <!-- bookself-reader-links:end -->
 
 | | |
 |---|---|
-| **Author**    | Sven Hardy Benson |
+| **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 25 of 25 drafted |
 | **Edition**   | Second edition |

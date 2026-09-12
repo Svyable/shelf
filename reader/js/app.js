@@ -2,10 +2,10 @@
 // local to this repository and is loaded only when a publication is opened.
 // Bookself remains the upstream framework source, never a production runtime.
 
-const readerCoreUrl = new URL('./app-core.js?v=20260911-local-1', import.meta.url).href;
+const readerCoreUrl = new URL('./app-core.js?v=20260912-cover-1', import.meta.url).href;
 const readmeUrl = new URL('../../README.md', import.meta.url);
 const catalogUrl = new URL('../../catalog.json', import.meta.url);
-const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v3';
+const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v4';
 
 let readerCorePromise = null;
 let readerCoreLoaded = false;
@@ -147,7 +147,8 @@ function volumeElement(entry) {
     <span class="volume-block"></span>
     <span class="volume-cover">
       <span class="volume-title">${escapeHtml(entry.title)}</span>
-      <span class="volume-author">Sven Hardy Benson</span>
+      ${entry.subtitle ? `<span class="volume-subtitle">${escapeHtml(entry.subtitle)}</span>` : ''}
+      <span class="volume-author">${escapeHtml(entry.authors || 'Sven Hardy Benson')}</span>
       <span class="volume-open">Open</span>
     </span>`;
   const warm = () => {
@@ -203,6 +204,25 @@ async function loadRecentRanks() {
   } catch {}
 }
 
+async function enrichFastCatalog(entries) {
+  const { parseBookReadme } = await import('./catalog.js');
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(6, entries.length) }, async () => {
+    while (next < entries.length) {
+      const entry = entries[next++];
+      try {
+        const response = await fetch(new URL(`../../books/${entry.slug}/README.md`, import.meta.url), { cache: 'no-cache' });
+        if (!response.ok) continue;
+        const meta = parseBookReadme(await response.text(), entry.slug);
+        Object.assign(entry, { title: meta.title, subtitle: meta.subtitle, authors: meta.authors });
+      } catch { /* Keep the root catalog available when a book fetch fails. */ }
+    }
+  }));
+  if (fastEntries !== entries) return;
+  saveFastCatalog(entries);
+  renderFastShelf();
+}
+
 async function refreshFastCatalog() {
   try {
     const response = await fetch(readmeUrl, { cache: 'no-cache' });
@@ -212,6 +232,7 @@ async function refreshFastCatalog() {
     fastEntries = entries;
     saveFastCatalog(entries);
     renderFastShelf();
+    enrichFastCatalog(entries).catch((error) => console.warn('Cover metadata unavailable', error));
   } catch (error) {
     console.error('Shelf fast catalog failed', error);
     if (!fastEntries.length && $('emptyShelf')) {

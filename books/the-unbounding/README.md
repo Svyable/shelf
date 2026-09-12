@@ -1,5 +1,7 @@
 # The Unbounding
 
+*When Humans and AI Cross the Event Horizon of Thought*
+
 <!-- bookself-reader-links:start -->
 **Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/the-unbounding/)
 <!-- bookself-reader-links:end -->

@@ -1,4 +1,6 @@
-# Deceptatron: Propaganda in the 2030s
+# Deceptatron
+
+*Propaganda in the 2030s*
 
 <!-- bookself-reader-links:start -->
 **Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/deceptatron/)
@@ -6,7 +8,7 @@
 
 | | |
 |---|---|
-| **Author**    | Sven Hardy Benson |
+| **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 20 of 20 drafted |
 

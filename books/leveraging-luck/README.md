@@ -1,5 +1,7 @@
 # Leveraging Luck
 
+*An Optimistic Guide To Life*
+
 <!-- bookself-reader-links:start -->
 **Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/leveraging-luck/)
 <!-- bookself-reader-links:end -->

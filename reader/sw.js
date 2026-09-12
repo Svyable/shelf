@@ -1,4 +1,4 @@
-const CACHE = 'sven-shelf-reader-v106';
+const CACHE = 'sven-shelf-reader-v107';
 const READER_PREFIX = new URL('./', self.location.href).pathname;
 const REPO_PREFIX = READER_PREFIX.replace(/reader\/?$/, '');
 const CORE = [
