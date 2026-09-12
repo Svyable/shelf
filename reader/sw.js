@@ -1,46 +1,86 @@
-const CACHE = 'sven-shelf-reader-v107';
+const CACHE = 'sven-shelf-reader-v108';
 const READER_PREFIX = new URL('./', self.location.href).pathname;
 const REPO_PREFIX = READER_PREFIX.replace(/reader\/?$/, '');
 const CORE = [
   './',
   './index.html',
   './css/style.css',
-  './css/experience.css',
-  './css/experience-scroll.css',
-  './css/atmosphere.css',
-  './css/gui.css',
   './css/shelf-gui.css',
-  './vendor/marked.min.js',
   './js/app.js',
 ];
 
-function freshRequest(request) {
-  try {
-    return new Request(request, { cache: 'reload' });
-  } catch {
-    return request;
-  }
+function isReaderDocument(url, request) {
+  return request.mode === 'navigate'
+    || url.pathname === READER_PREFIX
+    || url.pathname === `${READER_PREFIX}index.html`;
 }
 
-async function cacheFresh(request) {
-  const response = await fetch(freshRequest(request));
-  if (response?.ok) {
-    try {
-      const cache = await caches.open(CACHE);
-      await cache.put(request, response.clone());
-    } catch {
-      // Storage pressure must never block the live Reader.
-    }
+function isStaticReaderAsset(url) {
+  return url.pathname.startsWith(READER_PREFIX)
+    && !url.pathname.endsWith('/')
+    && !url.pathname.endsWith('/index.html');
+}
+
+function isCatalog(url) {
+  return url.pathname === `${REPO_PREFIX}README.md`
+    || url.pathname === `${REPO_PREFIX}catalog.json`;
+}
+
+function isPublication(url) {
+  return url.pathname.startsWith(`${REPO_PREFIX}books/`);
+}
+
+async function put(request, response) {
+  if (!response?.ok) return response;
+  try {
+    const cache = await caches.open(CACHE);
+    await cache.put(request, response.clone());
+  } catch {
+    // Storage pressure must never block the live Reader.
   }
   return response;
 }
 
-async function cachedFallback(request, ignoreSearch = false) {
-  const current = await caches.open(CACHE);
-  const hit = await current.match(request, { ignoreSearch });
-  if (hit) return hit;
-  // Keep compatibility with the prior Reader cache while this worker rolls out.
-  return caches.match(request, { ignoreSearch });
+async function cached(request, { ignoreSearch = false } = {}) {
+  const cache = await caches.open(CACHE);
+  return cache.match(request, { ignoreSearch })
+    || caches.match(request, { ignoreSearch });
+}
+
+async function networkAndCache(request) {
+  return put(request, await fetch(request));
+}
+
+async function cacheFirst(request, event) {
+  const hit = await cached(request, { ignoreSearch: true });
+  const refresh = networkAndCache(request).catch(() => null);
+  if (hit) {
+    event.waitUntil(refresh);
+    return hit;
+  }
+  return (await refresh) || Response.error();
+}
+
+async function networkFirst(request, { ignoreSearch = false } = {}) {
+  try {
+    return await networkAndCache(request);
+  } catch {
+    return (await cached(request, { ignoreSearch })) || Response.error();
+  }
+}
+
+function after(ms, value) {
+  return new Promise((resolve) => setTimeout(() => resolve(value), ms));
+}
+
+async function freshWithCacheDeadline(request, event, ms = 300) {
+  const hit = await cached(request);
+  if (!hit) return networkFirst(request);
+
+  const network = networkAndCache(request).catch(() => null);
+  event.waitUntil(network.then(() => {}));
+  const winner = await Promise.race([network, after(ms, hit)]);
+  return winner || hit;
 }
 
 self.addEventListener('install', (event) => {
@@ -75,21 +115,22 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  const inReader = url.pathname.startsWith(READER_PREFIX);
-  const isCatalog = url.pathname === `${REPO_PREFIX}README.md`
-    || url.pathname === `${REPO_PREFIX}catalog.json`;
-  const isPublication = url.pathname.startsWith(`${REPO_PREFIX}books/`);
-  if (!inReader && !isCatalog && !isPublication) return;
+  if (isReaderDocument(url, request)) {
+    event.respondWith(networkFirst(request, { ignoreSearch: true }));
+    return;
+  }
 
-  const ignoreSearch = inReader;
-  event.respondWith((async () => {
-    try {
-      const response = await cacheFresh(request);
-      if (response) return response;
-    } catch {
-      // Fall through to the cached copy for offline or transient failures.
-    }
-    const cached = await cachedFallback(request, ignoreSearch);
-    return cached || Response.error();
-  })());
+  if (isStaticReaderAsset(url)) {
+    event.respondWith(cacheFirst(request, event));
+    return;
+  }
+
+  if (isCatalog(url)) {
+    event.respondWith(freshWithCacheDeadline(request, event, 250));
+    return;
+  }
+
+  if (isPublication(url)) {
+    event.respondWith(freshWithCacheDeadline(request, event, 350));
+  }
 });
