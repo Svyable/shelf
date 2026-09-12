@@ -355,6 +355,8 @@ async function refreshFastCatalog() {
     fastEntries = entries;
     saveFastCatalog(entries);
     renderFastShelf();
+    const activeQuery = String($('librarySearch')?.value || '').trim();
+    if (!readerCoreLoaded && activeQuery.length >= 2) runFastLibrarySearch(activeQuery);
   } catch (error) {
     console.error('Shelf fast catalog failed', error);
     if (!fastEntries.length && $('emptyShelf')) {
