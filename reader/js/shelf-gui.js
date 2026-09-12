@@ -120,9 +120,13 @@ function searchResultCount(hits) {
   return [...hits.querySelectorAll('li')].filter((item) => item.querySelector('a')).length;
 }
 
-function searchHasEmptyState(hits) {
-  if (!hits || hits.hidden) return false;
-  return [...hits.querySelectorAll('li')].some((item) => !item.querySelector('a'));
+function searchMessage(hits) {
+  if (!hits || hits.hidden) return '';
+  return [...hits.querySelectorAll('li')]
+    .filter((item) => !item.querySelector('a'))
+    .map((item) => item.textContent.trim())
+    .filter(Boolean)
+    .join(' ');
 }
 
 function syncStatus() {
@@ -135,8 +139,8 @@ function syncStatus() {
 
   const hits = $('libraryHits');
   const hitCount = searchResultCount(hits);
+  const message = searchMessage(hits);
   const volumeCount = syncVolumes();
-  const coreLoaded = document.documentElement.dataset.readerCoreLoaded === 'true';
 
   if (!query) {
     status.textContent = `${plural(volumeCount, 'publication')} · ${searchShortcutLabel()} to search`;
@@ -153,13 +157,18 @@ function syncStatus() {
     return;
   }
 
-  if (!coreLoaded) {
+  if (hits?.dataset.searchState === 'loading' || /^Searching titles and passages/i.test(message)) {
     const titleLead = volumeCount ? `${plural(volumeCount, 'title match')} · ` : '';
-    status.textContent = `${titleLead}loading passage search…`;
+    status.textContent = `${titleLead}searching passages…`;
     return;
   }
 
-  if (searchHasEmptyState(hits)) {
+  if (hits?.dataset.searchState === 'error' || /could not be loaded/i.test(message)) {
+    status.textContent = `${plural(volumeCount, 'title match')} · passage search unavailable`;
+    return;
+  }
+
+  if (message) {
     status.textContent = `No title or passage results for “${query}”`;
     return;
   }
@@ -212,14 +221,10 @@ function installObservers() {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['class', 'hidden'],
+    attributeFilter: ['class', 'hidden', 'data-search-state'],
   });
 
   $('librarySearch')?.addEventListener('input', () => {
-    requestAnimationFrame(syncLibraryUi);
-  });
-
-  document.addEventListener('shelf:reader-core-loaded', () => {
     requestAnimationFrame(syncLibraryUi);
   });
 
