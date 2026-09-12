@@ -1,4 +1,4 @@
-const CACHE = 'sven-shelf-reader-v109';
+const CACHE = 'sven-shelf-reader-v110';
 const READER_PREFIX = new URL('./', self.location.href).pathname;
 const REPO_PREFIX = READER_PREFIX.replace(/reader\/?$/, '');
 const CORE = [
@@ -7,6 +7,8 @@ const CORE = [
   './css/style.css',
   './css/shelf-gui.css',
   './js/app.js',
+  './js/shelf-gui.js',
+  './js/shelf-library-sort.js',
 ];
 
 function isReaderDocument(url, request) {
