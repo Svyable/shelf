@@ -38,6 +38,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Parse Reader startup JavaScript
+        run: |
+          cp reader/js/app.js /tmp/shelf-app.mjs
+          node --check /tmp/shelf-app.mjs
+          node --check reader/sw.js
       - name: Verify Shelf publication and Reader ownership boundary
         run: python3 scripts/check-shelf-boundary.py
       - name: Verify release provenance for pull request changes
