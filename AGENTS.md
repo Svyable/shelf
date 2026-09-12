@@ -19,11 +19,10 @@ vocabulary.
 - Do not put book prose in `reader/`. The reader fetches Markdown from
   `books/<slug>/`. Authors and agents only edit Markdown and `media/`.
 
-## Desk / Shelf boundary
+## Desk / Shelf / Bookself boundary
 
 This repository is the **public Shelf**. It contains released publication
-snapshots. Drafts and the next revision of a published book belong on the
-private Desk.
+snapshots. Drafts and the next revision of a published book belong on Desk.
 
 Desk and Shelf are separate Git repositories. Shelf does not reference,
 submodule, symlink, mount, or fetch manuscript files from Desk at runtime.
@@ -31,18 +30,39 @@ A normal release copies a committed Desk snapshot into Shelf; after that the
 copies are independent until the next release.
 
 Normal manuscript flow is **Desk → Shelf**. Do not create a two-way sync.
-Shared `reader/` and `desk/` UI is copied separately from the Bookself platform.
+Bookself is a framework source, not a publication source and not a production
+runtime dependency for this Shelf.
+
+Shelf owns:
+
+- `books/**`, `catalog.json`, root `README.md`, and `imprint.json`
+- the public Reader shell and service worker
+- `reader/js/app.js`, the Shelf integration adapter
+- Shelf-specific Reader styles and `shelf-*` integration files
+- release provenance and this repository's history
+
+Reusable Reader engine updates may be copied from Bookself only through
+`scripts/sync-ui.sh`, which requires Bookself's `--shelf-safe` contract. That
+contract materializes Bookself's core locally as `reader/js/app-core.js` while
+preserving Shelf-owned files. It must never copy Bookself's `desk/` tree into
+this repository and must never make Shelf import code from
+`https://svyable.github.io/bookself/` at runtime.
 
 ## Local-first publishing
 
 Bookself publishing must remain functional without GitHub Actions. A normal
 release is prepared locally on Desk with Git and Python's standard library,
-then reviewed and committed here. Do not introduce a requirement for a private
-Desk Actions job, hosted build artifact, or deployment runner.
+then reviewed and committed here. Read-only CI may verify invariants, but it
+must not become a prerequisite for authoring or release preparation and it must
+not rewrite released content.
 
 This Shelf's Reader is static and should remain no-build by default. GitHub
 Pages is the delivery surface for committed files, not a reason to add an
-Actions-based build pipeline.
+Actions-based application build pipeline.
+
+Custom Shelf workflows are verification-only. Do not grant `contents: write`
+or `permissions: write-all` to repository workflows. Publication changes are
+committed deliberately through normal Git operations, not by scheduled bots.
 
 ## Voice
 
@@ -76,10 +96,13 @@ Actions-based build pipeline.
   asked for that by name.
 - Do not make publication depend on GitHub Actions, especially a private Desk
   workflow or paid automation minutes.
+- Do not give custom Actions workflows repository write permission.
 - Do not change GitHub Pages source away from the repository root, or add a
   custom domain, unless a human asked.
 - Do not commit secrets or credentials.
 - Do not add private drafts or next-edition work to this public repository.
+- Do not add a `desk/` application tree to Shelf.
+- Do not import executable Reader code from the Bookself Pages deployment.
 - Do not change a released book to `Drafting` or `Revision in progress` merely
   to revise it. That can hide it from the Reader while leaving the files public.
 - Do not revise a released manuscript in place unless a human explicitly asks
@@ -89,17 +112,21 @@ Actions-based build pipeline.
 
 These are the public lifecycle operations.
 
-**Receive a release.** The normal path begins on the private Desk with
+**Receive a release.** The normal path begins on Desk with
 `scripts/release-book.sh <slug> ../shelf`. That command runs locally, prepares
 an exact replacement publication snapshot here, sets the Shelf copy to
 `Published`, adds or updates the root **The books** row, verifies copied
-publication files against the committed Desk snapshot, and stops before
+publication files against the committed Desk snapshot, writes
+`books/<slug>/release.json` with the exact Desk commit and a deterministic
+payload digest, refreshes generated publication surfaces, and stops before
 commit or push. Review and land that prepared Shelf change through normal Git;
 a pull request is useful but not required by Bookself itself.
 
 **Publish.** A released publication has the exact Status `Published` and one
 root README row under **The books**. Normally both are prepared together by the
-Desk release command. Do not change only one side.
+Desk release command. Do not change only one side. New releases and substantive
+payload revisions after the provenance cutover must carry a valid
+`books/<slug>/release.json`.
 
 **Preview a public proof.** Only when a human explicitly intends a public,
 unlisted proof may a non-published publication live here. Its direct Reader URL
@@ -107,13 +134,15 @@ and raw Git files are public even when it is absent from the visible shelf.
 Never describe an unlisted Shelf proof as private.
 
 **Revise a published book.** Leave this Shelf snapshot unchanged. Revise and
-commit the private Desk copy, then receive the replacement release when it is
-ready.
+commit the Desk copy, then receive the replacement release when it is ready.
+The release transaction refreshes the provenance manifest and payload digest.
 
 **Live public hotfix.** Only when a human explicitly asks for an immediate
 public correction may the released Shelf manuscript be edited directly. Treat
-that as a public production change, not normal drafting, and reconcile the same
-change back into Desk afterward so the next release does not erase it.
+that as a public production change, not normal drafting. Reconcile the same
+change into Desk immediately, commit the Desk source, then refresh the Shelf
+release provenance so CI can prove the hotfixed payload has a committed source.
+Do not bypass provenance checks to land a direct manuscript edit.
 
 **Unpublish.** Set Status to anything except `Published` and remove the root
 catalog row. Remember that content already pushed to public Git history is not
