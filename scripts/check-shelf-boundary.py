@@ -28,6 +28,12 @@ BOOKSELF_DEMO_SLUGS = {
     "style-quiet-study",
 }
 
+REMOTE_BOOKSELF_RUNTIME = re.compile(
+    r"(?:import\s*\(|importScripts\s*\(|\bfrom\s+)[^\n]{0,240}"
+    r"https://svyable\.github\.io/bookself/",
+    re.I,
+)
+
 
 def fail(message: str) -> None:
     raise SystemExit(f"Shelf boundary violation: {message}")
@@ -43,6 +49,9 @@ def main() -> int:
     if github.get("owner") != "Svyable" or github.get("repo") != "shelf":
         fail("imprint GitHub identity must remain Svyable/shelf")
 
+    if (ROOT / "desk").exists():
+        fail("Shelf must not contain a copied Bookself/Desk application tree")
+
     catalog = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))
     books = catalog.get("books")
     if not isinstance(books, list) or not books:
@@ -56,15 +65,32 @@ def main() -> int:
 
     app = (ROOT / "reader" / "js" / "app.js").read_text(encoding="utf-8")
     if "svyable.github.io/bookself" in app.lower():
-        fail("production Reader must not import the Bookself GitHub Pages deployment")
+        fail("production Reader adapter must not reference the Bookself Pages deployment")
     if "canonicalAppUrl" in app:
         fail("legacy remote canonical-app bridge returned")
     if not (ROOT / "reader" / "js" / "app-core.js").is_file():
         fail("local Reader core is missing")
 
+    for path in (ROOT / "reader").rglob("*.js"):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if REMOTE_BOOKSELF_RUNTIME.search(text):
+            fail(
+                "Reader JavaScript dynamically depends on the Bookself Pages deployment: "
+                f"{path.relative_to(ROOT)}"
+            )
+
     sync = (ROOT / "scripts" / "sync-ui.sh").read_text(encoding="utf-8")
     if "--shelf-safe" not in sync:
         fail("Bookself UI sync must require --shelf-safe")
+
+    workflow_dir = ROOT / ".github" / "workflows"
+    if workflow_dir.is_dir():
+        for path in sorted(workflow_dir.glob("*.y*ml")):
+            text = path.read_text(encoding="utf-8")
+            if re.search(r"^\s*contents:\s*write\s*$", text, flags=re.M | re.I):
+                fail(f"custom workflow may not have contents: write: {path.relative_to(ROOT)}")
+            if re.search(r"^\s*permissions:\s*write-all\s*$", text, flags=re.M | re.I):
+                fail(f"custom workflow may not use permissions: write-all: {path.relative_to(ROOT)}")
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     released = set(re.findall(r"\]\(books/([a-z0-9][a-z0-9-]*)/\)", readme, flags=re.I))
@@ -74,7 +100,8 @@ def main() -> int:
 
     print(
         f"Shelf boundary OK: {len(books)} catalog entries; "
-        f"{len(released)} README-linked releases; local Reader runtime."
+        f"{len(released)} README-linked releases; local Reader runtime; "
+        "read-only custom CI."
     )
     return 0
 
