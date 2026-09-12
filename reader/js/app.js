@@ -1,14 +1,16 @@
-// Shelf owns the public library and its release state. The heavy Reader core is
-// local to this repository and is loaded only when a publication is opened.
+// Shelf owns the public library and its release state. The Reader core stays
+// local to this repository: books load it on demand, while the library warms it
+// after first paint (or immediately on search) so passage search is real.
 // Bookself remains the upstream framework source, never a production runtime.
 
-const readerCoreUrl = new URL('./app-core.js?v=20260912-cover-1', import.meta.url).href;
+const readerCoreUrl = new URL('./app-core.js?v=20260912-search-2', import.meta.url).href;
 const readmeUrl = new URL('../../README.md', import.meta.url);
 const catalogUrl = new URL('../../catalog.json', import.meta.url);
 const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v4';
 
 let readerCorePromise = null;
 let readerCoreLoaded = false;
+let readerCoreWarmupScheduled = false;
 let fastEntries = [];
 let recentRanks = new Map();
 let sortMode = 'title';
@@ -120,10 +122,13 @@ function ensureReaderCore() {
   readerCorePromise = import(readerCoreUrl)
     .then(() => {
       readerCoreLoaded = true;
+      document.documentElement.dataset.readerCoreLoaded = 'true';
+      document.dispatchEvent(new CustomEvent('shelf:reader-core-loaded'));
       return true;
     })
     .catch((error) => {
       readerCorePromise = null;
+      delete document.documentElement.dataset.readerCoreLoaded;
       console.error('Shelf Reader core failed', error);
       if ($('loader')) $('loader').hidden = true;
       const message = $('shelfError');
@@ -134,6 +139,43 @@ function ensureReaderCore() {
       throw error;
     });
   return readerCorePromise;
+}
+
+function replayLibrarySearch(value) {
+  const search = $('librarySearch');
+  if (!search || !libraryRouteRequested()) return;
+  const expected = String(value || '').trim();
+  const replay = () => {
+    if (!libraryRouteRequested() || String(search.value || '').trim() !== expected) return;
+    search.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+  // app-core initializes asynchronously after import (identity fetch, then UI binding).
+  // Replaying twice keeps a two-character query from being lost on a cold load,
+  // without making search correctness depend on network timing.
+  window.setTimeout(replay, 180);
+  window.setTimeout(replay, 700);
+}
+
+function activatePassageSearch() {
+  const search = $('librarySearch');
+  const value = String(search?.value || '').trim();
+  const cold = !readerCoreLoaded;
+  ensureReaderCore()
+    .then(() => {
+      if (cold && value.length >= 2) replayLibrarySearch(value);
+    })
+    .catch(() => {});
+}
+
+function scheduleReaderCoreWarmup() {
+  if (readerCoreWarmupScheduled || readerCoreLoaded || !libraryRouteRequested()) return;
+  readerCoreWarmupScheduled = true;
+  const warm = () => {
+    readerCoreWarmupScheduled = false;
+    if (libraryRouteRequested() && !readerCoreLoaded) ensureReaderCore().catch(() => {});
+  };
+  if ('requestIdleCallback' in window) window.requestIdleCallback(warm, { timeout: 1400 });
+  else window.setTimeout(warm, 650);
 }
 
 function volumeElement(entry) {
@@ -173,14 +215,21 @@ function renderFastShelf() {
   $('stacks')?.replaceChildren();
   shelf.replaceChildren(...entries.map(volumeElement));
   empty.hidden = entries.length > 0;
-  empty.textContent = fastEntries.length ? 'No matching publications.' : 'Loading publications…';
+  empty.textContent = query
+    ? 'No title matches. Passage matches appear above.'
+    : (fastEntries.length ? 'No matching publications.' : 'Loading publications…');
 }
 
 function bindFastLibraryControls() {
   const search = $('librarySearch');
   if (search && !search.dataset.fastShelfBound) {
     search.dataset.fastShelfBound = 'true';
-    search.addEventListener('input', renderFastShelf);
+    search.addEventListener('pointerdown', activatePassageSearch, { once: true, passive: true });
+    search.addEventListener('focus', activatePassageSearch, { once: true });
+    search.addEventListener('input', () => {
+      renderFastShelf();
+      if (String(search.value || '').trim().length >= 2 && !readerCoreLoaded) activatePassageSearch();
+    });
   }
   document.querySelectorAll('[data-sort]').forEach((button) => {
     if (button.dataset.fastShelfBound) return;
@@ -232,6 +281,7 @@ async function refreshFastCatalog() {
     fastEntries = entries;
     saveFastCatalog(entries);
     renderFastShelf();
+    scheduleReaderCoreWarmup();
     enrichFastCatalog(entries).catch((error) => console.warn('Cover metadata unavailable', error));
   } catch (error) {
     console.error('Shelf fast catalog failed', error);
@@ -256,6 +306,7 @@ function fastLibraryRouteGuard(event) {
   if (!libraryRouteRequested()) return;
   if (readerCoreLoaded) event.stopImmediatePropagation();
   renderFastShelf();
+  scheduleReaderCoreWarmup();
 }
 
 window.addEventListener('hashchange', fastLibraryRouteGuard, true);
@@ -273,6 +324,7 @@ if (bookRouteRequested()) {
   if (cached.length) {
     fastEntries = cached;
     renderFastShelf();
+    scheduleReaderCoreWarmup();
   } else if ($('emptyShelf')) {
     $('emptyShelf').hidden = false;
     $('emptyShelf').textContent = 'Loading publications…';
