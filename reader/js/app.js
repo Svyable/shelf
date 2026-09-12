@@ -5,12 +5,13 @@
 const readerCoreUrl = new URL('./app-core.js?v=20260912-cover-1', import.meta.url).href;
 const readmeUrl = new URL('../../README.md', import.meta.url);
 const catalogUrl = new URL('../../catalog.json', import.meta.url);
-const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v4';
+const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v5';
 
 let readerCorePromise = null;
 let readerCoreLoaded = false;
 let fastEntries = [];
 let recentRanks = new Map();
+let recentRanksPromise = null;
 let sortMode = 'title';
 
 const $ = (id) => document.getElementById(id);
@@ -147,8 +148,7 @@ function volumeElement(entry) {
     <span class="volume-block"></span>
     <span class="volume-cover">
       <span class="volume-title">${escapeHtml(entry.title)}</span>
-      ${entry.subtitle ? `<span class="volume-subtitle">${escapeHtml(entry.subtitle)}</span>` : ''}
-      <span class="volume-author">${escapeHtml(entry.authors || 'Sven Hardy Benson')}</span>
+      <span class="volume-author">Sven Hardy Benson</span>
       <span class="volume-open">Open</span>
     </span>`;
   const warm = () => {
@@ -176,6 +176,26 @@ function renderFastShelf() {
   empty.textContent = fastEntries.length ? 'No matching publications.' : 'Loading publications…';
 }
 
+async function ensureRecentRanks() {
+  if (recentRanks.size) return recentRanks;
+  if (recentRanksPromise) return recentRanksPromise;
+  recentRanksPromise = (async () => {
+    try {
+      const response = await fetch(catalogUrl, { cache: 'no-cache' });
+      if (!response.ok) return recentRanks;
+      const manifest = await response.json();
+      if (!Array.isArray(manifest?.books)) return recentRanks;
+      recentRanks = new Map(manifest.books.map((slug, index) => [String(slug), index]));
+      return recentRanks;
+    } catch {
+      return recentRanks;
+    } finally {
+      recentRanksPromise = null;
+    }
+  })();
+  return recentRanksPromise;
+}
+
 function bindFastLibraryControls() {
   const search = $('librarySearch');
   if (search && !search.dataset.fastShelfBound) {
@@ -185,42 +205,13 @@ function bindFastLibraryControls() {
   document.querySelectorAll('[data-sort]').forEach((button) => {
     if (button.dataset.fastShelfBound) return;
     button.dataset.fastShelfBound = 'true';
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       sortMode = button.dataset.sort === 'recent' ? 'recent' : 'title';
       document.querySelectorAll('[data-sort]').forEach((peer) => peer.classList.toggle('active', peer === button));
+      if (sortMode === 'recent') await ensureRecentRanks();
       renderFastShelf();
     });
   });
-}
-
-async function loadRecentRanks() {
-  try {
-    const response = await fetch(catalogUrl, { cache: 'no-cache' });
-    if (!response.ok) return;
-    const manifest = await response.json();
-    if (!Array.isArray(manifest?.books)) return;
-    recentRanks = new Map(manifest.books.map((slug, index) => [String(slug), index]));
-    if (sortMode === 'recent') renderFastShelf();
-  } catch {}
-}
-
-async function enrichFastCatalog(entries) {
-  const { parseBookReadme } = await import('./catalog.js');
-  let next = 0;
-  await Promise.all(Array.from({ length: Math.min(6, entries.length) }, async () => {
-    while (next < entries.length) {
-      const entry = entries[next++];
-      try {
-        const response = await fetch(new URL(`../../books/${entry.slug}/README.md`, import.meta.url), { cache: 'no-cache' });
-        if (!response.ok) continue;
-        const meta = parseBookReadme(await response.text(), entry.slug);
-        Object.assign(entry, { title: meta.title, subtitle: meta.subtitle, authors: meta.authors });
-      } catch { /* Keep the root catalog available when a book fetch fails. */ }
-    }
-  }));
-  if (fastEntries !== entries) return;
-  saveFastCatalog(entries);
-  renderFastShelf();
 }
 
 async function refreshFastCatalog() {
@@ -232,7 +223,6 @@ async function refreshFastCatalog() {
     fastEntries = entries;
     saveFastCatalog(entries);
     renderFastShelf();
-    enrichFastCatalog(entries).catch((error) => console.warn('Cover metadata unavailable', error));
   } catch (error) {
     console.error('Shelf fast catalog failed', error);
     if (!fastEntries.length && $('emptyShelf')) {
@@ -242,14 +232,22 @@ async function refreshFastCatalog() {
   }
 }
 
+function scheduleAfterFirstPaint(task, timeout = 900) {
+  const run = () => {
+    if ('requestIdleCallback' in window) window.requestIdleCallback(task, { timeout });
+    else window.setTimeout(task, Math.min(timeout, 500));
+  };
+  window.requestAnimationFrame(() => window.requestAnimationFrame(run));
+}
+
 function scheduleShelfWorker() {
   if (!('serviceWorker' in navigator)) return;
-  const register = () => navigator.serviceWorker
-    .register(new URL('../sw.js', import.meta.url), { updateViaCache: 'none' })
-    .then((registration) => registration.update().catch(() => {}))
-    .catch((error) => console.warn('Shelf service worker could not be updated', error));
-  if ('requestIdleCallback' in window) window.requestIdleCallback(register, { timeout: 1500 });
-  else window.setTimeout(register, 250);
+  scheduleAfterFirstPaint(() => {
+    navigator.serviceWorker
+      .register(new URL('../sw.js', import.meta.url), { updateViaCache: 'none' })
+      .then((registration) => registration.update().catch(() => {}))
+      .catch((error) => console.warn('Shelf service worker could not be updated', error));
+  }, 2400);
 }
 
 function fastLibraryRouteGuard(event) {
@@ -263,7 +261,6 @@ window.addEventListener('popstate', fastLibraryRouteGuard, true);
 
 bindFastLibraryControls();
 scheduleShelfWorker();
-loadRecentRanks();
 if ($('homeFromEnd')) $('homeFromEnd').textContent = 'Shelf';
 
 if (bookRouteRequested()) {
@@ -273,9 +270,12 @@ if (bookRouteRequested()) {
   if (cached.length) {
     fastEntries = cached;
     renderFastShelf();
-  } else if ($('emptyShelf')) {
-    $('emptyShelf').hidden = false;
-    $('emptyShelf').textContent = 'Loading publications…';
+    scheduleAfterFirstPaint(() => refreshFastCatalog(), 1200);
+  } else {
+    if ($('emptyShelf')) {
+      $('emptyShelf').hidden = false;
+      $('emptyShelf').textContent = 'Loading publications…';
+    }
+    refreshFastCatalog();
   }
-  refreshFastCatalog();
 }
