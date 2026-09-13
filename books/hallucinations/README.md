@@ -3,7 +3,7 @@
 *How AI Leads Us Astray*
 
 <!-- bookself-reader-links:start -->
-**Reader links:** [Working edition · Desk Reader](https://svyable.github.io/desk/reader/#/b/hallucinations/)
+**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/hallucinations/)
 <!-- bookself-reader-links:end -->
 
 | | |
