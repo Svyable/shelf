@@ -1,6 +1,7 @@
 import { stabilizeViewport, textEntryTarget } from './viewport-stability.js';
 import { installImmersiveChrome } from './immersive-chrome.js';
 import { installFontReadiness } from './font-readiness-runtime.js';
+import { intendedPagedSpread } from './spread-state.js';
 
 const DEFAULT_VIEWPORT = Object.freeze({ width: 1280, height: 800 });
 const ANNOUNCE_SCROLL_IDLE_MS = 620;
@@ -106,8 +107,15 @@ function setViewportCss(snapshot) {
 function syncSpreadState() {
   const right = document.getElementById('pageRight');
   const wrapper = document.getElementById('pagesWrapper');
+  const toggle = document.getElementById('viewModeBtn');
   if (!wrapper) return;
-  const spread = !!right?.classList.contains('active');
+  const spread = intendedPagedSpread({
+    stage: document.body.dataset.stage || '',
+    mode: root().dataset.readerMode || 'paged',
+    rightActive: !!right?.classList.contains('active'),
+    toggleHidden: !!toggle?.hidden,
+    toggleLabel: toggle?.textContent || '',
+  });
   wrapper.dataset.readerSpread = spread ? 'spread' : 'single';
 }
 
@@ -455,6 +463,7 @@ export function installReadingSurface() {
   modeObserver.observe(el, { attributes: true, attributeFilter: ['data-reader-mode'] });
 
   const stageObserver = new MutationObserver(() => {
+    syncSpreadState();
     syncModeSemantics();
     if (document.body.dataset.stage !== 'read') {
       document.body.classList.remove('reader-chrome-hidden');
