@@ -1,0 +1,19 @@
+{
+  "schema": "svyable-release-v1",
+  "source": {
+    "owner": "Svyable",
+    "repo": "desk",
+    "commit": "affb0256014b725768b65c3720e5a3a4c13e7841",
+    "path": "books/the-other-250"
+  },
+  "destination": {
+    "owner": "Svyable",
+    "repo": "shelf",
+    "path": "books/the-other-250"
+  },
+  "payload": {
+    "algorithm": "sha256-tree-v1",
+    "digest": "e09ac8524a142d786e67fb479de8cc8c3b3556fd66fbcc9815c11a39b5a519c3",
+    "files": 48
+  }
+}
