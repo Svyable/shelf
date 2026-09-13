@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Sven Hardy Benson’s Shelf — Released books</title>
-  <meta name="description" content="Released editions by Sven Hardy Benson: a public catalog of deliberately published book snapshots.">
+  <title>Sven Hardy Benson’s Shelf — Released books and research</title>
+  <meta name="description" content="Released editions by Sven Hardy Benson, plus a doorway to sourced mathematical and technical research papers.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Sven Hardy Benson’s Shelf">
-  <meta property="og:title" content="Sven Hardy Benson’s Shelf — Released books">
-  <meta property="og:description" content="The released book catalog by Sven Hardy Benson.">
+  <meta property="og:title" content="Sven Hardy Benson’s Shelf — Books and research">
+  <meta property="og:description" content="Released books by Sven Hardy Benson, with a separate research-paper collection exposing proofs, sources, code, and reproducibility artifacts.">
   <meta property="og:url" content="https://svyable.github.io/shelf/">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Sven Hardy Benson’s Shelf">
-  <meta name="twitter:description" content="Released editions by Sven Hardy Benson.">
+  <meta name="twitter:description" content="Released editions and sourced research papers by Sven Hardy Benson.">
   <link rel="canonical" href="https://svyable.github.io/shelf/">
   <link rel="describedby" href="llms.txt">
   <style>
@@ -26,6 +26,11 @@
     .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.5rem 0; }
     .actions a { border: 1px solid currentColor; border-radius: 999px; padding: .55rem .9rem; text-decoration: none; }
     .meta { opacity: .72; }
+    .research { margin: 0 0 3rem; padding: 1.25rem 1.35rem 1.4rem; border: 1px solid color-mix(in srgb, currentColor 22%, transparent); border-radius: .65rem; }
+    .research h2 { margin-top: 0; }
+    .research p { max-width: 55rem; }
+    .research-links { display: flex; flex-wrap: wrap; gap: .75rem 1rem; }
+    .research-links a { font-weight: 600; }
     .books { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: .9rem 1.2rem; }
     .book { border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent); padding: .9rem 0 1.1rem; }
     .book strong { display: block; font-size: 1.08rem; }
@@ -39,10 +44,11 @@
   <header>
     <p class="eyebrow">Sven Hardy Benson / Shelf</p>
     <h1>Released editions.</h1>
-    <p class="lede">Sven Hardy Benson’s Shelf contains the editions deliberately released for readers. Working drafts and next editions stay on Desk until a later release replaces the public snapshot.</p>
+    <p class="lede">Sven Hardy Benson’s Shelf contains the editions deliberately released for readers. Working drafts and next editions stay on Desk until a later release replaces the public snapshot. Research papers are surfaced separately so proofs can remain visibly provisional without being mislabeled as released books.</p>
     <nav class="actions" aria-label="Primary">
       <a href="reader/"><strong>Read the Shelf</strong></a>
       <a href="books/">Browse released books</a>
+      <a href="https://svyable.github.io/desk/papers/"><strong>Research papers</strong></a>
       <a href="https://svyable.github.io/desk/">Working drafts</a>
       <a href="README.md#the-books">Catalog source</a>
     </nav>
@@ -50,14 +56,24 @@
   </header>
 
   <main>
+    <section class="research" aria-labelledby="research-title">
+      <p class="eyebrow">Research / public proof trail</p>
+      <h2 id="research-title">White papers with the machinery exposed.</h2>
+      <p>The research collection keeps sources, derivations, diagrams, executable checks, LaTeX, and formalization artifacts next to the claims. It is intentionally separate from the released-book catalog: a promising theorem can be public and checkable without being advertised as peer reviewed or publication-final.</p>
+      <div class="research-links">
+        <a href="https://svyable.github.io/desk/papers/">Browse research papers →</a>
+        <a href="https://svyable.github.io/desk/papers/convex-pattern-amplification.html">Featured: Convex Pattern Amplification Under Deletion →</a>
+      </div>
+    </section>
+
     <h2>The books</h2>
     <ul id="books" class="books" aria-live="polite"></ul>
     <noscript><p class="error">JavaScript is off. The released catalog is available in <a href="README.md#the-books">README.md</a>.</p></noscript>
   </main>
 
   <footer>
-    <p><strong>Shelf is release state.</strong> This page follows the root `## The books` catalog, so unlisted public proofs do not appear as released editions.</p>
-    <p class="meta"><a href="https://github.com/Svyable/shelf/tree/main/books">Released project files</a> · <a href="llms.txt">Agent-readable map</a> · <a href="https://github.com/Svyable/bookself">Bookself structure</a></p>
+    <p><strong>Shelf is release state.</strong> The book list follows the root <code>## The books</code> catalog, so public research proofs do not silently become released editions.</p>
+    <p class="meta"><a href="https://svyable.github.io/desk/papers/">Research papers</a> · <a href="https://github.com/Svyable/shelf/tree/main/books">Released project files</a> · <a href="llms.txt">Agent-readable map</a> · <a href="https://github.com/Svyable/bookself">Bookself structure</a></p>
   </footer>
 
   <script>
