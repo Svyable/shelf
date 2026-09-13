@@ -1,4 +1,4 @@
-const CACHE = 'sven-shelf-reader-v111';
+const CACHE = 'sven-shelf-reader-v112';
 const READER_PREFIX = new URL('./', self.location.href).pathname;
 const REPO_PREFIX = READER_PREFIX.replace(/reader\/?$/, '');
 const CORE = [
@@ -58,13 +58,21 @@ async function networkAndCache(request) {
 }
 
 async function cacheFirst(request, event) {
-  const hit = await cached(request, { ignoreSearch: true });
+  // Query strings are intentional Reader asset-version keys. Prefer an exact
+  // cache entry so a new version can never be shadowed by an older pathname.
+  const hit = await cached(request);
   const refresh = networkAndCache(request).catch(() => null);
   if (hit) {
     event.waitUntil(refresh);
     return hit;
   }
-  return (await refresh) || Response.error();
+
+  const fresh = await refresh;
+  if (fresh) return fresh;
+
+  // Keep the Reader usable offline even when only the precached, unversioned
+  // core asset is available. Stale-by-path is an offline fallback only.
+  return (await cached(request, { ignoreSearch: true })) || Response.error();
 }
 
 async function networkFirst(request, { ignoreSearch = false } = {}) {
