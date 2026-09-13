@@ -85,6 +85,7 @@ These are the deliberately released editions on Sven Hardy Benson’s Shelf. Pub
 | [**Who Taught America?**](books/who-taught-america/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/who-taught-america/) |
 | [**Renegade Code**](books/renegade-code/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/renegade-code/) |
 | [**Deceptatron**](books/deceptatron/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/deceptatron/) |
+| [**Hallucinations**](books/hallucinations/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/hallucinations/) |
 
 ## What Shelf means
 

@@ -1,0 +1,19 @@
+{
+  "schema": "svyable-release-v1",
+  "source": {
+    "owner": "Svyable",
+    "repo": "desk",
+    "commit": "affb0256014b725768b65c3720e5a3a4c13e7841",
+    "path": "books/hallucinations"
+  },
+  "destination": {
+    "owner": "Svyable",
+    "repo": "shelf",
+    "path": "books/hallucinations"
+  },
+  "payload": {
+    "algorithm": "sha256-tree-v1",
+    "digest": "4aeecbca1bde3e6cd78e995327314d0d209f92a82c9ca289c25fef489ac54f63",
+    "files": 41
+  }
+}
