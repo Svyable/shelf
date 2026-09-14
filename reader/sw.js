@@ -1,4 +1,4 @@
-const CACHE = 'sven-shelf-reader-v112';
+const CACHE = 'sven-shelf-reader-v113';
 const READER_PREFIX = new URL('./', self.location.href).pathname;
 const REPO_PREFIX = READER_PREFIX.replace(/reader\/?$/, '');
 const CORE = [
@@ -140,7 +140,11 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (isCatalog(url)) {
-    event.respondWith(freshWithCacheDeadline(request, event, 250));
+    // The visible Shelf must reflect the current publication catalog. A stale
+    // catalog can remain as an offline fallback, but it must not win a timed
+    // race while the network is available or the open page can stay stuck on
+    // an older release count indefinitely.
+    event.respondWith(networkFirst(request));
     return;
   }
 
