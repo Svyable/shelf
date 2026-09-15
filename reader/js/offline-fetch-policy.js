@@ -47,13 +47,10 @@
   }
 
   function responsePlan(kind, hasCached = false) {
-    // Reader shell files must prefer the network when online. Cache-first shell
-    // delivery can mix generations of ES modules and leave the library stuck on
-    // a stale static shell even though the catalog and published books are fine.
-    // network-first still falls back to the precache when the request fails.
-    if (kind === 'shell') return 'network-first';
+    // Reader shell and publication content must stay current while online.
+    // Cached copies are resilience for offline/network failure, not a deadline
+    // winner that can leave an already-open Reader on stale manuscript text.
     if (kind === 'external' && hasCached) return 'cache-then-network';
-    if (kind === 'publication' && hasCached) return 'network-with-cache-deadline';
     return 'network-first';
   }
 

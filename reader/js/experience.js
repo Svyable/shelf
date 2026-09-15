@@ -1102,5 +1102,8 @@ function waitForImprint(attempt = 0) {
   window.setTimeout(() => waitForImprint(attempt + 1), 50);
 }
 
-if (document.readyState === 'complete') waitForImprint();
-else window.addEventListener('load', () => waitForImprint(), { once: true });
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => waitForImprint(), { once: true });
+} else {
+  waitForImprint();
+}

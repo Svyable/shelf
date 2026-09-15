@@ -88,16 +88,24 @@ function trackInstalling(worker) {
   });
 }
 
+function watchRegistration(nextRegistration) {
+  registration = nextRegistration;
+  if (!registration) return;
+  if (registration.waiting) showUpdate(registration.waiting);
+  if (registration.installing) trackInstalling(registration.installing);
+  registration.addEventListener('updatefound', () => trackInstalling(registration.installing));
+  window.addEventListener('focus', () => registration?.update().catch(() => {}), { passive: true });
+}
+
 async function installReaderUpdates() {
   if (!('serviceWorker' in navigator) || !window.isSecureContext) return;
   installStyles();
   ensureNotice();
   try {
-    registration = await navigator.serviceWorker.register(new URL('../sw.js', import.meta.url));
-    if (registration.waiting) showUpdate(registration.waiting);
-    if (registration.installing) trackInstalling(registration.installing);
-    registration.addEventListener('updatefound', () => trackInstalling(registration.installing));
-    window.addEventListener('focus', () => registration?.update().catch(() => {}), { passive: true });
+    // app.js owns registration timing so service-worker install traffic cannot
+    // compete with the Reader's initial route. This module only observes the
+    // registration once it exists and provides the update UI.
+    watchRegistration(await navigator.serviceWorker.ready);
   } catch {
     // Reading remains fully usable when service workers are unavailable.
   }

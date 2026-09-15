@@ -14,6 +14,15 @@ import {
 } from './chapter-availability.js';
 
 queueMicrotask(() => {
+  import('./accessibility-surfaces.js').catch((error) => {
+    console.warn('Accessibility surface isolation could not be loaded', error);
+  });
+  import('./direct-route-preview.js').catch((error) => {
+    console.warn('Direct-route first paint could not be loaded', error);
+  });
+});
+
+function loadDeferredEnhancements() {
   import('./semantic-progress.js').catch((error) => {
     console.warn('Semantic reading progress could not be loaded', error);
   });
@@ -38,12 +47,6 @@ queueMicrotask(() => {
   import('./progressive-library-search.js').catch((error) => {
     console.warn('Progressive library search could not be loaded', error);
   });
-  import('./accessibility-surfaces.js').catch((error) => {
-    console.warn('Accessibility surface isolation could not be loaded', error);
-  });
-  import('./direct-route-preview.js').catch((error) => {
-    console.warn('Direct-route first paint could not be loaded', error);
-  });
   import('./reading-mode-transition.js').catch((error) => {
     console.warn('Reading-mode transition continuity could not be loaded', error);
   });
@@ -58,7 +61,21 @@ queueMicrotask(() => {
     .catch((error) => {
       console.warn('Active reading-time enhancement could not be loaded', error);
     });
-});
+}
+
+function scheduleDeferredEnhancements() {
+  const begin = () => {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(loadDeferredEnhancements, { timeout: 2000 });
+      return;
+    }
+    window.setTimeout(loadDeferredEnhancements, 250);
+  };
+  if (document.readyState === 'complete') begin();
+  else window.addEventListener('load', begin, { once: true });
+}
+
+scheduleDeferredEnhancements();
 
 /** Repo-root URL prefix so fetches work at / and at /<repo>/ */
 
@@ -243,13 +260,14 @@ async function existingUrl(relativePath) {
 }
 
 export async function firstExisting(relativePaths) {
-  const paths = Array.isArray(relativePaths) ? relativePaths.filter(Boolean) : [];
-  if (!paths.length) return null;
-  const settled = await Promise.allSettled(paths.map((path) => existingUrl(path)));
-  for (const row of settled) {
-    if (row.status === 'fulfilled' && row.value) return row.value;
-  }
-  return null;
+  const candidates = await Promise.all(relativePaths.map(async (path) => {
+    try {
+      return await existingUrl(path);
+    } catch {
+      return null;
+    }
+  }));
+  return candidates.find(Boolean) || null;
 }
 
 const startupPlan = startupAcquisitionPlan(navigator.connection || {});

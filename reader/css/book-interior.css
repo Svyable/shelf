@@ -1,0 +1,268 @@
+/* Premium book interior
+   ---------------------
+   Paint-only editorial finish for the reading surface. This layer must not
+   change manuscript line breaks, page counts, Reader geometry variables, or
+   pagination controls when it arrives after the base Reader has rendered. */
+
+html[data-book-interior="true"] {
+  --book-interior-rule: color-mix(in srgb, var(--accent) 46%, transparent);
+  --book-interior-rule-soft: color-mix(in srgb, var(--accent) 20%, transparent);
+  --book-interior-ink-soft: color-mix(in srgb, var(--text-primary) 86%, var(--text-secondary));
+  --book-interior-shadow: color-mix(in srgb, var(--shadow) 42%, transparent);
+}
+
+/* Paper finish: tonal variation and edge depth without changing the page box. */
+html[data-book-interior="true"] [data-reader-mode="paged"] .page-surface {
+  background-image:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--shadow) 5%, transparent),
+      transparent 7%,
+      transparent 93%,
+      color-mix(in srgb, var(--shadow) 4%, transparent)),
+    radial-gradient(ellipse 80% 58% at 50% 12%,
+      color-mix(in srgb, var(--text-primary) 2.2%, transparent),
+      transparent 72%);
+  background-color: var(--bg-page);
+}
+
+html[data-book-interior="true"] [data-reader-mode="paged"] .page-surface.left {
+  box-shadow:
+    inset -30px 0 38px -34px color-mix(in srgb, #000 74%, transparent),
+    inset 0 1px color-mix(in srgb, var(--text-primary) 3%, transparent),
+    var(--reader-paper-shadow);
+}
+
+html[data-book-interior="true"] [data-reader-mode="paged"] .page-surface.right {
+  box-shadow:
+    inset 30px 0 38px -34px color-mix(in srgb, #000 74%, transparent),
+    inset 0 1px color-mix(in srgb, var(--text-primary) 3%, transparent),
+    var(--reader-paper-shadow);
+}
+
+/* Running furniture sits at the physical outside edge of each leaf. */
+html[data-book-interior="true"] .page-running {
+  color: color-mix(in srgb, var(--text-secondary) 82%, var(--accent));
+  opacity: .66;
+}
+
+html[data-book-interior="true"] .page-surface.left .page-running {
+  text-align: left;
+}
+
+html[data-book-interior="true"] .page-surface.right .page-running {
+  text-align: right;
+}
+
+html[data-book-interior="true"] .page-num {
+  color: color-mix(in srgb, var(--text-muted) 88%, var(--accent));
+  opacity: .74;
+}
+
+html[data-book-interior="true"] .page-num::before,
+html[data-book-interior="true"] .page-num::after {
+  color: var(--book-interior-rule-soft);
+  content: "·";
+}
+
+/* Chapter openings gain ceremony through ink and ornaments only. */
+html[data-book-interior="true"] .page-inner.chapter-open > h1:first-child,
+html[data-book-interior="true"] .scroll-document h1 {
+  position: relative;
+  color: var(--book-interior-ink-soft);
+  text-shadow: 0 1px color-mix(in srgb, var(--bg-page) 70%, transparent);
+}
+
+html[data-book-interior="true"] .page-inner.chapter-open > h1:first-child::before,
+html[data-book-interior="true"] .scroll-document h1::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -.68em;
+  width: 1.6rem;
+  border-top: 2px solid var(--book-interior-rule);
+  box-shadow: 1.95rem 0 0 -0.5px var(--book-interior-rule-soft);
+}
+
+html[data-book-interior="true"] .page-inner.chapter-open > h1:first-child::after,
+html[data-book-interior="true"] .scroll-document h1::after {
+  border-top-color: var(--book-interior-rule);
+}
+
+html[data-book-interior="true"] .page-inner.chapter-open > p:first-of-type,
+html[data-book-interior="true"] .scroll-chapter > .scroll-block:first-child:has(> h1) + .scroll-block:has(> p) > p {
+  color: color-mix(in srgb, var(--text-primary) 97%, var(--accent) 3%);
+}
+
+html[data-book-interior="true"] .page-inner.chapter-open > p:first-of-type::first-letter,
+html[data-book-interior="true"] .scroll-chapter > .scroll-block:first-child:has(> h1) + .scroll-block:has(> p) > p::first-letter {
+  color: color-mix(in srgb, var(--accent) 88%, var(--text-primary));
+  text-shadow: 0 1px 0 color-mix(in srgb, var(--bg-page) 70%, transparent);
+}
+
+html[data-book-interior="true"] .page-inner.chapter-open > p:first-of-type::first-line,
+html[data-book-interior="true"] .scroll-chapter > .scroll-block:first-child:has(> h1) + .scroll-block:has(> p) > p::first-line {
+  color: color-mix(in srgb, var(--text-primary) 94%, var(--accent) 6%);
+}
+
+/* Section hierarchy becomes more editorial without changing metrics. */
+html[data-book-interior="true"] .page-inner :is(h2, h3),
+html[data-book-interior="true"] .scroll-document :is(h2, h3) {
+  color: var(--book-interior-ink-soft);
+}
+
+html[data-book-interior="true"] .page-inner h2,
+html[data-book-interior="true"] .scroll-document h2 {
+  background:
+    linear-gradient(90deg, var(--book-interior-rule), transparent 74%)
+    left bottom / min(7.5rem, 48%) 1px no-repeat;
+}
+
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) strong {
+  color: color-mix(in srgb, var(--text-primary) 96%, var(--accent) 4%);
+}
+
+/* Quotes read as literary objects rather than generic web callouts. */
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) blockquote {
+  position: relative;
+  border-left-color: var(--book-interior-rule);
+  color: color-mix(in srgb, var(--text-primary) 76%, var(--text-secondary));
+}
+
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) blockquote::before {
+  content: "“";
+  position: absolute;
+  left: .12em;
+  top: -.22em;
+  color: color-mix(in srgb, var(--accent) 28%, transparent);
+  font-family: var(--font-display);
+  font-size: 2.9em;
+  font-style: normal;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Section breaks get a small book ornament without resizing the rule. */
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) hr {
+  position: relative;
+  overflow: visible;
+  border-top-color: var(--book-interior-rule-soft);
+}
+
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) hr::after {
+  content: "◆";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -52%) scale(.58);
+  background: var(--bg-page);
+  color: color-mix(in srgb, var(--accent) 72%, var(--text-secondary));
+  font-size: .72rem;
+  line-height: 1;
+}
+
+/* Figures feel tipped into the paper while media dimensions remain canonical. */
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) figure {
+  position: relative;
+}
+
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) figure > img,
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) p:has(> img:only-child) > img {
+  border-color: color-mix(in srgb, var(--accent) 20%, var(--text-muted));
+  box-shadow:
+    0 12px 30px var(--book-interior-shadow),
+    0 0 0 1px color-mix(in srgb, var(--bg-page) 78%, transparent);
+}
+
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) figcaption {
+  color: color-mix(in srgb, var(--text-secondary) 90%, var(--accent));
+}
+
+html[data-book-interior="true"] :is(.page-inner, .scroll-document) figcaption::before {
+  content: "— ";
+  color: var(--book-interior-rule);
+}
+
+/* Continuous mode reads as the same paper extended vertically. */
+html[data-book-interior="true"] [data-reader-mode="scroll"] .scroll-reader {
+  background:
+    radial-gradient(ellipse 58% 18% at 50% 0%, color-mix(in srgb, var(--accent) 3.5%, transparent), transparent 80%),
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--shadow) 5%, transparent),
+      transparent 9%,
+      transparent 91%,
+      color-mix(in srgb, var(--shadow) 5%, transparent)),
+    var(--bg-page);
+}
+
+html[data-book-interior="true"] .scroll-chapter + .scroll-chapter {
+  border-top-color: color-mix(in srgb, var(--accent) 20%, var(--border));
+}
+
+html[data-book-interior="true"] .scroll-chapter + .scroll-chapter::before {
+  border-top-color: var(--book-interior-rule);
+}
+
+/* Phones keep editorial ink but lose expensive physical shadowing. */
+@media (max-width: 700px) {
+  html[data-book-interior="true"] [data-reader-mode="paged"] .page-surface,
+  html[data-book-interior="true"] [data-reader-mode="paged"] .page-surface.left,
+  html[data-book-interior="true"] [data-reader-mode="paged"] .page-surface.right {
+    box-shadow: none;
+  }
+
+  html[data-book-interior="true"] .page-running {
+    opacity: .58;
+  }
+
+  html[data-book-interior="true"] :is(.page-inner, .scroll-document) figure > img,
+  html[data-book-interior="true"] :is(.page-inner, .scroll-document) p:has(> img:only-child) > img {
+    box-shadow: 0 7px 18px color-mix(in srgb, var(--shadow) 28%, transparent);
+  }
+}
+
+@media (prefers-contrast: more) {
+  html[data-book-interior="true"] {
+    --book-interior-rule: var(--text-secondary);
+    --book-interior-rule-soft: color-mix(in srgb, var(--text-secondary) 58%, transparent);
+  }
+
+  html[data-book-interior="true"] [data-reader-mode="paged"] .page-surface,
+  html[data-book-interior="true"] [data-reader-mode="scroll"] .scroll-reader {
+    background-image: none;
+  }
+}
+
+@media (forced-colors: active) {
+  html[data-book-interior="true"] [data-reader-mode="paged"] .page-surface,
+  html[data-book-interior="true"] [data-reader-mode="scroll"] .scroll-reader {
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  html[data-book-interior="true"] .page-inner.chapter-open > h1:first-child::before,
+  html[data-book-interior="true"] .scroll-document h1::before,
+  html[data-book-interior="true"] :is(.page-inner, .scroll-document) blockquote::before,
+  html[data-book-interior="true"] :is(.page-inner, .scroll-document) hr::after {
+    display: none;
+  }
+
+  html[data-book-interior="true"] :is(.page-inner, .scroll-document) figure > img,
+  html[data-book-interior="true"] :is(.page-inner, .scroll-document) p:has(> img:only-child) > img {
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+}
+
+@media print {
+  html[data-book-interior="true"] [data-reader-mode="paged"] .page-surface,
+  html[data-book-interior="true"] [data-reader-mode="scroll"] .scroll-reader {
+    background: #fff;
+    box-shadow: none;
+  }
+
+  html[data-book-interior="true"] .page-num::before,
+  html[data-book-interior="true"] .page-num::after,
+  html[data-book-interior="true"] :is(.page-inner, .scroll-document) blockquote::before {
+    display: none;
+  }
+}

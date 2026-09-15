@@ -21,6 +21,7 @@ import {
 } from './storage.js';
 import { parseRoute, libraryHash, coverHash, readHash, go } from './router.js';
 import { createLatestRouteQueue, routeNeedsCatalog } from './route-queue.js';
+import { catalogCoverCandidates, runCatalogPrimer } from './startup-catalog-primer.js';
 import {
   loadNotes,
   addNote,
@@ -103,27 +104,72 @@ function overlaysOpen() {
   ].some((id) => $(id)?.classList.contains('active'));
 }
 
+let catalogRenderFrame = 0;
+let catalogReady = null;
+
+function scheduleCatalogRender() {
+  if (document.body?.dataset.stage !== 'library' || catalogRenderFrame) return;
+  catalogRenderFrame = requestAnimationFrame(() => {
+    catalogRenderFrame = 0;
+    if (document.body?.dataset.stage === 'library') renderShelf(app.catalog);
+  });
+}
+
+async function loadCatalogMeta(slug) {
+  try {
+    const hubDoc = await fetchDocument(`books/${slug}/README.md`);
+    const meta = parseBookReadme(hubDoc.text, slug);
+    meta.modified = hubDoc.modified;
+    return catalogEntryVisible(meta, window.__IMPRINT?.role) ? meta : null;
+  } catch (err) {
+    console.warn('Skip catalog slug', slug, err);
+    return null;
+  }
+}
+
+function enrichCatalogCovers(entries) {
+  const start = () => {
+    runCatalogPrimer(entries, async (meta) => {
+      const cover = await firstExisting(catalogCoverCandidates(meta.slug));
+      if (cover && cover !== meta.cover) {
+        meta.cover = cover;
+        scheduleCatalogRender();
+      }
+      return meta;
+    }, 3).catch(() => {
+      // Cover artwork is optional enrichment and must not block the library.
+    });
+  };
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(start, { timeout: 750 });
+  } else {
+    window.setTimeout(start, 0);
+  }
+}
+
 async function loadCatalog() {
   const md = await fetchText('README.md');
   const slugs = parsePortalCatalog(md);
-  const entries = [];
-  for (const slug of slugs) {
-    try {
-      const hubDoc = await fetchDocument(`books/${slug}/README.md`);
-      const meta = parseBookReadme(hubDoc.text, slug);
-      meta.modified = hubDoc.modified;
-      meta.cover = await firstExisting(
-        ['cover.png', 'cover.jpg', 'cover.webp', 'cover.jpeg'].map(
-          (name) => `books/${slug}/media/${name}`
-        )
-      );
-      if (catalogEntryVisible(meta, window.__IMPRINT?.role)) entries.push(meta);
-    } catch (err) {
-      console.warn('Skip catalog slug', slug, err);
-    }
-  }
+  const settled = await runCatalogPrimer(slugs, loadCatalogMeta, 6);
+  const entries = settled
+    .filter((row) => row?.status === 'fulfilled' && row.value)
+    .map((row) => row.value);
   app.catalog = entries;
+  enrichCatalogCovers(entries);
   return entries;
+}
+
+function ensureCatalog() {
+  if (!catalogReady) {
+    catalogReady = loadCatalog().catch((err) => {
+      console.error(err);
+      $('shelfError').hidden = false;
+      $('shelfError').textContent =
+        'Could not load the library catalog. Serve the repository root (not file://) so Markdown can be fetched.';
+      return [];
+    });
+  }
+  return catalogReady;
 }
 
 async function loadBook(slug) {
@@ -1219,6 +1265,7 @@ async function onRoute(route = parseRoute()) {
     console.error(err);
     $('shelfError').hidden = false;
     $('shelfError').textContent = err.message || 'Could not open that book.';
+    if (!app.catalog.length) await ensureCatalog();
     setTitle();
     renderShelf(app.catalog);
     showStage('library');
@@ -1626,6 +1673,7 @@ function bindPageCurl() {
   const wrap = $('pagesWrapper');
   const prev = $('pageCurlPrev');
   const next = $('pageCurlNext');
+
   if (!wrap || !prev || !next) return;
 
   const motion = {
@@ -1719,21 +1767,32 @@ function bindPageCurl() {
   wrap.addEventListener('pointerleave', hide);
 }
 
+function scheduleServiceWorkerRegistration(afterInteractive) {
+  if (!('serviceWorker' in navigator)) return;
+  Promise.resolve(afterInteractive).finally(() => {
+    const register = () => {
+      navigator.serviceWorker.register(new URL('../sw.js', import.meta.url)).catch(() => {});
+    };
+    const begin = () => {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(register, { timeout: 2500 });
+      } else {
+        window.setTimeout(register, 250);
+      }
+    };
+    if (document.readyState === 'complete') begin();
+    else window.addEventListener('load', begin, { once: true });
+  });
+}
+
 async function init() {
   applyImprint(await loadImprint());
   app.prefs = loadPrefs();
   applyPrefs();
   bindUi();
 
-  const catalogReady = loadCatalog().catch((err) => {
-    console.error(err);
-    $('shelfError').hidden = false;
-    $('shelfError').textContent =
-      'Could not load the library catalog. Serve the repository root (not file://) so Markdown can be fetched.';
-  });
-
   const routeQueue = createLatestRouteQueue(async (route) => {
-    if (routeNeedsCatalog(route)) await catalogReady;
+    if (routeNeedsCatalog(route)) await ensureCatalog();
     await onRoute(route);
   }, {
     onError(error) {
@@ -1745,10 +1804,7 @@ async function init() {
   window.addEventListener('hashchange', requestRoute);
   window.addEventListener('popstate', requestRoute);
   requestRoute();
-
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register(new URL('../sw.js', import.meta.url)).catch(() => {});
-  }
+  scheduleServiceWorkerRegistration(routeQueue.idle());
 }
 
 init();

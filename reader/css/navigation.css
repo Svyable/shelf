@@ -150,14 +150,26 @@
     --reader-nav-target: 3.25rem;
   }
 
-  .nav-gesture-preview {
-    width: 26%;
+  .nav-gesture-preview.prev {
+    width: 20%;
+  }
+
+  .nav-gesture-preview.next {
+    width: 28%;
   }
 
   .nav-gesture-preview::before {
     width: 2.5rem;
     height: 2.5rem;
     font-size: 1.45rem;
+  }
+
+  /* Edge cues appear only while manually revealed immersive chrome is visible.
+     They disappear with the chrome and never become another persistent toolbar. */
+  body[data-stage="read"][data-reader-immersive="manual"].reader-chrome-visible
+    #pagesWrapper.active:not(.nav-drag-prev):not(.nav-drag-next):not([data-nav-buffered])
+    .nav-gesture-preview {
+    opacity: .085;
   }
 }
 
@@ -171,6 +183,11 @@
 @media (forced-colors: active) {
   [data-reader-overflow="true"]:focus-visible {
     outline-color: Highlight;
+  }
+
+  body[data-stage="read"][data-reader-immersive="manual"].reader-chrome-visible
+    #pagesWrapper .nav-gesture-preview {
+    opacity: 0;
   }
 }
 

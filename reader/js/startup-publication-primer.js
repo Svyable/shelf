@@ -1,3 +1,140 @@
+const DIRECT_COVER_OPENING_TEXT = 'Opening full book…';
+
+function directCoverRoute() {
+  if (typeof window === 'undefined') return null;
+  const query = new URLSearchParams(window.location.search || '');
+  const querySlug = query.get('b');
+  if (querySlug && !query.get('c')) return { slug: querySlug };
+
+  const raw = String(window.location.hash || '#/').replace(/^#/, '');
+  const parts = raw.split('/').filter(Boolean);
+  if (parts[0] !== 'b' || !parts[1] || parts[2]) return null;
+  try {
+    return { slug: decodeURIComponent(parts[1]) };
+  } catch {
+    return null;
+  }
+}
+
+function readerRepoBase() {
+  const path = String(window.location.pathname || '/').replace(/index\.html$/, '');
+  if (path.endsWith('/reader/') || path.endsWith('/reader')) return path.replace(/reader\/?$/, '');
+  const index = path.indexOf('/reader/');
+  if (index >= 0) return path.slice(0, index + 1);
+  return path.endsWith('/') ? path : `${path}/`;
+}
+
+function directCoverStillRequested(slug) {
+  return directCoverRoute()?.slug === slug;
+}
+
+function finishDirectCoverPreviewWhenCanonical(meta, start, dock) {
+  if (!meta || typeof MutationObserver === 'undefined') return;
+  const observer = new MutationObserver(() => {
+    if (meta.textContent === DIRECT_COVER_OPENING_TEXT) return;
+    if (start) {
+      start.disabled = false;
+      delete start.dataset.directCoverPreview;
+    }
+    if (dock) dock.hidden = false;
+    observer.disconnect();
+  });
+  observer.observe(meta, { childList: true, characterData: true, subtree: true });
+}
+
+export async function installDirectCoverFirstPaint() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return { status: 'skipped' };
+  const route = directCoverRoute();
+  if (!route?.slug) return { status: 'skipped' };
+
+  const title = document.getElementById('coverTitle');
+  if (document.body?.dataset.stage === 'cover' && title?.textContent?.trim()) {
+    return { status: 'ready' };
+  }
+
+  try {
+    const response = await fetch(
+      `${readerRepoBase()}books/${encodeURIComponent(route.slug)}/README.md`,
+      { cache: 'no-cache' }
+    );
+    if (!response.ok) return { status: 'failed' };
+    const markdown = await response.text();
+    if (!directCoverStillRequested(route.slug)) return { status: 'superseded' };
+
+    const { parseBookReadme, clothColor } = await import('./catalog.js');
+    const book = parseBookReadme(markdown, route.slug);
+    if (!directCoverStillRequested(route.slug)) return { status: 'superseded' };
+
+    const cover = document.getElementById('coverPage');
+    if (!cover || !title) return { status: 'unavailable' };
+
+    document.body.dataset.stage = 'cover';
+    document.getElementById('libraryView')?.setAttribute('hidden', '');
+    cover.hidden = false;
+    cover.classList.remove('opened');
+    document.getElementById('pagesWrapper')?.classList.remove('active');
+    document.getElementById('backCover')?.classList.remove('show');
+    const pageNav = document.getElementById('pageNav');
+    if (pageNav) pageNav.hidden = true;
+    document.getElementById('readerChrome')?.classList.remove('is-reading');
+    const loader = document.getElementById('loader');
+    if (loader) loader.hidden = true;
+
+    title.textContent = book.title || route.slug;
+    const subtitle = document.getElementById('coverSubtitle');
+    if (subtitle) subtitle.textContent = book.subtitle || '';
+    const author = document.getElementById('coverAuthor');
+    if (author) author.textContent = String(book.authors || '').replace(/@/g, '').trim();
+    const imprint = [book.publisher, book.edition].filter(Boolean).join(' · ');
+    const imprintNode = document.getElementById('coverImprint');
+    if (imprintNode) imprintNode.textContent = imprint;
+    const backImprint = document.getElementById('backImprint');
+    if (backImprint) backImprint.textContent = imprint;
+    const backTitle = document.getElementById('backTitle');
+    if (backTitle) backTitle.textContent = book.title || route.slug;
+    const backAuthor = document.getElementById('backAuthor');
+    if (backAuthor) backAuthor.textContent = String(book.authors || '').replace(/@/g, '').trim();
+
+    const draft = !book.published;
+    const draftBadge = document.getElementById('draftBadge');
+    if (draftBadge) draftBadge.hidden = !draft;
+    document.body.classList.toggle('is-draft', draft);
+    const proofRibbon = document.getElementById('proofRibbon');
+    if (proofRibbon) proofRibbon.hidden = !draft;
+
+    const face = document.getElementById('coverFront');
+    if (face) face.style.setProperty('--cloth', clothColor(book.slug));
+
+    const meta = document.getElementById('coverMeta');
+    if (meta) meta.textContent = DIRECT_COVER_OPENING_TEXT;
+    const start = document.getElementById('startBtn');
+    if (start) {
+      start.disabled = true;
+      start.dataset.directCoverPreview = 'true';
+      start.textContent = 'Opening…';
+    }
+    const dock = document.getElementById('coverDock');
+    if (dock) dock.hidden = true;
+    finishDirectCoverPreviewWhenCanonical(meta, start, dock);
+    document.title = book.title || document.title;
+    return { status: 'shown', slug: route.slug };
+  } catch (error) {
+    console.warn('Direct-cover first paint could not be shown', error);
+    return { status: 'failed' };
+  }
+}
+
+function scheduleDirectCoverFirstPaint() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  queueMicrotask(() => installDirectCoverFirstPaint());
+}
+
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  scheduleDirectCoverFirstPaint();
+  window.addEventListener('hashchange', scheduleDirectCoverFirstPaint);
+  window.addEventListener('popstate', scheduleDirectCoverFirstPaint);
+}
+
 export function orderedPublicationFiles(contents = [], targetChapter = null) {
   const rows = Array.isArray(contents) ? contents.filter((row) => row?.file) : [];
   if (!rows.length) return [];

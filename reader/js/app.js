@@ -4,7 +4,7 @@
 // full reading surface. Bookself remains the upstream framework source, never a
 // production runtime.
 
-const readerCoreUrl = new URL('./app-core.js?v=20260912-cover-1', import.meta.url).href;
+const readerCoreUrl = new URL('./app-core.js?v=20260914-reader-sync-1', import.meta.url).href;
 const readmeUrl = new URL('../../README.md', import.meta.url);
 const catalogUrl = new URL('../../catalog.json', import.meta.url);
 const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v5';
