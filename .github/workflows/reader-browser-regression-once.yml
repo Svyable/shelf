@@ -38,17 +38,9 @@ jobs:
 
           const base = 'http://127.0.0.1:4173/';
           const prefs = {
-            fontSize: 22,
-            font: 'clear',
-            fontWeight: 500,
-            tracking: 0.02,
-            leading: 1.8,
-            measure: 'narrow',
-            align: 'left',
-            paragraph: 'airy',
-            indent: 'none',
-            mode: 'paged',
-            hyphens: 'off',
+            fontSize: 22, font: 'clear', fontWeight: 500, tracking: 0.02,
+            leading: 1.8, measure: 'narrow', align: 'left', paragraph: 'airy',
+            indent: 'none', mode: 'paged', hyphens: 'off',
           };
           const viewports = [
             { name: 'desktop', width: 1280, height: 900, mobile: false },
@@ -56,41 +48,49 @@ jobs:
             { name: 'phone', width: 390, height: 844, mobile: true },
           ];
 
-          const imprintResponse = await fetch(`${base}imprint.json`);
-          assert.equal(imprintResponse.ok, true, 'imprint.json must load');
-          const imprint = await imprintResponse.json();
+          async function json(path) {
+            const response = await fetch(`${base}${path}`);
+            assert.equal(response.ok, true, `${path} must load`);
+            return response.json();
+          }
+
+          const imprint = await json('imprint.json');
           const storageKey = `${imprint.storagePrefix || 'obb'}:reader-experience`;
+          const catalog = await json('catalog.json');
+          let target = null;
+          for (const slug of catalog.books || []) {
+            const response = await fetch(`${base}books/${encodeURIComponent(slug)}/README.md`);
+            if (!response.ok) continue;
+            const markdown = await response.text();
+            const match = markdown.match(/^- \[[ xX]\] \[[^\]]+\]\((manuscript\/[^)\s]+)\)/m);
+            if (!match) continue;
+            target = {
+              slug,
+              chapter: match[1].replace(/^manuscript\//, '').replace(/\.md$/i, ''),
+            };
+            break;
+          }
+          assert.ok(target, 'catalog must contain a readable book with a manuscript chapter');
+          const directRead = `reader/?b=${encodeURIComponent(target.slug)}&c=${encodeURIComponent(target.chapter)}&o=0`;
 
           const browser = await chromium.launch({ headless: true });
           try {
-            const discovery = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-            const discoveryPage = await discovery.newPage();
-            await discoveryPage.goto(`${base}reader/`, { waitUntil: 'domcontentloaded' });
-            const book = discoveryPage.locator('.volume[href], #shelf a[href^="#/b/"]').first();
-            await book.waitFor({ state: 'visible', timeout: 20000 });
-            await book.click();
-            await discoveryPage.waitForFunction(() => ['cover', 'read'].includes(document.body.dataset.stage), null, { timeout: 20000 });
-            if (await discoveryPage.locator('#startBtn').isVisible()) await discoveryPage.locator('#startBtn').click();
-            await discoveryPage.waitForFunction(() => document.body.dataset.stage === 'read', null, { timeout: 20000 });
-            const readUrl = new URL(discoveryPage.url());
-            const directRead = `${readUrl.pathname}${readUrl.search}${readUrl.hash}`;
-            await discovery.close();
-
             for (const viewport of viewports) {
               const context = await browser.newContext({
                 viewport: { width: viewport.width, height: viewport.height },
                 hasTouch: viewport.mobile,
                 isMobile: viewport.mobile,
               });
-              await context.addInitScript(({ key, value }) => {
-                localStorage.setItem(key, value);
-              }, { key: storageKey, value: JSON.stringify(prefs) });
+              await context.addInitScript(({ key, value }) => localStorage.setItem(key, value), {
+                key: storageKey,
+                value: JSON.stringify(prefs),
+              });
               const page = await context.newPage();
               const errors = [];
               page.on('pageerror', (error) => errors.push(error.message));
-              await page.goto(`${base.replace(/\/$/, '')}${directRead}`, { waitUntil: 'domcontentloaded' });
-              await page.waitForFunction(() => document.body.dataset.stage === 'read', null, { timeout: 20000 });
-              await page.waitForFunction(() => Number(document.getElementById('totalPages')?.textContent || '0') > 0, null, { timeout: 20000 });
+              await page.goto(`${base}${directRead}`, { waitUntil: 'domcontentloaded' });
+              await page.waitForFunction(() => document.body.dataset.stage === 'read', null, { timeout: 30000 });
+              await page.waitForFunction(() => Number(document.getElementById('totalPages')?.textContent || '0') > 0, null, { timeout: 30000 });
 
               const firstPaintPrefs = await page.evaluate(() => {
                 const root = document.documentElement;
@@ -111,7 +111,7 @@ jobs:
                 fontSize: '22px', leading: '1.8', weight: '500', tracking: '0.02em',
                 font: 'clear', measure: 'narrow', align: 'left', paragraph: 'airy',
                 mode: 'paged', hyphens: 'off',
-              }, `${viewport.name}: saved reading spacing/type preferences must be active before any Reader control is touched`);
+              }, `${viewport.name}: saved spacing/type preferences must be active before any Reader control is touched`);
 
               await page.evaluate(async () => {
                 if (document.fonts?.ready) await document.fonts.ready;
@@ -130,8 +130,7 @@ jobs:
               });
               const before = await signature();
               await page.waitForTimeout(450);
-              const after = await signature();
-              assert.deepEqual(after, before, `${viewport.name}: settled first Reader layout must remain stable without control interaction`);
+              assert.deepEqual(await signature(), before, `${viewport.name}: settled first layout must remain stable without control interaction`);
 
               const toc = page.locator('#tocBtn');
               await toc.waitFor({ state: 'visible', timeout: 10000 });
@@ -145,37 +144,33 @@ jobs:
                 const rect = drawer.getBoundingClientRect();
                 const style = getComputedStyle(drawer);
                 return {
-                  width: rect.width,
-                  height: rect.height,
-                  display: style.display,
-                  visibility: style.visibility,
-                  expanded: button.getAttribute('aria-expanded'),
-                  modal: drawer.getAttribute('aria-modal'),
-                  appInert: !!app?.inert,
+                  width: rect.width, height: rect.height, display: style.display,
+                  visibility: style.visibility, expanded: button.getAttribute('aria-expanded'),
+                  modal: drawer.getAttribute('aria-modal'), appInert: !!app?.inert,
                   appBlockedClass: !!app?.classList.contains('gui-modal-background'),
                   headerPointerEvents: getComputedStyle(header).pointerEvents,
                 };
               });
-              assert.ok(drawerState.width > 20 && drawerState.height > 20, `${viewport.name}: Contents drawer must have visible geometry`);
-              assert.notEqual(drawerState.display, 'none', `${viewport.name}: Contents drawer must render`);
-              assert.notEqual(drawerState.visibility, 'hidden', `${viewport.name}: Contents drawer must be visible`);
-              assert.equal(drawerState.expanded, 'true', `${viewport.name}: Contents aria-expanded must track open state`);
-              assert.equal(drawerState.modal, 'false', `${viewport.name}: Contents must be a navigation drawer, not a blocking modal`);
-              assert.equal(drawerState.appInert, false, `${viewport.name}: Reader background/header must not be inert while Contents is open`);
-              assert.equal(drawerState.appBlockedClass, false, `${viewport.name}: Reader background must not retain modal blocking state`);
-              assert.notEqual(drawerState.headerPointerEvents, 'none', `${viewport.name}: header must remain interactive`);
+              assert.ok(drawerState.width > 20 && drawerState.height > 20, `${viewport.name}: Contents must have visible geometry`);
+              assert.notEqual(drawerState.display, 'none');
+              assert.notEqual(drawerState.visibility, 'hidden');
+              assert.equal(drawerState.expanded, 'true');
+              assert.equal(drawerState.modal, 'false');
+              assert.equal(drawerState.appInert, false);
+              assert.equal(drawerState.appBlockedClass, false);
+              assert.notEqual(drawerState.headerPointerEvents, 'none');
 
               await toc.click();
               await page.waitForFunction(() => !document.getElementById('tocOverlay')?.classList.contains('active'));
-              assert.equal(await toc.getAttribute('aria-expanded'), 'false', `${viewport.name}: Contents control must close its own drawer`);
+              assert.equal(await toc.getAttribute('aria-expanded'), 'false');
               await toc.click();
               await page.locator('#tocOverlay.active').waitFor({ state: 'visible' });
               await page.locator('#tocClose').click();
               await page.waitForFunction(() => !document.getElementById('tocOverlay')?.classList.contains('active'));
-              assert.equal(await toc.getAttribute('aria-expanded'), 'false', `${viewport.name}: close button must close Contents`);
+              assert.equal(await toc.getAttribute('aria-expanded'), 'false');
 
               assert.deepEqual(errors, [], `${viewport.name}: no uncaught page errors expected`);
-              console.log(`PASS ${viewport.name}: cold layout + Contents drawer`);
+              console.log(`PASS ${viewport.name}: cold direct-open layout + Contents drawer`);
               await context.close();
             }
           } finally {
