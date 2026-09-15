@@ -26,6 +26,51 @@ jobs:
         run: python3 .bookself/tests/test_sync_ui.py
       - name: Safe-sync Bookself Reader engine
         run: python3 .bookself/scripts/sync-ui.py --shelf-safe "$GITHUB_WORKSPACE"
+      - name: Preserve Shelf identity and refresh deployment keys
+        shell: bash
+        run: |
+          set -euo pipefail
+          git checkout "$GITHUB_SHA" -- reader/index.html reader/manifest.webmanifest reader/app-icon.svg
+          python3 - <<'PY'
+          from pathlib import Path
+
+          index = Path('reader/index.html')
+          text = index.read_text(encoding='utf-8')
+          changes = [
+              ('js/app.js?v=r3', 'js/app.js?v=r4'),
+              ('js/experience.js?v=r2', 'js/experience.js?v=r3'),
+          ]
+          for old, new in changes:
+              if old in text:
+                  text = text.replace(old, new, 1)
+              elif new not in text:
+                  raise SystemExit(f'expected Shelf shell version seam not found: {old}')
+          nav = '  <link rel="stylesheet" href="css/navigation.css?v=r2" data-reader-navigation="true" data-reader-critical="true">\n'
+          if nav not in text:
+              marker = '  <link rel="manifest" href="manifest.webmanifest">\n'
+              if marker not in text:
+                  raise SystemExit('Shelf manifest link seam not found')
+              text = text.replace(marker, nav + marker, 1)
+          index.write_text(text, encoding='utf-8')
+
+          app = Path('reader/js/app.js')
+          text = app.read_text(encoding='utf-8')
+          old = './app-core.js?v=20260912-cover-1'
+          new = './app-core.js?v=20260914-reader-sync-1'
+          if old in text:
+              text = text.replace(old, new, 1)
+          elif new not in text:
+              raise SystemExit('Shelf app-core cache key seam not found')
+          app.write_text(text, encoding='utf-8')
+
+          sw = Path('reader/sw.js')
+          text = sw.read_text(encoding='utf-8')
+          if "const CACHE = 'sven-shelf-reader-v113';" in text:
+              text = text.replace("const CACHE = 'sven-shelf-reader-v113';", "const CACHE = 'sven-shelf-reader-v114';", 1)
+          elif "const CACHE = 'sven-shelf-reader-v114';" not in text:
+              raise SystemExit('Shelf service-worker cache generation seam not found')
+          sw.write_text(text, encoding='utf-8')
+          PY
       - name: Verify Shelf ownership boundary
         shell: bash
         run: |
@@ -33,18 +78,47 @@ jobs:
           python3 - <<'PY'
           import json, os, subprocess
           from pathlib import Path
+
+          base = os.environ['GITHUB_SHA']
+          def original(path):
+              return subprocess.check_output(['git', 'show', f'{base}:{path}'], text=True)
+
+          expected_index = original('reader/index.html')
+          expected_index = expected_index.replace('js/app.js?v=r3', 'js/app.js?v=r4', 1)
+          expected_index = expected_index.replace('js/experience.js?v=r2', 'js/experience.js?v=r3', 1)
+          nav = '  <link rel="stylesheet" href="css/navigation.css?v=r2" data-reader-navigation="true" data-reader-critical="true">\n'
+          if nav not in expected_index:
+              expected_index = expected_index.replace('  <link rel="manifest" href="manifest.webmanifest">\n', nav + '  <link rel="manifest" href="manifest.webmanifest">\n', 1)
+          if Path('reader/index.html').read_text() != expected_index:
+              raise SystemExit('Shelf index changed beyond approved runtime/cache wiring')
+
+          expected_app = original('reader/js/app.js').replace(
+              './app-core.js?v=20260912-cover-1',
+              './app-core.js?v=20260914-reader-sync-1',
+              1,
+          )
+          if Path('reader/js/app.js').read_text() != expected_app:
+              raise SystemExit('Shelf app adapter changed beyond app-core cache key')
+
+          expected_sw = original('reader/sw.js').replace(
+              "const CACHE = 'sven-shelf-reader-v113';",
+              "const CACHE = 'sven-shelf-reader-v114';",
+              1,
+          )
+          if Path('reader/sw.js').read_text() != expected_sw:
+              raise SystemExit('Shelf service worker changed beyond cache generation')
+
           imprint = json.loads(Path('imprint.json').read_text())
           protected = [
               'catalog.json', 'README.md', 'books', 'imprint.json',
-              'reader/index.html', 'reader/manifest.webmanifest', 'reader/app-icon.svg',
-              'reader/sw.js', 'reader/js/app.js', 'reader/js/shelf-gui.js',
-              'reader/css/shelf-gui.css',
+              'reader/manifest.webmanifest', 'reader/app-icon.svg',
+              'reader/js/shelf-gui.js', 'reader/css/shelf-gui.css',
           ]
           for raw in imprint.get('readerStyles') or []:
               value = str(raw).split('?', 1)[0].strip().lstrip('./')
               if value and '..' not in Path(value).parts:
                   protected.append(value)
-          subprocess.run(['git', 'diff', '--exit-code', os.environ['GITHUB_SHA'], '--', *protected], check=True)
+          subprocess.run(['git', 'diff', '--exit-code', base, '--', *protected], check=True)
           PY
           cmp reader/js/app-core.js .bookself/reader/js/app.js
       - name: Verify Reader regression contracts
@@ -58,12 +132,19 @@ jobs:
           grep -Fq "aria-modal') !== 'false'" reader/js/viewport-stability-runtime.js
           grep -Fq "attributeFilter: ['class']" reader/js/viewport-stability-runtime.js
           ! grep -Fq "attributeFilter: ['class', 'aria-modal']" reader/js/viewport-stability-runtime.js
+          grep -Fq 'css/navigation.css?v=r2' reader/index.html
+          grep -Fq 'js/experience.js?v=r3' reader/index.html
+          grep -Fq 'js/app.js?v=r4' reader/index.html
+          grep -Fq 'app-core.js?v=20260914-reader-sync-1' reader/js/app.js
+          grep -Fq "const CACHE = 'sven-shelf-reader-v114';" reader/sw.js
           cp reader/js/viewport-stability-runtime.js /tmp/shelf-viewport-stability-runtime.mjs
           cp reader/js/experience.js /tmp/shelf-experience.mjs
           cp reader/js/app-core.js /tmp/shelf-app-core.mjs
+          cp reader/js/app.js /tmp/shelf-app.mjs
           node --check /tmp/shelf-viewport-stability-runtime.mjs
           node --check /tmp/shelf-experience.mjs
           node --check /tmp/shelf-app-core.mjs
+          node --check /tmp/shelf-app.mjs
       - name: Commit synchronized Reader
         shell: bash
         run: |
