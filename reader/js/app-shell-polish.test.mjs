@@ -28,7 +28,7 @@ check(
 );
 check(loader.includes("const STYLE_HREF = 'css/app-shell-polish.css?v=r1'"), 'loader owns one optional stylesheet');
 check(loader.includes("'#themeModeBtn'"), 'late global theme control participates in labels');
-check(loader.includes("attributeFilter: ['aria-label', 'title']"), 'dynamic control labels remain synchronized');
+check(loader.includes("attributeFilter: ['aria-label', 'aria-pressed', 'title', 'class']"), 'dynamic control labels remain synchronized');
 check(loader.includes("document.documentElement.dataset.readerAppShell = 'ready'"), 'runtime exposes a ready marker');
 check(runtime.includes("import('./app-shell-polish.js').catch"), 'polish is loaded opportunistically');
 
