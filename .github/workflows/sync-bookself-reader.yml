@@ -1,5 +1,7 @@
 name: Sync Bookself Reader
 
+# This is the only write-capable Shelf workflow. The boundary checker requires
+# it to use Bookself's --shelf-safe path and to stage reader/** only.
 on:
   push:
     branches: [main]
