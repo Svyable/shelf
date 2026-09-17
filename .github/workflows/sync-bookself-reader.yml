@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 1
       - name: Safely sync the current Reader engine
         working-directory: shelf
-        run: ./scripts/sync-ui.sh ../bookself
+        run: sh scripts/sync-ui.sh ../bookself
       - name: Verify Shelf ownership boundary
         working-directory: shelf
         run: python3 scripts/check-shelf-boundary.py
