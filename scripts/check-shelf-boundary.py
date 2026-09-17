@@ -10,29 +10,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 BOOKSELF_DEMO_SLUGS = {
-    "bookself-101",
-    "bookself-daily",
-    "bookself-dispatch",
-    "bookself-format-gallery",
-    "bookself-review",
-    "how-to-bookself",
-    "open-scholarship-notes",
-    "the-example-paper",
-    "style-after-midnight",
-    "style-clear-margin",
-    "style-common-book",
-    "style-easy-reading",
-    "style-field-notes",
-    "style-lamplight-room",
-    "style-poems-at-window",
-    "style-quiet-study",
+    "bookself-101", "bookself-daily", "bookself-dispatch", "bookself-format-gallery",
+    "bookself-review", "how-to-bookself", "open-scholarship-notes", "the-example-paper",
+    "style-after-midnight", "style-clear-margin", "style-common-book", "style-easy-reading",
+    "style-field-notes", "style-lamplight-room", "style-poems-at-window", "style-quiet-study",
 }
 
 REMOTE_BOOKSELF_RUNTIME = re.compile(
     r"(?:import\s*\(|importScripts\s*\(|\bfrom\s+)[^\n]{0,240}"
-    r"https://svyable\.github\.io/bookself/",
-    re.I,
+    r"https://svyable\.github\.io/bookself/", re.I,
 )
+SYNC_WRITER = Path(".github/workflows/sync-bookself-reader.yml")
 
 
 def fail(message: str) -> None:
@@ -74,10 +62,7 @@ def main() -> int:
     for path in (ROOT / "reader").rglob("*.js"):
         text = path.read_text(encoding="utf-8", errors="replace")
         if REMOTE_BOOKSELF_RUNTIME.search(text):
-            fail(
-                "Reader JavaScript dynamically depends on the Bookself Pages deployment: "
-                f"{path.relative_to(ROOT)}"
-            )
+            fail("Reader JavaScript dynamically depends on the Bookself Pages deployment: " + str(path.relative_to(ROOT)))
 
     sync = (ROOT / "scripts" / "sync-ui.sh").read_text(encoding="utf-8")
     if "--shelf-safe" not in sync:
@@ -87,10 +72,23 @@ def main() -> int:
     if workflow_dir.is_dir():
         for path in sorted(workflow_dir.glob("*.y*ml")):
             text = path.read_text(encoding="utf-8")
-            if re.search(r"^\s*contents:\s*write\s*$", text, flags=re.M | re.I):
-                fail(f"custom workflow may not have contents: write: {path.relative_to(ROOT)}")
+            relative = path.relative_to(ROOT)
+            writable = bool(re.search(r"^\s*contents:\s*write\s*$", text, flags=re.M | re.I))
+            if writable and relative != SYNC_WRITER:
+                fail(f"custom workflow may not have contents: write: {relative}")
+            if writable:
+                required = [
+                    "sh scripts/sync-ui.sh ../bookself",
+                    "python3 scripts/check-shelf-boundary.py",
+                    "git diff --quiet -- reader",
+                    "git add reader",
+                    "git push origin HEAD:main",
+                ]
+                missing = [needle for needle in required if needle not in text]
+                if missing:
+                    fail(f"Reader sync writer escaped its guarded contract: {', '.join(missing)}")
             if re.search(r"^\s*permissions:\s*write-all\s*$", text, flags=re.M | re.I):
-                fail(f"custom workflow may not use permissions: write-all: {path.relative_to(ROOT)}")
+                fail(f"custom workflow may not use permissions: write-all: {relative}")
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     released = set(re.findall(r"\]\(books/([a-z0-9][a-z0-9-]*)/\)", readme, flags=re.I))
@@ -99,9 +97,8 @@ def main() -> int:
             fail(f"released README entry has no publication directory: {slug}")
 
     print(
-        f"Shelf boundary OK: {len(books)} catalog entries; "
-        f"{len(released)} README-linked releases; local Reader runtime; "
-        "read-only custom CI."
+        f"Shelf boundary OK: {len(books)} catalog entries; {len(released)} README-linked releases; "
+        "local Reader runtime; guarded Reader sync writer."
     )
     return 0
 
