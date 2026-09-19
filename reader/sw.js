@@ -11,6 +11,7 @@ const CORE = [
   './js/navigation.js',
   './js/reading-surface.js',
   './js/reading-continuity.js',
+  './js/reading-position.js',
   './js/content-navigation.js',
   './js/page-tap-zones.js',
   './js/viewport-stability.js',
