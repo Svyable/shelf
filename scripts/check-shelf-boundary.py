@@ -22,6 +22,60 @@ REMOTE_BOOKSELF_RUNTIME = re.compile(
 )
 SYNC_WRITER = Path(".github/workflows/sync-bookself-reader.yml")
 
+CORE_RE = re.compile(r"const\s+CORE\s*=\s*\[([\s\S]*?)\];")
+STATIC_IMPORT_RE = re.compile(
+    r"""(?ms)^\s*(?:import|export)\s+"""
+    r"""(?:(?:\{[\s\S]*?\}|\*\s+as\s+\w+|[A-Za-z_$][\w$]*(?:\s*,\s*\{[\s\S]*?\})?)\s+from\s+)?"""
+    r"""['"](?P<path>\.[^'"]+\.js)['"]"""
+)
+
+
+def reader_core_entries(worker_source: str) -> set[str]:
+    match = CORE_RE.search(worker_source)
+    if not match:
+        fail("Reader service-worker CORE is missing or unreadable")
+    return set(re.findall(r"""['"](\./[^'"]+)['"]""", match.group(1)))
+
+
+def static_reader_imports(entry: str) -> set[str]:
+    relative = entry.removeprefix("./")
+    source_path = ROOT / "reader" / relative
+    if not source_path.is_file() or source_path.suffix != ".js":
+        return set()
+    source = source_path.read_text(encoding="utf-8")
+    imports: set[str] = set()
+    for match in STATIC_IMPORT_RE.finditer(source):
+        target = (source_path.parent / match.group("path")).resolve()
+        try:
+            reader_relative = target.relative_to((ROOT / "reader").resolve())
+        except ValueError:
+            continue
+        imports.add(f"./{reader_relative.as_posix()}")
+    return imports
+
+
+def verify_reader_core_closure() -> None:
+    worker = (ROOT / "reader" / "sw.js").read_text(encoding="utf-8")
+    core = reader_core_entries(worker)
+    missing_files: list[str] = []
+    missing_imports: list[str] = []
+    for entry in sorted(core):
+        relative = entry.removeprefix("./")
+        target = ROOT / "reader" if not relative else ROOT / "reader" / relative
+        if not target.exists():
+            missing_files.append(entry)
+            continue
+        for dependency in sorted(static_reader_imports(entry)):
+            if dependency not in core:
+                missing_imports.append(f"{entry} -> {dependency}")
+    if missing_files:
+        fail("Reader service-worker CORE references missing files: " + ", ".join(missing_files))
+    if missing_imports:
+        fail(
+            "Reader service-worker CORE is missing static JavaScript dependencies: "
+            + ", ".join(missing_imports)
+        )
+
 
 def fail(message: str) -> None:
     raise SystemExit(f"Shelf boundary violation: {message}")
@@ -59,6 +113,8 @@ def main() -> int:
     if not (ROOT / "reader" / "js" / "app-core.js").is_file():
         fail("local Reader core is missing")
 
+    verify_reader_core_closure()
+
     for path in (ROOT / "reader").rglob("*.js"):
         text = path.read_text(encoding="utf-8", errors="replace")
         if REMOTE_BOOKSELF_RUNTIME.search(text):
@@ -82,6 +138,7 @@ def main() -> int:
                     "python3 scripts/check-shelf-boundary.py",
                     "git diff --quiet -- reader",
                     "git add reader",
+                    "git pull --rebase origin main",
                     "git push origin HEAD:main",
                 ]
                 missing = [needle for needle in required if needle not in text]
