@@ -57,8 +57,8 @@ def info_cell(markdown: str, label: str) -> str:
     return match.group(1).strip() if match else ""
 
 
-def publication_statuses(root: Path) -> dict[str, str]:
-    result: dict[str, str] = {}
+def publication_metadata(root: Path) -> dict[str, dict[str, str]]:
+    result: dict[str, dict[str, str]] = {}
     books = root / "books"
     if not books.is_dir():
         return result
@@ -68,7 +68,11 @@ def publication_statuses(root: Path) -> dict[str, str]:
         hub = path / "README.md"
         if not hub.is_file():
             continue
-        result[path.name] = info_cell(hub.read_text(encoding="utf-8"), "Status")
+        markdown = hub.read_text(encoding="utf-8")
+        result[path.name] = {
+            "status": info_cell(markdown, "Status"),
+            "tags": info_cell(markdown, "Tags"),
+        }
     return result
 
 
@@ -77,16 +81,16 @@ def check(root: Path) -> list[str]:
     imprint = json.loads((root / "imprint.json").read_text(encoding="utf-8"))
     role = str(imprint.get("role", "")).strip().lower()
     catalog, catalog_label = catalog_slugs(root)
-    statuses = publication_statuses(root)
+    publications = publication_metadata(root)
     errors: list[str] = []
 
     for slug in sorted(catalog):
-        if slug not in statuses:
+        if slug not in publications:
             errors.append(f"{slug}: catalog entry has no readable books/{slug}/README.md")
 
     if role == "shelf":
         for slug in sorted(catalog):
-            status = statuses.get(slug)
+            status = publications.get(slug, {}).get("status")
             if status is not None and status != "Published":
                 errors.append(
                     f"{slug}: Shelf catalog entry is not Published "
@@ -94,8 +98,10 @@ def check(root: Path) -> list[str]:
                 )
 
     if role in {"platform", "shelf"}:
-        for slug, status in sorted(statuses.items()):
-            if status == "Published" and slug not in catalog:
+        for slug, meta in sorted(publications.items()):
+            status = meta.get("status", "")
+            tags = {tag.strip().lower() for tag in meta.get("tags", "").split(",") if tag.strip()}
+            if status == "Published" and slug not in catalog and "style gallery" not in tags:
                 errors.append(f"{slug}: Published publication is missing from {catalog_label}")
 
     return errors
