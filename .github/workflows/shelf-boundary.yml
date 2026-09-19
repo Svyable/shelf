@@ -45,6 +45,10 @@ jobs:
           node --check reader/sw.js
       - name: Verify Shelf publication and Reader ownership boundary
         run: python3 scripts/check-shelf-boundary.py
+      - name: Verify Shelf catalog publication boundary
+        run: |
+          python3 scripts/test_check_catalog.py
+          python3 scripts/check-catalog.py
       - name: Verify release provenance for pull request changes
         if: github.event_name == 'pull_request'
         run: python3 scripts/check-release-provenance.py --changed-from "${{ github.event.pull_request.base.sha }}"
