@@ -43,6 +43,10 @@ jobs:
           cp reader/js/app.js /tmp/shelf-app.mjs
           node --check /tmp/shelf-app.mjs
           node --check reader/sw.js
+      - name: Run Reader contract tests
+        run: |
+          set -e
+          for test in reader/js/*.test.mjs; do node --test "$test"; done
       - name: Verify Shelf publication and Reader ownership boundary
         run: python3 scripts/check-shelf-boundary.py
       - name: Verify Shelf catalog publication boundary
