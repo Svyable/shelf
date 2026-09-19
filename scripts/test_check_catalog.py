@@ -18,7 +18,13 @@ def write(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
-def fixture(root: Path, *, status: str = "Published", catalog: bool = True) -> None:
+def fixture(
+    root: Path,
+    *,
+    status: str = "Published",
+    catalog: bool = True,
+    tags: str = "",
+) -> None:
     write(root / "imprint.json", json.dumps({"role": "shelf"}))
     row = "- [Demo](books/demo/)" if catalog else "Nothing listed."
     write(root / "README.md", f"# Test\n\n## The books\n\n{row}\n")
@@ -27,7 +33,8 @@ def fixture(root: Path, *, status: str = "Published", catalog: bool = True) -> N
     write(
         root / "books" / "demo" / "README.md",
         "# Demo\n\n| | |\n|---|---|\n"
-        f"| **Status** | {status} |\n",
+        f"| **Status** | {status} |\n"
+        f"| **Tags** | {tags} |\n",
     )
 
 
@@ -43,6 +50,12 @@ class CatalogCheckTests(unittest.TestCase):
             root = Path(tmp)
             fixture(root, status="Published", catalog=False)
             self.assertIn("missing from catalog.json", "\n".join(check_catalog.check(root)))
+
+    def test_style_gallery_specimen_may_be_uncataloged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture(root, status="Published", catalog=False, tags="style gallery, specimen")
+            self.assertEqual(check_catalog.check(root), [])
 
     def test_draft_may_be_uncataloged(self):
         with tempfile.TemporaryDirectory() as tmp:
