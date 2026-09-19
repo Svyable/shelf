@@ -1,4 +1,4 @@
-const CACHE = 'sven-shelf-reader-v113';
+const CACHE = 'sven-shelf-reader-v114';
 const READER_PREFIX = new URL('./', self.location.href).pathname;
 const REPO_PREFIX = READER_PREFIX.replace(/reader\/?$/, '');
 const CORE = [
@@ -10,6 +10,16 @@ const CORE = [
   './js/app.js',
   './js/navigation.js',
   './js/reading-surface.js',
+  './js/reading-continuity.js',
+  './js/content-navigation.js',
+  './js/page-tap-zones.js',
+  './js/viewport-stability.js',
+  './js/immersive-chrome.js',
+  './js/font-readiness-runtime.js',
+  './js/font-readiness.js',
+  './js/router.js',
+  './js/reading-trail-model.js',
+  './js/storage.js',
   './js/spread-state.js',
   './js/shelf-gui.js',
   './js/shelf-library-sort.js',
