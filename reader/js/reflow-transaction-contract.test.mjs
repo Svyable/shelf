@@ -3,7 +3,11 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const base = await readFile(new URL('./base.js', import.meta.url), 'utf8');
-const app = await readFile(new URL('./app.js', import.meta.url), 'utf8');
+const shellApp = await readFile(new URL('./app.js', import.meta.url), 'utf8');
+const shelfOwnedShell = shellApp.includes('Shelf owns the public library and its release state.');
+const app = shelfOwnedShell
+  ? await readFile(new URL('./app-core.js', import.meta.url), 'utf8')
+  : shellApp;
 
 const has = (source, text, message) => assert.ok(source.includes(text), message || text);
 

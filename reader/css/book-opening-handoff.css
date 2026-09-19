@@ -1,0 +1,265 @@
+/* Book opening handoff
+   --------------------
+   Physical continuity from shelf/resume into the cover and reading surface.
+   Presentation only: no page measurement, typography, or route geometry. */
+
+html[data-book-opening-handoff="true"] .cover-page {
+  isolation: isolate;
+  filter: drop-shadow(0 24px 34px color-mix(in srgb, var(--shadow) 58%, transparent));
+}
+
+html[data-book-opening-handoff="true"] .cover-page::before,
+html[data-book-opening-handoff="true"] .cover-page::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+/* A real page block sits just behind the cover face. */
+html[data-book-opening-handoff="true"] .cover-page::before {
+  z-index: 0;
+  top: .34rem;
+  right: -.42rem;
+  bottom: .3rem;
+  width: .55rem;
+  border-radius: 0 6px 6px 0;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 44%, #7e6844), rgba(255,255,255,.22) 42%, transparent 100%),
+    repeating-linear-gradient(180deg, #e8d9b8 0 1px, #cdbb95 1px 2px);
+  box-shadow:
+    inset 1px 0 color-mix(in srgb, var(--accent) 42%, transparent),
+    4px 4px 12px rgba(0,0,0,.2);
+}
+
+/* A quieter spine ties the full cover back to the shelf object. */
+html[data-book-opening-handoff="true"] .cover-page::after {
+  z-index: 1;
+  top: .16rem;
+  bottom: .16rem;
+  left: -.28rem;
+  width: .52rem;
+  border-radius: 6px 0 0 6px;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.56), rgba(255,255,255,.05) 58%, rgba(0,0,0,.2)),
+    var(--book-handoff-cloth, #2a1814);
+  box-shadow: inset -1px 0 color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+html[data-book-opening-handoff="true"] .cover-page .cover-front {
+  z-index: 2;
+  border-radius: 4px 11px 11px 4px;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 82%, transparent),
+    10px 19px 44px color-mix(in srgb, var(--shadow) 82%, transparent),
+    inset 0 1px rgba(255,255,255,.05),
+    inset 0 0 82px rgba(0,0,0,.31);
+}
+
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-page:not(.opened) .cover-front {
+  animation: bookCoverSettle 360ms cubic-bezier(.18,.8,.26,1) both;
+}
+
+@keyframes bookCoverSettle {
+  from { transform: translateY(5px) scale(.992); }
+  to { transform: none; }
+}
+
+/* The existing cover-turn remains canonical; pages simply meet it more softly. */
+html[data-book-opening-handoff="true"]:not([data-reader-mode="scroll"]) body[data-stage="read"] .pages-wrapper.active {
+  animation: bookPagesArrive 500ms cubic-bezier(.18,.82,.28,1) both;
+}
+
+@keyframes bookPagesArrive {
+  0% { opacity: .18; transform: scale(.988); filter: brightness(.92); }
+  42% { opacity: .72; }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+
+/* While the shelf object is flying into place, avoid seeing two covers. */
+body.book-handoff-cover-arriving[data-stage="cover"] #coverPage:not(.opened) {
+  opacity: 0;
+  transition: none;
+}
+
+body.book-handoff-cover-reveal[data-stage="cover"] #coverPage:not(.opened) {
+  transition: opacity 240ms ease-out;
+}
+
+.book-handoff-clone {
+  position: fixed !important;
+  z-index: 120 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+  transform: none !important;
+  transform-origin: center !important;
+  filter: drop-shadow(0 18px 26px rgba(0,0,0,.35)) !important;
+  contain: layout paint;
+  will-change: left, top, width, height, opacity;
+}
+
+.book-handoff-clone.volume:hover,
+.book-handoff-clone.volume:nth-child(even) {
+  transform: none !important;
+}
+
+.book-handoff-clone.book-handoff-resume {
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+/* Cover actions: one primary action on the book, at most two quiet controls below. */
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-dock {
+  position: relative;
+  gap: .45rem;
+  margin-top: .7rem;
+  letter-spacing: .04em;
+  text-transform: none;
+  font-family: var(--font-ui);
+  font-size: .76rem;
+}
+
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-dock > #startOverBtn,
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-more > summary {
+  min-height: 2.55rem;
+  padding: .48rem .8rem;
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-elevated) 72%, transparent);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  list-style: none;
+  backdrop-filter: blur(12px);
+}
+
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-more > summary::-webkit-details-marker {
+  display: none;
+}
+
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-more > summary::after {
+  content: "⋯";
+  margin-left: .4rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-dock > #startOverBtn:hover,
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-dock > #startOverBtn:focus-visible,
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-more > summary:hover,
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-more > summary:focus-visible,
+html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-more[open] > summary {
+  border-color: color-mix(in srgb, var(--accent) 58%, var(--border));
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent-glow) 42%, var(--bg-elevated));
+  outline: none;
+}
+
+.cover-more {
+  position: relative;
+}
+
+.cover-more-menu {
+  position: absolute;
+  z-index: 24;
+  right: 0;
+  bottom: calc(100% + .48rem);
+  display: grid;
+  min-width: min(20rem, 84vw);
+  padding: .42rem;
+  border: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg-elevated) 96%, transparent);
+  box-shadow: 0 20px 54px color-mix(in srgb, var(--shadow) 58%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.cover-more:not([open]) .cover-more-menu {
+  display: none;
+}
+
+html[data-book-opening-handoff="true"] .cover-more-menu :is(button, a) {
+  width: 100%;
+  min-height: 2.7rem;
+  justify-content: flex-start;
+  padding: .55rem .7rem;
+  border-radius: 9px;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: .78rem;
+  letter-spacing: .01em;
+  text-transform: none;
+}
+
+html[data-book-opening-handoff="true"] .cover-more-menu :is(button, a):hover,
+html[data-book-opening-handoff="true"] .cover-more-menu :is(button, a):focus-visible {
+  background: color-mix(in srgb, var(--accent-glow) 38%, transparent);
+  color: var(--accent);
+  outline: none;
+}
+
+@media (max-width: 700px) {
+  html[data-book-opening-handoff="true"] .cover-page::before {
+    right: -.3rem;
+    width: .42rem;
+  }
+
+  html[data-book-opening-handoff="true"] .cover-page::after {
+    left: -.2rem;
+    width: .38rem;
+  }
+
+  html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-dock {
+    margin-top: .35rem;
+  }
+
+  html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-dock > #startOverBtn,
+  html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-more > summary {
+    min-height: 2.75rem;
+    padding-inline: .9rem;
+  }
+
+  .cover-more-menu {
+    position: fixed;
+    left: max(.75rem, env(safe-area-inset-left));
+    right: max(.75rem, env(safe-area-inset-right));
+    bottom: max(.75rem, env(safe-area-inset-bottom));
+    min-width: 0;
+    max-height: min(70dvh, 28rem);
+    overflow: auto;
+    border-radius: 18px;
+  }
+}
+
+@media (forced-colors: active) {
+  html[data-book-opening-handoff="true"] .cover-page::before,
+  html[data-book-opening-handoff="true"] .cover-page::after {
+    display: none;
+  }
+
+  .book-handoff-clone {
+    outline: 2px solid CanvasText;
+    filter: none !important;
+  }
+
+  .cover-more-menu,
+  html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-dock > #startOverBtn,
+  html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-more > summary {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-book-opening-handoff="true"] body[data-stage="cover"] .cover-page:not(.opened) .cover-front,
+  html[data-book-opening-handoff="true"]:not([data-reader-mode="scroll"]) body[data-stage="read"] .pages-wrapper.active {
+    animation: none;
+  }
+
+  .book-handoff-clone {
+    display: none !important;
+  }
+}

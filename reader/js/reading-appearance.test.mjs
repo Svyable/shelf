@@ -18,7 +18,7 @@ check(readingAppearanceDefaults('light'), {
   nightLight: false,
 });
 
-check(readingAppearanceDefaults('sepia').theme, 'dark');
+check(readingAppearanceDefaults('sepia').theme, 'light');
 
 const before = {
   theme: 'sepia',

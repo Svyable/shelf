@@ -12,6 +12,18 @@ import('./global-reader-controls.js').catch((error) => {
   console.warn('Global Reader controls could not be loaded', error);
 });
 
+import('./library-current-book.js').catch((error) => {
+  console.warn('Current-book polish could not be loaded', error);
+});
+
+import('./book-opening-handoff.js').catch((error) => {
+  console.warn('Book-opening polish could not be loaded', error);
+});
+
+import('./book-interior.js').catch((error) => {
+  console.warn('Book-interior polish could not be loaded', error);
+});
+
 import('./app-shell-polish.js').catch((error) => {
   console.warn('Reader app-shell polish could not be loaded', error);
 });
@@ -158,6 +170,8 @@ function installContentsDrawerPolish({
     button.setAttribute('aria-expanded', String(active));
     if (!active || otherModalOpen()) return;
 
+    // Contents is a navigation drawer, not a modal setting. Keep the header
+    // available so the same Contents control can close it on touch devices.
     if (drawer.getAttribute('aria-modal') !== 'false') drawer.setAttribute('aria-modal', 'false');
     const releaseBackground = () => {
       if (!drawer.classList.contains('active') || otherModalOpen()) return;

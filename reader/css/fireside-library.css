@@ -1,0 +1,525 @@
+/* Fireside library cohesion
+   -------------------------
+   A warm, book-first visual layer shared by library, cover, Pages, and Continuous.
+   It uses the active atmosphere palette as its source of truth, so themes remain
+   accessible and portable instead of hard-coding a single brown skin. */
+
+:root {
+  --fireside-wood: color-mix(in srgb, #5a341d 58%, var(--bg-secondary));
+  --fireside-wood-deep: color-mix(in srgb, #2b170d 76%, var(--bg-primary));
+  --fireside-brass: color-mix(in srgb, #c99755 64%, var(--accent));
+  --fireside-ember: color-mix(in srgb, #d36f2f 54%, var(--accent));
+  --fireside-room-shadow: color-mix(in srgb, var(--shadow) 82%, #120a06 18%);
+  --fireside-edge: color-mix(in srgb, var(--accent) 26%, var(--border));
+  --fireside-paper-glow: color-mix(in srgb, var(--bg-page) 92%, #f0c88e 8%);
+}
+
+/* Room light: one coherent background across library, cover and reading. */
+body {
+  background:
+    radial-gradient(ellipse 72% 48% at 50% -10%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 66%),
+    radial-gradient(ellipse 46% 36% at 8% 108%, color-mix(in srgb, #c45e22 10%, transparent), transparent 72%),
+    radial-gradient(ellipse 42% 32% at 92% 108%, color-mix(in srgb, #a7461e 8%, transparent), transparent 74%),
+    var(--bg-primary);
+}
+
+body[data-stage="library"] .library-view {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--bg-primary) 72%, transparent), transparent 24rem),
+    radial-gradient(ellipse 44% 24% at 50% 7rem, color-mix(in srgb, var(--accent) 8%, transparent), transparent 74%);
+}
+
+body[data-stage="library"] .library-hero {
+  position: relative;
+  max-width: 72rem;
+  padding: clamp(.25rem, 1vw, .7rem) 0 clamp(1rem, 2.4vw, 2rem);
+}
+
+body[data-stage="library"] .library-hero::after {
+  content: "";
+  display: block;
+  width: min(12rem, 42vw);
+  height: 1px;
+  margin-top: 1.35rem;
+  background: linear-gradient(90deg, var(--fireside-brass), color-mix(in srgb, var(--fireside-brass) 22%, transparent), transparent);
+}
+
+body[data-stage="library"] .library-kicker {
+  color: var(--fireside-brass);
+  text-shadow: 0 1px 14px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+body[data-stage="library"] .library-hero h1 {
+  letter-spacing: .015em;
+  text-shadow: 0 8px 30px color-mix(in srgb, var(--fireside-room-shadow) 34%, transparent);
+}
+
+body[data-stage="library"] .library-lede {
+  color: color-mix(in srgb, var(--text-secondary) 90%, var(--text-primary));
+}
+
+/* The shelf should read as furniture, not a row of floating cards. */
+body[data-stage="library"] .shelf {
+  isolation: isolate;
+  gap: clamp(1rem, 2.2vw, 1.75rem);
+  min-height: 21rem;
+  padding: clamp(1.35rem, 2.6vw, 2.2rem) clamp(1rem, 2.4vw, 2rem) 2.65rem;
+  overflow: visible;
+  border: 1px solid color-mix(in srgb, var(--fireside-edge) 78%, transparent);
+  border-bottom-color: color-mix(in srgb, #140b06 62%, var(--border));
+  border-radius: 18px 18px 5px 5px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #fff 4%, transparent), transparent 22%),
+    radial-gradient(ellipse 72% 42% at 50% 0%, color-mix(in srgb, var(--fireside-brass) 8%, transparent), transparent 76%),
+    repeating-linear-gradient(90deg,
+      color-mix(in srgb, var(--fireside-wood) 88%, #fff 12%) 0 28px,
+      var(--fireside-wood) 28px 58px,
+      color-mix(in srgb, var(--fireside-wood) 88%, #000 12%) 58px 92px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 9%, transparent),
+    inset 0 -24px 34px color-mix(in srgb, #000 24%, transparent),
+    0 22px 48px color-mix(in srgb, var(--fireside-room-shadow) 58%, transparent);
+}
+
+body[data-stage="library"] .shelf::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 1.25rem;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 62% 44% at 50% 16%, color-mix(in srgb, #ffcf8a 8%, transparent), transparent 72%),
+    linear-gradient(90deg, color-mix(in srgb, #000 16%, transparent), transparent 12% 88%, color-mix(in srgb, #000 18%, transparent));
+  box-shadow: inset 16px 0 28px -24px #000, inset -16px 0 28px -24px #000;
+}
+
+body[data-stage="library"] .shelf::after {
+  z-index: 3;
+  height: 1.55rem;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #160b05 58%, transparent), transparent 34%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--fireside-wood) 80%, #9a6841 20%),
+      color-mix(in srgb, var(--fireside-wood-deep) 88%, #000 12%));
+  border-top: 1px solid color-mix(in srgb, #d2a06b 20%, transparent);
+  box-shadow:
+    inset 0 5px 0 color-mix(in srgb, #24130b 78%, transparent),
+    inset 0 -3px 5px color-mix(in srgb, #000 34%, transparent),
+    0 14px 26px color-mix(in srgb, var(--fireside-room-shadow) 56%, transparent);
+}
+
+body[data-stage="library"] .volume {
+  z-index: 1;
+  filter:
+    drop-shadow(0 2px 1px color-mix(in srgb, #fff 7%, transparent))
+    drop-shadow(7px 13px 15px color-mix(in srgb, var(--fireside-room-shadow) 74%, transparent));
+  transform-origin: 50% 100%;
+  transition: transform 220ms cubic-bezier(.2,.72,.2,1), filter 220ms ease;
+}
+
+body[data-stage="library"] .volume::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 10%;
+  right: 4%;
+  bottom: -.28rem;
+  height: .65rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, #000 45%, transparent);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+body[data-stage="library"] .volume:hover,
+body[data-stage="library"] .volume:focus-visible {
+  z-index: 4;
+  transform: translateY(-9px) rotate(0deg) scale(1.012);
+  filter:
+    drop-shadow(0 2px 1px color-mix(in srgb, #fff 10%, transparent))
+    drop-shadow(10px 20px 24px color-mix(in srgb, var(--fireside-room-shadow) 72%, transparent));
+}
+
+body[data-stage="library"] .volume:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: 7px;
+}
+
+body[data-stage="library"] .volume-spine {
+  position: relative;
+  width: .95rem;
+  background:
+    linear-gradient(90deg, #0009, color-mix(in srgb, var(--cloth) 86%, #fff 14%) 44%, var(--cloth) 70%, #0005),
+    var(--cloth);
+  border-radius: 4px 0 0 4px;
+  box-shadow: inset 1px 0 0 color-mix(in srgb, #fff 9%, transparent), inset -2px 0 0 #0007;
+}
+
+body[data-stage="library"] .volume-spine::after {
+  content: "";
+  position: absolute;
+  inset: .65rem 2px;
+  border-left: 1px solid color-mix(in srgb, #fff 8%, transparent);
+  border-right: 1px solid color-mix(in srgb, #000 34%, transparent);
+  pointer-events: none;
+}
+
+body[data-stage="library"] .volume-block {
+  background: repeating-linear-gradient(90deg, #f2dfb2 0 1px, #c8a66c 1px 2px, #e9d3a0 2px 4px);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--fireside-brass) 38%, #000 62%),
+    1px 0 0 #0005;
+}
+
+body[data-stage="library"] .volume-cover {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--fireside-brass) 68%, var(--accent));
+  box-shadow:
+    inset 0 0 54px color-mix(in srgb, #000 32%, transparent),
+    inset 1px 0 0 color-mix(in srgb, #fff 8%, transparent),
+    2px 1px 0 color-mix(in srgb, #fff 4%, transparent);
+}
+
+body[data-stage="library"] .volume-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, color-mix(in srgb, #fff 10%, transparent), transparent 24% 72%, color-mix(in srgb, #000 8%, transparent)),
+    repeating-linear-gradient(0deg, transparent 0 3px, color-mix(in srgb, #fff 1.8%, transparent) 3px 4px);
+  mix-blend-mode: soft-light;
+}
+
+body[data-stage="library"] .volume-cover > * {
+  position: relative;
+  z-index: 1;
+}
+
+body[data-stage="library"] .volume-title {
+  font-size: 1.34rem;
+  line-height: 1.23;
+  letter-spacing: .085em;
+  word-spacing: .04em;
+  text-wrap: balance;
+}
+
+body[data-stage="library"] .volume-author {
+  font-size: .84rem;
+  letter-spacing: .18em;
+  line-height: 1.3;
+}
+
+body[data-stage="library"] .volume-imprint { letter-spacing: .045em; }
+
+body[data-stage="library"] .volume.is-reading .volume-cover {
+  box-shadow:
+    inset 0 0 54px color-mix(in srgb, #000 30%, transparent),
+    inset 1px 0 0 color-mix(in srgb, #fff 9%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--fireside-brass) 76%, var(--accent)),
+    0 0 24px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+body[data-stage="library"] .reading-ribbon {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--fireside-brass) 82%, #fff 18%),
+    color-mix(in srgb, var(--fireside-brass) 82%, #5b331a 18%));
+  color: color-mix(in srgb, var(--bg-primary) 88%, #000 12%);
+  box-shadow: 0 3px 8px color-mix(in srgb, var(--fireside-room-shadow) 46%, transparent);
+}
+
+/* The selected cover and the shelf volume should feel like the same object. */
+body[data-stage="cover"] .book-stage,
+body[data-stage="end"] .book-stage {
+  background:
+    radial-gradient(ellipse 46% 68% at 50% 46%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 72%),
+    radial-gradient(ellipse 58% 22% at 50% 92%, color-mix(in srgb, #000 18%, transparent), transparent 74%);
+}
+
+body[data-stage="cover"] .cover-page,
+body[data-stage="end"] .back-cover {
+  filter: drop-shadow(0 28px 34px color-mix(in srgb, var(--fireside-room-shadow) 64%, transparent));
+}
+
+body[data-stage="cover"] .cover-front,
+body[data-stage="end"] .back-cover {
+  border-radius: 5px 15px 15px 5px;
+  box-shadow:
+    -3px 0 0 color-mix(in srgb, #120905 70%, var(--border)),
+    0 0 0 1px color-mix(in srgb, var(--fireside-brass) 72%, var(--border)),
+    10px 24px 56px color-mix(in srgb, var(--fireside-room-shadow) 66%, transparent),
+    inset 0 0 90px color-mix(in srgb, #000 31%, transparent),
+    inset 1px 0 0 color-mix(in srgb, #fff 7%, transparent);
+}
+
+body[data-stage="cover"] .cover-front::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(112deg, color-mix(in srgb, #fff 7%, transparent), transparent 28% 76%, color-mix(in srgb, #000 7%, transparent)),
+    repeating-linear-gradient(0deg, transparent 0 4px, color-mix(in srgb, #fff 1.4%, transparent) 4px 5px);
+  mix-blend-mode: soft-light;
+}
+
+body[data-stage="cover"] .cover-front > * {
+  position: relative;
+  z-index: 1;
+}
+
+body[data-stage="cover"] .cover-title {
+  line-height: 1.14;
+  letter-spacing: .075em;
+  word-spacing: .035em;
+  text-wrap: balance;
+}
+
+body[data-stage="cover"] .cover-rule {
+  width: 4.25rem;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--fireside-brass) 92%, var(--accent)), transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+body[data-stage="cover"] .cover-author { letter-spacing: .16em; }
+
+body[data-stage="cover"] .start-btn {
+  border-color: color-mix(in srgb, var(--fireside-brass) 68%, var(--border));
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--accent) 14%, var(--bg-elevated)),
+      color-mix(in srgb, var(--bg-elevated) 88%, var(--fireside-wood-deep) 12%));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 10%, transparent),
+    0 8px 18px color-mix(in srgb, var(--fireside-room-shadow) 34%, transparent);
+}
+
+/* Pages: paper is lit from the room, with a stronger physical gutter. */
+body[data-stage="read"] .stage {
+  background:
+    radial-gradient(ellipse 58% 44% at 50% 18%, color-mix(in srgb, var(--fireside-ember) 6%, transparent), transparent 72%),
+    radial-gradient(ellipse 70% 28% at 50% 100%, color-mix(in srgb, #000 13%, transparent), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 97%, #120a06 3%);
+}
+
+body[data-stage="read"] .page-surface {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, #000 2.4%, transparent), transparent 12% 88%, color-mix(in srgb, #000 2.4%, transparent)),
+    linear-gradient(180deg, color-mix(in srgb, #fff 1.8%, transparent), transparent 24%),
+    var(--fireside-paper-glow);
+  border-color: color-mix(in srgb, var(--fireside-edge) 76%, transparent);
+  box-shadow:
+    0 22px 62px color-mix(in srgb, var(--fireside-room-shadow) 58%, transparent),
+    0 2px 0 color-mix(in srgb, #fff 6%, transparent);
+}
+
+[data-reader-mode="paged"] body[data-stage="read"] .pages-wrapper[data-reader-spread="spread"] .page-surface.left {
+  box-shadow:
+    inset -28px 0 36px -31px color-mix(in srgb, #000 76%, transparent),
+    inset 1px 0 0 color-mix(in srgb, #fff 4%, transparent),
+    0 22px 62px color-mix(in srgb, var(--fireside-room-shadow) 58%, transparent);
+}
+
+[data-reader-mode="paged"] body[data-stage="read"] .pages-wrapper[data-reader-spread="spread"] .page-surface.right {
+  box-shadow:
+    inset 28px 0 36px -31px color-mix(in srgb, #000 76%, transparent),
+    inset -1px 0 0 color-mix(in srgb, #fff 4%, transparent),
+    0 22px 62px color-mix(in srgb, var(--fireside-room-shadow) 58%, transparent);
+}
+
+[data-reader-mode="paged"] body[data-stage="read"] .gutter {
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, #000 52%, transparent),
+      color-mix(in srgb, #000 17%, transparent) 43%,
+      color-mix(in srgb, #fff 2%, transparent) 50%,
+      color-mix(in srgb, #000 17%, transparent) 57%,
+      color-mix(in srgb, #000 52%, transparent));
+  box-shadow:
+    inset 0 0 10px color-mix(in srgb, #000 35%, transparent),
+    0 0 14px color-mix(in srgb, #000 14%, transparent);
+}
+
+/* Continuous mode keeps the same paper and room-light relationship. */
+[data-reader-mode="scroll"] body[data-stage="read"] .scroll-reader {
+  background:
+    radial-gradient(ellipse 52% 22% at 50% 0%, color-mix(in srgb, var(--fireside-ember) 5%, transparent), transparent 76%),
+    linear-gradient(90deg, color-mix(in srgb, #000 2.2%, transparent), transparent 8% 92%, color-mix(in srgb, #000 2.2%, transparent)),
+    var(--fireside-paper-glow);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 4%, transparent),
+    inset 0 18px 36px -34px color-mix(in srgb, #000 45%, transparent);
+}
+
+[data-reader-mode="scroll"] body[data-stage="read"] .scroll-document h1::after,
+[data-reader-mode="scroll"] body[data-stage="read"] .scroll-chapter + .scroll-chapter::before {
+  border-color: color-mix(in srgb, var(--fireside-brass) 72%, transparent);
+}
+
+/* Chrome belongs to the room: translucent, warm-edged, and quieter than the book. */
+body[data-stage="read"] .app-header {
+  border-bottom-color: color-mix(in srgb, var(--fireside-edge) 70%, transparent);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--bg-primary) 86%, #2b160b 14%),
+      color-mix(in srgb, var(--bg-primary) 91%, transparent));
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--fireside-room-shadow) 24%, transparent);
+}
+
+body[data-stage="read"] .header-btn {
+  border-color: color-mix(in srgb, var(--fireside-edge) 70%, transparent);
+  background: color-mix(in srgb, var(--bg-elevated) 46%, transparent);
+}
+
+body[data-stage="read"] .header-btn:hover,
+body[data-stage="read"] .header-btn:focus-visible,
+body[data-stage="read"] .header-btn.active {
+  border-color: color-mix(in srgb, var(--fireside-brass) 80%, var(--accent));
+  background: color-mix(in srgb, var(--accent-glow) 72%, transparent);
+}
+
+body[data-stage="read"] .page-nav .nav-btn,
+body[data-stage="read"] .page-nav .nav-center {
+  border-color: color-mix(in srgb, var(--fireside-edge) 68%, transparent);
+  background: color-mix(in srgb, var(--bg-elevated) 86%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent),
+    0 8px 18px color-mix(in srgb, var(--fireside-room-shadow) 24%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+body[data-stage="read"] .progress-bar-container {
+  background: color-mix(in srgb, var(--fireside-wood-deep) 30%, var(--bg-secondary));
+}
+
+body[data-stage="read"] .progress-bar {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--fireside-brass) 62%, var(--accent-dim)),
+    var(--fireside-brass),
+    color-mix(in srgb, var(--fireside-ember) 56%, var(--accent)));
+}
+
+/* High-contrast themes stay literal; atmosphere must never compete with clarity. */
+[data-theme="contrast"],
+[data-theme="contrast-dark"] {
+  --fireside-paper-glow: var(--bg-page);
+  --fireside-edge: var(--border);
+}
+
+[data-theme="contrast"] body,
+[data-theme="contrast-dark"] body,
+[data-theme="contrast"] body[data-stage="library"] .library-view,
+[data-theme="contrast-dark"] body[data-stage="library"] .library-view,
+[data-theme="contrast"] body[data-stage="cover"] .book-stage,
+[data-theme="contrast-dark"] body[data-stage="cover"] .book-stage,
+[data-theme="contrast"] body[data-stage="end"] .book-stage,
+[data-theme="contrast-dark"] body[data-stage="end"] .book-stage,
+[data-theme="contrast"] body[data-stage="read"] .stage,
+[data-theme="contrast-dark"] body[data-stage="read"] .stage {
+  background: var(--bg-primary);
+}
+
+[data-theme="contrast"] body[data-stage="read"] .page-surface,
+[data-theme="contrast-dark"] body[data-stage="read"] .page-surface,
+[data-theme="contrast"] [data-reader-mode="scroll"] body[data-stage="read"] .scroll-reader,
+[data-theme="contrast-dark"] [data-reader-mode="scroll"] body[data-stage="read"] .scroll-reader {
+  background: var(--bg-page);
+}
+
+[data-theme="contrast"] body[data-stage="library"] .shelf,
+[data-theme="contrast-dark"] body[data-stage="library"] .shelf {
+  background: var(--bg-secondary);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+[data-theme="contrast"] body[data-stage="library"] .shelf::before,
+[data-theme="contrast-dark"] body[data-stage="library"] .shelf::before,
+[data-theme="contrast"] body[data-stage="library"] .volume-cover::before,
+[data-theme="contrast-dark"] body[data-stage="library"] .volume-cover::before,
+[data-theme="contrast"] body[data-stage="cover"] .cover-front::after,
+[data-theme="contrast-dark"] body[data-stage="cover"] .cover-front::after {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  body[data-stage="library"] .library-view { padding-top: 1.65rem; }
+
+  body[data-stage="library"] .shelf {
+    gap: 1rem;
+    padding: 1rem .8rem 2.25rem;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 8px 8px 2px 2px;
+    box-shadow:
+      inset 0 -18px 28px color-mix(in srgb, #000 18%, transparent),
+      0 14px 28px color-mix(in srgb, var(--fireside-room-shadow) 38%, transparent);
+  }
+
+  body[data-stage="library"] .volume {
+    filter: drop-shadow(5px 9px 11px color-mix(in srgb, var(--fireside-room-shadow) 62%, transparent));
+  }
+
+  body[data-stage="cover"] .cover-page {
+    filter: drop-shadow(0 18px 24px color-mix(in srgb, var(--fireside-room-shadow) 48%, transparent));
+  }
+
+  [data-reader-device="phone"] body[data-stage="read"] .page-surface {
+    background: var(--fireside-paper-glow);
+    box-shadow: none;
+  }
+}
+
+@media (max-height: 620px) and (orientation: landscape) {
+  body[data-stage="cover"] .cover-page {
+    filter: drop-shadow(0 10px 18px color-mix(in srgb, var(--fireside-room-shadow) 40%, transparent));
+  }
+
+  body[data-stage="library"] .shelf {
+    min-height: 17rem;
+    padding-top: .8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-stage="library"] .volume { transition: none; }
+
+  body[data-stage="library"] .volume:hover,
+  body[data-stage="library"] .volume:focus-visible {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  body,
+  body[data-stage="library"] .library-view,
+  body[data-stage="library"] .shelf,
+  body[data-stage="cover"] .book-stage,
+  body[data-stage="read"] .stage,
+  body[data-stage="read"] .page-surface,
+  [data-reader-mode="scroll"] body[data-stage="read"] .scroll-reader,
+  body[data-stage="read"] .app-header,
+  body[data-stage="read"] .page-nav .nav-btn,
+  body[data-stage="read"] .page-nav .nav-center {
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  body[data-stage="library"] .volume-cover,
+  body[data-stage="cover"] .cover-front,
+  body[data-stage="read"] .page-surface {
+    border-color: CanvasText;
+  }
+
+  body[data-stage="library"] .shelf::before,
+  body[data-stage="library"] .shelf::after,
+  body[data-stage="library"] .volume-cover::before,
+  body[data-stage="cover"] .cover-front::after {
+    display: none;
+  }
+}

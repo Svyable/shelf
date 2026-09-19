@@ -6,7 +6,7 @@ import {
   readerFontRequestKey,
 } from './font-readiness.js';
 
-const root = document.documentElement;
+const root = globalThis.document?.documentElement || null;
 let installed = false;
 let requestRevision = 0;
 let lastSettledKey = '';
@@ -124,6 +124,7 @@ function observeTypography() {
 }
 
 export function installFontReadiness({ onReady } = {}) {
+  if (!root || typeof document === 'undefined' || typeof window === 'undefined') return;
   if (typeof onReady === 'function') onGeometryReady = onReady;
   if (installed) {
     settleActiveFont({ reason: 'install' });

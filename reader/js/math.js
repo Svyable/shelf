@@ -419,7 +419,7 @@ function installMathNavigation() {
   document.addEventListener('scroll', onMathScroll, true);
 }
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   installStyles();
   installMarkedMath();
   protectMathInteractions();

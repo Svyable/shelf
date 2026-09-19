@@ -16,6 +16,10 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["books", "education", "productivity"],
-  "description": "Books by Sven Hardy Benson on intelligence, institutions, markets, medicine, and changing systems."
+  "categories": [
+    "books",
+    "education",
+    "productivity"
+  ],
+  "description": "The public library of author and independent researcher Sven Hardy Benson, writing across intelligence, institutions, markets, medicine, infrastructure, energy, and fast-moving technology."
 }

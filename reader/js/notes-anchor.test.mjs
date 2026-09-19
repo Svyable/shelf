@@ -1,8 +1,5 @@
 import assert from 'node:assert/strict';
-import fs from 'node:fs/promises';
-
-const source = await fs.readFile(new URL('./notes.js', import.meta.url), 'utf8');
-const mod = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+import * as mod from './notes.js';
 
 assert.equal(mod.sourceOffsetForTextPosition(100, 300, 100, 50), 200);
 assert.equal(mod.sourceOffsetForTextPosition(100, 300, 100, 0), 100);

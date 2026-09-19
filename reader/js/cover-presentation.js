@@ -1,5 +1,3 @@
-import { fetchText, firstExisting } from './base.js';
-
 export const COVER_PRESENTATION_OPTIONS = Object.freeze({
   layouts: Object.freeze(['classic', 'centered', 'lower-third']),
   aligns: Object.freeze(['left', 'center']),
@@ -84,6 +82,7 @@ export async function loadBookCoverPresentation(slug) {
   if (cache.has(clean)) return cache.get(clean);
   const loading = (async () => {
     try {
+      const { fetchText } = await import('./base.js');
       const raw = JSON.parse(await fetchText(`books/${clean}/reader.json`));
       return resolveCoverPresentation(raw);
     } catch {
@@ -98,9 +97,11 @@ export async function findBookCoverAsset(slug) {
   const clean = String(slug || '').trim();
   if (!clean) return null;
   if (artCache.has(clean)) return artCache.get(clean);
-  const loading = firstExisting(
-    ['cover.png', 'cover.jpg', 'cover.webp', 'cover.jpeg'].map((name) => `books/${clean}/media/${name}`)
-  ).catch(() => null);
+  const loading = import('./base.js')
+    .then(({ firstExisting }) => firstExisting(
+      ['cover.png', 'cover.jpg', 'cover.webp', 'cover.jpeg'].map((name) => `books/${clean}/media/${name}`)
+    ))
+    .catch(() => null);
   artCache.set(clean, loading);
   return loading;
 }

@@ -108,7 +108,7 @@ export function parsePortalStand(markdown) {
 
 function cell(markdown, label) {
   const re = new RegExp(
-    `\\|\\s*\\*\\*${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\*\\*\\s*\\|\\s*([^|\\n]+)\\|`,
+    `\\|\\s*\\*\\*${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\*\\*\\s*\\|\\s*([^|\n]+)\\|`,
     'i'
   );
   const m = markdown.match(re);

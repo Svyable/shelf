@@ -1,6 +1,7 @@
 import { installReadingSurface } from './reading-surface.js';
 import { installReadingContinuity } from './reading-continuity.js';
 import { horizontalKeyDestination, overflowInstruction, overflowState } from './content-navigation.js';
+import { pageTapIntent } from './page-tap-zones.js';
 
 const state = {
   pointerId: null,
@@ -239,12 +240,9 @@ function onPageClick(event) {
   if (!event.target.closest('#pagesWrapper')) return;
   if (selectionActive()) return;
 
-  // Always stop the core 50/50 click handler. This layer substitutes safer,
-  // device-aware zones below.
-  event.stopImmediatePropagation();
-
   if (performance.now() < state.suppressClickUntil) {
     event.preventDefault();
+    event.stopImmediatePropagation();
     return;
   }
 
@@ -252,19 +250,17 @@ function onPageClick(event) {
   if (!el) return;
   const rect = el.getBoundingClientRect();
   const x = event.clientX - rect.left;
+  const intent = pageTapIntent(x, rect.width, { coarse: coarseClick(event) });
 
-  if (coarseClick(event)) {
-    // One-handed reading: the backward zone is deliberately small, while most
-    // of the page advances. This mirrors dedicated e-reader ergonomics.
-    event.preventDefault();
-    requestTurn(x < rect.width * 0.22 ? -1 : 1);
-    return;
-  }
+  // The center band belongs to immersive chrome, which runs earlier during
+  // document capture. Safety-buffer clicks that reach this layer intentionally
+  // do nothing. In both cases, prevent the legacy 50/50 handler from turning a
+  // page behind the newer interaction contract.
+  event.stopImmediatePropagation();
+  if (intent === 'pass') return;
 
-  // Desktop follows the visual page curl: only the physical edges turn.
-  const edge = Math.min(132, Math.max(62, rect.width * 0.14));
-  if (x <= edge) requestTurn(-1);
-  else if (x >= rect.width - edge) requestTurn(1);
+  event.preventDefault();
+  requestTurn(intent === 'prev' ? -1 : 1);
 }
 
 function overflowHint() {
@@ -427,7 +423,7 @@ function tuneHint() {
   const hint = document.getElementById('readHint');
   if (!hint) return;
   hint.innerHTML = window.matchMedia('(pointer: coarse)').matches
-    ? 'Tap right to turn · swipe either way · <kbd>←</kbd> <kbd>→</kbd> also work'
+    ? 'Tap center for controls · tap an edge or swipe to turn · <kbd>←</kbd> <kbd>→</kbd> also work'
     : 'Click a page edge to turn · <kbd>←</kbd> <kbd>→</kbd> or <kbd>PgUp</kbd> <kbd>PgDn</kbd>';
 }
 

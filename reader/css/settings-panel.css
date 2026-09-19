@@ -177,3 +177,407 @@
     transition: none !important;
   }
 }
+
+/* Reading app shell — Kindle/Libby-inspired hierarchy without copying branding.
+   Bookself already owns center-tap immersive chrome and semantic seek behavior;
+   this layer makes those existing controls feel like a focused reading app. */
+:root {
+  --reader-app-rail-offset: 4.15rem;
+  --reader-app-control: color-mix(in srgb, var(--bg-elevated) 82%, transparent);
+  --reader-app-control-strong: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
+  --reader-app-hairline: color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+body[data-stage="read"] .app-header {
+  min-height: 3.55rem;
+  padding-block: .42rem;
+  border-bottom-color: color-mix(in srgb, var(--border) 44%, transparent);
+  box-shadow: 0 7px 22px color-mix(in srgb, var(--shadow) 14%, transparent);
+}
+
+body[data-stage="read"] .header-right {
+  gap: .08rem;
+}
+
+body[data-stage="read"] .reading-time {
+  display: none;
+}
+
+body[data-stage="read"] .header-btn,
+body[data-stage="read"] .logo {
+  width: 2.7rem;
+  height: 2.7rem;
+  min-width: 2.7rem;
+  min-height: 2.7rem;
+  border-radius: 999px;
+}
+
+body[data-stage="read"] .reader-context {
+  gap: .04rem;
+}
+
+body[data-stage="read"] .reader-context-title {
+  font-size: .8rem;
+  letter-spacing: .01em;
+}
+
+body[data-stage="read"] .reader-context-chapter {
+  font-size: .61rem;
+  letter-spacing: .1em;
+}
+
+/* The semantic seek rail becomes the Libby-style bottom timeline. */
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] {
+  position: fixed;
+  z-index: 39;
+  left: max(3.5rem, calc(env(safe-area-inset-left) + 3rem));
+  right: max(3.5rem, calc(env(safe-area-inset-right) + 3rem));
+  bottom: calc(var(--reader-app-rail-offset) + env(safe-area-inset-bottom));
+  width: auto;
+  height: 1.7rem;
+  overflow: visible;
+  background: transparent;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: opacity 180ms ease, transform 220ms cubic-bezier(.2,.72,.2,1);
+}
+
+/* Moving the 2px rail out of flex flow must not silently increase the page
+   measurement viewport. Preserve the old vertical budget at the stage edge. */
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] + .stage {
+  border-top: 2px solid transparent;
+}
+
+[data-reader-mode="scroll"] body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] {
+  bottom: calc(.8rem + env(safe-area-inset-bottom));
+}
+
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 1px);
+  height: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-muted) 28%, transparent);
+  box-shadow: 0 1px 0 color-mix(in srgb, #fff 4%, transparent);
+}
+
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-bar {
+  position: absolute;
+  z-index: 2;
+  top: calc(50% - 1px);
+  left: 0;
+  height: 2px;
+  border-radius: 999px;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-seek {
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.7rem;
+}
+
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-seek::-webkit-slider-runnable-track,
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-seek::-moz-range-track {
+  height: 1.7rem;
+}
+
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-seek::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: .16rem;
+}
+
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-seek::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+}
+
+body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-seek-label {
+  top: -1.85rem;
+  padding: .36rem .62rem;
+  border-radius: 10px;
+  background: var(--reader-app-control-strong);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--shadow) 36%, transparent);
+  font-size: .72rem;
+}
+
+body[data-stage="read"].reader-chrome-hidden .progress-bar-container[data-reader-seekable="true"] {
+  opacity: 0 !important;
+  transform: translateY(12px) !important;
+  pointer-events: none !important;
+}
+
+/* Page controls become a compact footer. Reading mode lives in Settings,
+   so the bottom bar no longer repeats a second Pages/Continuous control. */
+body[data-stage="read"] .page-nav {
+  position: relative;
+  z-index: 38;
+  justify-content: center;
+  gap: .5rem;
+  padding-top: .38rem;
+  background: transparent;
+}
+
+body[data-stage="read"] .page-nav .view-toggle {
+  display: none !important;
+}
+
+body[data-stage="read"] .page-nav .nav-center {
+  flex: 0 1 auto;
+  min-width: min(18rem, 44vw);
+  max-width: min(28rem, 54vw);
+  gap: .45rem;
+  padding: .34rem .7rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+body[data-stage="read"] .page-nav .nav-btn {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--bg-elevated) 58%, transparent);
+  box-shadow: none;
+}
+
+body[data-stage="read"] .page-nav .nav-btn:hover,
+body[data-stage="read"] .page-nav .nav-btn:focus-visible {
+  background: color-mix(in srgb, var(--accent-glow) 62%, var(--reader-app-control));
+}
+
+body[data-stage="read"] .page-indicator {
+  font-family: var(--font-ui);
+  font-size: .78rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .02em;
+}
+
+body[data-stage="read"] .page-chapter {
+  max-width: min(18rem, 28vw);
+  font-size: .65rem;
+  letter-spacing: .08em;
+}
+
+/* Reading settings behave as a bottom tray rather than a generic modal. */
+#settingsPanel {
+  place-items: end center;
+  padding: 0;
+  overflow: hidden;
+}
+
+#settingsPanel .settings-card {
+  position: relative;
+  width: min(46rem, 100%);
+  max-width: 46rem;
+  max-height: min(86dvh, 52rem);
+  margin: 0;
+  padding: 1.6rem clamp(1rem, 3vw, 1.45rem) calc(1rem + env(safe-area-inset-bottom));
+  border-bottom: 0;
+  border-radius: 26px 26px 0 0;
+  background: var(--reader-app-control-strong);
+  box-shadow: 0 -24px 64px color-mix(in srgb, var(--shadow) 56%, transparent);
+  text-align: left;
+}
+
+#settingsPanel .settings-card::before {
+  content: "";
+  position: absolute;
+  top: .5rem;
+  left: 50%;
+  width: 2.9rem;
+  height: .28rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-muted) 48%, transparent);
+}
+
+#settingsPanel .settings-card > h3 {
+  margin: .2rem 0 .9rem;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  letter-spacing: -.015em;
+}
+
+#settingsPanel .settings-section {
+  padding: .9rem 0;
+  border-top-color: var(--reader-app-hairline);
+}
+
+#settingsPanel .settings-section h4 {
+  font-size: .7rem;
+  letter-spacing: .1em;
+}
+
+#settingsPanel .settings-note {
+  margin-bottom: .72rem;
+  font-size: .74rem;
+}
+
+#settingsPanel .setting-row {
+  gap: .7rem;
+  margin-bottom: .72rem;
+}
+
+#settingsPanel .setting-row > span,
+#settingsPanel .experience-subhead,
+#settingsPanel .atmosphere-group-label {
+  color: color-mix(in srgb, var(--text-secondary) 88%, var(--text-primary));
+}
+
+#settingsPanel .setting-pills {
+  gap: .38rem;
+}
+
+#settingsPanel .pill,
+#settingsPanel .experience-mode,
+#settingsPanel .atmosphere-filter {
+  border-radius: 999px;
+}
+
+#settingsPanel .pill,
+#settingsPanel .experience-mode,
+#settingsPanel .atmosphere-option,
+#settingsPanel .atmosphere-warmth {
+  border-color: color-mix(in srgb, var(--border) 72%, transparent);
+  background: color-mix(in srgb, var(--bg-secondary) 54%, transparent);
+}
+
+#settingsPanel .pill.active,
+#settingsPanel .pill[aria-pressed="true"],
+#settingsPanel .experience-mode[aria-pressed="true"],
+#settingsPanel .atmosphere-option[aria-pressed="true"],
+#settingsPanel .atmosphere-warmth[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--accent) 64%, var(--border));
+  background: color-mix(in srgb, var(--accent-glow) 72%, transparent);
+}
+
+#settingsPanel .atmosphere-panel {
+  margin: .4rem 0 .8rem;
+  padding: .65rem 0 .15rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+#settingsPanel .atmosphere-lede {
+  display: none;
+}
+
+#settingsPanel .atmosphere-filter-row {
+  margin: .2rem 0 .75rem;
+}
+
+#settingsPanel .atmosphere-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .42rem;
+}
+
+#settingsPanel .atmosphere-option {
+  min-height: 3rem;
+}
+
+#settingsPanel .settings-action-grid {
+  gap: .42rem;
+}
+
+#settingsPanel .settings-action-grid .ghost-btn,
+#settingsPanel .stats-close {
+  border-color: color-mix(in srgb, var(--border) 76%, transparent);
+  background: color-mix(in srgb, var(--bg-secondary) 48%, transparent);
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: .76rem;
+  letter-spacing: .01em;
+  text-transform: none;
+}
+
+#settingsPanel .settings-action-grid .ghost-btn:hover,
+#settingsPanel .settings-action-grid .ghost-btn:focus-visible,
+#settingsPanel .stats-close:hover,
+#settingsPanel .stats-close:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 52%, var(--border));
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--accent-glow) 52%, transparent);
+}
+
+@media (max-width: 700px) {
+  :root { --reader-app-rail-offset: 4.5rem; }
+
+  body[data-stage="read"] .app-header {
+    min-height: 3.35rem;
+    padding-block: .28rem;
+  }
+
+  body[data-stage="read"] .header-btn,
+  body[data-stage="read"] .logo {
+    width: 2.55rem;
+    height: 2.55rem;
+    min-width: 2.55rem;
+    min-height: 2.55rem;
+  }
+
+  body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] {
+    left: max(2.75rem, calc(env(safe-area-inset-left) + 2.45rem));
+    right: max(2.75rem, calc(env(safe-area-inset-right) + 2.45rem));
+  }
+
+  body[data-stage="read"] .page-nav .nav-center {
+    min-width: 7rem;
+    max-width: 54vw;
+    padding-inline: .4rem;
+  }
+
+  #settingsPanel .settings-card {
+    width: 100%;
+    max-width: none;
+    max-height: min(91dvh, 52rem);
+    padding-top: 1.5rem;
+  }
+
+  #settingsPanel .atmosphere-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (pointer: coarse) {
+  body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] {
+    height: 2rem;
+  }
+
+  body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-seek,
+  body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-seek::-webkit-slider-runnable-track,
+  body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"] .progress-seek::-moz-range-track {
+    height: 2rem;
+  }
+}
+
+@media (forced-colors: active) {
+  body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"]::before,
+  body[data-stage="read"] .page-nav .nav-btn,
+  #settingsPanel .settings-card,
+  #settingsPanel .pill,
+  #settingsPanel .experience-mode,
+  #settingsPanel .atmosphere-option,
+  #settingsPanel .atmosphere-warmth,
+  #settingsPanel .settings-action-grid .ghost-btn,
+  #settingsPanel .stats-close {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-stage="read"] .progress-bar-container[data-reader-seekable="true"],
+  body[data-stage="read"] .page-nav .nav-btn,
+  #settingsPanel .settings-card {
+    transition: none !important;
+  }
+}

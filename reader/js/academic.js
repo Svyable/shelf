@@ -471,7 +471,7 @@ function protectAcademicLinks() {
   }).observe(readingRoot, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'hidden', 'aria-hidden'] });
 }
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   installStyles();
   installMarkedAcademic();
   protectAcademicLinks();

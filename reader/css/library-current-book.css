@@ -1,0 +1,306 @@
+/* Current-book resume card
+   ------------------------
+   Progressive enhancement for the library Continue card. The base link remains
+   functional when this layer or its metadata enrichment is unavailable. */
+
+body[data-stage="library"] .continue-card[data-current-book-ready] {
+  max-width: min(56rem, 100%);
+  padding: 0;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  background:
+    radial-gradient(circle at 18% 10%, color-mix(in srgb, var(--accent-glow) 34%, transparent), transparent 42%),
+    color-mix(in srgb, var(--bg-elevated) 91%, transparent);
+  box-shadow:
+    0 18px 52px color-mix(in srgb, var(--shadow) 42%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent);
+}
+
+body[data-stage="library"] .continue-card[data-current-book-ready] .continue-kicker {
+  position: absolute;
+  z-index: 3;
+  top: 1rem;
+  left: clamp(7.6rem, 18vw, 10.3rem);
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+body[data-stage="library"] .continue-card[data-current-book-ready] #continueCardLink {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(5.1rem, 13vw, 7.2rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 1.55rem);
+  min-height: clamp(9.1rem, 18vw, 11.2rem);
+  padding: 2.15rem clamp(1rem, 2.8vw, 1.55rem) 1.25rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+body[data-stage="library"] .continue-card[data-current-book-ready] #continueCardLink::after {
+  content: none;
+  display: none;
+}
+
+.continue-book-object {
+  --continue-cloth: #2a1b22;
+  position: relative;
+  display: grid;
+  grid-template-columns: .46rem .28rem 1fr;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  min-height: 6.8rem;
+  max-height: 8.9rem;
+  filter: drop-shadow(5px 9px 12px color-mix(in srgb, var(--shadow) 70%, transparent));
+  transform: rotate(-1.2deg);
+  transform-origin: 50% 100%;
+  transition: transform 180ms cubic-bezier(.2,.7,.2,1), filter 180ms ease;
+}
+
+.continue-book-spine {
+  border-radius: 3px 0 0 3px;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.58), transparent 52%),
+    var(--continue-cloth);
+  box-shadow: inset -1px 0 0 rgba(0,0,0,.34);
+}
+
+.continue-book-pages {
+  background:
+    repeating-linear-gradient(90deg, #eadcb7 0 1px, #c9ad72 1px 2px);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, #000 62%);
+}
+
+.continue-book-cover {
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--accent) 62%, var(--border));
+  border-left: 0;
+  border-radius: 0 5px 5px 0;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.08), transparent 42%),
+    var(--continue-cloth);
+  background-position: center;
+  background-size: cover;
+  box-shadow:
+    inset 0 0 24px rgba(0,0,0,.32),
+    inset -1px 0 0 rgba(255,255,255,.05);
+}
+
+.continue-book-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.continue-book-title {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 3vw, 1.9rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -.018em;
+  color: var(--text-primary);
+}
+
+.continue-book-author {
+  margin-top: .38rem;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-ui);
+  font-size: .83rem;
+  letter-spacing: .035em;
+  color: color-mix(in srgb, var(--text-secondary) 92%, var(--text-primary));
+}
+
+.continue-book-context,
+.continue-book-saved {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-ui);
+  font-size: .72rem;
+  line-height: 1.25;
+  color: var(--text-muted);
+}
+
+.continue-book-context {
+  margin-top: .92rem;
+  color: color-mix(in srgb, var(--text-secondary) 78%, var(--accent));
+}
+
+.continue-book-saved {
+  margin-top: .24rem;
+}
+
+.continue-book-meter {
+  position: relative;
+  display: block;
+  width: min(24rem, 100%);
+  height: 3px;
+  margin-top: .82rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-muted) 20%, transparent);
+}
+
+.continue-book-meter[hidden] {
+  display: none;
+}
+
+.continue-book-meter-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 18%, transparent);
+  transition: width 260ms cubic-bezier(.2,.72,.2,1);
+}
+
+.continue-book-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  min-height: 2.75rem;
+  padding: .58rem .86rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 46%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-glow) 48%, transparent);
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .025em;
+  white-space: nowrap;
+  transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+
+#continueCardLink:hover .continue-book-object,
+#continueCardLink:focus-visible .continue-book-object {
+  transform: translateY(-3px) rotate(0deg);
+  filter: drop-shadow(6px 12px 15px color-mix(in srgb, var(--shadow) 74%, transparent));
+}
+
+#continueCardLink:hover .continue-book-action,
+#continueCardLink:focus-visible .continue-book-action {
+  border-color: color-mix(in srgb, var(--accent) 76%, var(--border));
+  background: color-mix(in srgb, var(--accent-glow) 76%, transparent);
+  transform: translateX(2px);
+}
+
+#continueCardLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+  border-radius: inherit;
+}
+
+body[data-stage="library"] .continue-card[data-current-book-ready="loading"] .continue-book-copy {
+  opacity: .84;
+}
+
+@media (max-width: 700px) {
+  body[data-stage="library"] .continue-card[data-current-book-ready] .continue-kicker {
+    left: 6.55rem;
+    top: .82rem;
+  }
+
+  body[data-stage="library"] .continue-card[data-current-book-ready] #continueCardLink {
+    grid-template-columns: 4.55rem minmax(0, 1fr);
+    gap: .9rem;
+    min-height: 8.2rem;
+    padding: 1.9rem .85rem .9rem;
+  }
+
+  .continue-book-object {
+    min-height: 6.15rem;
+    max-height: 7rem;
+  }
+
+  .continue-book-title {
+    font-size: clamp(1.15rem, 5.6vw, 1.5rem);
+  }
+
+  .continue-book-context {
+    margin-top: .62rem;
+  }
+
+  .continue-book-action {
+    grid-column: 2;
+    justify-self: start;
+    min-height: 2.55rem;
+    margin-top: -.15rem;
+    padding: .42rem .72rem;
+  }
+}
+
+@media (max-width: 430px) {
+  body[data-stage="library"] .continue-card[data-current-book-ready] .continue-kicker {
+    left: 5.8rem;
+  }
+
+  body[data-stage="library"] .continue-card[data-current-book-ready] #continueCardLink {
+    grid-template-columns: 3.9rem minmax(0, 1fr);
+    gap: .72rem;
+  }
+
+  .continue-book-object {
+    min-height: 5.45rem;
+  }
+
+  .continue-book-context,
+  .continue-book-saved {
+    font-size: .68rem;
+  }
+
+  .continue-book-meter {
+    margin-top: .62rem;
+  }
+}
+
+@media (forced-colors: active) {
+  body[data-stage="library"] .continue-card[data-current-book-ready],
+  .continue-book-cover,
+  .continue-book-action {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .continue-book-meter {
+    border: 1px solid CanvasText;
+    background: Canvas;
+  }
+
+  .continue-book-meter-fill {
+    background: Highlight;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .continue-book-object,
+  .continue-book-action,
+  .continue-book-meter-fill {
+    transition: none !important;
+  }
+
+  #continueCardLink:hover .continue-book-object,
+  #continueCardLink:focus-visible .continue-book-object,
+  #continueCardLink:hover .continue-book-action,
+  #continueCardLink:focus-visible .continue-book-action {
+    transform: none;
+  }
+}

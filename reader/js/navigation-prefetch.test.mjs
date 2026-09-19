@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import {
   routeFromHref,
   shouldPrefetchIntent,
+  isCoverVolume,
+  coverPreviewSnapshot,
   createNavigationPrefetchController,
 } from './navigation-prefetch.js';
 
@@ -25,6 +27,31 @@ eq(shouldPrefetchIntent('focus', { saveData: false }), true);
 eq(shouldPrefetchIntent('focus', { saveData: true }), false);
 eq(shouldPrefetchIntent('activate', { saveData: true, effectiveType: '2g' }), true);
 eq(shouldPrefetchIntent('other', {}), false);
+
+const classList = { contains: (name) => name === 'volume' };
+const coverAnchor = {
+  classList,
+  getAttribute: (name) => name === 'href' ? '#/b/book/' : null,
+  style: { getPropertyValue: (name) => name === '--cloth' ? '#123456' : '' },
+  querySelector: (selector) => ({
+    '.volume-title': { textContent: 'Fast Book' },
+    '.volume-subtitle': { textContent: 'A subtitle' },
+    '.volume-author': { textContent: 'Ada Example' },
+    '.volume-imprint': { textContent: 'Example Press' },
+    '.volume-cover': { style: { backgroundImage: 'url("cover.jpg")' } },
+  }[selector] || null),
+};
+ok(isCoverVolume(coverAnchor));
+eq(isCoverVolume({ ...coverAnchor, getAttribute: () => '#/b/book/ch1/0' }), false);
+eq(isCoverVolume({ ...coverAnchor, classList: { contains: () => false } }), false);
+eq(coverPreviewSnapshot(coverAnchor), {
+  title: 'Fast Book',
+  subtitle: 'A subtitle',
+  author: 'Ada Example',
+  imprint: 'Example Press',
+  cloth: '#123456',
+  backgroundImage: 'url("cover.jpg")',
+});
 
 const primes = [];
 let timers = [];

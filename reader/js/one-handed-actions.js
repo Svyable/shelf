@@ -213,5 +213,7 @@ function install() {
   sync();
 }
 
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
-else install();
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
+  else install();
+}

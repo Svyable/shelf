@@ -1,6 +1,7 @@
 /* Expanded Reading Atmosphere library.
    Loaded by atmosphere.js so the original palette contract stays portable. */
 
+@import url('./fireside-library.css?v=r1');
 @import url('./library-home.css?v=r1');
 
 [data-theme="porcelain"] {

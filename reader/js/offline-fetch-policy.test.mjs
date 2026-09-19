@@ -57,7 +57,7 @@ assert.equal(policy.responsePlan('shell', true), 'network-first');
 assert.equal(policy.responsePlan('shell', false), 'network-first');
 assert.equal(policy.responsePlan('external', true), 'cache-then-network');
 assert.equal(policy.responsePlan('external', false), 'network-first');
-assert.equal(policy.responsePlan('publication', true), 'network-with-cache-deadline');
+assert.equal(policy.responsePlan('publication', true), 'network-first');
 assert.equal(policy.responsePlan('publication', false), 'network-first');
 assert.equal(policy.responsePlan('other', true), 'network-first');
 assert.equal(policy.deadlineMs('publication'), 1200);

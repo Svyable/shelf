@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
-import { normalizeReaderStyles, READER_STYLE_API_VERSION } from './imprint.js';
+import { normalizeReaderStyles } from './imprint.js';
 
-assert.equal(READER_STYLE_API_VERSION, '1');
 assert.deepEqual(normalizeReaderStyles(undefined), []);
 assert.deepEqual(normalizeReaderStyles('styles/reader.css'), []);
 

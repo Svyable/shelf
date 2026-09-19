@@ -77,11 +77,20 @@ function updateButton(button, theme) {
   button.innerHTML = themeIcon(state.current);
 }
 
-function hideLegacyPaperTheme(root) {
+function cleanLegacySettings(root) {
   const row = root.querySelector?.('[data-paper]')?.closest('.setting-row');
   if (row) {
     row.hidden = true;
     row.setAttribute('aria-hidden', 'true');
+  }
+
+  // The richer Reader experience owns the canonical Reset all action. Keeping
+  // the older GUI reset beside it is misleading because that legacy action only
+  // writes the old appearance store while typography now lives elsewhere.
+  if (root.getElementById?.('readerReset')) {
+    root.getElementById?.('resetAppearanceBtn')?.remove();
+    root.getElementById?.('appearanceResetHelp')?.remove();
+    return;
   }
 
   const help = root.getElementById?.('appearanceResetHelp');
@@ -123,7 +132,7 @@ export function installGlobalThemeControls(root = document) {
   const prefs = loadPrefs();
   const theme = applyReaderTheme(prefs.theme, root);
   updateButton(button, theme);
-  hideLegacyPaperTheme(root);
+  cleanLegacySettings(root);
 
   if (button.dataset.themeControl !== 'installed') {
     button.dataset.themeControl = 'installed';
@@ -137,7 +146,7 @@ export function installGlobalThemeControls(root = document) {
   const settingsPanel = root.getElementById?.('settingsPanel');
   if (settingsPanel && settingsPanel.dataset.themeCleanup !== 'installed') {
     settingsPanel.dataset.themeCleanup = 'installed';
-    const observer = new MutationObserver(() => hideLegacyPaperTheme(root));
+    const observer = new MutationObserver(() => cleanLegacySettings(root));
     observer.observe(settingsPanel, { childList: true, subtree: true });
   }
 
