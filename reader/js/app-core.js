@@ -32,6 +32,7 @@ import {
 import { searchBook, searchLibrary, wordCount, readingMinutes } from './search.js';
 import { bookAsMarkdown, bookAsHtml, downloadText } from './export.js';
 import { loadImprint, applyImprint, imprintName, imprintGithub } from './imprint.js';
+import { shouldProtectNativeKey } from './reader-keyboard-policy.js';
 
 const app = {
   prefs: null,
@@ -1581,6 +1582,19 @@ function bindUi() {
       else if (stage === 'cover' || stage === 'end') go(libraryHash());
       return;
     }
+
+    const interactive = !!e.target?.closest?.('input, textarea, select, button, a, [contenteditable="true"]');
+    if (shouldProtectNativeKey({
+      key: e.key,
+      interactive,
+      dialogOpen: overlaysOpen(),
+      ctrlKey: e.ctrlKey,
+      metaKey: e.metaKey,
+      altKey: e.altKey,
+      composing: e.isComposing,
+      repeat: e.repeat,
+    })) return;
+
     if (stage === 'cover' && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
       $('startBtn').click();

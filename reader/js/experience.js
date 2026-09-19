@@ -4,6 +4,11 @@ import { blocksFromMarkdown } from './markdown.js';
 import { parseRoute, readHash } from './router.js';
 import { isTitlePageChapter } from './title-page.js';
 import { loadNotes, addNote, applyNotes } from './notes.js';
+import {
+  continuousEdgeTarget,
+  continuousKeyboardCommand,
+  continuousScrollDelta,
+} from './continuous-keyboard-model.js';
 
 const FONTS = ['book', 'literary', 'warm', 'classic', 'modern', 'clear', 'humanist', 'system'];
 const DEFAULTS = Object.freeze({
@@ -956,12 +961,30 @@ function toggleMode() {
   applyPrefs();
 }
 
-function scrollByReadingStep(direction) {
+function runContinuousKeyboardCommand(command) {
+  if (!command) return;
   const reader = document.getElementById('scrollReader');
-  if (!reader) return;
+  if (!reader || command.type === 'consume') return;
+
+  const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  if (command.type === 'edge') {
+    reader.scrollTo({
+      top: continuousEdgeTarget(command, {
+        viewport: reader.clientHeight,
+        scrollHeight: reader.scrollHeight,
+      }),
+      behavior,
+    });
+    return;
+  }
+
+  const lineHeight = Number.parseFloat(window.getComputedStyle(reader).lineHeight) || 24;
   reader.scrollBy({
-    top: direction * Math.max(160, reader.clientHeight * 0.78),
-    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    top: continuousScrollDelta(command, {
+      viewport: reader.clientHeight,
+      lineHeight,
+    }),
+    behavior,
   });
 }
 
@@ -972,6 +995,7 @@ function keyboardControl(target) {
 function bindKeyboard() {
   document.addEventListener('keydown', (event) => {
     if (keyboardControl(event.target)) return;
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
     if (document.body.dataset.stage !== 'read' || overlaysOpen()) return;
 
     if (event.key === '+' || event.key === '=') {
@@ -991,25 +1015,17 @@ function bindKeyboard() {
   });
 
   document.addEventListener('keydown', (event) => {
-    if (prefs.mode !== 'scroll' || document.body.dataset.stage !== 'read') return;
-    if (keyboardControl(event.target) || overlaysOpen()) return;
+    const command = continuousKeyboardCommand(event, {
+      mode: prefs.mode,
+      stage: document.body.dataset.stage,
+      overlayOpen: overlaysOpen(),
+      editable: keyboardControl(event.target),
+    });
+    if (!command) return;
 
-    if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      return;
-    }
-    if (event.key === 'ArrowUp' || event.key === 'PageUp') {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      scrollByReadingStep(-1);
-      return;
-    }
-    if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      scrollByReadingStep(1);
-    }
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    runContinuousKeyboardCommand(command);
   }, true);
 }
 
