@@ -3,7 +3,7 @@
 *The Birth of a New Force in the Economy*
 
 <!-- bookself-reader-links:start -->
-**Reader links:** [Published edition · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/agentile/)
+**Reader links:** [Public proof · Shelf Reader](https://svyable.github.io/shelf/reader/#/b/agentile/)
 <!-- bookself-reader-links:end -->
 
 | | |
