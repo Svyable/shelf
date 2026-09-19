@@ -64,4 +64,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add reader
           git commit -m "Sync current Bookself Reader runtime"
+          # Main may advance while Reader tests run. Rebase the generated
+          # Reader commit onto the latest main rather than force-pushing or
+          # failing a clean sync with a non-fast-forward rejection.
+          git pull --rebase origin main
           git push origin HEAD:main
