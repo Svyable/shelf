@@ -48,7 +48,7 @@
         <span class="draft-badge" id="draftBadge" hidden>Draft</span>
       </div>
       <div class="header-right">
-        <button class="header-btn" id="bookmarkBtn" type="button" title="Bookmark this page" aria-label="Bookmark">
+        <button class="header-btn" id="bookmarkBtn" type="button" title="Bookmark this page" aria-label="Bookmark" aria-pressed="false">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
         </button>
         <button class="header-btn" id="searchBtn" type="button" title="Search this book" aria-label="Search">
@@ -83,8 +83,8 @@
           <div class="library-bar">
             <input type="search" id="librarySearch" placeholder="Search the library" autocomplete="off">
             <div class="setting-pills">
-              <button type="button" class="pill active" data-sort="title">Title</button>
-              <button type="button" class="pill" data-sort="recent">Recent</button>
+              <button type="button" class="pill active" data-sort="title" aria-pressed="true">Title</button>
+              <button type="button" class="pill" data-sort="recent" aria-pressed="false">Recent</button>
             </div>
           </div>
           <ul class="search-hits" id="libraryHits" aria-live="polite" hidden></ul>
@@ -252,7 +252,7 @@
       <div class="setting-row">
         <span>Lamp</span>
         <div class="setting-pills">
-          <button type="button" class="pill" id="nightLightBtn">On</button>
+          <button type="button" class="pill" id="nightLightBtn" aria-pressed="false" aria-label="Lamp off">Off</button>
         </div>
       </div>
       <div class="setting-row">
@@ -272,7 +272,7 @@
       </div>
       <div class="setting-actions">
         <button type="button" class="ghost-btn" id="shareBtn">Copy link</button>
-        <button type="button" class="ghost-btn" id="focusBtn">Focus mode</button>
+        <button type="button" class="ghost-btn" id="focusBtn" aria-pressed="false">Focus mode</button>
         <button type="button" class="ghost-btn" id="printBtn">Print / PDF</button>
         <button type="button" class="ghost-btn" id="downloadMd">Download Markdown</button>
         <button type="button" class="ghost-btn" id="downloadHtml">Download HTML</button>
@@ -347,7 +347,7 @@
   <script type="module" src="js/viewport-stability-runtime.js?v=r1"></script>
   <script type="module" src="js/atmosphere.js?v=r1"></script>
   <script type="module" src="js/rights.js?v=r1"></script>
-  <script type="module" src="js/app.js?v=r4"></script>
+  <script type="module" src="js/app.js?v=r5"></script>
   <script type="module" src="js/experience.js?v=r2"></script>
   <script type="module" src="js/navigation.js?v=r1"></script>
   <script type="module" src="js/gui.js?v=r1"></script>
