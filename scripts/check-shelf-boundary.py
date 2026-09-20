@@ -132,11 +132,17 @@ def main() -> int:
             fail("Reader JavaScript dynamically depends on the Bookself Pages deployment: " + str(path.relative_to(ROOT)))
 
     sync = (ROOT / "scripts" / "sync-ui.sh").read_text(encoding="utf-8")
-    if "--shelf-safe" not in sync:
-        fail("Bookself UI sync must require --shelf-safe")
-
-    if "sync-bookself-versions.py" not in sync:
-        fail("Bookself UI sync must mirror upstream Reader freshness tokens")
+    sync_lines = {line.strip() for line in sync.splitlines()}
+    required_sync_lines = {
+        'python3 "$SYNC" --shelf-safe "$ROOT"',
+        'python3 "$ROOT/scripts/sync-bookself-versions.py" "$SRC" "$ROOT"',
+    }
+    missing_sync_lines = sorted(required_sync_lines - sync_lines)
+    if missing_sync_lines:
+        fail(
+            "Bookself UI sync wrapper is missing required command lines: "
+            + ", ".join(missing_sync_lines)
+        )
 
     workflow_dir = ROOT / ".github" / "workflows"
     if workflow_dir.is_dir():
