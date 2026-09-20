@@ -12,12 +12,12 @@ const fastCatalogCacheKey = 'sven-shelf:fast-catalog:v5';
 let readerCorePromise = null;
 let readerCoreLoaded = false;
 let librarySearchModulesPromise = null;
-let librarySearchEpoch = 0;
+let librarySearchSequence = 0;
 let fastEntries = [];
 let recentRanks = new Map();
 let recentRanksPromise = null;
 let sortMode = 'title';
-const searchBookCache = new Map();
+const bookLoads = new Map();
 
 const $ = (id) => document.getElementById(id);
 
@@ -158,14 +158,15 @@ function ensureLibrarySearchModules() {
 }
 
 async function loadSearchBook(entry, parseBookReadme) {
-  if (searchBookCache.has(entry.slug)) return searchBookCache.get(entry.slug);
-  const pending = (async () => {
-    const response = await fetch(new URL(`../../books/${entry.slug}/README.md`, import.meta.url));
+  const slug = entry.slug;
+  if (bookLoads.has(slug)) return bookLoads.get(slug);
+  const task = (async () => {
+    const response = await fetch(new URL(`../../books/${slug}/README.md`, import.meta.url));
     if (!response.ok) throw new Error(`Search metadata failed (${response.status})`);
-    const meta = parseBookReadme(await response.text(), entry.slug);
+    const meta = parseBookReadme(await response.text(), slug);
     const chapters = await Promise.all((meta.contents || []).map(async (chapter) => {
       try {
-        const chapterResponse = await fetch(new URL(`../../books/${entry.slug}/${chapter.file}`, import.meta.url));
+        const chapterResponse = await fetch(new URL(`../../books/${slug}/${chapter.file}`, import.meta.url));
         if (!chapterResponse.ok) throw new Error(`Chapter request failed (${chapterResponse.status})`);
         return { ...chapter, markdown: await chapterResponse.text(), missing: false };
       } catch {
@@ -174,15 +175,13 @@ async function loadSearchBook(entry, parseBookReadme) {
     }));
     return { ...meta, chapters };
   })();
-  searchBookCache.set(entry.slug, pending);
+  bookLoads.set(slug, task);
   try {
-    return await pending;
-  } catch (error) {
-    searchBookCache.delete(entry.slug);
-    throw error;
+    return await task;
+  } finally {
+    if (bookLoads.get(slug) === task) bookLoads.delete(slug);
   }
 }
-
 async function loadSearchBooks(entries, parseBookReadme) {
   const books = new Array(entries.length);
   let next = 0;
@@ -202,6 +201,7 @@ async function loadSearchBooks(entries, parseBookReadme) {
 function renderLibrarySearchHits(hits, modules) {
   const box = $('libraryHits');
   if (!box) return;
+  box.removeAttribute('aria-busy');
   box.innerHTML = '';
   box.dataset.searchState = hits.length ? 'ready' : 'empty';
   box.hidden = false;
@@ -232,13 +232,14 @@ function renderLibrarySearchHits(hits, modules) {
   }
 }
 
-async function runFastLibrarySearch(value) {
+async function runLibrarySearch(query) {
+  const requestId = ++librarySearchSequence;
   const box = $('libraryHits');
   if (!box || readerCoreLoaded) return;
-  const query = String(value || '').trim();
-  const epoch = ++librarySearchEpoch;
-  if (query.length < 2) {
+  const q = String(query || '').trim();
+  if (q.length < 2) {
     box.hidden = true;
+    box.removeAttribute('aria-busy');
     box.innerHTML = '';
     delete box.dataset.searchState;
     return;
@@ -246,21 +247,26 @@ async function runFastLibrarySearch(value) {
 
   box.hidden = false;
   box.dataset.searchState = 'loading';
-  box.innerHTML = '<li class="search-empty">Searching titles and passages…</li>';
+  box.setAttribute('aria-busy', 'true');
+  box.innerHTML = '<li>Searching…</li>';
 
   try {
-    const modules = await ensureLibrarySearchModules();
+    const [modules] = await Promise.all([ensureLibrarySearchModules()]);
+    if (requestId !== librarySearchSequence) return;
     const books = await loadSearchBooks(fastEntries.slice(), modules.parseBookReadme);
-    if (epoch !== librarySearchEpoch || String($('librarySearch')?.value || '').trim() !== query) return;
-    renderLibrarySearchHits(modules.searchLibrary(books, query), modules);
+    if (requestId !== librarySearchSequence || String($('librarySearch')?.value || '').trim() !== q) return;
+    const { searchLibrary } = modules;
+    const hits = searchLibrary(books, q);
+    if (requestId !== librarySearchSequence) return;
+    renderLibrarySearchHits(hits, modules);
   } catch (error) {
-    if (epoch !== librarySearchEpoch) return;
+    if (requestId !== librarySearchSequence) return;
+    box.removeAttribute('aria-busy');
     console.error('Shelf library search failed', error);
     box.dataset.searchState = 'error';
     box.innerHTML = '<li class="search-empty">Passage search could not be loaded. Title filtering still works.</li>';
   }
 }
-
 function volumeElement(entry) {
   const a = document.createElement('a');
   a.className = 'volume';
@@ -331,7 +337,7 @@ function bindFastLibraryControls() {
     search.addEventListener('focus', prepare, { once: true });
     search.addEventListener('input', () => {
       renderFastShelf();
-      if (!readerCoreLoaded) runFastLibrarySearch(search.value);
+      if (!readerCoreLoaded) runLibrarySearch(search.value);
     });
   }
   document.querySelectorAll('[data-sort]').forEach((button) => {
@@ -356,7 +362,7 @@ async function refreshFastCatalog() {
     saveFastCatalog(entries);
     renderFastShelf();
     const activeQuery = String($('librarySearch')?.value || '').trim();
-    if (!readerCoreLoaded && activeQuery.length >= 2) runFastLibrarySearch(activeQuery);
+    if (!readerCoreLoaded && activeQuery.length >= 2) runLibrarySearch(activeQuery);
   } catch (error) {
     console.error('Shelf fast catalog failed', error);
     if (!fastEntries.length && $('emptyShelf')) {
