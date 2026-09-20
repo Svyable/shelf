@@ -14,10 +14,10 @@ ASSET_RE = re.compile(
     r'(?P<suffix>")'
 )
 BOOKSELF_CACHE_RE = re.compile(
-    r"const\s+CACHE\s*=\s*['"]bookself-reader-shell-(?P<generation>v[0-9]+)['"]\s*;"
+    r"""const\s+CACHE\s*=\s*['"]bookself-reader-shell-(?P<generation>v[0-9]+)['"]\s*;"""
 )
 SHELF_CACHE_RE = re.compile(
-    r"const\s+CACHE\s*=\s*['"]sven-shelf-reader-[^'"]+['"]\s*;"
+    r"""const\s+CACHE\s*=\s*['"]sven-shelf-reader-[^'"]+['"]\s*;"""
 )
 
 
