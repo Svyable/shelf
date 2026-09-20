@@ -117,11 +117,11 @@ def main() -> int:
         fail("Shelf Reader adapter must carry its version token into app-core.js")
 
     index_html = (ROOT / "reader" / "index.html").read_text(encoding="utf-8")
-    if not re.search(r'js/app\.js\?v=[^"\\s]+', index_html):
+    if not re.search(r'js/app\.js\?v=[^"\s]+', index_html):
         fail("Shelf Reader adapter must have an explicit freshness token")
 
     worker_source = (ROOT / "reader" / "sw.js").read_text(encoding="utf-8")
-    if not re.search(r"const\\s+CACHE\\s*=\\s*['\"]sven-shelf-reader-bookself-v[0-9]+['\"]", worker_source):
+    if not re.search(r"""const\s+CACHE\s*=\s*['"]sven-shelf-reader-bookself-v[0-9]+['"]""", worker_source):
         fail("Shelf Reader cache must track the synchronized Bookself generation")
 
     verify_reader_core_closure()
