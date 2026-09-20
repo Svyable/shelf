@@ -345,7 +345,11 @@ function bindFastLibraryControls() {
     button.dataset.fastShelfBound = 'true';
     button.addEventListener('click', async () => {
       sortMode = button.dataset.sort === 'recent' ? 'recent' : 'title';
-      document.querySelectorAll('[data-sort]').forEach((peer) => peer.classList.toggle('active', peer === button));
+      document.querySelectorAll('[data-sort]').forEach((peer) => {
+        const active = peer === button;
+        peer.classList.toggle('active', active);
+        peer.setAttribute('aria-pressed', String(active));
+      });
       if (sortMode === 'recent') await ensureRecentRanks();
       renderFastShelf();
     });
