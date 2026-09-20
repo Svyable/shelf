@@ -14,10 +14,19 @@ const source = await readFile(sourceUrl, 'utf8');
 const start = source.indexOf('async function loadBook(slug)');
 const end = source.indexOf('async function fetchRevision(slug)', start);
 assert.ok(start >= 0 && end > start);
-const createLoader = new Function('app', 'fetchDocument', 'parseBookReadme', 'parseFrontMatterMeta', 'fetchText', 'firstExisting', 'fetchRevision', `${source.slice(start, end)}; return loadBook;`);
+const createLoader = new Function('app', 'bookLoads', 'fetchDocument', 'parseBookReadme', 'parseFrontMatterMeta', 'fetchText', 'firstExisting', 'fetchRevision', `${source.slice(start, end)}; return loadBook;`);
 
 async function load(readme, front) {
-  const loader = createLoader({ books: new Map() }, async () => ({ text: readme }), parseBookReadme, parseFrontMatterMeta, async () => front, async () => null, async () => null);
+  const loader = createLoader(
+    { books: new Map() },
+    new Map(),
+    async () => ({ text: readme }),
+    parseBookReadme,
+    parseFrontMatterMeta,
+    async () => front,
+    async () => null,
+    async () => null,
+  );
   return loader('example');
 }
 const readme = `# The Correct Title

@@ -1704,17 +1704,17 @@ body[data-stage="read"] .page-nav { display: flex; }
 
 #noteList .toc-link, #bookmarkList .toc-link { flex: 1; }
 
-body.focus-mode .app-header,
-body.focus-mode .progress-bar-container,
-body.focus-mode .page-nav {
+body[data-stage="read"].focus-mode .app-header,
+body[data-stage="read"].focus-mode .progress-bar-container,
+body[data-stage="read"].focus-mode .page-nav {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
 }
 
-body.focus-mode:hover .app-header,
-body.focus-mode:hover .progress-bar-container,
-body.focus-mode:hover .page-nav {
+body[data-stage="read"].focus-mode:hover .app-header,
+body[data-stage="read"].focus-mode:hover .progress-bar-container,
+body[data-stage="read"].focus-mode:hover .page-nav {
   opacity: 1;
   pointer-events: auto;
 }
@@ -1789,9 +1789,9 @@ body.focus-mode:hover .page-nav {
 }
 
 @media (hover: none) {
-  body.focus-mode .app-header,
-  body.focus-mode .progress-bar-container,
-  body.focus-mode .page-nav {
+  body[data-stage="read"].focus-mode .app-header,
+  body[data-stage="read"].focus-mode .progress-bar-container,
+  body[data-stage="read"].focus-mode .page-nav {
     opacity: 1;
     pointer-events: auto;
   }

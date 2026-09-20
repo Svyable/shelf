@@ -34,6 +34,9 @@ import { bookAsMarkdown, bookAsHtml, downloadText } from './export.js';
 import { loadImprint, applyImprint, imprintName, imprintGithub } from './imprint.js';
 import { shouldProtectNativeKey } from './reader-keyboard-policy.js';
 
+let librarySearchSequence = 0;
+const bookLoads = new Map();
+
 const app = {
   prefs: null,
   catalog: [],
@@ -69,18 +72,34 @@ function applyPrefs() {
   document.body.classList.toggle('is-draft', !!(app.book && !app.book.published));
   $('nightLightOverlay').classList.toggle('active', !!app.prefs.nightLight);
   $('lampPool')?.classList.toggle('active', !!app.prefs.nightLight);
-  $('nightLightBtn')?.classList.toggle('active', !!app.prefs.nightLight);
-  $('nightLightBtn') && ($('nightLightBtn').textContent = app.prefs.nightLight ? 'On' : 'Off');
+  if ($('nightLightBtn')) {
+    const active = !!app.prefs.nightLight;
+    $('nightLightBtn').classList.toggle('active', active);
+    $('nightLightBtn').textContent = active ? 'On' : 'Off';
+    $('nightLightBtn').setAttribute('aria-pressed', String(active));
+    $('nightLightBtn').setAttribute('aria-label', active ? 'Lamp on' : 'Lamp off');
+  }
+  if ($('focusBtn')) {
+    const active = !!app.prefs.focus;
+    $('focusBtn').classList.toggle('active', active);
+    $('focusBtn').setAttribute('aria-pressed', String(active));
+  }
   document.querySelectorAll('[data-paper]').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.paper === app.prefs.theme);
+    const active = btn.dataset.paper === app.prefs.theme;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
   });
   $('viewModeBtn').hidden = !canSpreadViewport();
   $('viewModeBtn').textContent = app.prefs.viewMode === 'spread' ? 'Single' : 'Spread';
   document.querySelectorAll('[data-font]').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.font === app.prefs.fontFamily);
+    const active = btn.dataset.font === app.prefs.fontFamily;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
   });
   document.querySelectorAll('[data-leading]').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.leading === String(app.prefs.lineHeight));
+    const active = btn.dataset.leading === String(app.prefs.lineHeight);
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
   });
 }
 
@@ -175,36 +194,54 @@ function ensureCatalog() {
 
 async function loadBook(slug) {
   if (app.books.has(slug)) return app.books.get(slug);
-  const hubDoc = await fetchDocument(`books/${slug}/README.md`);
-  const hub = hubDoc.text;
-  const meta = parseBookReadme(hub, slug);
-  meta.modified = hubDoc.modified;
-  let fm = { title: meta.title, subtitle: '', year: '' };
-  const chapters = await Promise.all(
-    meta.contents.map(async (c) => {
-      try {
-        const markdown = await fetchText(`books/${slug}/${c.file}`);
-        return { ...c, markdown, missing: false };
-      } catch {
-        return {
-          ...c,
-          markdown: `# ${c.title}\n\nThis chapter file is missing from the repository.\n`,
-          missing: true,
-        };
-      }
-    })
-  );
-  const front = chapters.find((c) => /^(?:\d+-)?front-matter$/.test(c.id));
-  if (front) fm = { ...fm, ...parseFrontMatterMeta(front.markdown) };
-  const cover = await firstExisting(
-    ['cover.png', 'cover.jpg', 'cover.webp', 'cover.jpeg'].map(
-      (name) => `books/${slug}/media/${name}`
-    )
-  );
-  const book = { ...meta, title: meta.title || fm.title, subtitle: meta.subtitle || fm.subtitle, year: fm.year, cover, chapters };
-  book.revision = await fetchRevision(slug);
-  app.books.set(slug, book);
-  return book;
+  if (bookLoads.has(slug)) return bookLoads.get(slug);
+
+  const task = (async () => {
+    const hubDoc = await fetchDocument(`books/${slug}/README.md`);
+    const hub = hubDoc.text;
+    const meta = parseBookReadme(hub, slug);
+    meta.modified = hubDoc.modified;
+    let fm = { title: meta.title, subtitle: '', year: '' };
+    const chapters = await Promise.all(
+      meta.contents.map(async (c) => {
+        try {
+          const markdown = await fetchText(`books/${slug}/${c.file}`);
+          return { ...c, markdown, missing: false };
+        } catch {
+          return {
+            ...c,
+            markdown: `# ${c.title}\n\nThis chapter file is missing from the repository.\n`,
+            missing: true,
+          };
+        }
+      })
+    );
+    const front = chapters.find((c) => /^(?:\d+-)?front-matter$/.test(c.id));
+    if (front) fm = { ...fm, ...parseFrontMatterMeta(front.markdown) };
+    const cover = await firstExisting(
+      ['cover.png', 'cover.jpg', 'cover.webp', 'cover.jpeg'].map(
+        (name) => `books/${slug}/media/${name}`
+      )
+    );
+    const book = {
+      ...meta,
+      title: meta.title || fm.title,
+      subtitle: meta.subtitle || fm.subtitle,
+      year: fm.year,
+      cover,
+      chapters,
+    };
+    book.revision = await fetchRevision(slug);
+    app.books.set(slug, book);
+    return book;
+  })();
+
+  bookLoads.set(slug, task);
+  try {
+    return await task;
+  } finally {
+    if (bookLoads.get(slug) === task) bookLoads.delete(slug);
+  }
 }
 
 async function fetchRevision(slug) {
@@ -350,6 +387,7 @@ function updateProgressUi() {
   const marks = loadBookmarks(app.slug);
   const here = marks.some((m) => m.chapter === ch?.chapter && m.offset === ch?.start);
   $('bookmarkBtn').classList.toggle('active', here);
+  $('bookmarkBtn').setAttribute('aria-pressed', String(here));
 }
 
 function isChapterOpen(html) {
@@ -687,7 +725,9 @@ function renderPublisherFilters(entries) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.textContent = label;
-    btn.classList.toggle('active', app.pubFilter === label);
+    const active = app.pubFilter === label;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
     btn.addEventListener('click', () => {
       app.pubFilter = label;
       renderShelf(app.catalog);
@@ -970,17 +1010,29 @@ function exportNotes() {
 }
 
 async function runLibrarySearch(query) {
+  const requestId = ++librarySearchSequence;
   const box = $('libraryHits');
   if (!box) return;
   const q = query.trim();
   if (q.length < 2) {
     box.hidden = true;
+    box.removeAttribute('aria-busy');
     box.innerHTML = '';
     return;
   }
+
+  box.hidden = false;
+  box.setAttribute('aria-busy', 'true');
+  box.innerHTML = '<li>Searching…</li>';
+
   await Promise.all(app.catalog.map((e) => loadBook(e.slug).catch(() => null)));
+  if (requestId !== librarySearchSequence) return;
+
   const books = app.catalog.map((e) => app.books.get(e.slug)).filter(Boolean);
   const hits = searchLibrary(books, q);
+  if (requestId !== librarySearchSequence) return;
+
+  box.removeAttribute('aria-busy');
   box.innerHTML = '';
   box.hidden = hits.length === 0;
   if (!hits.length) {
@@ -1381,10 +1433,18 @@ function bindUi() {
   });
   $('librarySearch')?.addEventListener('input', (e) => runLibrarySearch(e.target.value));
   document.querySelectorAll('[data-sort]').forEach((btn) => {
+    const syncSortState = () => {
+      const active = btn.dataset.sort === app.sortMode;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+    };
+    syncSortState();
     btn.addEventListener('click', () => {
       app.sortMode = btn.dataset.sort;
       document.querySelectorAll('[data-sort]').forEach((b) => {
-        b.classList.toggle('active', b === btn);
+        const active = b === btn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-pressed', String(active));
       });
       renderShelf(app.catalog);
     });

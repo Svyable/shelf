@@ -169,9 +169,19 @@ function syncBackgroundIsolation(isolated) {
 function syncOpenerSemantics(config, active) {
   const opener = $(config.opener);
   if (!opener) return;
+
+  if (config.id === 'searchOverlay' && document.body.dataset.stage === 'library') {
+    opener.setAttribute('aria-controls', 'librarySearch');
+    opener.setAttribute('aria-label', 'Search library');
+    opener.removeAttribute('aria-haspopup');
+    opener.removeAttribute('aria-expanded');
+    return;
+  }
+
   opener.setAttribute('aria-controls', config.id);
   opener.setAttribute('aria-haspopup', 'dialog');
   opener.setAttribute('aria-expanded', String(active));
+  if (config.id === 'searchOverlay') opener.setAttribute('aria-label', 'Search this book');
 }
 
 function syncOverlayStack() {
@@ -306,6 +316,19 @@ function installOverlayPolish() {
     const observer = new MutationObserver(() => onOverlayMutation(overlay, config));
     observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
   });
+
+  const searchConfig = OVERLAYS.find((config) => config.id === 'searchOverlay');
+  if (searchConfig) {
+    const syncSearchOpener = () => {
+      const overlay = $('searchOverlay');
+      syncOpenerSemantics(searchConfig, !!overlay?.classList.contains('active'));
+    };
+    new MutationObserver(syncSearchOpener).observe(document.body, {
+      attributes: true,
+      attributeFilter: ['data-stage'],
+    });
+    syncSearchOpener();
+  }
 
   syncOverlayStack();
   syncBodyOverlayState();
