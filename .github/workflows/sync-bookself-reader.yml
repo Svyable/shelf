@@ -9,6 +9,7 @@ on:
       - ".github/workflows/sync-bookself-reader.yml"
       - "reader/**"
       - "scripts/sync-ui.sh"
+      - "scripts/sync-bookself-versions.py"
   schedule:
     - cron: "17 * * * *"
   workflow_dispatch:
