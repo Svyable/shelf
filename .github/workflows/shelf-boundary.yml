@@ -47,6 +47,8 @@ jobs:
         run: |
           set -e
           for test in reader/js/*.test.mjs; do node --test "$test"; done
+      - name: Test Bookself Reader freshness synchronization
+        run: python3 scripts/test_sync_bookself_versions.py
       - name: Verify Shelf publication and Reader ownership boundary
         run: python3 scripts/check-shelf-boundary.py
       - name: Verify Shelf catalog publication boundary

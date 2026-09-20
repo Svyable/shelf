@@ -113,6 +113,17 @@ def main() -> int:
     if not (ROOT / "reader" / "js" / "app-core.js").is_file():
         fail("local Reader core is missing")
 
+    if "url.search = new URL(import.meta.url).search;" not in app:
+        fail("Shelf Reader adapter must carry its version token into app-core.js")
+
+    index_html = (ROOT / "reader" / "index.html").read_text(encoding="utf-8")
+    if not re.search(r'js/app\.js\?v=[^"\s]+', index_html):
+        fail("Shelf Reader adapter must have an explicit freshness token")
+
+    worker_source = (ROOT / "reader" / "sw.js").read_text(encoding="utf-8")
+    if not re.search(r"""const\s+CACHE\s*=\s*['"]sven-shelf-reader-bookself-v[0-9]+['"]""", worker_source):
+        fail("Shelf Reader cache must track the synchronized Bookself generation")
+
     verify_reader_core_closure()
 
     for path in (ROOT / "reader").rglob("*.js"):
@@ -123,6 +134,9 @@ def main() -> int:
     sync = (ROOT / "scripts" / "sync-ui.sh").read_text(encoding="utf-8")
     if "--shelf-safe" not in sync:
         fail("Bookself UI sync must require --shelf-safe")
+
+    if "sync-bookself-versions.py" not in sync:
+        fail("Bookself UI sync must mirror upstream Reader freshness tokens")
 
     workflow_dir = ROOT / ".github" / "workflows"
     if workflow_dir.is_dir():

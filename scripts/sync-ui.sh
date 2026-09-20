@@ -13,4 +13,4 @@ fi
 # --shelf-safe is deliberately required. Older Bookself checkouts that only know
 # the legacy whole-tree sync will fail here instead of overwriting Shelf's shell,
 # service worker, adapter, identity styles, or copying Bookself's Desk into Shelf.
-exec python3 "$SYNC" --shelf-safe "$ROOT"
+python3 "$SYNC" --shelf-safe "$ROOT"\npython3 "$ROOT/scripts/sync-bookself-versions.py" "$SRC" "$ROOT"
