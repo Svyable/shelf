@@ -28,21 +28,28 @@ function wikiId(target) {
 }
 
 export function tokenizeWikiLink(src) {
-  const match = String(src || '').match(/^\[\[([^\]|#]+?)(?:\|([^\]]+))?\]\]/);
+  const match = String(src || '').match(/^\[\[([^\]|#]+?)(?:#([^\]|]+?))?(?:\|([^\]]+))?\]\]/);
   if (!match) return null;
   const id = wikiId(match[1]);
   if (!id) return null;
-  return {
+  const heading = (match[2] || '').trim();
+  const token = {
     raw: match[0],
     id,
-    label: (match[2] || id).trim(),
+    label: (match[3] || heading || id).trim(),
   };
+  if (heading) token.heading = heading;
+  return token;
 }
 
 export function renderWikiLink(token, slug = wikiSlug) {
-  const label = escapeHtml(token.label || token.id);
+  const label = escapeHtml(token.label || token.heading || token.id);
+  const heading = String(token.heading || '').trim();
   if (!slug) return `<a href="manuscript/${encodeURIComponent(token.id)}.md">${label}</a>`;
-  return `<a href="#/b/${encodeURIComponent(slug)}/${encodeURIComponent(token.id)}/0" data-internal="1">${label}</a>`;
+  const semanticTarget = heading
+    ? ` data-internal-heading="${escapeHtml(heading)}"`
+    : '';
+  return `<a href="#/b/${encodeURIComponent(slug)}/${encodeURIComponent(token.id)}/0" data-internal="1"${semanticTarget}>${label}</a>`;
 }
 
 export function installMarkedWiki(marked = globalThis.window?.marked) {
@@ -117,6 +124,18 @@ export function headingOffsets(markdown) {
     });
   }
   return headingCache.set('headings', source, heads);
+}
+
+function normalizedHeading(value) {
+  return String(value || '').trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+export function headingTargetOffset(markdown, target) {
+  const wanted = normalizedHeading(target);
+  if (!wanted) return null;
+  const heading = headingOffsets(markdown)
+    .find((item) => normalizedHeading(item.title) === wanted);
+  return heading ? heading.offset : null;
 }
 
 export function blocksFromMarkdown(markdown, slug) {

@@ -99,13 +99,19 @@ ${body}
 `;
 }
 
-export function downloadText(filename, text, type = 'text/plain') {
-  const blob = new Blob([text], { type });
+export function downloadBlob(filename, blob) {
+  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  a.href = url;
   a.download = filename;
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(a.href);
+  a.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+export function downloadText(filename, text, type = 'text/plain') {
+  downloadBlob(filename, new Blob([text], { type }));
 }
 
 function escapeHtml(s) {
