@@ -13,7 +13,7 @@
   },
   "payload": {
     "algorithm": "sha256-tree-v1",
-    "digest": "f7ea5328914472738b26e45e4800a487c7078aaf90e480a191d84ba8aa04394c",
+    "digest": "60995f95dc0486b3f60e4416451c4791f826d4ebc0f7d41940ad95a2d9e7e77c",
     "files": 33
   }
 }
