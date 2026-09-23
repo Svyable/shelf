@@ -30,6 +30,7 @@ Your reading position, bookmarks, notes, and presentation preferences stay in yo
 These are the deliberately released editions on Sven Hardy Benson’s Shelf. Public proofs are intentionally excluded until their status becomes `Published`.
 
 | Book | Status | Read |
+| [**The Unobserved World**](books/the-unobserved-world/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-unobserved-world/) |
 |---|---|---|
 | [**Abdicating Intelligence**](books/abdicating-intelligence/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/abdicating-intelligence/) |
 | [**Adjacency**](books/adjacency/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/adjacency/) |

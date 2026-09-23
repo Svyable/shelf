@@ -1,0 +1,19 @@
+{
+  "schema": "svyable-release-v1",
+  "source": {
+    "owner": "Svyable",
+    "repo": "desk",
+    "commit": "ac5e9ddfce540f5d5b533a19a02ed222ef132ba0",
+    "path": "books/the-unobserved-world"
+  },
+  "destination": {
+    "owner": "Svyable",
+    "repo": "shelf",
+    "path": "books/the-unobserved-world"
+  },
+  "payload": {
+    "algorithm": "sha256-tree-v1",
+    "digest": "f7ea5328914472738b26e45e4800a487c7078aaf90e480a191d84ba8aa04394c",
+    "files": 33
+  }
+}
