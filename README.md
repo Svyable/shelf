@@ -12,6 +12,7 @@ The full library is in the Reader. These six books are useful entry points into 
 
 | Book | Start here if you are interested in | Read |
 |---|---|---|
+| [**The Unobserved World**](books/the-unobserved-world/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-unobserved-world/) |
 | [**Face The Strange**](books/face-the-strange/) | How people and institutions adapt when advanced machine intelligence stops feeling like ordinary software. | [Read →](https://svyable.github.io/shelf/reader/#/b/face-the-strange/) |
 | [**The World Beneath the World**](books/the-world-beneath-the-world/) | The physical systems that quietly organize modern life: air, weather, temperature, grids, pipes, microbes, logistics, and waste. | [Read →](https://svyable.github.io/shelf/reader/#/b/the-world-beneath-the-world/) |
 | [**Proof of Human**](books/proof-of-human/) | What authenticity, evidence, identity, and trust become when convincing fabrication gets cheap. | [Read →](https://svyable.github.io/shelf/reader/#/b/proof-of-human/) |
