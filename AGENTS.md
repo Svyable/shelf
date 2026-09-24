@@ -82,6 +82,10 @@ Consistency rules:
 - Keep `llms.txt`'s released-edition list identical to `catalog.json`. It is
   the one generated-reader surface that is not produced by a script; do not let
   it drift.
+- Released `research/**` travels with the manuscript snapshot: a canonical
+  `research/README.md`, plus `source-ledger.csv` and `sources/*.json` source
+  fragments where the Desk released them. Conformance to the authorized ledger
+  schemas is gated on Desk before release; Shelf provenance verifies the bytes.
 - Run `python3 scripts/check-catalog.py` and `python3 scripts/sync-reader-links.py --check`
   after any catalog or book-list change.
 
@@ -115,6 +119,12 @@ CI mirrors these through `.github/workflows/`:
   deliberately narrow: it syncs `reader/**` from Bookself through
   `scripts/sync-ui.sh` under the `--shelf-safe` contract and nothing else. It
   is the exception that proves the read-only rule; never widen it.
+
+Shelf CI does not validate research ledger or fragment schemas. Bookself's
+`docs/research.md` defines the publication research contract; the Desk release
+gate (`scripts/check-research-sources.py`) enforces the authorized schemas
+before a release is prepared, and `scripts/check-release-provenance.py` here
+verifies the released bytes against the committed Desk snapshot.
 
 Before pushing any change to `books/`, `catalog.json`, `README.md`, or
 `llms.txt`, run at least `check-catalog.py` and, when you touched the release
@@ -199,7 +209,10 @@ payload digest, and refreshes the generated `publication/` surfaces and
 `sitemap.xml`. `llms.txt` is not written by that command, so add the released
 book there in the same change. The command stops before commit or push. Review
 and land that prepared Shelf change through normal Git; a pull request is
-useful but not required by Bookself itself.
+useful but not required by Bookself itself. The received snapshot includes the
+full research tree; Desk's release gate has already validated ledger and
+fragment conformance against the authorized schemas, and this repository's
+provenance check verifies the released bytes against the committed Desk source.
 
 **Publish.** A released publication has the exact Status `Published`, one
 root README row under **The books**, an entry in `catalog.json`, a release

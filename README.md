@@ -160,7 +160,10 @@ python3 scripts/sync-reader-links.py --check
 Workflows in `.github/workflows/` run these checks on pull requests and every
 push, plus the Reader contract tests (`node --test reader/js/*.test.mjs`). The
 only write-capable workflow is `sync-bookself-reader.yml`, which updates
-`reader/` from Bookself; no workflow rewrites published content.
+`reader/` from Bookself; no workflow rewrites published content. Research
+content conformance (ledger schemas, fragment shapes) is verified on Desk
+before a release is prepared, not by Shelf CI; Shelf provenance checks confirm
+the released research bytes match the committed Desk snapshot.
 
 ## Local preview
 
