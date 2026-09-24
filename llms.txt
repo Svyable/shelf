@@ -66,10 +66,4 @@ This file is the low-noise machine-readable map of Sven Hardy Benson’s Shelf. 
 - [Useful Noise](https://svyable.github.io/shelf/books/useful-noise/README.md)
 - [Wild Speculation](https://svyable.github.io/shelf/books/wild-speculation/README.md)
 
-## Public proofs — not released editions
 
-These are intentionally public but remain `Drafting`; they are not part of the released-book catalog.
-
-- [Agentile](https://svyable.github.io/shelf/books/agentile/README.md) — Public proof.
-- [The Exponentiality](https://svyable.github.io/shelf/books/the-exponentiality/README.md) — Public draft.
-- [The Hundred-Year Handoff](https://svyable.github.io/shelf/books/the-hundred-year-handoff/README.md) — Public proof.
