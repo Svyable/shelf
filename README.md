@@ -88,6 +88,7 @@ These are the deliberately released editions on Sven Hardy Benson’s Shelf. Pub
 | [**Deceptatron**](books/deceptatron/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/deceptatron/) |
 | [**Hallucinations**](books/hallucinations/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/hallucinations/) |
 | [**America’s Other 250**](books/the-other-250/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-other-250/) |
+| [**The Unobserved World**](books/the-unobserved-world/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/the-unobserved-world/) |
 
 ## What Shelf means
 

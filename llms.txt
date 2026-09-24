@@ -1,6 +1,6 @@
 # Sven Hardy Benson’s Shelf
 
-> Deliberately released editions by Sven Hardy Benson, plus a small number of explicitly labeled public proofs.
+> Deliberately released editions by Sven Hardy Benson.
 
 This file is the low-noise machine-readable map of Sven Hardy Benson’s Shelf. A book is a released edition only when its book README says `Published` and it appears in the root `README.md` table under `## The books`.
 
@@ -19,23 +19,28 @@ This file is the low-noise machine-readable map of Sven Hardy Benson’s Shelf. 
 - [Adjacency](https://svyable.github.io/shelf/books/adjacency/README.md)
 - [Allocating Intelligence](https://svyable.github.io/shelf/books/allocating-intelligence/README.md)
 - [America's Got a Spending Problem](https://svyable.github.io/shelf/books/americas-got-a-spending-problem/README.md)
+- [America's Other 250](https://svyable.github.io/shelf/books/the-other-250/README.md)
 - [Appeal](https://svyable.github.io/shelf/books/appeal/README.md)
 - [Artificial Identity](https://svyable.github.io/shelf/books/artificial-identity/README.md)
 - [Austerity Measures](https://svyable.github.io/shelf/books/austerity-measures/README.md)
 - [Commit](https://svyable.github.io/shelf/books/commit/README.md)
+- [Deceptatron](https://svyable.github.io/shelf/books/deceptatron/README.md)
 - [Energy, Value & Intelligence](https://svyable.github.io/shelf/books/energy-value-intelligence/README.md)
 - [Face The Strange](https://svyable.github.io/shelf/books/face-the-strange/README.md)
 - [Fiscal Wall](https://svyable.github.io/shelf/books/fiscal-wall/README.md)
 - [Gatekeepers](https://svyable.github.io/shelf/books/gatekeepers/README.md)
+- [Hallucinations](https://svyable.github.io/shelf/books/hallucinations/README.md)
 - [Intelligence State](https://svyable.github.io/shelf/books/intelligence-state/README.md)
 - [Keep Cooking](https://svyable.github.io/shelf/books/keep-cooking/README.md)
 - [Leveraging Luck](https://svyable.github.io/shelf/books/leveraging-luck/README.md)
 - [Look Alive](https://svyable.github.io/shelf/books/look-alive/README.md)
+- [Neuralase](https://svyable.github.io/shelf/books/neuralase/README.md)
 - [Nothing Counts Yet](https://svyable.github.io/shelf/books/nothing-counts-yet/README.md)
 - [Open Source](https://svyable.github.io/shelf/books/open-source/README.md)
 - [Pace of Change](https://svyable.github.io/shelf/books/pace-of-change/README.md)
 - [Proof of Human](https://svyable.github.io/shelf/books/proof-of-human/README.md)
 - [Public Pressure](https://svyable.github.io/shelf/books/public-pressure/README.md)
+- [Renegade Code](https://svyable.github.io/shelf/books/renegade-code/README.md)
 - [Restructuring America](https://svyable.github.io/shelf/books/restructuring-america/README.md)
 - [Right To Try](https://svyable.github.io/shelf/books/right-to-try/README.md)
 - [Robust](https://svyable.github.io/shelf/books/robust/README.md)
@@ -57,6 +62,7 @@ This file is the low-noise machine-readable map of Sven Hardy Benson’s Shelf. 
 - [The Retry Generation](https://svyable.github.io/shelf/books/the-retry-generation/README.md)
 - [The Risk Pool](https://svyable.github.io/shelf/books/the-risk-pool/README.md)
 - [The Unbounding](https://svyable.github.io/shelf/books/the-unbounding/README.md)
+- [The Unobserved World](https://svyable.github.io/shelf/books/the-unobserved-world/README.md)
 - [The Vanishing Bid](https://svyable.github.io/shelf/books/the-vanishing-bid/README.md)
 - [The Weather We Build](https://svyable.github.io/shelf/books/the-weather-we-build/README.md)
 - [The World Beneath the World](https://svyable.github.io/shelf/books/the-world-beneath-the-world/README.md)
@@ -64,6 +70,5 @@ This file is the low-noise machine-readable map of Sven Hardy Benson’s Shelf. 
 - [Triumph of the Commons](https://svyable.github.io/shelf/books/triumph-of-the-commons/README.md)
 - [Ubiquitous](https://svyable.github.io/shelf/books/ubiquitous/README.md)
 - [Useful Noise](https://svyable.github.io/shelf/books/useful-noise/README.md)
+- [Who Taught America?](https://svyable.github.io/shelf/books/who-taught-america/README.md)
 - [Wild Speculation](https://svyable.github.io/shelf/books/wild-speculation/README.md)
-
-
