@@ -127,15 +127,40 @@ For the publishing architecture and revision workflow, see [Bookself](https://gi
 | Path | Purpose |
 |---|---|
 | `books/` | Public publication snapshots and intentionally public proofs |
-| `catalog.json` | Machine-readable Shelf inventory |
+| `catalog.json` | Machine-readable Shelf inventory (source of truth for "published") |
+| `publication/` | Generated, crawlable per-book landing pages and gallery |
+| `sitemap.xml` | Search discovery for every publication page |
+| `llms.txt` | Machine-readable reading list for agents and search crawlers |
 | `reader/` | Shared Bookself reading interface |
-| `desk/` | Shared Bookself publishing/readiness interface |
 | `imprint.json` | Sven Hardy Benson’s Shelf identity and Reader links |
 | `README.md` | Human-facing front door to the Shelf |
+| `index.html`, `books/index.html` | Web landing pages that render the released catalog |
+
+The book list, `catalog.json`, `publication/`, and `sitemap.xml` must agree.
+The Desk release command refreshes them together; `llms.txt` is maintained by
+hand, so the same change must add or remove a released book there too.
 
 ## Rights
 
 **Open tools. Author-owned words.** Bookself software is open source. Publication content is not automatically open merely because it is publicly readable or source-visible. See [LICENSE](LICENSE), [RIGHTS.md](RIGHTS.md), and any publication-specific `RIGHTS.md` / `rights.json` for the applicable rights boundary.
+
+## Checks and continuous integration
+
+Shelf publishes from committed files and verifies consistency with small
+read-only checks, both locally and in GitHub Actions:
+
+```bash
+python3 scripts/check-shelf-boundary.py    # Shelf ownership + Reader closure
+python3 scripts/check-catalog.py            # catalog.json vs books/ and README
+python3 scripts/check-feedback-catalog.py   # chapter-feedback dropdown in sync
+python3 scripts/check-release-provenance.py # release.json provenance
+python3 scripts/sync-reader-links.py --check
+```
+
+Workflows in `.github/workflows/` run these checks on pull requests and every
+push, plus the Reader contract tests (`node --test reader/js/*.test.mjs`). The
+only write-capable workflow is `sync-bookself-reader.yml`, which updates
+`reader/` from Bookself; no workflow rewrites published content.
 
 ## Local preview
 
