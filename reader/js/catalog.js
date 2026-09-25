@@ -53,7 +53,7 @@ export function applyPortalCatalogManifest(markdown, manifest) {
 
   const rows = slugs.map((slug) => `- [${slug}](books/${slug}/)`).join('\n');
   const body = rows ? `\n\n${rows}\n` : '\n';
-  const heading = /^##\s+The books\s*$/im;
+  const heading = /^##[ \t]+The books[ \t]*$/im;
   const match = heading.exec(markdown);
   if (!match) {
     const spacer = markdown.endsWith('\n') ? '\n' : '\n\n';
@@ -63,8 +63,8 @@ export function applyPortalCatalogManifest(markdown, manifest) {
   const start = match.index + match[0].length;
   const next = /^##\s+/m.exec(markdown.slice(start));
   const end = next ? start + next.index : markdown.length;
-  const suffix = markdown.slice(end);
-  const separator = suffix && !suffix.startsWith('\n') ? '\n' : '';
+  const suffix = markdown.slice(end).replace(/^\n+/, '');
+  const separator = suffix ? '\n' : '';
   return `${markdown.slice(0, start)}${body}${separator}${suffix}`;
 }
 

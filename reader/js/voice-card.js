@@ -28,7 +28,9 @@ function decorateBlockquote(body) {
   const labelMatch = label.match(VOICE_LABEL);
   if (!labelMatch) return null;
 
-  const [, voice, theme] = labelMatch;
+  const [, voiceRaw, themeRaw] = labelMatch;
+  const voice = voiceRaw.trim();
+  const theme = themeRaw.trim();
   return [
     `<blockquote class="voice-card" data-voice-label="${escapeAttribute(voice)}" data-voice-theme="${escapeAttribute(theme)}">`,
     `<p class="voice-card__label"><strong>${match[1]}</strong></p>`,
