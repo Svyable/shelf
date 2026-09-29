@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: navy · height: tall · thickness: thick · foil: gold |
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 25 of 25 drafted |

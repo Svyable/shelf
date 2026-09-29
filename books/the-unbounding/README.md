@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: forest · height: short · thickness: slim · foil: gold |
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 19 of 19 drafted |

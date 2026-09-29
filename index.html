@@ -14,163 +14,777 @@
   <meta name="twitter:title" content="Sven Hardy Benson’s Shelf">
   <meta name="twitter:description" content="Released editions and sourced research papers by Sven Hardy Benson.">
   <link rel="canonical" href="https://svyable.github.io/shelf/">
+  <link rel="icon" href="reader/app-icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="reader/app-icon.svg">
   <link rel="describedby" href="llms.txt">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..600;1,8..60,300..600&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: light dark; font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif; }
+    :root {
+      color-scheme: dark;
+      --ink: #0c0b0a;
+      --ink-2: #121010;
+      --gold: #c89a52;
+      --gold-bright: #e8c987;
+      --cream: #e9e3d7;
+      --cream-dim: #b3aa9c;
+      --cream-faint: #7d766b;
+      --rule: rgba(200, 154, 82, .22);
+      --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+      --display: "Fraunces", Georgia, "Times New Roman", serif;
+    }
     * { box-sizing: border-box; }
-    body { max-width: 72rem; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 1.25rem 5rem; line-height: 1.55; }
-    header { margin-bottom: 3rem; }
-    .eyebrow { opacity: .7; letter-spacing: .08em; text-transform: uppercase; font-size: .78rem; }
-    h1 { margin: 0; font-size: clamp(2.8rem, 8vw, 6rem); line-height: .95; }
-    .lede { max-width: 48rem; font-size: 1.18rem; }
-    .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.5rem 0; }
-    .actions a { border: 1px solid currentColor; border-radius: 999px; padding: .55rem .9rem; text-decoration: none; }
-    .meta { opacity: .72; }
-    .research { margin: 0 0 3rem; padding: 1.25rem 1.35rem 1.4rem; border: 1px solid color-mix(in srgb, currentColor 22%, transparent); border-radius: .65rem; }
-    .research h2 { margin-top: 0; }
-    .research p { max-width: 55rem; }
-    .research-links { display: flex; flex-wrap: wrap; gap: .75rem 1rem; }
-    .research-links a { font-weight: 600; }
-    .books { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: .9rem 1.2rem; }
-    .book { border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent); padding: .9rem 0 1.1rem; }
-    .book strong { display: block; font-size: 1.08rem; }
-    .status { display: block; margin-top: .15rem; font-size: .88rem; opacity: .72; }
-    .book-links { display: flex; gap: .8rem; font-size: .92rem; margin-top: .35rem; }
-    .error { border: 1px solid currentColor; padding: 1rem; max-width: 44rem; }
-    footer { margin-top: 3.5rem; padding-top: 1.25rem; border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--cream);
+      font-family: var(--serif);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .sr {
+      position: absolute; width: 1px; height: 1px; overflow: hidden;
+      clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+    }
+
+    /* paper grain + vignette */
+    .grain {
+      position: fixed; inset: 0; z-index: 60; pointer-events: none;
+      opacity: .05; mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .vignette {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(120% 90% at 50% 0%, transparent 55%, rgba(0,0,0,.55) 100%);
+    }
+
+    .wrap { width: min(74rem, calc(100% - 2.5rem)); margin: 0 auto; position: relative; z-index: 2; }
+
+    /* ---------- HERO: the room ---------- */
+    .hero {
+      position: relative; min-height: 100svh; display: grid; place-items: center;
+      text-align: center; padding: 4rem 0 3rem; overflow: hidden;
+    }
+    .hero::before {
+      content: ""; position: absolute; left: 50%; top: -22vh; transform: translateX(-50%);
+      width: 120vmax; height: 90vmax; pointer-events: none;
+      background: radial-gradient(closest-side, rgba(200,154,82,.20), rgba(200,154,82,.06) 42%, transparent 68%);
+      animation: breathe 14s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%, 100% { opacity: .85; transform: translateX(-50%) scale(1); }
+      50%      { opacity: 1;   transform: translateX(-50%) scale(1.08); }
+    }
+    /* dust in the lamp beam */
+    .motes { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+    .mote {
+      position: absolute; bottom: -8vh; border-radius: 50%;
+      background: var(--gold-bright); box-shadow: 0 0 7px rgba(232,201,135,.9);
+      opacity: 0; animation: float var(--dur, 20s) linear var(--delay, 0s) infinite;
+    }
+    @keyframes float {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      9%   { opacity: .55; }
+      50%  { transform: translateY(-42vh) translateX(14px); }
+      90%  { opacity: .38; }
+      100% { transform: translateY(-88vh) translateX(-8px); opacity: 0; }
+    }
+    .hero .wrap > * { animation: rise .9s cubic-bezier(.2,.8,.2,1) both; }
+    .eyebrow {
+      margin: 0 0 1.4rem; font-family: var(--serif); font-size: .78rem;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--gold);
+    }
+    h1 {
+      margin: 0; font-family: var(--display); font-weight: 300;
+      font-size: clamp(3.1rem, 11vw, 8.4rem); line-height: .92; letter-spacing: -.02em;
+    }
+    h1 span { display: block; }
+    h1 .accent { color: var(--gold); font-style: italic; }
+    .lede {
+      max-width: 40rem; margin: 2rem auto 0; font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+      color: var(--cream-dim);
+    }
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem; margin: 2.4rem 0 0; }
+    .actions a {
+      display: inline-flex; align-items: center; min-height: 46px; padding: .6rem 1.15rem;
+      border: 1px solid var(--rule); border-radius: 999px; text-decoration: none;
+      color: var(--cream); font-size: .95rem; transition: border-color .3s, background .3s, color .3s;
+    }
+    .actions a.primary { border-color: var(--gold); color: var(--gold-bright); }
+    .actions a:hover, .actions a:focus-visible { border-color: var(--gold); background: rgba(200,154,82,.10); }
+    .actions a:focus-visible, .btn:focus-visible, .filter input:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+    .count { margin: 1.6rem 0 0; font-size: .86rem; color: var(--cream-faint); letter-spacing: .04em; }
+    .count b { color: var(--gold); font-weight: 600; }
+    .scroll-cue {
+      position: absolute; left: 50%; bottom: 2.2rem; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--cream-faint);
+    }
+    .scroll-cue i { display: block; width: 1px; height: 56px; background: var(--rule); position: relative; overflow: hidden; }
+    .scroll-cue i::after {
+      content: ""; position: absolute; left: 0; width: 1px; height: 18px;
+      background: var(--gold); animation: travel 2.4s ease-in-out infinite;
+    }
+    @keyframes travel { 0% { top: -20px; } 60%, 100% { top: 58px; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+
+    /* ---------- sections ---------- */
+    section { position: relative; z-index: 2; }
+    .band { padding: clamp(4.5rem, 10vw, 8rem) 0; border-top: 1px solid var(--rule); }
+    .band h2 {
+      margin: 0 0 .6rem; font-family: var(--display); font-weight: 300;
+      font-size: clamp(2.1rem, 5vw, 3.6rem); line-height: 1; letter-spacing: -.015em;
+    }
+    .band h2 .accent { color: var(--gold); font-style: italic; }
+    .note { margin: 0 0 2.4rem; color: var(--cream-dim); max-width: 44rem; }
+    .kicker {
+      margin: 0 0 .9rem; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold);
+    }
+
+    /* choreographed scroll reveal for non-shelf bands */
+    .band.revealable > .wrap > * {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1);
+    }
+    .band.revealable.in > .wrap > * { opacity: 1; transform: none; }
+    .band.revealable.in > .wrap > *:nth-child(2) { transition-delay: .09s; }
+    .band.revealable.in > .wrap > *:nth-child(3) { transition-delay: .18s; }
+
+    /* ---------- the shelf: a wall of spines ---------- */
+    .shelf-stage { position: relative; }
+    .filter { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: 0 0 1.5rem; }
+    .filter input {
+      flex: 1 1 16rem; max-width: 22rem; padding: .6rem .9rem;
+      background: rgba(255,255,255,.02); color: var(--cream);
+      border: 1px solid var(--rule); border-radius: 10px;
+      font-family: var(--serif); font-size: .95rem;
+    }
+    .filter input::placeholder { color: var(--cream-faint); }
+    .filter-count { font-size: .82rem; color: var(--cream-faint); }
+    .shelf { position: relative; }
+    .shelf-row {
+      display: flex; align-items: flex-end; gap: 6px; perspective: 900px;
+      border-bottom: 2px solid rgba(200,154,82,.30);
+      padding-bottom: 0; margin-bottom: 46px; position: relative;
+      opacity: 0; transform: translateY(26px);
+      transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1);
+    }
+    .shelf-row.in { opacity: 1; transform: none; }
+    .shelf-row::after {
+      content: ""; position: absolute; left: -6px; right: -6px; bottom: -13px; height: 9px;
+      background: linear-gradient(#1c1712, #0a0908); border-radius: 2px;
+      box-shadow: 0 14px 22px -12px rgba(0,0,0,.9);
+    }
+    .spine {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      border-radius: 4px 4px 0 0; text-decoration: none; overflow: hidden;
+      background-color: var(--spine, #1a1512);
+      background-image:
+        linear-gradient(90deg, rgba(0,0,0,.36) 0%, rgba(255,255,255,.06) 44%, rgba(0,0,0,.5) 100%);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.6), inset 1px 0 0 rgba(255,255,255,.04);
+      transform-origin: bottom center;
+      transition: transform .38s cubic-bezier(.2,.8,.2,1), filter .38s, box-shadow .38s, opacity .5s ease;
+    }
+    /* head and tail bands: the coloured capping strips of a bound volume */
+    .spine::before, .spine::after {
+      content: ""; position: absolute; left: 0; right: 0; height: 5px; z-index: 2;
+      background: linear-gradient(180deg, rgba(233,206,150,.62), rgba(150,116,56,.5));
+      box-shadow: 0 1px 2px rgba(0,0,0,.6);
+    }
+    .spine::before { top: 0; border-radius: 4px 4px 0 0; }
+    .spine::after { bottom: 0; }
+    .spine.foil-blind::before, .spine.foil-blind::after {
+      background: linear-gradient(180deg, rgba(255,255,255,.11), rgba(0,0,0,.32));
+    }
+    .spine.dim { opacity: .13; }
+    /* raised hubs: one per band of chapters, the way a spine signals extent */
+    .spine .hubs {
+      position: absolute; inset: 22% 0 22% 0; z-index: 1; pointer-events: none;
+      background-image: repeating-linear-gradient(
+        180deg,
+        rgba(0,0,0,.55) 0 1px,
+        rgba(255,255,255,.10) 1px 2px,
+        transparent 2px var(--hub-gap, 34px)
+      );
+      background-position: 0 6px;
+      mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+    }
+    /* the two title lines, set in vertical runs right to left */
+    .spine .lines {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: row-reverse; align-items: center; justify-content: center;
+      gap: .28em; max-height: calc(100% - 58px);
+    }
+    .spine .t {
+      writing-mode: vertical-rl; text-orientation: mixed; white-space: nowrap;
+      font-family: var(--display);
+      font-variation-settings: "opsz" 14, "SOFT" 0, "WONK" 0;
+      font-weight: 400;
+      font-size: var(--ts, 14px);
+      letter-spacing: .085em;
+      line-height: 1;
+      transition: color .35s, text-shadow .35s;
+    }
+    /* gold foil: a struck, light-catching letterform */
+    .spine .t {
+      color: #e6cd98;
+      text-shadow: 0 0 10px rgba(200,154,82,.35), 0 1px 0 rgba(0,0,0,.7);
+    }
+    /* blind stamping: pressed into the cloth, no foil at all */
+    .spine.foil-blind .t {
+      color: rgba(226,214,192,.46);
+      text-shadow: 0 1px 0 rgba(0,0,0,.5);
+    }
+    /* publisher's device at the tail of the spine */
+    .spine .device {
+      position: absolute; bottom: 9px; left: 0; right: 0; z-index: 2;
+      text-align: center; font-family: var(--display);
+      font-size: 8.5px; font-weight: 500; letter-spacing: .16em;
+      color: rgba(214,180,120,.62);
+    }
+    .spine.foil-blind .device { color: rgba(240,233,220,.3); }
+    .spine:hover, .spine:focus-visible {
+      transform: translateY(-10px) translateZ(46px) rotate(-3deg); z-index: 5;
+      filter: brightness(1.4) saturate(1.1);
+      box-shadow: 0 22px 46px -14px rgba(0,0,0,.85), 0 0 0 1px var(--gold), 0 0 60px -8px rgba(200,154,82,.5);
+    }
+    .spine:hover .t, .spine:focus-visible .t {
+      color: #fbe9c2;
+      text-shadow: 0 0 16px rgba(214,173,96,.6), 0 1px 0 rgba(0,0,0,.7);
+    }
+    .spine.foil-blind:hover .t, .spine.foil-blind:focus-visible .t {
+      color: rgba(240,233,220,.72);
+      text-shadow: 0 0 12px rgba(0,0,0,.5), 0 1px 0 rgba(0,0,0,.5);
+    }
+    .spine:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+    .shelf-error { padding: 1rem; border: 1px solid var(--rule); color: var(--cream-dim); }
+
+    /* reading-lamp spotlight that tracks the pointer across the shelf */
+    .spot {
+      position: absolute; inset: 0; pointer-events: none; opacity: 0; z-index: 6;
+      transition: opacity .5s ease;
+    }
+    .spot::after {
+      content: ""; position: absolute; left: var(--mx, 50%); top: var(--my, 50%);
+      width: 560px; height: 560px; transform: translate(-50%, -50%); border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(200,154,82,.15), rgba(200,154,82,.05) 45%, transparent 70%);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .shelf-stage:hover .spot { opacity: 1; }
+    }
+
+    /* ---------- author ---------- */
+    .author-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+    .statement {
+      margin: 0; font-family: var(--display); font-weight: 300; font-style: italic;
+      font-size: clamp(1.6rem, 3.4vw, 2.6rem); line-height: 1.25; letter-spacing: -.01em; color: var(--cream);
+    }
+    .bio p { margin: 0 0 1.1rem; color: var(--cream-dim); }
+    .bio a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--rule); }
+    .bio a:hover { border-bottom-color: var(--gold); }
+
+    /* ---------- reader cta ---------- */
+    .cta { text-align: center; }
+    .btn {
+      display: inline-flex; align-items: center; min-height: 56px; padding: .8rem 1.6rem;
+      border: 1px solid var(--gold); border-radius: 999px; text-decoration: none;
+      color: var(--gold-bright); font-family: var(--display); font-size: 1.12rem; letter-spacing: .01em;
+      transition: background .35s, color .35s, box-shadow .35s;
+    }
+    .btn:hover, .btn:focus-visible { background: var(--gold); color: var(--ink); box-shadow: 0 12px 40px -12px rgba(200,154,82,.6); }
+    .ribbon { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem .55rem; margin: 2.2rem auto 0; max-width: 46rem; }
+    .ribbon span {
+      border: 1px solid var(--rule); border-radius: 999px; padding: .34rem .7rem;
+      font-size: .78rem; color: var(--cream-dim);
+    }
+
+    /* ---------- research ---------- */
+    .research {
+      border: 1px solid var(--rule); border-radius: 14px; padding: clamp(1.6rem, 4vw, 2.6rem);
+      background: linear-gradient(180deg, rgba(200,154,82,.05), transparent 55%);
+    }
+    .research h2 { margin-bottom: .8rem; }
+    .research p { color: var(--cream-dim); max-width: 52rem; }
+    .research-links { display: flex; flex-wrap: wrap; gap: .7rem 1.4rem; margin-top: 1.2rem; }
+    .research-links a { color: var(--gold); text-decoration: none; font-weight: 600; }
+    .research-links a:hover { text-decoration: underline; }
+
+    /* ---------- colophon ---------- */
+    footer { border-top: 1px solid var(--rule); padding: 3rem 0 4rem; color: var(--cream-faint); font-size: .86rem; }
+    footer p { margin: 0 0 .7rem; max-width: 52rem; }
+    footer a { color: var(--cream-dim); text-decoration: none; border-bottom: 1px solid var(--rule); }
+    footer a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+    .fine { display: flex; flex-wrap: wrap; gap: .4rem 1rem; }
+
+    noscript p { color: var(--cream-dim); border: 1px solid var(--rule); padding: 1rem; }
+
+    @media (max-width: 720px) {
+      .author-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .hero .wrap > *, .shelf-row, .band.revealable > .wrap > * { opacity: 1; transform: none; }
+      .mote, .spot { display: none; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <p class="eyebrow">Sven Hardy Benson / Shelf</p>
-    <h1>Released editions.</h1>
-    <p class="lede">Sven Hardy Benson’s Shelf contains the editions deliberately released for readers. Working drafts and next editions stay on Desk until a later release replaces the public snapshot. Research papers are surfaced separately so proofs can remain visibly provisional without being mislabeled as released books.</p>
-    <nav class="actions" aria-label="Primary">
-      <a href="reader/"><strong>Read the Shelf</strong></a>
-      <a href="books/">Browse released books</a>
-      <a href="https://svyable.github.io/desk/papers/"><strong>Research papers</strong></a>
-      <a href="https://svyable.github.io/desk/">Working drafts</a>
-      <a href="README.md#the-books">Catalog source</a>
-    </nav>
-    <p id="catalog-meta" class="meta">Loading the released catalog…</p>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="motes" aria-hidden="true">
+      <i class="mote" style="left:10%;--dur:24s;--delay:-2s"></i>
+      <i class="mote" style="left:18%;--dur:30s;--delay:-11s"></i>
+      <i class="mote" style="left:26%;--dur:20s;--delay:-6s"></i>
+      <i class="mote" style="left:34%;--dur:27s;--delay:-15s"></i>
+      <i class="mote" style="left:43%;--dur:22s;--delay:-3s"></i>
+      <i class="mote" style="left:52%;--dur:31s;--delay:-19s"></i>
+      <i class="mote" style="left:60%;--dur:21s;--delay:-8s"></i>
+      <i class="mote" style="left:68%;--dur:26s;--delay:-13s"></i>
+      <i class="mote" style="left:77%;--dur:23s;--delay:-5s"></i>
+      <i class="mote" style="left:85%;--dur:29s;--delay:-17s"></i>
+      <i class="mote" style="left:91%;--dur:20s;--delay:-9s"></i>
+    </div>
+    <div class="wrap">
+      <p class="eyebrow" style="animation-delay:.05s">Sven Hardy Benson / Shelf</p>
+      <h1>
+        <span style="animation-delay:.18s">Sven Hardy Benson’s</span>
+        <span class="accent" style="animation-delay:.34s">Shelf</span>
+      </h1>
+      <p class="lede" style="animation-delay:.5s">A library lit after dark. Books about intelligence, institutions, markets, medicine, infrastructure, and what happens when the rules change.</p>
+      <nav class="actions" style="animation-delay:.66s" aria-label="Primary">
+        <a class="primary" href="reader/"><strong>Open the Reader</strong></a>
+        <a href="#shelf">The Shelf</a>
+        <a href="https://svyable.github.io/desk/papers/">Research papers</a>
+        <a href="README.md#the-books">Catalog source</a>
+      </nav>
+      <p class="count" id="catalog-meta" style="animation-delay:.82s">Loading the released catalog…</p>
+    </div>
+    <div class="scroll-cue" style="animation-delay:1.05s" aria-hidden="true">
+      <span>Scroll</span>
+      <i></i>
+    </div>
   </header>
 
   <main>
-    <section class="research" aria-labelledby="research-title">
-      <p class="eyebrow">Research / public proof trail</p>
-      <h2 id="research-title">White papers with the machinery exposed.</h2>
-      <p>The research collection keeps sources, derivations, diagrams, executable checks, LaTeX, and formalization artifacts next to the claims. It is intentionally separate from the released-book catalog: a promising theorem can be public and checkable without being advertised as peer reviewed or publication-final.</p>
-      <div class="research-links">
-        <a href="https://svyable.github.io/desk/papers/">Browse research papers →</a>
-        <a href="https://svyable.github.io/desk/papers/convex-pattern-amplification.html">Featured: Convex Pattern Amplification Under Deletion →</a>
+    <!-- THE SHELF: wall of spines -->
+    <section class="band" id="shelf" aria-labelledby="shelf-title">
+      <div class="wrap">
+        <p class="kicker">The collection</p>
+        <h2 id="shelf-title">Every <span class="accent">released</span> edition.</h2>
+        <p class="note">Hover a spine to pull it from the shelf; click to read. Every volume is bound to its own extent: taller and more-hubbed for more chapters, thicker for a longer read, gold-lettered or blind-stamped. A title that will not set on one line breaks onto a second rather than shrink away.</p>
+        <div class="shelf-stage">
+          <div class="spot" aria-hidden="true"></div>
+          <div class="filter">
+            <label class="sr" for="shelf-filter">Filter the shelf by title</label>
+            <input id="shelf-filter" type="search" placeholder="Filter the shelf by title…" autocomplete="off">
+            <span class="filter-count" id="filter-count" aria-live="polite"></span>
+          </div>
+          <div id="books" class="shelf" aria-live="polite"></div>
+        </div>
+        <noscript><p>The released catalog is available in <a href="README.md#the-books">README.md</a>.</p></noscript>
       </div>
     </section>
 
-    <h2>The books</h2>
-    <ul id="books" class="books" aria-live="polite"></ul>
-    <noscript><p class="error">JavaScript is off. The released catalog is available in <a href="README.md#the-books">README.md</a>.</p></noscript>
+    <!-- THE AUTHOR -->
+    <section class="band revealable" id="author" aria-labelledby="author-title">
+      <div class="wrap author-grid">
+        <div>
+          <p class="kicker">The author</p>
+          <p class="statement" id="author-title">Books that take the machinery apart — and then ask what the rules are actually for.</p>
+        </div>
+        <div class="bio">
+          <p>Sven Hardy Benson is an independent researcher and author. The Shelf collects deliberately released editions about how the physical and institutional world works: how systems fail, how institutions adapt, and what changes when intelligence, markets, or medicine stop behaving like they used to.</p>
+          <p>Working drafts and the next edition of a book live on Desk and stay off this shelf until a later release replaces the public snapshot. <a href="https://svyable.github.io/desk/">See the working Desk →</a></p>
+          <p><a href="llms.txt">Agent-readable map</a> · <a href="https://github.com/Svyable/shelf/tree/main/books">Released files</a> · <a href="RIGHTS.md">Rights</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE READER -->
+    <section class="band cta revealable" aria-labelledby="reader-title">
+      <div class="wrap">
+        <p class="kicker">The Reader</p>
+        <h2 id="reader-title">Stay as long as you like.</h2>
+        <p class="note" style="margin-inline:auto">Your place, bookmarks, and notes stay in your browser — no account, no tracking.</p>
+        <a class="btn" href="reader/">Open the Reader</a>
+        <div class="ribbon">
+          <span>Library &amp; in-book search</span><span>Bookmarks</span><span>Notes</span><span>Citations</span>
+          <span>Reading progress</span><span>Pages &amp; Continuous</span><span>Typography &amp; paper</span>
+          <span>Focus mode</span><span>Print</span><span>Export</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEARCH (the separate doorway) -->
+    <section class="band revealable" aria-labelledby="research-title">
+      <div class="wrap">
+        <div class="research">
+          <p class="kicker">Research / public proof trail</p>
+          <h2 id="research-title">White papers with the <span class="accent">machinery</span> exposed.</h2>
+          <p>The research collection keeps sources, derivations, diagrams, executable checks, LaTeX, and formalization artifacts next to the claims. It is intentionally separate from the released-book catalog: a promising theorem can be public and checkable without being advertised as peer reviewed or publication-final.</p>
+          <div class="research-links">
+            <a href="https://svyable.github.io/desk/papers/">Browse research papers →</a>
+            <a href="https://svyable.github.io/desk/papers/convex-pattern-amplification.html">Featured: Convex Pattern Amplification Under Deletion →</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p><strong>Shelf is release state.</strong> The book list follows the root <code>## The books</code> catalog, so public research proofs do not silently become released editions.</p>
-    <p class="meta"><a href="https://svyable.github.io/desk/papers/">Research papers</a> · <a href="https://github.com/Svyable/shelf/tree/main/books">Released project files</a> · <a href="llms.txt">Agent-readable map</a> · <a href="https://github.com/Svyable/bookself">Bookself structure</a></p>
+    <div class="wrap">
+      <p><strong>Shelf is release state.</strong> The book list follows the root <code>## The books</code> catalog, so public research proofs do not silently become released editions.</p>
+      <p class="fine">
+        <a href="llms.txt">Agent map</a> ·
+        <a href="sitemap.xml">Sitemap</a> ·
+        <a href="https://github.com/Svyable/shelf">Source</a> ·
+        <a href="https://github.com/Svyable/bookself">Built with Bookself</a> ·
+        <a href="RIGHTS.md">Rights</a> ·
+        <a href="https://svyable.github.io/desk/papers/">Research papers</a>
+      </p>
+    </div>
   </footer>
 
   <script>
-    function plain(value) {
-      return value.replace(/\*\*/g, '').replace(/<[^>]+>/g, '').trim();
-    }
+    (function () {
+      var GAP = 6;
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function parseCatalog(markdown) {
-      const marker = '## The books';
-      const start = markdown.indexOf(marker);
-      if (start < 0) throw new Error('README catalog section is missing');
-      const tail = markdown.slice(start + marker.length);
-      const next = tail.search(/^##\s+/m);
-      const section = next >= 0 ? tail.slice(0, next) : tail;
-      const books = [];
+      function plain(value) {
+        return value.replace(/\*\*/g, '').replace(/<[^>]+>/g, '').trim();
+      }
 
-      for (const line of section.split('\n')) {
-        if (!line.startsWith('|')) continue;
-        const cells = line.split('|').slice(1, -1).map((cell) => cell.trim());
-        if (cells.length < 2) continue;
-        const match = cells[0].match(/\[(.*?)\]\(books\/([^/]+)\/\)/);
-        if (!match) continue;
-        books.push({
-          title: plain(match[1]),
-          slug: match[2],
-          status: plain(cells[1]),
+      // Canonical source stays the README "## The books" table.
+      function parseCatalog(markdown) {
+        var marker = '## The books';
+        var start = markdown.indexOf(marker);
+        if (start < 0) throw new Error('README catalog section is missing');
+        var tail = markdown.slice(start + marker.length);
+        var next = tail.search(/^##\s+/m);
+        var section = next >= 0 ? tail.slice(0, next) : tail;
+        var books = [];
+        section.split('\n').forEach(function (line) {
+          if (line.charAt(0) !== '|') return;
+          var cells = line.split('|').slice(1, -1).map(function (c) { return c.trim(); });
+          if (cells.length < 2) return;
+          var m = cells[0].match(/\[(.*?)\]\(books\/([^/]+)\/\)/);
+          if (!m) return;
+          books.push({ title: plain(m[1]), slug: m[2], status: plain(cells[1]) });
+        });
+        return books;
+      }
+
+      // Wider spine = longer read, per the derived thickness class.
+      function spineWidth(title) {
+        return Math.round(Math.min(72, Math.max(46, 40 + title.length * 1.35)));
+      }
+
+      // Spine typography: one house size, the way a publisher sets a shelf, and
+      // only ever stepped down where a title genuinely will not fit.
+      var TITLE_MAX = 15.5, TITLE_MIN = 9.5, TITLE_STEP = 0.5;
+      var TITLE_PAD_H = 58, TITLE_PAD_W = 15;
+
+      // A title may break onto a second vertical run. Prefer the word boundary
+      // that leaves the two runs closest in length.
+      function titleRuns(title) {
+        var words = title.split(/\s+/).filter(Boolean);
+        if (words.length < 2) return [[title]];
+        var mid = title.length / 2, bestI = 1, bestD = Infinity;
+        for (var i = 1; i < words.length; i++) {
+          var d = Math.abs(words.slice(0, i).join(' ').length - mid);
+          if (d < bestD) { bestD = d; bestI = i; }
+        }
+        return [[title], [words.slice(0, bestI).join(' '), words.slice(bestI).join(' ')]];
+      }
+
+      // Raised hubs on a bound spine read as extent; band the chapter count.
+      function hubCount(chapters) {
+        if (!chapters) return 2;
+        if (chapters <= 8) return 2;
+        if (chapters <= 14) return 3;
+        if (chapters <= 20) return 4;
+        return 5;
+      }
+
+      var books = [];
+      var spineData = null;
+      var shelfEl = document.getElementById('books');
+      var metaEl = document.getElementById('catalog-meta');
+      var filterEl = document.getElementById('shelf-filter');
+      var filterCountEl = document.getElementById('filter-count');
+      var stageEl = document.querySelector('.shelf-stage');
+      var revealObserver = null;
+
+      function heightScale() {
+        return window.innerWidth < 720 ? 0.86 : 1;
+      }
+
+      function makeSpine(book) {
+        var sp = (spineData && spineData.books && spineData.books[book.slug]) || null;
+        var a = document.createElement('a');
+        a.className = 'spine' + (sp && sp.foil === 'blind' ? ' foil-blind' : '');
+        a.href = 'reader/#/b/' + book.slug + '/';
+        var w = (sp && sp.thickness_px) ? sp.thickness_px : spineWidth(book.title);
+        var h = (sp && sp.height_px) ? sp.height_px : 244;
+        a.style.width = w + 'px';
+        a.style.height = Math.round(h * heightScale()) + 'px';
+        if (sp && sp.color) a.style.setProperty('--spine', sp.color);
+        if (sp && sp.chapters) {
+          a.style.setProperty('--hub-gap',
+            Math.max(26, Math.round((h * heightScale() * 0.56) / hubCount(sp.chapters))) + 'px');
+        }
+        a.setAttribute('aria-label', 'Read ' + book.title + (sp && sp.chapters
+          ? ' — ' + sp.chapters + ' chapter' + (sp.chapters === 1 ? '' : 's')
+            + ', about ' + Math.round(sp.words / 1000) + ',000 words'
+          : ''));
+        a.dataset.title = book.title.toLowerCase();
+        a.dataset.full = book.title;
+
+        var hubs = document.createElement('span');
+        hubs.className = 'hubs';
+        hubs.setAttribute('aria-hidden', 'true');
+        a.appendChild(hubs);
+
+        var lines = document.createElement('span');
+        lines.className = 'lines';
+        lines.setAttribute('aria-hidden', 'true');
+        // A single run by default; layout() may break it onto two.
+        var t = document.createElement('span');
+        t.className = 't';
+        t.textContent = book.title;
+        lines.appendChild(t);
+        a.appendChild(lines);
+
+        var device = document.createElement('span');
+        device.className = 'device';
+        device.setAttribute('aria-hidden', 'true');
+        device.textContent = 'SHB';
+        a.appendChild(device);
+        return a;
+      }
+
+      // Set each spine's type so the longest run clears the bands and the device,
+      // breaking onto a second run before it ever shrinks below house size.
+      function fitTitles() {
+        var spines = shelfEl.querySelectorAll('.spine');
+        Array.prototype.forEach.call(spines, function (a) {
+          var lines = a.querySelector('.lines');
+          if (!lines) return;
+          // Read the title from the spine, not from the live runs: adjacent runs
+          // have no separator in textContent, so re-fitting would eat the spaces.
+          var full = a.dataset.full || lines.textContent;
+          var runs = titleRuns(full);
+          var availH = a.clientHeight - TITLE_PAD_H;
+          var availW = a.clientWidth - TITLE_PAD_W;
+          if (availH <= 0 || availW <= 0) return;
+
+          // Cheap estimate so the measurement ladder is one or two rungs deep
+          // for almost every title; the real sizes are always measured below.
+          var longest = 0;
+          runs[runs.length - 1].forEach(function (s) { longest = Math.max(longest, s.length); });
+          var est = Math.floor(availH / (longest * 0.68) / TITLE_STEP) * TITLE_STEP;
+          var start = Math.min(TITLE_MAX, Math.max(TITLE_MIN, est + TITLE_STEP));
+
+          // Prefer one run, then two, and only then step the size down.
+          for (var size = start; size >= TITLE_MIN - 1e-9; size -= TITLE_STEP) {
+            a.style.setProperty('--ts', size.toFixed(2) + 'px');
+            for (var r = 0; r < runs.length; r++) {
+              var candidate = runs[r];
+              while (lines.children.length > candidate.length) lines.removeChild(lines.lastChild);
+              for (var c = 0; c < candidate.length; c++) {
+                var el = lines.children[c];
+                if (!el) {
+                  el = document.createElement('span');
+                  el.className = 't';
+                  lines.appendChild(el);
+                }
+                el.textContent = candidate[c];
+              }
+              var tallest = 0;
+              for (var k = 0; k < lines.children.length; k++) {
+                tallest = Math.max(tallest, lines.children[k].offsetHeight);
+              }
+              if (tallest <= availH && lines.offsetWidth <= availW) return;
+            }
+          }
+          // Nothing fit: fall back to the single run at the floor size.
+          a.style.setProperty('--ts', TITLE_MIN + 'px');
+          while (lines.children.length > 1) lines.removeChild(lines.lastChild);
+          lines.children[0].textContent = full;
         });
       }
-      return books;
-    }
 
-    function addStructuredData(books) {
-      const data = {
-        '@context': 'https://schema.org',
-        '@type': 'CollectionPage',
-        name: 'Sven Hardy Benson’s Shelf',
-        url: 'https://svyable.github.io/shelf/',
-        description: 'Released editions by Sven Hardy Benson.',
-        hasPart: books.map((book) => ({
-          '@type': 'Book',
-          name: book.title,
-          url: `https://svyable.github.io/shelf/reader/#/b/${book.slug}/`,
-        })),
-      };
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.textContent = JSON.stringify(data);
-      document.head.appendChild(script);
-    }
-
-    async function loadCatalog() {
-      const list = document.getElementById('books');
-      const meta = document.getElementById('catalog-meta');
-      try {
-        const response = await fetch('README.md', { cache: 'no-cache' });
-        if (!response.ok) throw new Error(`README returned ${response.status}`);
-        const books = parseCatalog(await response.text());
-        if (!books.length) throw new Error('README catalog contains no released books');
-
-        const fragment = document.createDocumentFragment();
-        for (const book of books) {
-          const item = document.createElement('li');
-          item.className = 'book';
-
-          const title = document.createElement('strong');
-          const readTitle = document.createElement('a');
-          readTitle.href = `reader/#/b/${book.slug}/`;
-          readTitle.textContent = book.title;
-          title.appendChild(readTitle);
-
-          const status = document.createElement('span');
-          status.className = 'status';
-          status.textContent = book.status || 'Released';
-
-          const links = document.createElement('div');
-          links.className = 'book-links';
-          const read = document.createElement('a');
-          read.href = `reader/#/b/${book.slug}/`;
-          read.textContent = 'Read';
-          const files = document.createElement('a');
-          files.href = `https://github.com/Svyable/shelf/tree/main/books/${book.slug}`;
-          files.textContent = 'Edition files';
-          links.append(read, files);
-
-          item.append(title, status, links);
-          fragment.appendChild(item);
-        }
-        list.replaceChildren(fragment);
-        meta.textContent = `${books.length} released editions · cataloged from README.md`;
-        addStructuredData(books);
-      } catch (error) {
-        list.innerHTML = `<li class="error">Could not load the released catalog: ${error.message}. Open <a href="README.md#the-books">README.md</a> instead.</li>`;
-        meta.textContent = 'Catalog unavailable';
+      function applyFilter(q) {
+        q = (q || '').trim().toLowerCase();
+        var shown = 0;
+        var spines = shelfEl.querySelectorAll('.spine');
+        Array.prototype.forEach.call(spines, function (sp) {
+          var match = !q || (sp.dataset.title || '').indexOf(q) >= 0;
+          sp.classList.toggle('dim', !match);
+          if (match) shown++;
+        });
+        filterCountEl.textContent = q ? (shown + ' of ' + books.length + ' shown') : '';
       }
-    }
 
-    loadCatalog();
+      function layout() {
+        if (!books.length) return;
+        var available = shelfEl.clientWidth;
+        shelfEl.textContent = '';
+        var row = null, used = 0, rowIndex = 0;
+
+        function newRow() {
+          row = document.createElement('div');
+          row.className = 'shelf-row';
+          row.style.transitionDelay = (rowIndex++ * 0.07) + 's';
+          shelfEl.appendChild(row);
+          used = 0;
+        }
+        newRow();
+
+        books.forEach(function (book) {
+          var sp = (spineData && spineData.books && spineData.books[book.slug]) || null;
+          var w = (sp && sp.thickness_px) ? sp.thickness_px : spineWidth(book.title);
+          if (row.children.length && used + w > available) newRow();
+          row.appendChild(makeSpine(book));
+          used += w + GAP;
+        });
+
+        fitTitles();
+
+        if (revealObserver) revealObserver.disconnect();
+        revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -8% 0px' });
+        Array.prototype.forEach.call(shelfEl.querySelectorAll('.shelf-row'), function (r) {
+          revealObserver.observe(r);
+        });
+
+        if (filterEl && filterEl.value) applyFilter(filterEl.value);
+      }
+
+      // The fit above measures real glyphs, so it has to run again once the
+      // display face has actually arrived; a fallback metric is a wrong answer.
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fitTitles).catch(function () {});
+      }
+
+      function addStructuredData(list) {
+        var data = {
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Sven Hardy Benson’s Shelf',
+          url: 'https://svyable.github.io/shelf/',
+          description: 'Released editions by Sven Hardy Benson.',
+          hasPart: list.map(function (book) {
+            return {
+              '@type': 'Book',
+              name: book.title,
+              url: 'https://svyable.github.io/shelf/reader/#/b/' + book.slug + '/'
+            };
+          })
+        };
+        var script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.textContent = JSON.stringify(data);
+        document.head.appendChild(script);
+      }
+
+      function countUp(target) {
+        var el = document.querySelector('#catalog-meta b');
+        if (!el) return;
+        if (reduceMotion) { el.textContent = target; return; }
+        var start = performance.now(), dur = 1100;
+        function tick(now) {
+          var p = Math.min(1, (now - start) / dur);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(eased * target);
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      /* cursor-tracked reading-lamp spotlight (fine pointers only) */
+      function initSpotlight() {
+        if (reduceMotion) return;
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        var raf = null;
+        stageEl.addEventListener('pointermove', function (e) {
+          if (raf) return;
+          raf = requestAnimationFrame(function () {
+            raf = null;
+            var r = stageEl.getBoundingClientRect();
+            stageEl.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+            stageEl.style.setProperty('--my', (e.clientY - r.top) + 'px');
+          });
+        }, { passive: true });
+      }
+
+      /* choreographed reveals for the non-shelf bands */
+      function initBandReveals() {
+        var bands = document.querySelectorAll('.band.revealable');
+        if (!bands.length) return;
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -10% 0px' });
+        Array.prototype.forEach.call(bands, function (b) { io.observe(b); });
+      }
+
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(layout, 150);
+      });
+      if (filterEl) filterEl.addEventListener('input', function () { applyFilter(this.value); });
+
+      initBandReveals();
+      initSpotlight();
+      loadCatalog();
+
+      function loadCatalog() {
+        var readme = fetch('README.md', { cache: 'no-cache' }).then(function (res) {
+          if (!res.ok) throw new Error('README returned ' + res.status);
+          return res.text();
+        });
+        var spines = fetch('spines.json', { cache: 'no-cache' })
+          .then(function (res) { return res.ok ? res.json() : null; })
+          .catch(function () { return null; });
+
+        Promise.all([readme, spines])
+          .then(function (both) {
+            books = parseCatalog(both[0]);
+            spineData = both[1];
+            if (!books.length) throw new Error('README catalog contains no released books');
+            layout();
+            metaEl.innerHTML = '<b id="released-count">0</b> released editions · cataloged from README.md';
+            countUp(books.length);
+            addStructuredData(books);
+          })
+          .catch(function (error) {
+            var p = document.createElement('p');
+            p.className = 'shelf-error';
+            p.textContent = 'Could not load the released catalog: ' + error.message + ' Open README.md instead.';
+            shelfEl.appendChild(p);
+            metaEl.textContent = 'Catalog unavailable';
+          });
+      }
+    })();
   </script>
 </body>
 </html>

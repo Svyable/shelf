@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: indigo · height: tall · thickness: heavy · foil: gold |
 | **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 25 of 25 drafted |

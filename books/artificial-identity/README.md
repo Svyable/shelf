@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: aubergine · height: short · thickness: slim · foil: gold |
 | **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 4 of 24 drafted |

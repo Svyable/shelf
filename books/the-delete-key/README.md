@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: forest · height: tall · thickness: slim · foil: gold |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | Front matter, 25 of 25 chapters, back matter |
