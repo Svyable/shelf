@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: bronze · height: short · thickness: medium · foil: gold |
+| **Spine** | binding: bronze · height: short · thickness: medium · foil: gold · font: garalde · bands: blind-head |
 | **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |

@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: indigo · height: short · thickness: slim · foil: gold |
+| **Spine** | binding: indigo · height: short · thickness: slim · foil: gold · font: geometric · bands: gilt-head |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 8 of 8 + prologue + epilogue + back matter |

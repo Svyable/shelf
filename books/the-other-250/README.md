@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: brass · height: tall · thickness: heavy · foil: gold |
+| **Spine** | binding: brass · height: tall · thickness: heavy · foil: gold · font: wonk · bands: gilt-double |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |

@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: oxblood · height: short · thickness: slim · foil: gold |
+| **Spine** | binding: oxblood · height: short · thickness: slim · foil: gold · font: slab · bands: blind-double |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Form** | Short book / narrative nonfiction |

@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: moss · height: tall · thickness: thick · foil: gold |
+| **Spine** | binding: moss · height: tall · thickness: thick · foil: gold · font: geometric · bands: gilt-double |
 | **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 29 of 29 drafted |

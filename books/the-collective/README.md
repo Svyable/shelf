@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: slate · height: tall · thickness: slim · foil: gold |
+| **Spine** | binding: slate · height: tall · thickness: slim · foil: gold · font: garalde · bands: blind-head |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Form** | Narrative nonfiction / technology |

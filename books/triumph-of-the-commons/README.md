@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: brass · height: short · thickness: thick · foil: gold |
+| **Spine** | binding: brass · height: short · thickness: thick · foil: gold · font: slab · bands: gilt-double |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 20 of 20 drafted |

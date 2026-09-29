@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: charcoal · height: short · thickness: slim · foil: gold |
+| **Spine** | binding: charcoal · height: short · thickness: slim · foil: gold · font: geometric · bands: fillet |
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Publisher** | Sven Hardy Benson’s Shelf |

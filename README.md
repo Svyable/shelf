@@ -159,13 +159,16 @@ python3 scripts/sync-reader-links.py --check
 ```
 
 The Reading Room landing (`index.html`) renders each book as a spine whose
-binding colour, height, and thickness come from the book’s `Spine` row, and
-whose hubs and accessible label come from the measured extent in
-`spines.json`. Titles are set at one house size and only step down, or break
-onto a second vertical run, when a title genuinely will not fit. That row is
-publication presentation metadata and is exempt from the release payload
-digest. `spines.json` is the machine-readable mirror the landing fetches; after
-hand-tuning a `Spine` row, regenerate and verify with:
+binding colour, height, thickness, lettering face, and head/tail banding come
+from the book’s `Spine` row, and whose accessible label carries the measured
+extent from `spines.json`. Each face carries its own optical size, weight, and
+tracking so it reads at the same size as every other face. A vertical column
+can only give a title about fourteen pixels, so hovering a spine lies the book
+flat and re-sets the whole title horizontally along the spine’s length, which
+is the widest space the binding has. That row is publication presentation
+metadata and is exempt from the release payload digest. `spines.json` is the
+machine-readable mirror the landing fetches; after hand-tuning a `Spine` row,
+regenerate and verify with:
 
 ```bash
 python3 scripts/generate-spines.py   # rebuild spines.json from the book rows

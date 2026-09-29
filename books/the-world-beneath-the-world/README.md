@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: slate · height: short · thickness: slim · foil: gold |
+| **Spine** | binding: slate · height: short · thickness: slim · foil: gold · font: news · bands: none |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |

@@ -21,9 +21,13 @@ HEIGHTS = gen.HEIGHTS
 THICKNESSES = gen.THICKNESSES
 FOILS = set(gen.FOILS)
 COLORS = dict(gen.PALETTE)
+FONT_SPECS = {f["token"]: f for f in gen.FONTS}
+FONT_TOKENS = set(gen.FONT_TOKENS)
+BANDS = gen.BANDS
+BAND_TOKENS = set(gen.BAND_TOKENS)
 SPINE_RE = gen.SPINE_RE
 KEYVAL_RE = gen.KEYVAL_RE
-MIRRORED_KEYS = ("binding", "height", "thickness", "foil")
+MIRRORED_KEYS = ("binding", "height", "thickness", "foil", "font", "bands")
 
 
 def check(root: Path) -> list[str]:
@@ -52,6 +56,30 @@ def check(root: Path) -> list[str]:
         fail("spines.json palette must be an object keyed by binding")
     elif palette != COLORS:
         fail("spines.json palette does not match scripts/generate-spines.py (regenerate spines.json)")
+    fonts = spines.get("fonts")
+    if not isinstance(fonts, dict):
+        fail("spines.json fonts must be an object keyed by font token")
+    elif fonts != FONT_SPECS:
+        fail("spines.json fonts do not match scripts/generate-spines.py (regenerate spines.json)")
+    else:
+        for token, spec in fonts.items():
+            for numeric in ("size", "weight", "tracking"):
+                value = spec.get(numeric)
+                if not isinstance(value, (int, float)) or isinstance(value, bool) or value <= 0:
+                    fail(f"font {token}: {numeric} must be a positive number, got {value!r}")
+            if not spec.get("stack") or not spec.get("family"):
+                fail(f"font {token}: needs a family and a CSS stack")
+    bands_map = spines.get("bands")
+    if not isinstance(bands_map, dict):
+        fail("spines.json bands must be an object keyed by band token")
+    elif bands_map != BANDS:
+        fail("spines.json bands do not match scripts/generate-spines.py (regenerate spines.json)")
+    else:
+        for token, sides in bands_map.items():
+            if not isinstance(sides, dict) or set(sides) != {"head", "tail"}:
+                fail(f"band {token}: needs exactly head and tail")
+            elif any(v not in {"gilt", "blind", "fillet", "none"} for v in sides.values()):
+                fail(f"band {token}: unknown side treatment in {sides}")
     books = spines.get("books")
     if not isinstance(books, dict):
         return errors + ["spines.json books must be an object keyed by slug"]
@@ -97,6 +125,11 @@ def check(root: Path) -> list[str]:
 
         if entry.get("foil") not in FOILS:
             fail(f"{slug}: invalid foil {entry.get('foil')!r}")
+
+        if entry.get("font") not in FONT_TOKENS:
+            fail(f"{slug}: invalid font {entry.get('font')!r} (not in {sorted(FONT_TOKENS)})")
+        if entry.get("bands") not in BAND_TOKENS:
+            fail(f"{slug}: invalid bands {entry.get('bands')!r} (not in {sorted(BAND_TOKENS)})")
 
         for numeric in ("chapters", "words"):
             value = entry.get(numeric)

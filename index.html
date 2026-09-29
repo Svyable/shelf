@@ -19,7 +19,7 @@
   <link rel="describedby" href="llms.txt">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..600;1,8..60,300..600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Jost:wght@400..600&family=Libre+Baskerville:wght@400&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..600;1,8..60,300..600&family=Zilla+Slab:wght@500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: dark;
@@ -178,54 +178,61 @@
       background: linear-gradient(#1c1712, #0a0908); border-radius: 2px;
       box-shadow: 0 14px 22px -12px rgba(0,0,0,.9);
     }
+    /* The <a> is only the hit target and never moves, so rotating the book
+       cannot slide it out from under the pointer and drop :hover. Everything
+       visible lives on the inner .book. */
     .spine {
-      position: relative; display: flex; align-items: center; justify-content: center;
-      border-radius: 4px 4px 0 0; text-decoration: none; overflow: hidden;
+      position: relative; display: block; text-decoration: none;
+      overflow: visible;
+    }
+    .spine .book {
+      position: absolute; inset: 0; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 4px 4px 0 0;
       background-color: var(--spine, #1a1512);
       background-image:
         linear-gradient(90deg, rgba(0,0,0,.36) 0%, rgba(255,255,255,.06) 44%, rgba(0,0,0,.5) 100%);
       box-shadow: inset 0 0 0 1px rgba(0,0,0,.6), inset 1px 0 0 rgba(255,255,255,.04);
-      transform-origin: bottom center;
-      transition: transform .38s cubic-bezier(.2,.8,.2,1), filter .38s, box-shadow .38s, opacity .5s ease;
+      transform-origin: 50% 50%;
+      transition: transform .38s cubic-bezier(.2,.8,.2,1), filter .38s, box-shadow .38s;
     }
-    /* head and tail bands: the coloured capping strips of a bound volume */
-    .spine::before, .spine::after {
-      content: ""; position: absolute; left: 0; right: 0; height: 5px; z-index: 2;
+    .spine.dim { opacity: .13; }
+    /* Head and tail banding: a bound volume announces its caps. Which caps it
+       carries, and whether the rules are gilt or pressed, is curated per book
+       rather than a decoration we impose on all of them. */
+    .spine .book::before, .spine .book::after {
+      content: ""; position: absolute; left: 0; right: 0; height: 4px; z-index: 2;
       background: linear-gradient(180deg, rgba(233,206,150,.62), rgba(150,116,56,.5));
       box-shadow: 0 1px 2px rgba(0,0,0,.6);
     }
-    .spine::before { top: 0; border-radius: 4px 4px 0 0; }
-    .spine::after { bottom: 0; }
-    .spine.foil-blind::before, .spine.foil-blind::after {
+    .spine .book::before { top: 0; border-radius: 4px 4px 0 0; }
+    .spine .book::after { bottom: 0; }
+    .spine.no-head .book::before, .spine.no-tail .book::after { content: none; }
+    .spine.blind-band .book::before, .spine.blind-band .book::after {
       background: linear-gradient(180deg, rgba(255,255,255,.11), rgba(0,0,0,.32));
     }
-    .spine.dim { opacity: .13; }
-    /* raised hubs: one per band of chapters, the way a spine signals extent */
-    .spine .hubs {
-      position: absolute; inset: 22% 0 22% 0; z-index: 1; pointer-events: none;
-      background-image: repeating-linear-gradient(
-        180deg,
-        rgba(0,0,0,.55) 0 1px,
-        rgba(255,255,255,.10) 1px 2px,
-        transparent 2px var(--hub-gap, 34px)
-      );
-      background-position: 0 6px;
-      mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
-      -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+    /* a fillet is one thin rule near the head, not a capping band */
+    .spine.fillet .book::before {
+      height: 1px; box-shadow: none;
+      background: linear-gradient(180deg, rgba(233,206,150,.5), rgba(150,116,56,.4));
+    }
+    .spine.blind-band.fillet .book::before {
+      background: linear-gradient(180deg, rgba(255,255,255,.13), rgba(0,0,0,.3));
     }
     /* the two title lines, set in vertical runs right to left */
     .spine .lines {
       position: relative; z-index: 2;
       display: flex; flex-direction: row-reverse; align-items: center; justify-content: center;
       gap: .28em; max-height: calc(100% - 58px);
+      transition: opacity .28s ease;
     }
     .spine .t {
       writing-mode: vertical-rl; text-orientation: mixed; white-space: nowrap;
-      font-family: var(--display);
-      font-variation-settings: "opsz" 14, "SOFT" 0, "WONK" 0;
-      font-weight: 400;
-      font-size: var(--ts, 14px);
-      letter-spacing: .085em;
+      font-family: var(--f-stack, var(--display));
+      font-variation-settings: var(--f-var, normal);
+      font-weight: var(--f-weight, 500);
+      font-size: calc(var(--ts, 14px) * var(--f-scale, 1));
+      letter-spacing: var(--f-track, .05em);
       line-height: 1;
       transition: color .35s, text-shadow .35s;
     }
@@ -239,6 +246,41 @@
       color: rgba(226,214,192,.46);
       text-shadow: 0 1px 0 rgba(0,0,0,.5);
     }
+    /* The hover face. The book spins flat onto the shelf and the whole title is
+       re-set as one horizontal block: a vertical column can only ever give a
+       title about twelve pixels, whereas lying down, the spine's own length is
+       the widest space available for the words. */
+    .spine .flat {
+      position: absolute; inset: 0; z-index: 3;
+      visibility: hidden; opacity: 0;
+      transition: opacity .28s ease, visibility .28s;
+    }
+    .spine .flat > span {
+      /* laid out along the spine's length, then turned so it reads level once
+         the book itself has rotated the other way. Absolutely positioned and
+         centred on its own box: as a flex item it would be shrunk to the
+         spine's thickness and the title would wrap into a tall narrow ribbon. */
+      position: absolute; left: 50%; top: 50%;
+      width: calc(var(--h, 240px) - 22px);
+      transform: translate(-50%, -50%) rotate(90deg);
+      writing-mode: horizontal-tb;
+      font-family: var(--f-stack, var(--display));
+      font-variation-settings: var(--f-var, normal);
+      font-weight: var(--f-weight, 500);
+      font-size: var(--fs, 15px);
+      letter-spacing: var(--f-track, .04em);
+      line-height: 1.16;
+      text-align: center;
+      text-wrap: balance;
+      color: #f6e6bd;
+      text-shadow: 0 0 14px rgba(214,173,96,.5), 0 1px 2px rgba(0,0,0,.8);
+    }
+    .spine.foil-blind .flat > span {
+      color: #efe6d6;
+      text-shadow: 0 0 12px rgba(0,0,0,.6), 0 1px 2px rgba(0,0,0,.8);
+    }
+    .spine:hover .flat, .spine:focus-visible .flat { visibility: visible; opacity: 1; }
+    .spine:hover .lines, .spine:focus-visible .lines { opacity: 0; }
     /* publisher's device at the tail of the spine */
     .spine .device {
       position: absolute; bottom: 9px; left: 0; right: 0; z-index: 2;
@@ -247,10 +289,15 @@
       color: rgba(214,180,120,.62);
     }
     .spine.foil-blind .device { color: rgba(240,233,220,.3); }
-    .spine:hover, .spine:focus-visible {
-      transform: translateY(-10px) translateZ(46px) rotate(-3deg); z-index: 5;
-      filter: brightness(1.4) saturate(1.1);
-      box-shadow: 0 22px 46px -14px rgba(0,0,0,.85), 0 0 0 1px var(--gold), 0 0 60px -8px rgba(200,154,82,.5);
+    .spine:hover .device, .spine:focus-visible .device { opacity: 0; }
+    .spine:hover, .spine:focus-visible { z-index: 20; }
+    .spine:hover .book, .spine:focus-visible .book {
+      /* Half the height minus half the thickness is how far the centre sits
+         above the shelf once the book is lying down, so this lands the near
+         edge the same distance up at every size. */
+      transform: translateY(calc(var(--h, 240px) / 2 - var(--w, 66px) * 0.52 - 15px)) rotate(-90deg) scale(1.04);
+      filter: brightness(1.3) saturate(1.08);
+      box-shadow: 0 26px 52px -16px rgba(0,0,0,.9), 0 0 0 1px var(--gold), 0 0 60px -8px rgba(200,154,82,.45);
     }
     .spine:hover .t, .spine:focus-visible .t {
       color: #fbe9c2;
@@ -261,6 +308,14 @@
       text-shadow: 0 0 12px rgba(0,0,0,.5), 0 1px 0 rgba(0,0,0,.5);
     }
     .spine:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+    /* On a touch screen a tap is a navigation, not an inspection, so the book
+       does not lie down: the tap should simply open the book. */
+    @media (hover: none) {
+      .spine:hover .book, .spine:focus-visible .book { transform: none; }
+      .spine:hover .flat, .spine:focus-visible .flat { visibility: hidden; opacity: 0; }
+      .spine:hover .lines, .spine:focus-visible .lines { opacity: 1; }
+      .spine:hover .device, .spine:focus-visible .device { opacity: 1; }
+    }
     .shelf-error { padding: 1rem; border: 1px solid var(--rule); color: var(--cream-dim); }
 
     /* reading-lamp spotlight that tracks the pointer across the shelf */
@@ -378,7 +433,7 @@
       <div class="wrap">
         <p class="kicker">The collection</p>
         <h2 id="shelf-title">Every <span class="accent">released</span> edition.</h2>
-        <p class="note">Hover a spine to pull it from the shelf; click to read. Every volume is bound to its own extent: taller and more-hubbed for more chapters, thicker for a longer read, gold-lettered or blind-stamped. A title that will not set on one line breaks onto a second rather than shrink away.</p>
+        <p class="note">Hover a spine and it lies down flat so you can read it; click to open. Every volume is bound to its own extent: taller for more chapters, thicker for a longer read, and each is lettered in its own face, from old-style garalde to new-age grotesk, gilt or blind-stamped, with its own head and tail banding. A title that will not set on one line breaks onto a second rather than shrink away.</p>
         <div class="shelf-stage">
           <div class="spot" aria-hidden="true"></div>
           <div class="filter">
@@ -486,10 +541,18 @@
         return Math.round(Math.min(72, Math.max(46, 40 + title.length * 1.35)));
       }
 
-      // Spine typography: one house size, the way a publisher sets a shelf, and
-      // only ever stepped down where a title genuinely will not fit.
-      var TITLE_MAX = 15.5, TITLE_MIN = 9.5, TITLE_STEP = 0.5;
+      // Spine typography: one house size per face, the way a publisher sets a
+      // shelf, and only ever stepped down where a title genuinely will not fit.
+      // The per-face optical multiplier in --f-scale makes that one size mean
+      // the same apparent size across faces with very different x-heights.
+      var TITLE_MAX = 17, TITLE_MIN = 9.5, TITLE_STEP = 0.5;
       var TITLE_PAD_H = 58, TITLE_PAD_W = 15;
+
+      // The lying-down face gets its own ladder: it is the one place a title is
+      // set across the spine's full length, so it can afford a larger size than
+      // the vertical column ever could.
+      var FLAT_MAX = 17, FLAT_MIN = 10, FLAT_STEP = 0.5;
+      var FLAT_PAD = 12;
 
       // A title may break onto a second vertical run. Prefer the word boundary
       // that leaves the two runs closest in length.
@@ -502,15 +565,6 @@
           if (d < bestD) { bestD = d; bestI = i; }
         }
         return [[title], [words.slice(0, bestI).join(' '), words.slice(bestI).join(' ')]];
-      }
-
-      // Raised hubs on a bound spine read as extent; band the chapter count.
-      function hubCount(chapters) {
-        if (!chapters) return 2;
-        if (chapters <= 8) return 2;
-        if (chapters <= 14) return 3;
-        if (chapters <= 20) return 4;
-        return 5;
       }
 
       var books = [];
@@ -529,17 +583,43 @@
       function makeSpine(book) {
         var sp = (spineData && spineData.books && spineData.books[book.slug]) || null;
         var a = document.createElement('a');
-        a.className = 'spine' + (sp && sp.foil === 'blind' ? ' foil-blind' : '');
+        var cls = 'spine';
+        if (sp && sp.foil === 'blind') cls += ' foil-blind';
+
+        // Banding is curated per book: which caps it carries, and whether the
+        // rules are gilt or pressed.
+        var band = (sp && sp.bands) ? ((spineData.bands || {})[sp.bands]) : null;
+        if (band) {
+          if (band.head === 'none') cls += ' no-head';
+          if (band.tail === 'none') cls += ' no-tail';
+          if ((band.head === 'blind' && band.head !== 'none')
+              || (band.tail === 'blind' && band.tail !== 'none')) cls += ' blind-band';
+          if (band.head === 'fillet') cls += ' fillet';
+        }
+        a.className = cls;
         a.href = 'reader/#/b/' + book.slug + '/';
         var w = (sp && sp.thickness_px) ? sp.thickness_px : spineWidth(book.title);
         var h = (sp && sp.height_px) ? sp.height_px : 244;
+        var rh = Math.round(h * heightScale());
         a.style.width = w + 'px';
-        a.style.height = Math.round(h * heightScale()) + 'px';
+        a.style.height = rh + 'px';
+        // the hover spin lands on the shelf using these, so they must be the
+        // rendered size, not the nominal one
+        a.style.setProperty('--h', rh + 'px');
+        a.style.setProperty('--w', w + 'px');
         if (sp && sp.color) a.style.setProperty('--spine', sp.color);
-        if (sp && sp.chapters) {
-          a.style.setProperty('--hub-gap',
-            Math.max(26, Math.round((h * heightScale() * 0.56) / hubCount(sp.chapters))) + 'px');
+
+        // The lettering face is a per-book choice, carried in from spines.json
+        // with the optical metrics that keep it at the house size.
+        var font = (sp && sp.font) ? ((spineData.fonts || {})[sp.font]) : null;
+        if (font) {
+          a.style.setProperty('--f-stack', font.stack);
+          a.style.setProperty('--f-weight', String(font.weight));
+          a.style.setProperty('--f-scale', String(font.size));
+          a.style.setProperty('--f-track', font.tracking + 'em');
+          if (font.variable) a.style.setProperty('--f-var', font.variable);
         }
+
         a.setAttribute('aria-label', 'Read ' + book.title + (sp && sp.chapters
           ? ' — ' + sp.chapters + ' chapter' + (sp.chapters === 1 ? '' : 's')
             + ', about ' + Math.round(sp.words / 1000) + ',000 words'
@@ -547,10 +627,10 @@
         a.dataset.title = book.title.toLowerCase();
         a.dataset.full = book.title;
 
-        var hubs = document.createElement('span');
-        hubs.className = 'hubs';
-        hubs.setAttribute('aria-hidden', 'true');
-        a.appendChild(hubs);
+        // Everything visible lives inside .book so the <a> can stay put as the
+        // hit target while the book itself spins.
+        var bookEl = document.createElement('span');
+        bookEl.className = 'book';
 
         var lines = document.createElement('span');
         lines.className = 'lines';
@@ -560,13 +640,25 @@
         t.className = 't';
         t.textContent = book.title;
         lines.appendChild(t);
-        a.appendChild(lines);
+        bookEl.appendChild(lines);
+
+        // The hover face carries the whole title as one horizontal block, so a
+        // long title is readable instead of being forced into a narrow column.
+        var flat = document.createElement('span');
+        flat.className = 'flat';
+        flat.setAttribute('aria-hidden', 'true');
+        var flatT = document.createElement('span');
+        flatT.textContent = book.title;
+        flat.appendChild(flatT);
+        bookEl.appendChild(flat);
 
         var device = document.createElement('span');
         device.className = 'device';
         device.setAttribute('aria-hidden', 'true');
         device.textContent = 'SHB';
-        a.appendChild(device);
+        bookEl.appendChild(device);
+
+        a.appendChild(bookEl);
         return a;
       }
 
@@ -621,6 +713,30 @@
         });
       }
 
+      // Fit the horizontal hover face. Turned on its side, the spine's length is
+      // the width available for the words and its thickness is the height, so
+      // this is the only place a long title can be set at a readable size.
+      function fitFlat() {
+        var spines = shelfEl.querySelectorAll('.spine');
+        Array.prototype.forEach.call(spines, function (a) {
+          var span = a.querySelector('.flat > span');
+          if (!span) return;
+          // across-book room is the spine's own thickness
+          var avail = a.clientWidth - FLAT_PAD;
+          if (avail <= 0) return;
+          for (var size = FLAT_MAX; size >= FLAT_MIN - 1e-9; size -= FLAT_STEP) {
+            a.style.setProperty('--fs', size.toFixed(2) + 'px');
+            if (span.offsetHeight <= avail && span.scrollWidth <= span.clientWidth + 1) return;
+          }
+          a.style.setProperty('--fs', FLAT_MIN + 'px');
+        });
+      }
+
+      function fitAll() {
+        fitTitles();
+        fitFlat();
+      }
+
       function applyFilter(q) {
         q = (q || '').trim().toLowerCase();
         var shown = 0;
@@ -656,7 +772,7 @@
           used += w + GAP;
         });
 
-        fitTitles();
+        fitAll();
 
         if (revealObserver) revealObserver.disconnect();
         revealObserver = new IntersectionObserver(function (entries) {
@@ -677,7 +793,7 @@
       // The fit above measures real glyphs, so it has to run again once the
       // display face has actually arrived; a fallback metric is a wrong answer.
       if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(fitTitles).catch(function () {});
+        document.fonts.ready.then(fitAll).catch(function () {});
       }
 
       function addStructuredData(list) {

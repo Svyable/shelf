@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: oxblood · height: short · thickness: slim · foil: gold |
+| **Spine** | binding: oxblood · height: short · thickness: slim · foil: gold · font: slab · bands: gilt-double |
 | **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |

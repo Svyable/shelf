@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: bronze · height: tall · thickness: thick · foil: gold |
+| **Spine** | binding: bronze · height: tall · thickness: thick · foil: gold · font: baskerville · bands: blind-double |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 25 of 25 drafted |

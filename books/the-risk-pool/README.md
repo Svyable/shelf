@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: plum · height: medium · thickness: thick · foil: gold |
+| **Spine** | binding: plum · height: medium · thickness: thick · foil: gold · font: baskerville · bands: none |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 22 of 22 drafted |

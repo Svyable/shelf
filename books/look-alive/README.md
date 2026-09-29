@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: bronze · height: medium · thickness: medium · foil: gold |
+| **Spine** | binding: bronze · height: medium · thickness: medium · foil: gold · font: news · bands: gilt-double |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 21 of 21 drafted |

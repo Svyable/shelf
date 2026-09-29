@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: slate · height: short · thickness: thick · foil: gold |
+| **Spine** | binding: slate · height: short · thickness: thick · foil: gold · font: didone · bands: blind-double |
 | **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 20 of 20 drafted |

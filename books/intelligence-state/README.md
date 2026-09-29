@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: bronze · height: short · thickness: slim · foil: blind |
+| **Spine** | binding: bronze · height: short · thickness: slim · foil: blind · font: wonk · bands: blind-double |
 | **Status** | Published |
 | **Authors** | Sven Hardy Benson |
 | **Publication Surface** | Shelf |

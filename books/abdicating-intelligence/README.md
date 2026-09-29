@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: aubergine · height: tall · thickness: medium · foil: gold |
+| **Spine** | binding: aubergine · height: tall · thickness: medium · foil: gold · font: grotesk · bands: gilt-double |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 30 of 30 |

@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: aubergine · height: short · thickness: heavy · foil: gold |
+| **Spine** | binding: aubergine · height: short · thickness: heavy · foil: gold · font: news · bands: none |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |

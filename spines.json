@@ -14,6 +14,106 @@
     "indigo": "#212a4c",
     "plum": "#3a1f2e"
   },
+  "fonts": {
+    "wonk": {
+      "token": "wonk",
+      "family": "Fraunces",
+      "size": 1.0,
+      "weight": 500,
+      "tracking": 0.055,
+      "stack": "\"Fraunces\", Georgia, \"Times New Roman\", serif",
+      "variable": "\"opsz\" 14, \"SOFT\" 0, \"WONK\" 0"
+    },
+    "garalde": {
+      "token": "garalde",
+      "family": "EB Garamond",
+      "size": 1.16,
+      "weight": 500,
+      "tracking": 0.04,
+      "stack": "\"EB Garamond\", Georgia, \"Times New Roman\", serif",
+      "variable": ""
+    },
+    "didone": {
+      "token": "didone",
+      "family": "Playfair Display",
+      "size": 0.95,
+      "weight": 500,
+      "tracking": 0.05,
+      "stack": "\"Playfair Display\", Georgia, \"Times New Roman\", serif",
+      "variable": ""
+    },
+    "slab": {
+      "token": "slab",
+      "family": "Zilla Slab",
+      "size": 1.02,
+      "weight": 600,
+      "tracking": 0.035,
+      "stack": "\"Zilla Slab\", \"Bookman Old Style\", Georgia, serif",
+      "variable": ""
+    },
+    "baskerville": {
+      "token": "baskerville",
+      "family": "Libre Baskerville",
+      "size": 1.04,
+      "weight": 400,
+      "tracking": 0.04,
+      "stack": "\"Libre Baskerville\", Georgia, \"Times New Roman\", serif",
+      "variable": ""
+    },
+    "news": {
+      "token": "news",
+      "family": "Newsreader",
+      "size": 1.04,
+      "weight": 500,
+      "tracking": 0.035,
+      "stack": "\"Newsreader\", Georgia, \"Times New Roman\", serif",
+      "variable": "\"opsz\" 14"
+    },
+    "grotesk": {
+      "token": "grotesk",
+      "family": "Inter",
+      "size": 1.1,
+      "weight": 600,
+      "tracking": 0.02,
+      "stack": "Inter, \"Helvetica Neue\", Arial, sans-serif",
+      "variable": "\"opsz\" 16"
+    },
+    "geometric": {
+      "token": "geometric",
+      "family": "Jost",
+      "size": 1.1,
+      "weight": 500,
+      "tracking": 0.07,
+      "stack": "Jost, Futura, \"Century Gothic\", sans-serif",
+      "variable": ""
+    }
+  },
+  "bands": {
+    "gilt-double": {
+      "head": "gilt",
+      "tail": "gilt"
+    },
+    "gilt-head": {
+      "head": "gilt",
+      "tail": "none"
+    },
+    "blind-double": {
+      "head": "blind",
+      "tail": "blind"
+    },
+    "blind-head": {
+      "head": "blind",
+      "tail": "none"
+    },
+    "fillet": {
+      "head": "fillet",
+      "tail": "none"
+    },
+    "none": {
+      "head": "none",
+      "tail": "none"
+    }
+  },
   "books": {
     "abdicating-intelligence": {
       "binding": "aubergine",
@@ -23,6 +123,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "grotesk",
+      "bands": "gilt-double",
       "chapters": 30,
       "words": 59027
     },
@@ -34,6 +136,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "geometric",
+      "bands": "gilt-head",
       "chapters": 25,
       "words": 85392
     },
@@ -45,6 +149,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "garalde",
+      "bands": "gilt-double",
       "chapters": 20,
       "words": 63261
     },
@@ -56,6 +162,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "baskerville",
+      "bands": "none",
       "chapters": 18,
       "words": 48231
     },
@@ -67,6 +175,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "didone",
+      "bands": "gilt-double",
       "chapters": 26,
       "words": 60889
     },
@@ -78,6 +188,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "news",
+      "bands": "fillet",
       "chapters": 4,
       "words": 13477
     },
@@ -89,6 +201,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "slab",
+      "bands": "blind-double",
       "chapters": 12,
       "words": 19975
     },
@@ -100,6 +214,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "grotesk",
+      "bands": "fillet",
       "chapters": 22,
       "words": 69464
     },
@@ -111,6 +227,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "wonk",
+      "bands": "gilt-double",
       "chapters": 22,
       "words": 73473
     },
@@ -122,6 +240,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "garalde",
+      "bands": "blind-head",
       "chapters": 25,
       "words": 67129
     },
@@ -133,6 +253,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "baskerville",
+      "bands": "gilt-double",
       "chapters": 18,
       "words": 68496
     },
@@ -144,6 +266,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "didone",
+      "bands": "gilt-double",
       "chapters": 21,
       "words": 87701
     },
@@ -155,6 +279,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "blind",
+      "font": "wonk",
+      "bands": "blind-double",
       "chapters": 17,
       "words": 47017
     },
@@ -166,6 +292,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "garalde",
+      "bands": "gilt-head",
       "chapters": 25,
       "words": 68754
     },
@@ -177,6 +305,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "geometric",
+      "bands": "fillet",
       "chapters": 11,
       "words": 17393
     },
@@ -188,6 +318,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "news",
+      "bands": "gilt-double",
       "chapters": 21,
       "words": 56896
     },
@@ -199,6 +331,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "slab",
+      "bands": "none",
       "chapters": 25,
       "words": 26734
     },
@@ -210,6 +344,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "grotesk",
+      "bands": "fillet",
       "chapters": 18,
       "words": 73418
     },
@@ -221,6 +357,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "wonk",
+      "bands": "gilt-head",
       "chapters": 20,
       "words": 51120
     },
@@ -232,6 +370,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "geometric",
+      "bands": "gilt-double",
       "chapters": 29,
       "words": 68720
     },
@@ -243,6 +383,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "baskerville",
+      "bands": "blind-head",
       "chapters": 23,
       "words": 83439
     },
@@ -254,6 +396,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "didone",
+      "bands": "gilt-double",
       "chapters": 20,
       "words": 86777
     },
@@ -265,6 +409,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "garalde",
+      "bands": "gilt-double",
       "chapters": 20,
       "words": 73713
     },
@@ -276,6 +422,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "grotesk",
+      "bands": "fillet",
       "chapters": 31,
       "words": 73720
     },
@@ -287,6 +435,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "didone",
+      "bands": "blind-double",
       "chapters": 21,
       "words": 66082
     },
@@ -298,6 +448,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "slab",
+      "bands": "gilt-double",
       "chapters": 12,
       "words": 19644
     },
@@ -309,6 +461,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "wonk",
+      "bands": "gilt-double",
       "chapters": 24,
       "words": 38087
     },
@@ -320,6 +474,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "geometric",
+      "bands": "fillet",
       "chapters": 23,
       "words": 70140
     },
@@ -331,6 +487,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "baskerville",
+      "bands": "gilt-double",
       "chapters": 28,
       "words": 95901
     },
@@ -342,6 +500,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "garalde",
+      "bands": "blind-head",
       "chapters": 30,
       "words": 27442
     },
@@ -353,6 +513,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "wonk",
+      "bands": "gilt-head",
       "chapters": 21,
       "words": 71326
     },
@@ -364,6 +526,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "grotesk",
+      "bands": "gilt-double",
       "chapters": 21,
       "words": 71708
     },
@@ -375,6 +539,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "news",
+      "bands": "fillet",
       "chapters": 25,
       "words": 31599
     },
@@ -386,6 +552,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "didone",
+      "bands": "gilt-double",
       "chapters": 20,
       "words": 52403
     },
@@ -397,6 +565,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "garalde",
+      "bands": "blind-head",
       "chapters": 19,
       "words": 66507
     },
@@ -408,6 +578,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "wonk",
+      "bands": "gilt-double",
       "chapters": 7,
       "words": 4621
     },
@@ -419,6 +591,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "slab",
+      "bands": "blind-double",
       "chapters": 22,
       "words": 73551
     },
@@ -430,6 +604,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "wonk",
+      "bands": "gilt-double",
       "chapters": 25,
       "words": 91875
     },
@@ -441,6 +617,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "garalde",
+      "bands": "blind-head",
       "chapters": 20,
       "words": 50024
     },
@@ -452,6 +630,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "geometric",
+      "bands": "gilt-head",
       "chapters": 8,
       "words": 20532
     },
@@ -463,6 +643,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "baskerville",
+      "bands": "none",
       "chapters": 22,
       "words": 68881
     },
@@ -474,6 +656,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "wonk",
+      "bands": "gilt-double",
       "chapters": 19,
       "words": 29707
     },
@@ -485,6 +669,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "didone",
+      "bands": "gilt-double",
       "chapters": 11,
       "words": 16904
     },
@@ -496,6 +682,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "garalde",
+      "bands": "gilt-head",
       "chapters": 12,
       "words": 17883
     },
@@ -507,6 +695,8 @@
       "thickness": "slim",
       "thickness_px": 56,
       "foil": "gold",
+      "font": "news",
+      "bands": "none",
       "chapters": 12,
       "words": 28590
     },
@@ -518,6 +708,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "grotesk",
+      "bands": "fillet",
       "chapters": 22,
       "words": 68012
     },
@@ -529,6 +721,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "slab",
+      "bands": "gilt-double",
       "chapters": 20,
       "words": 73344
     },
@@ -540,6 +734,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "geometric",
+      "bands": "fillet",
       "chapters": 20,
       "words": 73530
     },
@@ -551,6 +747,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "baskerville",
+      "bands": "blind-double",
       "chapters": 25,
       "words": 73527
     },
@@ -562,6 +760,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "didone",
+      "bands": "gilt-double",
       "chapters": 20,
       "words": 63898
     },
@@ -573,6 +773,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "geometric",
+      "bands": "fillet",
       "chapters": 18,
       "words": 76132
     },
@@ -584,6 +786,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "slab",
+      "bands": "gilt-double",
       "chapters": 26,
       "words": 89589
     },
@@ -595,6 +799,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "grotesk",
+      "bands": "none",
       "chapters": 26,
       "words": 99087
     },
@@ -606,6 +812,8 @@
       "thickness": "thick",
       "thickness_px": 77,
       "foil": "gold",
+      "font": "didone",
+      "bands": "blind-double",
       "chapters": 20,
       "words": 69617
     },
@@ -617,6 +825,8 @@
       "thickness": "medium",
       "thickness_px": 66,
       "foil": "gold",
+      "font": "baskerville",
+      "bands": "blind-head",
       "chapters": 29,
       "words": 66322
     },
@@ -628,6 +838,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "wonk",
+      "bands": "gilt-double",
       "chapters": 26,
       "words": 96793
     },
@@ -639,6 +851,8 @@
       "thickness": "heavy",
       "thickness_px": 90,
       "foil": "gold",
+      "font": "news",
+      "bands": "none",
       "chapters": 20,
       "words": 82226
     }

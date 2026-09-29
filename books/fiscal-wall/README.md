@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: plum · height: short · thickness: thick · foil: gold |
+| **Spine** | binding: plum · height: short · thickness: thick · foil: gold · font: baskerville · bands: gilt-double |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |
