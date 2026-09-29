@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: brass · height: tall · thickness: medium · foil: gold |
+| **Spine** | binding: brass · height: tall · thickness: medium · foil: gold · font: garalde · bands: blind-head |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 25 of 25 drafted |

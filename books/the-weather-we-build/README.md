@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: merlot · height: short · thickness: slim · foil: gold |
+| **Spine** | binding: merlot · height: short · thickness: slim · foil: gold · font: garalde · bands: gilt-head |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |

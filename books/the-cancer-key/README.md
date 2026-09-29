@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: forest · height: tall · thickness: heavy · foil: gold |
+| **Spine** | binding: forest · height: tall · thickness: heavy · foil: gold · font: baskerville · bands: gilt-double |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |

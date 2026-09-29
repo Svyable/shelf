@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: moss · height: short · thickness: medium · foil: gold |
+| **Spine** | binding: moss · height: short · thickness: medium · foil: gold · font: didone · bands: gilt-double |
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 20 / 20 |

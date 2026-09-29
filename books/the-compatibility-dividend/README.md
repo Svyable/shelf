@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: aubergine · height: medium · thickness: thick · foil: gold |
+| **Spine** | binding: aubergine · height: medium · thickness: thick · foil: gold · font: wonk · bands: gilt-head |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 21 of 21 drafted + coda |

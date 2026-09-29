@@ -16,10 +16,14 @@ BINDING = "oxblood"
 COLOR = check_spines.COLORS[BINDING]
 
 
-def spine_row(binding=BINDING, height="medium", thickness="thick", foil="gold") -> str:
+def spine_row(
+    binding=BINDING, height="medium", thickness="thick", foil="gold",
+    font="wonk", bands="gilt-double",
+) -> str:
     return (
         "| **Spine** | binding: "
-        f"{binding} · height: {height} · thickness: {thickness} · foil: {foil} |"
+        f"{binding} · height: {height} · thickness: {thickness} · foil: {foil} · "
+        f"font: {font} · bands: {bands} |"
     )
 
 
@@ -37,6 +41,8 @@ def fixture(root: Path, *, catalog=("demo",), spines=True) -> None:
                 {
                     "version": 1,
                     "palette": check_spines.COLORS,
+                    "fonts": check_spines.FONT_SPECS,
+                    "bands": check_spines.BANDS,
                     "books": {
                         "demo": {
                             "binding": BINDING,
@@ -46,6 +52,8 @@ def fixture(root: Path, *, catalog=("demo",), spines=True) -> None:
                             "thickness": "thick",
                             "thickness_px": check_spines.THICKNESSES["thick"],
                             "foil": "gold",
+                            "font": "wonk",
+                            "bands": "gilt-double",
                             "chapters": 9,
                             "words": 31000,
                         }
@@ -161,6 +169,80 @@ class SpineCheckTests(unittest.TestCase):
             fixture(root)
             tamper(root, "demo", "words", True)
             self.assertIn("words must be a positive integer", "\n".join(check_spines.check(root)))
+
+    def test_unknown_font_token_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture(root)
+            tamper(root, "demo", "font", "papyrus")
+            self.assertIn("invalid font 'papyrus'", "\n".join(check_spines.check(root)))
+
+    def test_unknown_band_token_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture(root)
+            tamper(root, "demo", "bands", "rainbow")
+            self.assertIn("invalid bands 'rainbow'", "\n".join(check_spines.check(root)))
+
+    def test_font_must_mirror_the_readme_row(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture(root)
+            (root / "books" / "demo" / "README.md").write_text(
+                f"# Demo\n\n| | |\n|---|---|\n{spine_row(font='didone')}\n", encoding="utf-8"
+            )
+            self.assertIn("README Spine font='didone' does not match", "\n".join(check_spines.check(root)))
+
+    def test_fonts_block_must_match_generator(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture(root)
+            data = json.loads((root / "spines.json").read_text(encoding="utf-8"))
+            data["fonts"] = {"wonk": {"family": "Papyrus", "stack": "serif", "size": 1, "weight": 400, "tracking": 0.05, "variable": ""}}
+            (root / "spines.json").write_text(json.dumps(data), encoding="utf-8")
+            self.assertIn("fonts do not match", "\n".join(check_spines.check(root)))
+
+    def test_bands_block_must_match_generator(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture(root)
+            data = json.loads((root / "spines.json").read_text(encoding="utf-8"))
+            data["bands"] = {"gilt-double": {"head": "gilt", "tail": "none"}}
+            (root / "spines.json").write_text(json.dumps(data), encoding="utf-8")
+            self.assertIn("bands do not match", "\n".join(check_spines.check(root)))
+
+    def test_font_optical_size_must_be_positive(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture(root)
+            data = json.loads((root / "spines.json").read_text(encoding="utf-8"))
+            data["fonts"] = {k: dict(v) for k, v in check_spines.FONT_SPECS.items()}
+            data["fonts"]["wonk"]["size"] = 0
+            (root / "spines.json").write_text(json.dumps(data), encoding="utf-8")
+            errors = "\n".join(check_spines.check(root))
+            self.assertIn("fonts do not match", errors)
+
+    def test_update_mode_preserves_curated_font_and_bands(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture(root)
+            gen = check_spines.gen
+            parsed = gen.parse_spine(
+                (root / "books" / "demo" / "README.md").read_text(encoding="utf-8")
+            )
+            self.assertEqual(parsed["font"], "wonk")
+            self.assertEqual(parsed["bands"], "gilt-double")
+            # --update derives everything else but must not clobber a curated face
+            gen.write_spine_row(root / "books" / "demo" / "README.md", {
+                "binding": "navy", "height": "tall", "thickness": "slim",
+                "foil": "blind", "font": "didone", "bands": "blind-head",
+            })
+            again = gen.parse_spine(
+                (root / "books" / "demo" / "README.md").read_text(encoding="utf-8")
+            )
+            self.assertEqual(again["font"], "didone")
+            self.assertEqual(again["bands"], "blind-head")
+            self.assertEqual(again["binding"], "navy")
 
 
 if __name__ == "__main__":

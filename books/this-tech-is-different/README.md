@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: bronze · height: medium · thickness: medium · foil: gold |
+| **Spine** | binding: bronze · height: medium · thickness: medium · foil: gold · font: grotesk · bands: fillet |
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Edition**   | First edition · updated September 6, 2026 |

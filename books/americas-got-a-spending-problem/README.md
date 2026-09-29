@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: merlot · height: short · thickness: medium · foil: gold |
+| **Spine** | binding: merlot · height: short · thickness: medium · foil: gold · font: baskerville · bands: none |
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 18 of 18 drafted |

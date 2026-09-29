@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: merlot · height: short · thickness: heavy · foil: gold |
+| **Spine** | binding: merlot · height: short · thickness: heavy · foil: gold · font: geometric · bands: fillet |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Format** | Book |

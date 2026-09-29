@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: navy · height: tall · thickness: thick · foil: gold |
+| **Spine** | binding: navy · height: tall · thickness: thick · foil: gold · font: garalde · bands: gilt-head |
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 25 of 25 drafted |

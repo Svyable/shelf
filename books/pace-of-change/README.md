@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: slate · height: short · thickness: medium · foil: gold |
+| **Spine** | binding: slate · height: short · thickness: medium · foil: gold · font: wonk · bands: gilt-head |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 20 of 20 drafted |

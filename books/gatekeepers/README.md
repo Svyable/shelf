@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| **Spine** | binding: merlot · height: medium · thickness: heavy · foil: gold |
+| **Spine** | binding: merlot · height: medium · thickness: heavy · foil: gold · font: didone · bands: gilt-double |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Chapters** | 21 of 21 drafted |

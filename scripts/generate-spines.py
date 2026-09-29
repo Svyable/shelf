@@ -45,6 +45,111 @@ HEIGHTS = {"short": 214, "medium": 244, "tall": 276}
 THICKNESSES = {"slim": 56, "medium": 66, "thick": 77, "heavy": 90}
 FOILS = ("blind", "gold")
 
+# Spine lettering faces, one per token, in the order a shelf is mixed.
+#
+# "size" is an optical correction, not a size: a single pixel size means very
+# different things to a large-x-height didone and a small-x-height garalde, so
+# the house size is per face and the landing scales it by this factor. "weight"
+# is held down on the high-contrast and humanist faces because they lose their
+# stems above 500, and "tracking" opens up the geometric and didone faces,
+# which set too tightly at spine sizes.
+#
+# Old school: garalde, didone, slab, baskerville. New age: news, grotesk,
+# geometric, wonk.
+FONTS: list[dict] = [
+    {
+        "token": "wonk",
+        "family": "Fraunces",
+        "size": 1.00,
+        "weight": 500,
+        "tracking": 0.055,
+        "stack": '"Fraunces", Georgia, "Times New Roman", serif',
+        "variable": '"opsz" 14, "SOFT" 0, "WONK" 0',
+    },
+    {
+        "token": "garalde",
+        "family": "EB Garamond",
+        "size": 1.16,
+        "weight": 500,
+        "tracking": 0.040,
+        "stack": '"EB Garamond", Georgia, "Times New Roman", serif',
+        "variable": "",
+    },
+    {
+        "token": "didone",
+        "family": "Playfair Display",
+        "size": 0.95,
+        "weight": 500,
+        "tracking": 0.050,
+        "stack": '"Playfair Display", Georgia, "Times New Roman", serif',
+        "variable": "",
+    },
+    {
+        "token": "slab",
+        "family": "Zilla Slab",
+        "size": 1.02,
+        "weight": 600,
+        "tracking": 0.035,
+        "stack": '"Zilla Slab", "Bookman Old Style", Georgia, serif',
+        "variable": "",
+    },
+    {
+        "token": "baskerville",
+        "family": "Libre Baskerville",
+        "size": 1.04,
+        "weight": 400,
+        "tracking": 0.040,
+        "stack": '"Libre Baskerville", Georgia, "Times New Roman", serif',
+        "variable": "",
+    },
+    {
+        "token": "news",
+        "family": "Newsreader",
+        "size": 1.04,
+        "weight": 500,
+        "tracking": 0.035,
+        "stack": '"Newsreader", Georgia, "Times New Roman", serif',
+        "variable": '"opsz" 14',
+    },
+    {
+        "token": "grotesk",
+        "family": "Inter",
+        "size": 1.10,
+        "weight": 600,
+        "tracking": 0.020,
+        "stack": 'Inter, "Helvetica Neue", Arial, sans-serif',
+        "variable": '"opsz" 16',
+    },
+    {
+        "token": "geometric",
+        "family": "Jost",
+        "size": 1.10,
+        "weight": 500,
+        "tracking": 0.070,
+        "stack": 'Jost, Futura, "Century Gothic", sans-serif',
+        "variable": "",
+    },
+]
+FONT_TOKENS = tuple(f["token"] for f in FONTS)
+
+# Head/tail banding, the way a bound volume announces its caps. "gilt" rules are
+# gold foil; "blind" rules are pressed into the cloth; "fillet" is a single thin
+# rule near the head; "none" leaves the spine bare.
+BANDS: dict[str, dict] = {
+    "gilt-double": {"head": "gilt", "tail": "gilt"},
+    "gilt-head": {"head": "gilt", "tail": "none"},
+    "blind-double": {"head": "blind", "tail": "blind"},
+    "blind-head": {"head": "blind", "tail": "none"},
+    "fillet": {"head": "fillet", "tail": "none"},
+    "none": {"head": "none", "tail": "none"},
+}
+BAND_TOKENS = tuple(BANDS)
+
+# Curated by a human in the README row. --update derives the rest and only
+# proposes a face or banding when the row has none yet; it never overwrites one.
+CURATED_KEYS = ("binding", "height", "thickness", "foil", "font", "bands")
+DERIVED_KEYS = ("binding", "height", "thickness", "foil")
+
 
 def read_catalog() -> list[str]:
     data = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))
@@ -105,6 +210,7 @@ def derive(order: list[str]) -> dict[str, dict]:
 
     result: dict[str, dict] = {}
     prev_binding = None
+    prev_font = None
     for slug in order:
         c, w = data[slug]
 
@@ -120,6 +226,13 @@ def derive(order: list[str]) -> dict[str, dict]:
 
         foil = "blind" if stable_pick(slug, "foil", 7) == 0 else "gold"
 
+        # a proposal only; the curated row wins when it already names a face
+        fidx = stable_pick(slug, "font", len(FONT_TOKENS))
+        if prev_font is not None and FONT_TOKENS[fidx] == prev_font:
+            fidx = (fidx + 1 + stable_pick(slug, "font-nudge", len(FONT_TOKENS) - 1)) % len(FONT_TOKENS)
+        font = FONT_TOKENS[fidx]
+        prev_font = font
+
         result[slug] = {
             "binding": binding,
             "color": color,
@@ -128,6 +241,8 @@ def derive(order: list[str]) -> dict[str, dict]:
             "thickness": thickness,
             "thickness_px": THICKNESSES[thickness],
             "foil": foil,
+            "font": font,
+            "bands": BAND_TOKENS[stable_pick(slug, "bands", len(BAND_TOKENS))],
             "chapters": c,
             "words": w,
         }
@@ -144,7 +259,8 @@ def parse_spine(readme: str) -> dict[str, str] | None:
 def format_spine(spine: dict) -> str:
     return (
         f"| **Spine** | binding: {spine['binding']} · height: {spine['height']} · "
-        f"thickness: {spine['thickness']} · foil: {spine['foil']} |"
+        f"thickness: {spine['thickness']} · foil: {spine['foil']} · "
+        f"font: {spine['font']} · bands: {spine['bands']} |"
     )
 
 
@@ -188,6 +304,8 @@ def build_from_readmes(order: list[str]) -> dict:
             "thickness": thickness,
             "thickness_px": THICKNESSES.get(thickness, THICKNESSES["medium"]),
             "foil": parsed.get("foil", "gold"),
+            "font": parsed.get("font", FONT_TOKENS[0]),
+            "bands": parsed.get("bands", BAND_TOKENS[0]),
             "chapters": chapters,
             "words": words,
         }
@@ -209,7 +327,15 @@ def main() -> int:
     if args.update:
         derived = derive(order)
         for slug, spine in derived.items():
-            write_spine_row(ROOT / "books" / slug / "README.md", spine)
+            path = ROOT / "books" / slug / "README.md"
+            # The face and the banding are a human's editorial call, so a
+            # --update run may only propose them. An existing row keeps its
+            # curation; the derived extent values are always refreshed.
+            existing = parse_spine(path.read_text(encoding="utf-8")) or {}
+            for key in ("font", "bands"):
+                if existing.get(key):
+                    spine[key] = existing[key]
+            write_spine_row(path, spine)
         books = build_from_readmes(order)
     else:
         books = build_from_readmes(order)
@@ -217,6 +343,8 @@ def main() -> int:
     payload = {
         "version": SCHEMA,
         "palette": {name: color for name, color in PALETTE},
+        "fonts": {f["token"]: f for f in FONTS},
+        "bands": BANDS,
         "books": books,
     }
     (ROOT / "spines.json").write_text(
