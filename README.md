@@ -153,8 +153,23 @@ read-only checks, both locally and in GitHub Actions:
 python3 scripts/check-shelf-boundary.py    # Shelf ownership + Reader closure
 python3 scripts/check-catalog.py            # catalog.json vs books/ and README
 python3 scripts/check-feedback-catalog.py   # chapter-feedback dropdown in sync
+python3 scripts/check-spines.py             # spines.json vs each book’s Spine row
 python3 scripts/check-release-provenance.py # release.json provenance
 python3 scripts/sync-reader-links.py --check
+```
+
+The Reading Room landing (`index.html`) renders each book as a spine whose
+binding colour, height, and thickness come from the book’s `Spine` row, and
+whose hubs and accessible label come from the measured extent in
+`spines.json`. Titles are set at one house size and only step down, or break
+onto a second vertical run, when a title genuinely will not fit. That row is
+publication presentation metadata and is exempt from the release payload
+digest. `spines.json` is the machine-readable mirror the landing fetches; after
+hand-tuning a `Spine` row, regenerate and verify with:
+
+```bash
+python3 scripts/generate-spines.py   # rebuild spines.json from the book rows
+python3 scripts/check-spines.py      # spines.json matches the book rows
 ```
 
 Workflows in `.github/workflows/` run these checks on pull requests and every

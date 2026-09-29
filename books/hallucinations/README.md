@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: bronze · height: tall · thickness: medium · foil: gold |
 | **Authors**    | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 29 of 29 |

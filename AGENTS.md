@@ -64,6 +64,7 @@ under `books/<slug>/`; the rest are derived.
 | `catalog.json` | machine-readable inventory (single source of truth for "published") | `check-catalog.py` validates it against `books/` |
 | root `README.md` | the human `## The books` table (single source for the visible web shelf) | the Desk release command |
 | `llms.txt` | machine-readable reading list linked from the landing pages | hand-maintained; keep in sync with `catalog.json` |
+| `spines.json` | machine-readable spine presentation (binding colour, height, thickness, foil, extent) for the Reading Room landing | `scripts/generate-spines.py`; `check-spines.py` validates it against the per-book `Spine` rows |
 | `publication/<slug>/index.html` + `cover.svg` | per-book crawlable landing page | Desk `generate-publication-pages.py` |
 | `publication/index.html` | gallery of all publications | Desk `generate-publication-pages.py` |
 | `sitemap.xml` | search discovery for every `publication/` page | Desk `generate-publication-pages.py` |
@@ -88,6 +89,21 @@ Consistency rules:
   schemas is gated on Desk before release; Shelf provenance verifies the bytes.
 - Run `python3 scripts/check-catalog.py` and `python3 scripts/sync-reader-links.py --check`
   after any catalog or book-list change.
+- A book `README.md` is publication **presentation** metadata: it is excluded
+  from the release payload digest and from the substantive-change requirement in
+  `check-release-provenance.py`, so Shelf-side edits (for example the `Spine`
+  row below) never need a Desk release. Chapter files, `RIGHTS.md`, and
+  `research/**` are the protected payload.
+- Each released book may carry a `| **Spine** | … |` row in its `README.md`
+  (binding, height, thickness, foil). It drives the Reading Room landing. The
+  machine mirror `spines.json` must be regenerated with
+  `python3 scripts/generate-spines.py` after any hand edit; never edit both by
+  hand. `scripts/generate-spines.py --update` rewrites the rows from the
+  manuscripts — destructive to hand curation, so it is a one-off bootstrap only.
+- `binding`, `height`, `thickness`, and `foil` are curated in the README row.
+  `chapters` and `words` are not: they are measured from the released manuscript
+  on every run, so `spines.json` is the only place they appear. Only the four
+  curated keys are mirrored back against the README by `check-spines.py`.
 
 ## Continuous integration
 
@@ -101,6 +117,7 @@ The repo verifies locally and in CI:
 python3 scripts/check-shelf-boundary.py   # ownership + Reader closure
 python3 scripts/check-catalog.py           # catalog/README/llms consistency
 python3 scripts/check-feedback-catalog.py  # feedback dropdown in sync
+python3 scripts/check-spines.py            # spines.json vs per-book Spine rows
 python3 scripts/check-release-provenance.py  # release.json provenance
 python3 scripts/sync-reader-links.py --check  # canonical Reader links
 python3 -m pytest -q scripts/             # catalog + sync tests
@@ -246,10 +263,11 @@ README `## The books` table, the `llms.txt` released list, the
 history is not made private by removing it from the current branch.
 
 Optional book README rows (omit or leave blank if unused): **Publisher**,
-**Series**, **Tags**, **Edition**, **Language**, **ISBN**. Series groups
-volumes on the public shelf. Tags are comma-separated. Wiki links
-`[[ch03-publishing|label]]` in chapter Markdown become in-reader jumps.
-Do not invent a config file for these.
+**Series**, **Tags**, **Edition**, **Language**, **ISBN**, **Spine**. Series
+groups volumes on the public shelf. Tags are comma-separated. `**Spine**` is
+`binding: … · height: … · thickness: … · foil: …`; see the consistency rules
+above for how it is maintained. Wiki links `[[ch03-publishing|label]]` in
+chapter Markdown become in-reader jumps. Do not invent a config file for these.
 
 See https://github.com/Svyable/bookself/blob/main/docs/revisions.md for the
 canonical revision and release model.

@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: slate · height: tall · thickness: slim · foil: gold |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Form** | Narrative nonfiction / technology |

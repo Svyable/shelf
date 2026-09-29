@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: oxblood · height: short · thickness: heavy · foil: gold |
 | **Status** | Published |
 | **Authors** | Sven Hardy Benson |
 | **Publication Surface** | Shelf |

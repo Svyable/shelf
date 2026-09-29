@@ -10,6 +10,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: bronze · height: tall · thickness: heavy · foil: gold |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Form** | Narrative nonfiction / technology / security |

@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: merlot · height: short · thickness: heavy · foil: gold |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Format** | Book |

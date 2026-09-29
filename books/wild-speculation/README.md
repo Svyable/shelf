@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: moss · height: short · thickness: medium · foil: gold |
 | **Authors**   | Sven Hardy Benson |
 | **Status**    | Published |
 | **Chapters**  | 20 / 20 |
