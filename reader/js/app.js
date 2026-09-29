@@ -287,7 +287,7 @@ function volumeElement(entry) {
     </span>`;
   const warm = () => {
     if ($('loader')) $('loader').hidden = false;
-    ensureReaderCore();
+    ensureReaderCore().catch(() => {});
   };
   a.addEventListener('pointerdown', warm, { once: true, passive: true });
   a.addEventListener('click', warm, { once: true });
@@ -399,9 +399,13 @@ function scheduleShelfWorker() {
 }
 
 function fastLibraryRouteGuard(event) {
-  if (!libraryRouteRequested()) return;
+  if (bookRouteRequested()) {
+    ensureReaderCore().catch(() => {});
+    return;
+  }
   if (readerCoreLoaded) event.stopImmediatePropagation();
   renderFastShelf();
+  if (!fastEntries.length) refreshFastCatalog();
 }
 
 window.addEventListener('hashchange', fastLibraryRouteGuard, true);
@@ -412,7 +416,7 @@ scheduleShelfWorker();
 if ($('homeFromEnd')) $('homeFromEnd').textContent = 'Shelf';
 
 if (bookRouteRequested()) {
-  ensureReaderCore();
+  ensureReaderCore().catch(() => {});
 } else {
   const cached = readFastCatalog();
   if (cached.length) {

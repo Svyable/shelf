@@ -91,7 +91,7 @@ function syncPublisherSemantics() {
   });
 
   // "All + one publisher" is not a useful filter choice; keep the shelf quieter.
-  if (buttons.length > 0 && buttons.length <= 2 && buttons[0]?.textContent?.trim() === 'All') {
+  if (!filters.hidden && buttons.length > 0 && buttons.length <= 2 && buttons[0]?.textContent?.trim() === 'All') {
     filters.hidden = true;
   }
 }
@@ -131,6 +131,12 @@ function searchMessage(hits) {
     .join(' ');
 }
 
+// textContent replaces children even when the text is unchanged. This output
+// lives inside the observed library, so repeated writes would starve the event loop.
+function setStatusText(status, text) {
+  if (status.textContent !== text) status.textContent = text;
+}
+
 function syncStatus() {
   const status = $('shelfStatus');
   const search = $('librarySearch');
@@ -145,37 +151,37 @@ function syncStatus() {
   const volumeCount = syncVolumes();
 
   if (!query) {
-    status.textContent = `${plural(volumeCount, 'publication')} · ${searchShortcutLabel()} to search`;
+    setStatusText(status, `${plural(volumeCount, 'publication')} · ${searchShortcutLabel()} to search`);
     return;
   }
 
   if (query.length < 2) {
-    status.textContent = `${plural(volumeCount, 'title match')} · type 2+ characters to search passages`;
+    setStatusText(status, `${plural(volumeCount, 'title match')} · type 2+ characters to search passages`);
     return;
   }
 
   if (hitCount > 0) {
-    status.textContent = `${plural(hitCount, 'result')} for “${query}”`;
+    setStatusText(status, `${plural(hitCount, 'result')} for “${query}”`);
     return;
   }
 
   if (hits?.dataset.searchState === 'loading' || /^Searching titles and passages/i.test(message)) {
     const titleLead = volumeCount ? `${plural(volumeCount, 'title match')} · ` : '';
-    status.textContent = `${titleLead}searching passages…`;
+    setStatusText(status, `${titleLead}searching passages…`);
     return;
   }
 
   if (hits?.dataset.searchState === 'error' || /could not be loaded/i.test(message)) {
-    status.textContent = `${plural(volumeCount, 'title match')} · passage search unavailable`;
+    setStatusText(status, `${plural(volumeCount, 'title match')} · passage search unavailable`);
     return;
   }
 
   if (message) {
-    status.textContent = `No title or passage results for “${query}”`;
+    setStatusText(status, `No title or passage results for “${query}”`);
     return;
   }
 
-  status.textContent = `Searching titles and passages for “${query}”…`;
+  setStatusText(status, `Searching titles and passages for “${query}”…`);
 }
 
 function syncLibraryUi() {
