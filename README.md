@@ -4,7 +4,13 @@
 
 Sven Hardy Benson’s Shelf is the public reading library for books by Sven Hardy Benson. It holds deliberately released editions: stable snapshots readers can open, cite, share, and return to.
 
-**[📖 Open Sven Hardy Benson’s Shelf →](https://svyable.github.io/shelf/reader/)**
+## Pick a book
+
+**[🔖 Come in and browse the shelf →](https://svyable.github.io/shelf/)**
+
+Fifty-seven released books stand on the shelf as spines, each with its own binding colour, height, thickness, lettering face, and head banding. Hover a spine and the book lies down flat so you can read the whole title, then click through to the edition. If you would rather go straight to text, the Reader below is the same library with a full-screen reading view.
+
+**[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)**
 
 ## Start here
 
@@ -135,6 +141,8 @@ For the publishing architecture and revision workflow, see [Bookself](https://gi
 | `imprint.json` | Sven Hardy Benson’s Shelf identity and Reader links |
 | `README.md` | Human-facing front door to the Shelf |
 | `index.html`, `books/index.html` | Web landing pages that render the released catalog |
+| `RIGHTS.md` | Plain-language statement of what the author reserves and what the law does and does not make possible |
+| `LICENSE` | MIT grant for the Bookself framework software, and the boundary around publication content |
 
 The book list, `catalog.json`, `publication/`, and `sitemap.xml` must agree.
 The Desk release command refreshes them together; `llms.txt` is maintained by
@@ -142,7 +150,27 @@ hand, so the same change must add or remove a released book there too.
 
 ## Rights
 
-**Open tools. Author-owned words.** Bookself software is open source. Publication content is not automatically open merely because it is publicly readable or source-visible. See [LICENSE](LICENSE), [RIGHTS.md](RIGHTS.md), and any publication-specific `RIGHTS.md` / `rights.json` for the applicable rights boundary.
+**Open tools. Author-owned words.**
+
+Bookself software is open source. The books are not. Reading a book here is free and unrestricted; reusing one is not.
+
+Each publication under `books/<slug>/` is **All Rights Reserved** by Sven Hardy Benson unless that publication's own rights file says otherwise. Public reading through the Shelf, source-visible Markdown, Git history, and GitHub's forking UI are visibility, not a license, and none of them grant permission to reproduce, republish, redistribute, sell, adapt, translate, or commercially exploit a book.
+
+Rights reserved include the exclusive rights the Copyright Act gives a copyright owner — reproduction, derivative works, distribution, public performance, and public display — and the machine uses that follow from them:
+
+- training, fine-tuning, or distilling on a book, and keeping the model weights, embeddings, or vectors derived from it;
+- ingesting a book into a retrieval system, vector store, or knowledge base used to ground a generative model;
+- building an AI-specific search or discovery index;
+- AI-generated summaries, substitutes, narration, translation, or dramatizations, sold or not;
+- monetizing any of the above.
+
+Quotation, criticism, comment, teaching, scholarship, and research are the ordinary province of the law rather than a concession by the author, and nothing in the rights notice is meant to prohibit a use the law independently permits. Whether a use qualifies is decided by the law on its own facts.
+
+**On agentic authorship.** These books were researched, drafted, and revised with substantial involvement from AI systems acting as tools. Copyright protects original works of authorship by a human being: output a machine produced autonomously is not itself copyrightable, and where a human contributes the original expression — the selection, arrangement, revision, judgment, and structure — that human contribution is what copyright attaches to. A statement of All Rights Reserved is a refusal to license; it does not create copyright where the law finds none, and it is not a prediction about what a court would hold. The law in this area is unsettled and jurisdiction-specific. [RIGHTS.md](RIGHTS.md) states the position in full.
+
+Copyright-management information — the copyright notice, `RIGHTS.md`, `rights.json`, and the rights links in the Reader and exported copies — is meant to stay with official copies. Removing it is not a way to shed copyright, and whether it creates liability under 17 U.S.C. §1202 depends on the facts and on that statute's knowledge and intent requirements. A registration status of `not-recorded-in-bookself` means only that this repository is not asserting Copyright Office registration data; it is not a claim that a work is unregistered.
+
+Start with [RIGHTS.md](RIGHTS.md) for the full statement, [LICENSE](LICENSE) for the software grant, and each publication's `RIGHTS.md` / `rights.json` for the machine-readable record. Permission requests: <https://github.com/Svyable>.
 
 ## Checks and continuous integration
 
