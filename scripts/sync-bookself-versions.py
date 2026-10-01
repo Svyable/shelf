@@ -20,6 +20,12 @@ SHELF_CACHE_RE = re.compile(
     r"""const\s+CACHE\s*=\s*['"]sven-shelf-reader-[^'"]+['"]\s*;"""
 )
 
+SHELF_OWNED_ASSETS = frozenset({
+    "css/shelf-gui.css",
+    "js/app.js",
+    "js/shelf-gui.js",
+})
+
 
 def asset_versions(html: str) -> dict[str, str]:
     versions: dict[str, str] = {}
@@ -35,6 +41,8 @@ def mirror_index_versions(bookself_html: str, shelf_html: str) -> str:
 
     def replace(match: re.Match[str]) -> str:
         path = match.group("path")
+        if path in SHELF_OWNED_ASSETS:
+            return match.group(0)
         version = versions.get(path)
         if not version:
             return match.group(0)
@@ -47,9 +55,14 @@ def mirror_cache_generation(bookself_worker: str, shelf_worker: str) -> str:
     upstream = BOOKSELF_CACHE_RE.search(bookself_worker)
     if not upstream:
         raise ValueError("Bookself Reader cache generation is missing or unreadable")
-    if not SHELF_CACHE_RE.search(shelf_worker):
+    shelf = SHELF_CACHE_RE.search(shelf_worker)
+    if not shelf:
         raise ValueError("Shelf Reader cache generation is missing or unreadable")
-    generation = upstream.group("generation")
+
+    upstream_number = int(upstream.group("generation")[1:])
+    local_version = re.search(r"v(?P<number>[0-9]+)", shelf.group(0))
+    local_number = int(local_version.group("number")) if local_version else 0
+    generation = f"v{max(upstream_number, local_number)}"
     return SHELF_CACHE_RE.sub(
         f"const CACHE = 'sven-shelf-reader-bookself-{generation}';",
         shelf_worker,
