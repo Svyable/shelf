@@ -1,3 +1,4 @@
+import { requestWithDeadline } from './request-deadline.js';
 import './page-drag.js';
 import './reader-keyboard-runtime.js';
 import './one-handed-actions.js';
@@ -187,8 +188,7 @@ export function fileUrl(relativePath) {
 
 export function fetchDocument(relativePath) {
   const url = fileUrl(relativePath);
-  const acquisition = documentCache.load(url, async () => {
-    const res = await fetch(url, { cache: 'no-cache' });
+  const acquisition = documentCache.load(url, () => requestWithDeadline(url, { cache: 'no-cache' }, async (res) => {
     if (!res.ok) {
       const err = new Error(`Could not load ${relativePath} (${res.status})`);
       err.status = res.status;
@@ -199,7 +199,7 @@ export function fetchDocument(relativePath) {
       text: await res.text(),
       modified: res.headers.get('Last-Modified'),
     });
-  });
+  }));
   return acquisition.then(
     (documentResult) => {
       reportChapterAcquisitionSuccess(relativePath);
@@ -214,8 +214,8 @@ export function fetchDocument(relativePath) {
 
 async function loadPortalCatalogManifest() {
   if (!portalCatalogManifestPromise) {
-    portalCatalogManifestPromise = fetch(fileUrl('catalog.json'), { cache: 'no-cache' })
-      .then(async (res) => (res.ok ? res.text() : null))
+    portalCatalogManifestPromise = requestWithDeadline(fileUrl('catalog.json'), { cache: 'no-cache' },
+      (res) => (res.ok ? res.text() : null))
       .catch(() => null);
   }
   return portalCatalogManifestPromise;
@@ -244,9 +244,9 @@ export function clearDocumentCache() {
 export async function fileExists(relativePath) {
   const url = fileUrl(relativePath);
   try {
-    const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+    const res = await requestWithDeadline(url, { method: 'HEAD', cache: 'no-cache' });
     if (res.ok) return true;
-    const get = await fetch(url, { method: 'GET', cache: 'no-cache' });
+    const get = await requestWithDeadline(url, { method: 'GET', cache: 'no-cache' });
     return get.ok;
   } catch {
     return false;
@@ -256,10 +256,10 @@ export async function fileExists(relativePath) {
 async function existingUrl(relativePath) {
   const url = fileUrl(relativePath);
   return existenceCache.load(url, async () => {
-    const head = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+    const head = await requestWithDeadline(url, { method: 'HEAD', cache: 'no-cache' });
     if (head.ok) return url;
     if (head.status !== 405 && head.status !== 501) return null;
-    const get = await fetch(url, { method: 'GET', cache: 'no-cache' });
+    const get = await requestWithDeadline(url, { method: 'GET', cache: 'no-cache' });
     return get.ok ? url : null;
   });
 }

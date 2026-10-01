@@ -1,3 +1,4 @@
+import { requestWithDeadline } from './request-deadline.js';
 import { fetchText, fetchDocument, firstExisting } from './base.js';
 import {
   catalogEntryVisible,
@@ -247,12 +248,12 @@ async function loadBook(slug) {
 async function fetchRevision(slug) {
   try {
     const { owner, repo } = githubRepo();
-    const res = await fetch(
+    const rows = await requestWithDeadline(
       `https://api.github.com/repos/${owner}/${repo}/commits?path=books/${encodeURIComponent(slug)}/&per_page=1`,
-      { headers: { Accept: 'application/vnd.github+json' } }
+      { headers: { Accept: 'application/vnd.github+json' } },
+      (res) => res.ok ? res.json() : [],
+      2500
     );
-    if (!res.ok) return null;
-    const rows = await res.json();
     const c = rows[0];
     if (!c?.sha) return null;
     return {
