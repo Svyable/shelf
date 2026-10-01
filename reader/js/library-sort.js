@@ -452,6 +452,26 @@ function compactSpines() {
   return grid ? [...grid.querySelectorAll(':scope > .compact-spine')] : [];
 }
 
+function resetShelfIndex() {
+  shelfIndexPointerId = null;
+  window.clearTimeout(shelfIndexBubbleTimer);
+  window.clearTimeout(shelfIndexHighlightTimer);
+  document.querySelector('.compact-spine.is-index-target')?.classList.remove('is-index-target');
+
+  const index = $('compactShelfIndex');
+  if (index) {
+    index.replaceChildren();
+    index.hidden = true;
+    delete index.dataset.fingerprint;
+  }
+
+  const bubble = $('compactShelfIndexBubble');
+  if (bubble) {
+    bubble.classList.remove('visible');
+    bubble.textContent = '';
+  }
+}
+
 function clearShelfIndexFeedback() {
   document.querySelectorAll('.compact-shelf-index-button.is-scrubbing').forEach((button) => {
     button.classList.remove('is-scrubbing');
@@ -554,17 +574,27 @@ function syncShelfIndex() {
   shelfIndexFrame = 0;
   const section = $('compactShelf');
   const grid = $('compactShelfGrid');
-  if (!section || !grid) return;
+  if (!libraryStage() || !section || !grid) {
+    resetShelfIndex();
+    return;
+  }
 
   const spines = compactSpines();
-  if (!spines.length) return;
+  if (!spines.length) {
+    resetShelfIndex();
+    return;
+  }
   const letters = shelfIndexLetters(spines.map((spine) => spine.dataset.title || ''));
   const fingerprint = spines
     .map((spine) => `${spine.getAttribute('href') || ''}\u0000${spine.dataset.title || ''}`)
     .join('\u0001');
   const index = shelfIndexElement(section);
   const landmarkCount = grid.querySelectorAll('.compact-shelf-landmark').length;
-  if (index.dataset.fingerprint === fingerprint && landmarkCount === letters.length) {
+  const indexedLetters = [...index.querySelectorAll('.compact-shelf-index-button')]
+    .map((button) => button.dataset.shelfIndexLetter || '');
+  const indexMatches = indexedLetters.length === letters.length
+    && indexedLetters.every((letter, position) => letter === letters[position]);
+  if (index.dataset.fingerprint === fingerprint && landmarkCount === letters.length && indexMatches) {
     index.hidden = letters.length <= 1;
     return;
   }
@@ -612,14 +642,21 @@ function scheduleShelfIndexSync() {
 function installObserver() {
   const library = $('libraryView');
   if (!library) return;
-  const observer = new MutationObserver(() => {
+  const syncLibrary = () => {
     restoreSortPreference();
     scheduleShelfIndexSync();
     if (!lastReadActive) return;
     syncControls();
     scheduleLastReadSort();
-  });
+  };
+  const observer = new MutationObserver(syncLibrary);
   observer.observe(library, { childList: true, subtree: true });
+
+  const stageObserver = new MutationObserver(syncLibrary);
+  stageObserver.observe(document.body, {
+    attributes: true,
+    attributeFilter: ['data-stage'],
+  });
 }
 
 function initialize() {
