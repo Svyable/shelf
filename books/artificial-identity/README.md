@@ -10,7 +10,7 @@
 |---|---|
 | **Spine** | binding: aubergine · height: short · thickness: slim · foil: gold · font: news · bands: fillet |
 | **Authors**    | Sven Hardy Benson |
-| **Status**    | Published |
+| **Status**    | Drafting |
 | **Chapters**  | 4 of 24 drafted |
 
 *The Other You Machines Are Building*
