@@ -8,7 +8,7 @@ Sven Hardy Benson’s Shelf is the public reading library for books by Sven Hard
 
 **[🔖 Come in and browse the shelf →](https://svyable.github.io/shelf/)**
 
-Fifty-seven released books stand on the shelf as spines, each with its own binding colour, height, thickness, lettering face, and head banding. Hover a spine and the book lies down flat so you can read the whole title, then click through to the edition. If you would rather go straight to text, the Reader below is the same library with a full-screen reading view.
+Fifty-six released books stand on the shelf as spines, each with its own binding colour, height, thickness, lettering face, and head banding. Hover a spine and the book lies down flat so you can read the whole title, then click through to the edition. If you would rather go straight to text, the Reader below is the same library with a full-screen reading view.
 
 **[📖 Open the Shelf Reader →](https://svyable.github.io/shelf/reader/)**
 
@@ -43,7 +43,6 @@ These are the deliberately released editions on Sven Hardy Benson’s Shelf. Pub
 | [**Allocating Intelligence**](books/allocating-intelligence/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/allocating-intelligence/) |
 | [**America's Got a Spending Problem**](books/americas-got-a-spending-problem/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/americas-got-a-spending-problem/) |
 | [**Appeal**](books/appeal/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/appeal/) |
-| [**Artificial Identity**](books/artificial-identity/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/artificial-identity/) |
 | [**Austerity Measures**](books/austerity-measures/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/austerity-measures/) |
 | [**Commit**](books/commit/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/commit/) |
 | [**Energy, Value & Intelligence**](books/energy-value-intelligence/) | ✅ Released | [Read →](https://svyable.github.io/shelf/reader/#/b/energy-value-intelligence/) |
