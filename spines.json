@@ -18,7 +18,7 @@
     "wonk": {
       "token": "wonk",
       "family": "Fraunces",
-      "size": 1.0,
+      "size": 1,
       "weight": 500,
       "tracking": 0.055,
       "stack": "\"Fraunces\", Georgia, \"Times New Roman\", serif",
@@ -179,19 +179,6 @@
       "bands": "gilt-double",
       "chapters": 26,
       "words": 60889
-    },
-    "artificial-identity": {
-      "binding": "aubergine",
-      "color": "#35203c",
-      "height": "short",
-      "height_px": 214,
-      "thickness": "slim",
-      "thickness_px": 56,
-      "foil": "gold",
-      "font": "news",
-      "bands": "fillet",
-      "chapters": 4,
-      "words": 13477
     },
     "austerity-measures": {
       "binding": "oxblood",

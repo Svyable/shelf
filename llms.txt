@@ -21,7 +21,6 @@ This file is the low-noise machine-readable map of Sven Hardy Benson’s Shelf. 
 - [America's Got a Spending Problem](https://svyable.github.io/shelf/books/americas-got-a-spending-problem/README.md)
 - [America's Other 250](https://svyable.github.io/shelf/books/the-other-250/README.md)
 - [Appeal](https://svyable.github.io/shelf/books/appeal/README.md)
-- [Artificial Identity](https://svyable.github.io/shelf/books/artificial-identity/README.md)
 - [Austerity Measures](https://svyable.github.io/shelf/books/austerity-measures/README.md)
 - [Commit](https://svyable.github.io/shelf/books/commit/README.md)
 - [Deceptatron](https://svyable.github.io/shelf/books/deceptatron/README.md)
