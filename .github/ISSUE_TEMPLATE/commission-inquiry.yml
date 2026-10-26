@@ -1,0 +1,41 @@
+name: Commissioned research inquiry
+description: Propose a scoped, paid research question. Do not share confidential information.
+title: "Research inquiry: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Public form:** GitHub issues are visible to everyone. Please do not post personal, proprietary, security-sensitive, or confidential information. This is an inquiry, not an order or commitment. We agree on scope, fee, and private follow-up before work starts.
+  - type: textarea
+    id: question
+    attributes:
+      label: The question
+      description: One or two sentences about the question you need answered. Keep it nonconfidential.
+      placeholder: "We need to understand how..."
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: What decision will this inform?
+      description: Broad context is enough.
+    validations:
+      required: true
+  - type: dropdown
+    id: horizon
+    attributes:
+      label: Timing
+      options:
+        - Flexible
+        - Within two weeks
+        - Time-sensitive; please discuss
+    validations:
+      required: true
+  - type: checkboxes
+    id: public
+    attributes:
+      label: Public inquiry acknowledgment
+      options:
+        - label: I understand this issue is public and contains no confidential information.
+          required: true
