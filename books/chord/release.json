@@ -1,0 +1,19 @@
+{
+  "schema": "svyable-release-v1",
+  "source": {
+    "owner": "Svyable",
+    "repo": "desk",
+    "commit": "a43bf6f7ad4ba1600d754f07b5d81eee9309ca1f",
+    "path": "books/chord"
+  },
+  "destination": {
+    "owner": "Svyable",
+    "repo": "shelf",
+    "path": "books/chord"
+  },
+  "payload": {
+    "algorithm": "sha256-tree-v1",
+    "digest": "107f50d99e02c3db379345864bd6b0102bfeccb2977ad14360ed0e307fa01a3e",
+    "files": 28
+  }
+}

@@ -18,7 +18,7 @@
     "wonk": {
       "token": "wonk",
       "family": "Fraunces",
-      "size": 1,
+      "size": 1.0,
       "weight": 500,
       "tracking": 0.055,
       "stack": "\"Fraunces\", Georgia, \"Times New Roman\", serif",
@@ -842,6 +842,19 @@
       "bands": "none",
       "chapters": 20,
       "words": 82226
+    },
+    "chord": {
+      "binding": "forest",
+      "color": "#1f3a30",
+      "height": "short",
+      "height_px": 214,
+      "thickness": "thick",
+      "thickness_px": 77,
+      "foil": "gold",
+      "font": "baskerville",
+      "bands": "blind-head",
+      "chapters": 18,
+      "words": 69162
     }
   }
 }
