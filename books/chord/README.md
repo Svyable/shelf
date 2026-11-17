@@ -8,6 +8,7 @@
 
 | | |
 |---|---|
+| **Spine** | binding: forest · height: short · thickness: thick · foil: gold · font: baskerville · bands: blind-head |
 | **Authors** | Sven Hardy Benson |
 | **Status** | Published |
 | **Drafting Source** | Sven Hardy Benson’s Desk |
