@@ -1,0 +1,19 @@
+{
+  "schema": "svyable-release-v1",
+  "source": {
+    "owner": "Svyable",
+    "repo": "desk",
+    "commit": "a01617e3c97b7d1709b35a1f7b4cf4c01598e504",
+    "path": "books/we-stole-the-night"
+  },
+  "destination": {
+    "owner": "Svyable",
+    "repo": "shelf",
+    "path": "books/we-stole-the-night"
+  },
+  "payload": {
+    "algorithm": "sha256-tree-v1",
+    "digest": "9619eabbc24d5b25c282056a1871b40dfe2a85bc435b0c89a08b4884767a386a",
+    "files": 27
+  }
+}

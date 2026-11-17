@@ -855,6 +855,19 @@
       "bands": "blind-head",
       "chapters": 18,
       "words": 69162
+    },
+    "we-stole-the-night": {
+      "binding": "aubergine",
+      "color": "#35203c",
+      "height": "short",
+      "height_px": 214,
+      "thickness": "medium",
+      "thickness_px": 66,
+      "foil": "gold",
+      "font": "wonk",
+      "bands": "gilt-double",
+      "chapters": 18,
+      "words": 67774
     }
   }
 }

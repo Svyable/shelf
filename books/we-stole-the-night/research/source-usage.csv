@@ -1,0 +1,67 @@
+chapter,source_key,source_title,url,evidence_status
+1,audubon,"More Than 1,000 Birds Collided With a Single Chicago Building in One Night",https://www.audubon.org/magazine/more-1000-birds-collided-single-chicago-building-one-night,contemporary institutional reporting
+1,field,Turning off lights can save migrating birds from crashing into buildings,https://www.fieldmuseum.org/about/press/turning-lights-can-save-migrating-birds-crashing-buildings,research-institution summary of peer-reviewed primary study
+1,mccormick,Bird Safety Improvements Reduce Collisions by more than 95%,https://www.mccormickplace.com/newsroom/press-release-2025-01-08/,site-owner institutional announcement using Field Museum data
+1,falchi,The new world atlas of artificial night sky brightness,https://doi.org/10.1126/sciadv.1600377,peer-reviewed model-based primary research
+1,kyba,Citizen scientists report global rapid reductions in the visibility of stars from 2011 to 2022,https://doi.org/10.1126/science.abq7781,peer-reviewed citizen-science inference
+2,london,Gas lamps illuminated London,https://www.londonmuseum.org.uk/collections/london-stories/gas-lamps-illuminated-london/,museum historical interpretation
+2,soane,Georgian Illuminations: Lighting,https://www.soane.org/exhibitions/georgian-illuminations/lighting,museum historical interpretation
+2,gasmuseum,The early days,https://www.nationalgasmuseum.org.uk/discover/the-early-days/,museum historical documentation
+2,nps,Edison Biography,https://www.nps.gov/edis/learn/historyculture/edison-biography.htm?simple=True,government historical background
+2,met,A Peep at the Gas Lights in Pall-Mall,https://www.metmuseum.org/art/collection/search/820411,historical artwork and museum catalog
+2,census,September 2026 Historical Stories,https://www.census.gov/about/history/stories/monthly/2026/september-2026.html,government historical account
+3,falchi,The new world atlas of artificial night sky brightness,https://doi.org/10.1126/sciadv.1600377,peer-reviewed model-based primary research
+3,fwc,Artificial Lighting: Sea Turtle Threats,https://myfwc.com/research/wildlife/sea-turtles/threats/artificial-lighting/,state wildlife research and practice guidance
+3,nobel,Scientific Background: The 2017 Nobel Prize in Physiology or Medicine,https://www.nobelprize.org/prizes/medicine/2017/advanced-information/,official prize scientific background
+3,gaston,Environmental Impacts of Artificial Light at Night,https://doi.org/10.1146/annurev-environ-112420-014438,peer-reviewed scientific review
+4,kyba,Citizen scientists report global rapid reductions in the visibility of stars from 2011 to 2022,https://doi.org/10.1126/science.abq7781,peer-reviewed citizen-science inference
+4,falchi,The new world atlas of artificial night sky brightness,https://doi.org/10.1126/sciadv.1600377,peer-reviewed model-based primary research
+4,gaston,Environmental Impacts of Artificial Light at Night,https://doi.org/10.1146/annurev-environ-112420-014438,peer-reviewed scientific review
+5,iea,"The next wave of LED lighting: Smarter, circular and more efficient",https://www.iea.org/commentaries/the-next-wave-of-led-lighting-smarter-circular-and-more-efficient,intergovernmental energy analysis
+5,doeexterior,Purchasing Energy-Efficient Exterior Lighting,https://www.energy.gov/cmei/femp/purchasing-energy-efficient-exterior-lighting,government procurement guidance
+5,doeroad,Roadway Lighting Research,https://www.energy.gov/cmei/ssl/roadway-lighting-research,government research-program guidance
+5,gaston,Environmental Impacts of Artificial Light at Night,https://doi.org/10.1146/annurev-environ-112420-014438,peer-reviewed scientific review
+6,nobel,Scientific Background: The 2017 Nobel Prize in Physiology or Medicine,https://www.nobelprize.org/prizes/medicine/2017/advanced-information/,official prize scientific background
+6,iarc,IARC Monographs Volume 124: Night Shift Work,https://publications.iarc.who.int/Night-Shift-Work-2020,expert hazard evaluation
+6,gaston,Environmental Impacts of Artificial Light at Night,https://doi.org/10.1146/annurev-environ-112420-014438,peer-reviewed scientific review
+7,iarc,IARC Monographs Volume 124: Night Shift Work,https://publications.iarc.who.int/Night-Shift-Work-2020,expert hazard evaluation
+7,iarc2019,Evaluation of the carcinogenicity of night shift work,https://www.iarc.who.int/news-events/iarc-monographs-evaluation-of-the-carcinogenicity-of-night-shift-work,agency institutional interpretation
+7,nobel,Scientific Background: The 2017 Nobel Prize in Physiology or Medicine,https://www.nobelprize.org/prizes/medicine/2017/advanced-information/,official prize scientific background
+8,field,Turning off lights can save migrating birds from crashing into buildings,https://www.fieldmuseum.org/about/press/turning-lights-can-save-migrating-birds-crashing-buildings,research-institution summary of peer-reviewed primary study
+8,mccormick,Bird Safety Improvements Reduce Collisions by more than 95%,https://www.mccormickplace.com/newsroom/press-release-2025-01-08/,site-owner institutional announcement using Field Museum data
+8,diaz,Artificial Light at Night Consistently Impacts Avian Physiology and Behaviour: A Meta-Analysis,https://doi.org/10.1111/ele.70382,peer-reviewed systematic meta-analysis
+8,birdfield,White light reduces flight height of birds in low-density migration corridor,https://www.usgs.gov/publications/white-light-reduces-flight-height-birds-low-density-migration-corridor,peer-reviewed field experiment indexed by USGS
+9,fwc,Artificial Lighting: Sea Turtle Threats,https://myfwc.com/research/wildlife/sea-turtles/threats/artificial-lighting/,state wildlife research and practice guidance
+9,gaston,Environmental Impacts of Artificial Light at Night,https://doi.org/10.1146/annurev-environ-112420-014438,peer-reviewed scientific review
+10,knop,Artificial light at night as a new threat to pollination,https://doi.org/10.1038/nature23288,peer-reviewed field experiment
+10,reinhard,Citizen science reveals temporally structured insect attraction and mitigation efficacy under artificial light at night,https://www.nature.com/articles/s42003-026-10979-2,peer-reviewed field and citizen-science research
+10,gaston,Environmental Impacts of Artificial Light at Night,https://doi.org/10.1146/annurev-environ-112420-014438,peer-reviewed scientific review
+11,rutkowska,Artificial light at night reshapes vertical distributions of lake zooplankton across population and community scales,https://doi.org/10.1038/s41598-026-60447-4,peer-reviewed lake field research
+11,ayalon,Coral reproductive timing under artificial nighttime light,https://doi.org/10.1016/j.cub.2020.10.039,peer-reviewed coral experimental study
+11,marine,Artificial light at night across marine ecosystems,https://doi.org/10.1111/gcb.16264,peer-reviewed scientific review
+12,bat,Artificial light reduces foraging opportunities in wild least horseshoe bats,https://pubmed.ncbi.nlm.nih.gov/34265558/,peer-reviewed field experiment
+12,baturban,Context-dependent responses of bats to artificial light at night in urban and natural woodlands,https://pubmed.ncbi.nlm.nih.gov/42096857/,peer-reviewed field experiment
+12,bat2024,Artificial light and pipistrelle foraging,https://doi.org/10.1016/j.scitotenv.2024.173699,peer-reviewed empirical study
+13,nyc,Reducing Crime Through Environmental Design: Evidence from a Randomized Experiment of Street Lighting in New York City,https://www.nber.org/papers/w25798,"randomized field experiment, NBER working paper"
+13,uk,The effect of reduced street lighting on road casualties and crime in England and Wales,https://doi.org/10.1136/JECH-2015-206012,peer-reviewed controlled interrupted time-series observational study
+13,doeroad,Roadway Lighting Research,https://www.energy.gov/cmei/ssl/roadway-lighting-research,government research-program guidance
+14,uk,The effect of reduced street lighting on road casualties and crime in England and Wales,https://doi.org/10.1136/JECH-2015-206012,peer-reviewed controlled interrupted time-series observational study
+14,doeroad,Roadway Lighting Research,https://www.energy.gov/cmei/ssl/roadway-lighting-research,government research-program guidance
+14,doeexterior,Purchasing Energy-Efficient Exterior Lighting,https://www.energy.gov/cmei/femp/purchasing-energy-efficient-exterior-lighting,government procurement guidance
+15,falchi,The new world atlas of artificial night sky brightness,https://doi.org/10.1126/sciadv.1600377,peer-reviewed model-based primary research
+15,kyba,Citizen scientists report global rapid reductions in the visibility of stars from 2011 to 2022,https://doi.org/10.1126/science.abq7781,peer-reviewed citizen-science inference
+15,gaston,Environmental Impacts of Artificial Light at Night,https://doi.org/10.1146/annurev-environ-112420-014438,peer-reviewed scientific review
+16,darksky,Five Principles for Responsible Outdoor Lighting,https://darksky.org/RESOURCES/guides-and-how-tos/lighting-principles/,professional and nonprofit guidance
+16,doeexterior,Purchasing Energy-Efficient Exterior Lighting,https://www.energy.gov/cmei/femp/purchasing-energy-efficient-exterior-lighting,government procurement guidance
+16,doeroad,Roadway Lighting Research,https://www.energy.gov/cmei/ssl/roadway-lighting-research,government research-program guidance
+16,reinhard,Citizen science reveals temporally structured insect attraction and mitigation efficacy under artificial light at night,https://www.nature.com/articles/s42003-026-10979-2,peer-reviewed field and citizen-science research
+17,nyc,Reducing Crime Through Environmental Design: Evidence from a Randomized Experiment of Street Lighting in New York City,https://www.nber.org/papers/w25798,"randomized field experiment, NBER working paper"
+17,uk,The effect of reduced street lighting on road casualties and crime in England and Wales,https://doi.org/10.1136/JECH-2015-206012,peer-reviewed controlled interrupted time-series observational study
+17,darksky,Five Principles for Responsible Outdoor Lighting,https://darksky.org/RESOURCES/guides-and-how-tos/lighting-principles/,professional and nonprofit guidance
+17,falchi,The new world atlas of artificial night sky brightness,https://doi.org/10.1126/sciadv.1600377,peer-reviewed model-based primary research
+18,field,Turning off lights can save migrating birds from crashing into buildings,https://www.fieldmuseum.org/about/press/turning-lights-can-save-migrating-birds-crashing-buildings,research-institution summary of peer-reviewed primary study
+18,mccormick,Bird Safety Improvements Reduce Collisions by more than 95%,https://www.mccormickplace.com/newsroom/press-release-2025-01-08/,site-owner institutional announcement using Field Museum data
+18,knop,Artificial light at night as a new threat to pollination,https://doi.org/10.1038/nature23288,peer-reviewed field experiment
+18,nyc,Reducing Crime Through Environmental Design: Evidence from a Randomized Experiment of Street Lighting in New York City,https://www.nber.org/papers/w25798,"randomized field experiment, NBER working paper"
+18,uk,The effect of reduced street lighting on road casualties and crime in England and Wales,https://doi.org/10.1136/JECH-2015-206012,peer-reviewed controlled interrupted time-series observational study
+18,darksky,Five Principles for Responsible Outdoor Lighting,https://darksky.org/RESOURCES/guides-and-how-tos/lighting-principles/,professional and nonprofit guidance
